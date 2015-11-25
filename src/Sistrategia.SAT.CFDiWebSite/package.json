@@ -1,0 +1,13 @@
+{
+  "name": "sistrategia.sat.cfdiwebsite",
+  "version": "1.0.0",
+  "description": "Sistrategia CFDI Solution.",
+  "author": "Jose Ernesto Ocampo Cicero <ernesto@sistrategia.com>",
+  "license": "Apache-2.0",
+  "private": true,
+  "dependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-less": "^1.1.0",
+    "less-plugin-autoprefix": "^1.5.1"
+  }
+}

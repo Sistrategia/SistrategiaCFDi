@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@ViewBag.Title - SistrategiaDrive</title>
+  <link rel="shortcut icon" href="https://sistrategiadrive.blob.core.windows.net/wwwroot/favicon.png">
+ 
+  @Styles.Render("~/Content/css")
+  @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("SistrategiaCFDi", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+              @*<a class="navbar-brand sistrategiaLogo" href="@Url.Content("~/")"><img src="~/Content/Img/logo_header_white.png" class="img-responsive" /></a>*@
+              @*<a class="navbar-brand sistrategiaLogo" href="@Url.Content("~/")"><img src="https://sistrategiadrive.blob.core.windows.net/wwwroot/logo_header_white.png" class="img-responsive" /></a>*@
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                </ul>
+              @*@Html.Partial("_LoginPartial")*@
+
+              <ul class="nav navbar-nav navbar-right">
+                @*<li>@Html.ActionLink(Sistrategia.Drive.WebSite.Views.Home.Welcome.Register, "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>*@
+                @*<li>@Html.ActionLink(Sistrategia.Drive.WebSite.Views.Home.Welcome.Login, "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>*@
+
+             
+              </ul>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+          <p class="pull-left">&copy; @DateTime.Now.Year - Sistrategia</p>
+</footer>
+    </div>
+
+  @Scripts.Render("~/bundles/jquery")
+  @Scripts.Render("~/bundles/bootstrap")
+  @RenderSection("scripts", required: false)
+</body>
+</html>
