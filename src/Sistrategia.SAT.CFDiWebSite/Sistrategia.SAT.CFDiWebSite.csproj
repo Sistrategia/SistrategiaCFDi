@@ -260,11 +260,20 @@
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
     <Content Include="Scripts\jquery-2.1.4.min.map" />
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Home\Welcome.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\DisplayEmail.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -279,17 +288,49 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LocaleController.cs" />
+    <Compile Include="Data\ApplicationDbContext.cs" />
+    <Compile Include="Data\SecurityRoleStore.cs" />
+    <Compile Include="Data\SecurityUserStore.cs" />
+    <Compile Include="Messaging\EmailService.cs" />
+    <Compile Include="Messaging\SmsService.cs" />
+    <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\SecurityRole.cs" />
+    <Compile Include="Security\SecuritySignInManager.cs" />
+    <Compile Include="Security\SecurityUser.cs" />
+    <Compile Include="Security\SecurityUserClaim.cs" />
+    <Compile Include="Security\SecurityUserLogin.cs" />
+    <Compile Include="Security\SecurityUserManager.cs" />
+    <Compile Include="Security\SecurityUserRole.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utils\CustomRedirectHandler.cs" />
+    <Compile Include="Utils\LocalizationRedirectRouteHandler.cs" />
+    <Compile Include="Utils\LocalizedRouteHandler.cs" />
+    <Compile Include="Utils\RouteCollectionExtensions.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Views\Locale\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sistrategia.SAT.Resources\Sistrategia.SAT.Resources.csproj">
+      <Project>{f8a49afc-0012-4308-a954-fe6e51ea3238}</Project>
+      <Name>Sistrategia.SAT.Resources</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

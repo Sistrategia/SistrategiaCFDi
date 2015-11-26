@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sistrategia.SAT.CFDiWebSite", "Sistrategia.SAT.CFDiWebSite\Sistrategia.SAT.CFDiWebSite.csproj", "{80F519AB-F09A-4A5C-B7E3-D5A319169C50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sistrategia.SAT.Resources", "Sistrategia.SAT.Resources\Sistrategia.SAT.Resources.csproj", "{F8A49AFC-0012-4308-A954-FE6E51EA3238}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{80F519AB-F09A-4A5C-B7E3-D5A319169C50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80F519AB-F09A-4A5C-B7E3-D5A319169C50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80F519AB-F09A-4A5C-B7E3-D5A319169C50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8A49AFC-0012-4308-A954-FE6E51EA3238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8A49AFC-0012-4308-A954-FE6E51EA3238}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8A49AFC-0012-4308-A954-FE6E51EA3238}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8A49AFC-0012-4308-A954-FE6E51EA3238}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

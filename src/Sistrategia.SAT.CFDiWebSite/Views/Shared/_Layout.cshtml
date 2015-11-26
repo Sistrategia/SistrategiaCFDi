@@ -26,14 +26,9 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                 </ul>
-              @*@Html.Partial("_LoginPartial")*@
+              @Html.Partial("_LoginPartial")
 
-              <ul class="nav navbar-nav navbar-right">
-                @*<li>@Html.ActionLink(Sistrategia.Drive.WebSite.Views.Home.Welcome.Register, "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>*@
-                @*<li>@Html.ActionLink(Sistrategia.Drive.WebSite.Views.Home.Welcome.Login, "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>*@
-
-             
-              </ul>
+              
 
             </div>
         </div>
@@ -44,6 +39,12 @@
         <hr />
         <footer>
           <p class="pull-left">&copy; @DateTime.Now.Year - Sistrategia</p>
+          <div class="pull-right hidden-xs">
+            <ul class="nav navbar-nav navbar-right">
+              <li>@Html.ActionLink("English (US)", "ChangeLang", "Locale", new { Lang = "en-US", ReturnUrl = Url.Encode(Request.RawUrl) }, new { @class = "navbar-brand footer-lang-bar", @style = "font-size:11px;" })</li>
+              <li>@Html.ActionLink("Español (México)", "ChangeLang", "Locale", new { Lang = "es-MX", ReturnUrl = Url.Encode(Request.RawUrl) }, new { @class = "navbar-brand footer-lang-bar", @style = "font-size:11px;" })</li>
+            </ul>
+          </div>
 </footer>
     </div>
 
