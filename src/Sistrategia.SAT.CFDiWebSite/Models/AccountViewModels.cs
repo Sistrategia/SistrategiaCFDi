@@ -7,6 +7,32 @@ using Sistrategia.SAT.Resources;
 
 namespace Sistrategia.SAT.CFDiWebSite.Models
 {
+    public enum AccountIndexMessageId
+    {
+        AddPhoneSuccess,
+        ChangePasswordSuccess,
+        SetTwoFactorSuccess,
+        SetPasswordSuccess,
+        RemoveLoginSuccess,
+        RemovePhoneSuccess,
+        Error
+    }
+
+    public class AccountIndexViewModel
+    {
+        public AccountIndexViewModel() {        
+        }
+
+        public string UserName { get; set; }
+        public string FullName { get; set; }
+
+        public bool HasPassword { get; set; }
+        public IList<UserLoginInfo> Logins { get; set; }
+        public string PhoneNumber { get; set; }
+        public bool TwoFactor { get; set; }
+        public bool BrowserRemembered { get; set; }
+    }
+
     public class LoginViewModel
     {
         [Required]
@@ -57,5 +83,34 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         //[Display(Name = "Hometown")]
         //public string Hometown { get; set; }
+    }
+
+    public class ForgotPasswordViewModel
+    {
+        [Required]
+        [EmailAddress]
+        [Display(ResourceType = typeof(LocalizedStrings), Name = "Email")]
+        public string Email { get; set; }
+    }
+
+    public class ResetPasswordViewModel
+    {
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+
+        public string Code { get; set; }
     }
 }

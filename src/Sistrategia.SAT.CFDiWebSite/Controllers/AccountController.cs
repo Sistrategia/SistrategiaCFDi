@@ -27,11 +27,36 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         }
         #endregion
 
-        // GET: Account
-        public ActionResult Index()
+        #region Index (MyAccount)
+        public async Task<ActionResult> Index(AccountIndexMessageId? message)
         {
-            return View();
+            ViewBag.StatusMessage =
+                message == AccountIndexMessageId.ChangePasswordSuccess ? LocalizedStrings.Account_YourPasswordHasBeenChanged
+                : message == AccountIndexMessageId.SetPasswordSuccess ? LocalizedStrings.Account_YourPasswordHasBeenSet
+                : message == AccountIndexMessageId.SetTwoFactorSuccess ? LocalizedStrings.Account_YourTwoFactorAuthenticationHasBeenSet
+                : message == AccountIndexMessageId.Error ? LocalizedStrings.Account_MessageError
+                : message == AccountIndexMessageId.AddPhoneSuccess ? LocalizedStrings.Account_MessageAddPhoneSuccess
+                : message == AccountIndexMessageId.RemovePhoneSuccess ? LocalizedStrings.Account_MessageRemovePhoneSuccess
+                : "";
+
+            var userId = User.Identity.GetUserId<int>();
+
+            if (userId != default(int)) {
+                var user = await UserManager.FindByIdAsync(userId);
+                var model = new AccountIndexViewModel {
+                    UserName = user.UserName,
+                    FullName = user.FullName,
+                    HasPassword = HasPassword(),
+                    PhoneNumber = user.PhoneNumber,
+                    TwoFactor = user.TwoFactorEnabled,
+                    Logins = await UserManager.GetLoginsAsync(userId),
+                    BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(User.Identity.GetUserId()), // string always?                    
+                };
+                return View(model);
+            }
+            return RedirectToAction("Index", "Home");
         }
+        #endregion
 
         #region Login and Logoff
         //
@@ -169,6 +194,71 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
         #endregion
 
+        #region Forgot and Reset Password
+
+        [AllowAnonymous]
+        public ActionResult ForgotPassword() {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model) {
+            if (ModelState.IsValid) {
+                var user = await UserManager.FindByNameAsync(model.Email);
+                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id))) {
+                    return View("ForgotPasswordConfirmation");
+                }
+
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { forgot = user.PublicKey, code = code }, protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
+            }
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult ForgotPasswordConfirmation() {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult ResetPassword(string code) {
+            return code == null ? View("Error") : View();
+        }
+
+        //
+        // POST: /Account/ResetPassword
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model) {
+            if (!ModelState.IsValid) {
+                return View(model);
+            }
+            var user = await UserManager.FindByNameAsync(model.Email);
+            if (user == null) {
+                // Don't reveal that the user does not exist
+                return RedirectToAction("ResetPasswordConfirmation", "Account");
+            }
+            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            if (result.Succeeded) {
+                return RedirectToAction("ResetPasswordConfirmation", "Account");
+            }
+            AddErrors(result);
+            return View();
+        }
+
+        //
+        // GET: /Account/ResetPasswordConfirmation
+        [AllowAnonymous]
+        public ActionResult ResetPasswordConfirmation() {
+            return View();
+        }
+
+        #endregion
 
 
         #region Helpers

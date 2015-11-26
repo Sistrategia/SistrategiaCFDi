@@ -23,7 +23,6 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
         }
 
         protected override void OnModelCreating(System.Data.Entity.DbModelBuilder modelBuilder) {
-
             var user = modelBuilder.Entity<SecurityUser>()
                 .ToTable("security_user");
             user.Property(u => u.Id).HasColumnName("user_id")
