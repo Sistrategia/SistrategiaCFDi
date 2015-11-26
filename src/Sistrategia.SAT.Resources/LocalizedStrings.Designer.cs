@@ -70,6 +70,33 @@ namespace Sistrategia.SAT.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to click here to go to your SistrategiaCFDi home.
+        /// </summary>
+        public static string Account_ClickHereToGoHome {
+            get {
+                return ResourceManager.GetString("Account_ClickHereToGoHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click here to Log in.
+        /// </summary>
+        public static string Account_ClickHereToLogIn {
+            get {
+                return ResourceManager.GetString("Account_ClickHereToLogIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm Email.
+        /// </summary>
+        public static string Account_ConfirmEmailTitle {
+            get {
+                return ResourceManager.GetString("Account_ConfirmEmailTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm password.
         /// </summary>
         public static string Account_ConfirmPassword {
@@ -102,6 +129,24 @@ namespace Sistrategia.SAT.Resources {
         public static string Account_ConfirmYourAccountBody {
             get {
                 return ResourceManager.GetString("Account_ConfirmYourAccountBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email Link.
+        /// </summary>
+        public static string Account_EmailLink {
+            get {
+                return ResourceManager.GetString("Account_EmailLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your email..
+        /// </summary>
+        public static string Account_EnterYourEmail {
+            get {
+                return ResourceManager.GetString("Account_EnterYourEmail", resourceCulture);
             }
         }
         
@@ -214,6 +259,15 @@ namespace Sistrategia.SAT.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please reset your password by clicking &lt;a href=&quot;{0}&quot;&gt;here&lt;/a&gt;.
+        /// </summary>
+        public static string Account_PleaseResetYourPasswordByClickingHere {
+            get {
+                return ResourceManager.GetString("Account_PleaseResetYourPasswordByClickingHere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Register as a new user.
         /// </summary>
         public static string Account_RegisterAsNewUser {
@@ -255,6 +309,24 @@ namespace Sistrategia.SAT.Resources {
         public static string Account_RememberMe {
             get {
                 return ResourceManager.GetString("Account_RememberMe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset Password.
+        /// </summary>
+        public static string Account_ResetPassword {
+            get {
+                return ResourceManager.GetString("Account_ResetPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thank you for confirming your email. Please .
+        /// </summary>
+        public static string Account_ThankYouForConfirmEmail {
+            get {
+                return ResourceManager.GetString("Account_ThankYouForConfirmEmail", resourceCulture);
             }
         }
         

@@ -142,7 +142,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         , protocol: Request.Url.Scheme);
 
                     await UserManager.SendEmailAsync(user.Id,
-                        LocalizedStrings.Account_ConfirmYourAccount,
+                        LocalizedStrings.Account_ConfirmYourAccount + " " + DateTime.Now.ToString("yyyyMMddHHmmssfff"),
                         string.Format(LocalizedStrings.Account_ConfirmYourAccountBody, callbackUrl));
 
                     //return RedirectToAction("Index", "Home");
@@ -213,7 +213,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { forgot = user.PublicKey, code = code }, protocol: Request.Url.Scheme);
-                await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                await UserManager.SendEmailAsync(user.Id, LocalizedStrings.Account_ResetPassword,
+                    string.Format(LocalizedStrings.Account_PleaseResetYourPasswordByClickingHere, callbackUrl));
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
             return View(model);

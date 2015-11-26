@@ -246,4 +246,28 @@
   <data name="UserNameField" xml:space="preserve">
     <value>Nombre de usuario</value>
   </data>
+  <data name="Account_ClickHereToGoHome" xml:space="preserve">
+    <value>Haga clic aquí para ir a su pantalla de inicio</value>
+  </data>
+  <data name="Account_ClickHereToLogIn" xml:space="preserve">
+    <value>Haga clic aquí para iniciar su sesión</value>
+  </data>
+  <data name="Account_ConfirmEmailTitle" xml:space="preserve">
+    <value>Confirmación de Correo</value>
+  </data>
+  <data name="Account_EnterYourEmail" xml:space="preserve">
+    <value>Ingrese su correo electrónico.</value>
+  </data>
+  <data name="Account_ThankYouForConfirmEmail" xml:space="preserve">
+    <value>Gracias por confimar su correo. Por favor </value>
+  </data>
+  <data name="Account_EmailLink" xml:space="preserve">
+    <value>Enviar liga</value>
+  </data>
+  <data name="Account_PleaseResetYourPasswordByClickingHere" xml:space="preserve">
+    <value>Por favor reestablezca su contraseña haciendo clic &lt;a href="{0}"&gt;aquí&lt;/a&gt;</value>
+  </data>
+  <data name="Account_ResetPassword" xml:space="preserve">
+    <value>Reestablecer contraseña</value>
+  </data>
 </root>

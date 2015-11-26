@@ -1,17 +1,17 @@
 ﻿@{
-  ViewBag.Title = "Confirm Email";
+  ViewBag.Title = LocalizedStrings.Account_ConfirmEmailTitle;
 }
 
-<h2>@ViewBag.Title.</h2>
+<h1>@ViewBag.Title.</h1>
 <div>
   @if (User.Identity.IsAuthenticated) {
     <p>
-      Thank you for confirming your email. Please @Html.ActionLink("click here to go to your SistrategiaCFDi home", "Index", "Home", routeValues: null, htmlAttributes: new { id = "loginLink" })
+      @LocalizedStrings.Account_ThankYouForConfirmEmail @Html.ActionLink(LocalizedStrings.Account_ClickHereToGoHome, "Index", "Home", routeValues: null, htmlAttributes: new { id = "loginLink" })
     </p>
   }
   else {
     <p>
-      Thank you for confirming your email. Please @Html.ActionLink("Click here to Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+      @LocalizedStrings.Account_ThankYouForConfirmEmail @Html.ActionLink(LocalizedStrings.Account_ClickHereToLogIn, "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
     </p>
   }
 </div>

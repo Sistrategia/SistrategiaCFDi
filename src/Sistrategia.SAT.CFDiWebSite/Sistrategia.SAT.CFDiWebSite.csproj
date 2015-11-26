@@ -304,6 +304,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\DevController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocaleController.cs" />
     <Compile Include="Data\ApplicationDbContext.cs" />
@@ -311,6 +312,11 @@
     <Compile Include="Data\SecurityUserStore.cs" />
     <Compile Include="Messaging\EmailService.cs" />
     <Compile Include="Messaging\SmsService.cs" />
+    <Compile Include="Migrations\201511261212045_InitialCreate.cs" />
+    <Compile Include="Migrations\201511261212045_InitialCreate.Designer.cs">
+      <DependentUpon>201511261212045_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\SecurityRole.cs" />
@@ -328,6 +334,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Dev\" />
     <Folder Include="Views\Locale\" />
   </ItemGroup>
   <ItemGroup>
@@ -335,6 +342,11 @@
       <Project>{f8a49afc-0012-4308-a954-fe6e51ea3238}</Project>
       <Name>Sistrategia.SAT.Resources</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201511261212045_InitialCreate.resx">
+      <DependentUpon>201511261212045_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
