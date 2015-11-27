@@ -270,4 +270,28 @@
   <data name="Account_ResetPassword" xml:space="preserve">
     <value>Reestablecer contraseña</value>
   </data>
+  <data name="Account_ForgotYourPasswordConfirmation" xml:space="preserve">
+    <value>Confirmación para recuperación de contraseña</value>
+  </data>
+  <data name="Account_ForgotYourPasswordConfirmationLegend" xml:space="preserve">
+    <value>Por favor verifique su correo electrónico para reestablecer su constraseña.</value>
+  </data>
+  <data name="Account_ResetPasswordConfirmation" xml:space="preserve">
+    <value>Confirmación para reestablecer su contraseña</value>
+  </data>
+  <data name="Account_ResetPasswordConfirmationLegend1" xml:space="preserve">
+    <value>Su contraseña ha sido reestablecida. Por favor </value>
+  </data>
+  <data name="Account_ResetPasswordSubtitle" xml:space="preserve">
+    <value>Reestablezca su contraseña.</value>
+  </data>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>El campo Contraseña es obligatorio.</value>
+  </data>
+  <data name="ResetPasswordButton" xml:space="preserve">
+    <value>Reestablecer</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
 </root>

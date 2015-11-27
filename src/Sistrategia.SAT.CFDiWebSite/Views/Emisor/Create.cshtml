@@ -1,0 +1,48 @@
+﻿@using Sistrategia.SAT.CFDiWebSite.Models
+@model EmisorCreateViewModel
+@{
+    ViewBag.Title = "Create";
+}
+
+<h1>@ViewBag.Title</h1>
+
+@using (Html.BeginForm("Create", "Emisor", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
+  @Html.AntiForgeryToken()
+  <h4>@LocalizedStrings.Account_RegisterSubtitle</h4>
+  <hr />
+  @Html.ValidationSummary("", new { @class = "text-danger" })
+
+  <div class="form-group">
+    @Html.LabelFor(m => m.RFC, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.RFC, new { @class = "form-control" })
+    </div>
+  </div>
+  <div class="form-group">
+    @Html.LabelFor(m => m.Nombre, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
+    </div>
+  </div>
+  <div class="form-group">
+    @Html.LabelFor(m => m.Calle, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.Calle, new { @class = "form-control" })
+    </div>
+  </div>
+  <div class="form-group">
+    @Html.LabelFor(m => m.NoExterior, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.PasswordFor(m => m.NoExterior, new { @class = "form-control" })
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+      <input type="submit" class="btn btn-default" value="@LocalizedStrings.SaveButton" />
+    </div>
+  </div>
+}
+
+@section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
+}

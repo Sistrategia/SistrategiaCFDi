@@ -270,4 +270,28 @@
   <data name="Account_ResetPassword" xml:space="preserve">
     <value>Reset Password</value>
   </data>
+  <data name="Account_ForgotYourPasswordConfirmation" xml:space="preserve">
+    <value>Forgot Password Confirmation</value>
+  </data>
+  <data name="Account_ForgotYourPasswordConfirmationLegend" xml:space="preserve">
+    <value>Please check your email to reset your password.</value>
+  </data>
+  <data name="Account_ResetPasswordConfirmation" xml:space="preserve">
+    <value>Reset password confirmation</value>
+  </data>
+  <data name="Account_ResetPasswordConfirmationLegend1" xml:space="preserve">
+    <value>Your password has been reset. Please</value>
+  </data>
+  <data name="Account_ResetPasswordSubtitle" xml:space="preserve">
+    <value>Reset your password.</value>
+  </data>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>The Password field is required.</value>
+  </data>
+  <data name="ResetPasswordButton" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Save</value>
+  </data>
 </root>

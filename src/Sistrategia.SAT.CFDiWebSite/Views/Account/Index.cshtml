@@ -28,49 +28,22 @@
       }
       ]
     </dd>
-    <dt>@LocalizedStrings.Account_ExternalLogins:</dt>
+
+    @*<dt>@LocalizedStrings.Account_ExternalLogins:</dt>
     <dd>
       @Model.Logins.Count [
       @Html.ActionLink(LocalizedStrings.Manage, "ManageLogins") ]
-    </dd>
+    </dd>*@
 
     <dt>@LocalizedStrings.Language: </dt>
     <dd>
       @Html.ActionLink(LocalizedStrings.Lang_en_US_DisplayName, "ChangeLang", "Locale", new { Lang = "en-US", ReturnUrl = Url.Encode(Request.RawUrl) }, new { @class = "active" })
-      | @Html.ActionLink(LocalizedStrings.Lang_es_MX_DisplayName, "ChangeLang", "Home", new { Lang = "es-MX", ReturnUrl = Url.Encode(Request.RawUrl) }, new { @class = "active" })
+      | @Html.ActionLink(LocalizedStrings.Lang_es_MX_DisplayName, "ChangeLang", "Locale", new { Lang = "es-MX", ReturnUrl = Url.Encode(Request.RawUrl) }, new { @class = "active" })
     </dd>
 
-    @*
-      Phone Numbers can used as a second factor of verification in a two-factor authentication system.
-
-       See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-          for details on setting up this ASP.NET application to support two-factor authentication using SMS.
-
-       Uncomment the following block after you have set up two-factor authentication
-    *@
-    @*
-      <dt>Phone Number:</dt>
-      <dd>
-          @(Model.PhoneNumber ?? "None") [
-          @if (Model.PhoneNumber != null)
-          {
-              @Html.ActionLink("Change", "AddPhoneNumber")
-              @: &nbsp;|&nbsp;
-              @Html.ActionLink("Remove", "RemovePhoneNumber")
-          }
-          else
-          {
-              @Html.ActionLink("Add", "AddPhoneNumber")
-          }
-          ]
-      </dd>
-    *@
-    <dt>@LocalizedStrings.Account_TwoFactorAuthentication:</dt>
-    <dd>
-      @*<p>
-          There are no two-factor authentication providers configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-          for details on setting up this ASP.NET application to support two-factor authentication.
-        </p>*@
+  
+    @*<dt>@LocalizedStrings.Account_TwoFactorAuthentication:</dt>
+    <dd>    
       @if (Model.TwoFactor) {
         using (Html.BeginForm("DisableTwoFactorAuthentication", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
           @Html.AntiForgeryToken()
@@ -87,7 +60,7 @@
           </text>
         }
       }
-    </dd> 
+    </dd>*@ 
 
   </dl>
 

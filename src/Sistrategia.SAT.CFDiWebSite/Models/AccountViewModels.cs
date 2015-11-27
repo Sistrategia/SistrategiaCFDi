@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
@@ -61,7 +62,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         [Display(ResourceType = typeof(LocalizedStrings), Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(LocalizedStrings), ErrorMessageResourceName = "PasswordRequired")]
         [StringLength(100,
             MinimumLength = 6,
             ErrorMessageResourceType = typeof(LocalizedStrings),
@@ -87,7 +88,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
     public class ForgotPasswordViewModel
     {
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(LocalizedStrings), ErrorMessageResourceName = "EmailRequired")]
         [EmailAddress]
         [Display(ResourceType = typeof(LocalizedStrings), Name = "Email")]
         public string Email { get; set; }
@@ -95,22 +96,55 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
     public class ResetPasswordViewModel
     {
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(LocalizedStrings), ErrorMessageResourceName = "EmailRequired")]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(ResourceType = typeof(LocalizedStrings), Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [Required(ErrorMessageResourceType = typeof(LocalizedStrings), ErrorMessageResourceName = "PasswordRequired")]
+        [StringLength(100,
+            MinimumLength = 6,
+            ErrorMessageResourceType = typeof(LocalizedStrings),
+            ErrorMessageResourceName = "Account_PasswordValidationError"
+            //ErrorMessage = "The {0} must be at least {2} characters long."
+            )]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(ResourceType = typeof(LocalizedStrings), Name = "Password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(ResourceType = typeof(LocalizedStrings), Name = "Account_ConfirmPassword")]
+        [Compare("Password",
+            ErrorMessageResourceType = typeof(LocalizedStrings),
+            //ErrorMessage = "The password and confirmation password do not match."
+            ErrorMessageResourceName = "Account_ConfirmPasswordDoesNotMatchError"
+            )]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }
+    }
+
+    public class ChangePasswordViewModel
+    {
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Current password")]
+        public string OldPassword { get; set; }
+
+        [Required]
+        [StringLength(100,
+            MinimumLength = 6,
+            ErrorMessageResourceType = typeof(LocalizedStrings),
+            ErrorMessageResourceName = "Account_PasswordValidationError"
+            //ErrorMessage = "The {0} must be at least {2} characters long."
+            )]
+        [DataType(DataType.Password)]
+        [Display(Name = "New password")]
+        public string NewPassword { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm new password")]
+        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
     }
 }

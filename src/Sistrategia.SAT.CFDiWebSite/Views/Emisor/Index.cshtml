@@ -1,0 +1,38 @@
+﻿@using Sistrategia.SAT.CFDiWebSite.Models
+@model EmisorIndexViewModel
+@{
+    ViewBag.Title = "Lista de Emisores";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<div class="row">
+  <div class="col-md-12">
+
+    @Html.ActionLink("Agregar", "Create", User.Identity.Name, new { @class = "btn btn-default", @role = "button" })
+
+    <table class="table table-hover">
+      @*<caption>Test caption</caption>*@
+      <thead>
+        <tr>
+          <th>RFC</th>          
+          <th>@LocalizedStrings.FullNameField</th>
+          <th>@LocalizedStrings.Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (var emisor in Model.Emisores) {
+          <tr>
+            <td>@Html.ActionLink(@emisor.RFC, "Detail", "Emisor", new { Id = @emisor.PublicKey.ToString("N") }, null)</td>
+            @*<td>@Html.ActionLink(@user.UserName, "UserDetail", "Dev", new { Id = @user.PublicKey.ToString("N") }, null)</td>*@
+            @*<td><a href="@item.Url">@item.Name</a></td>*@
+            <td>@emisor.Nombre</td>
+            @*<td>@user.Modified.ToString()</td>*@
+            <td>emisor.Email</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+  </div>
+</div>

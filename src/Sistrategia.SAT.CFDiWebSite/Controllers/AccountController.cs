@@ -261,6 +261,31 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
         #endregion
 
+        #region Change Password
+        
+        public ActionResult ChangePassword() {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model) {
+            if (!ModelState.IsValid) {
+                return View(model);
+            }
+            var result = await UserManager.ChangePasswordAsync(this.GetUserId(), model.OldPassword, model.NewPassword);
+            if (result.Succeeded) {
+                var user = await UserManager.FindByIdAsync(this.GetUserId());
+                if (user != null) {
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                }
+                return RedirectToAction("Index", new { Message = AccountIndexMessageId.ChangePasswordSuccess });
+            }
+            AddErrors(result);
+            return View(model);
+        }
+
+        #endregion
 
         #region Helpers
         // Used for XSRF protection when adding external logins

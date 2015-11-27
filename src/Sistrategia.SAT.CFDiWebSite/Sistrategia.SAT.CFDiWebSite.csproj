@@ -279,6 +279,9 @@
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Emisor\Index.cshtml" />
+    <Content Include="Views\Emisor\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -302,9 +305,13 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="CFDI\Emisor.cs" />
+    <Compile Include="CFDI\Ubicacion.cs" />
+    <Compile Include="CFDI\UbicacionFiscal.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DevController.cs" />
+    <Compile Include="Controllers\EmisorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocaleController.cs" />
     <Compile Include="Data\ApplicationDbContext.cs" />
@@ -316,9 +323,15 @@
     <Compile Include="Migrations\201511261212045_InitialCreate.Designer.cs">
       <DependentUpon>201511261212045_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511261926247_SATSchema.cs" />
+    <Compile Include="Migrations\201511261926247_SATSchema.Designer.cs">
+      <DependentUpon>201511261926247_SATSchema.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\EmisorViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SATManager.cs" />
     <Compile Include="Security\SecurityRole.cs" />
     <Compile Include="Security\SecuritySignInManager.cs" />
     <Compile Include="Security\SecurityUser.cs" />
@@ -346,6 +359,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201511261212045_InitialCreate.resx">
       <DependentUpon>201511261212045_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511261926247_SATSchema.resx">
+      <DependentUpon>201511261926247_SATSchema.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

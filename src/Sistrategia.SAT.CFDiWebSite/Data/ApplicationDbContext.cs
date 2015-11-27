@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity.Infrastructure.Annotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Sistrategia.SAT.CFDiWebSite.Security;
+using Sistrategia.SAT.CFDiWebSite.CFDI;
 
 
 namespace Sistrategia.SAT.CFDiWebSite.Data
@@ -21,6 +22,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
         public static ApplicationDbContext Create() {
             return new ApplicationDbContext();
         }
+
+        public virtual DbSet<Emisor> Emisores { get; set; }
+        public virtual DbSet<Ubicacion> Ubicaciones { get; set; }
+        public virtual DbSet<UbicacionFiscal> UbicacionesFiscales { get; set; }
 
         protected override void OnModelCreating(System.Data.Entity.DbModelBuilder modelBuilder) {
             var user = modelBuilder.Entity<SecurityUser>()
@@ -93,6 +98,81 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             userClaim.Property(pr2 => pr2.UserId).HasColumnName("user_id");
             userClaim.Property(pr3 => pr3.ClaimType).HasColumnName("claim_type");
             userClaim.Property(pr4 => pr4.ClaimValue).HasColumnName("claim_value");
+
+            var emisor = modelBuilder.Entity<Emisor>()
+                .ToTable("sat_emisor");
+            emisor.Property(p => p.EmisorId)
+                .HasColumnName("emisor_id");
+            emisor.Property(p => p.PublicKey)
+                .HasColumnName("public_key")
+                .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()));
+            emisor.Property(p => p.RFC)
+                .HasColumnName("rfc");
+            emisor.Property(p => p.Nombre)
+                .HasColumnName("nombre");
+
+            emisor.Property(p => p.DomicilioFiscalId)
+                .HasColumnName("domicilio_fiscal_id");
+            emisor.Property(p => p.ExpedidoEnId)
+                .HasColumnName("expedido_en_id");
+
+            var ubicacion = modelBuilder.Entity<Ubicacion>()
+                .ToTable("sat_ubicacion");
+            ubicacion.Property(p => p.UbicacionId)
+                .HasColumnName("ubicacion_id");
+            ubicacion.Property(p => p.PublicKey)
+                .HasColumnName("public_key")
+                .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()));
+            ubicacion.Property(p => p.Calle)
+                .HasColumnName("calle");
+            ubicacion.Property(p => p.NoExterior)
+                .HasColumnName("no_exterior");
+            ubicacion.Property(p => p.NoInterior)
+                .HasColumnName("no_interior");
+            ubicacion.Property(p => p.Colonia)
+                .HasColumnName("colonia");
+            ubicacion.Property(p => p.Localidad)
+                .HasColumnName("localidad");
+            ubicacion.Property(p => p.Referencia)
+                .HasColumnName("referencia");
+            ubicacion.Property(p => p.Municipio)
+                .HasColumnName("municipio");
+            ubicacion.Property(p => p.Estado)
+                .HasColumnName("estado");
+            ubicacion.Property(p => p.Pais)
+                .HasColumnName("pais");
+            ubicacion.Property(p => p.CodigoPostal)
+                .HasColumnName("codigo_postal");
+
+            var ubicacionFiscal = modelBuilder.Entity<UbicacionFiscal>()
+                .ToTable("sat_ubicacion_fiscal");
+            ubicacionFiscal.Property(p => p.UbicacionId)
+                .HasColumnName("ubicacion_fiscal_id");
+            ubicacionFiscal.Property(p => p.PublicKey)
+                .HasColumnName("public_key")
+                .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()));
+            ubicacionFiscal.Property(p => p.Calle)
+                .HasColumnName("calle");
+            ubicacionFiscal.Property(p => p.NoExterior)
+                .HasColumnName("no_exterior");
+            ubicacionFiscal.Property(p => p.NoInterior)
+                .HasColumnName("no_interior");
+            ubicacionFiscal.Property(p => p.Colonia)
+                .HasColumnName("colonia");
+            ubicacionFiscal.Property(p => p.Localidad)
+                .HasColumnName("localidad");
+            ubicacionFiscal.Property(p => p.Referencia)
+                .HasColumnName("referencia");
+            ubicacionFiscal.Property(p => p.Municipio)
+                .HasColumnName("municipio");
+            ubicacionFiscal.Property(p => p.Estado)
+                .HasColumnName("estado");
+            ubicacionFiscal.Property(p => p.Pais)
+                .HasColumnName("pais");
+            ubicacionFiscal.Property(p => p.CodigoPostal)
+                .HasColumnName("codigo_postal");
+
+            
         }
     }
 }
