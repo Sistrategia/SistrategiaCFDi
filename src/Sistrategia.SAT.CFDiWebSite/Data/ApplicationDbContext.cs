@@ -25,7 +25,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
 
         public virtual DbSet<Emisor> Emisores { get; set; }
         public virtual DbSet<Ubicacion> Ubicaciones { get; set; }
-        public virtual DbSet<UbicacionFiscal> UbicacionesFiscales { get; set; }
+        //public virtual DbSet<UbicacionFiscal> UbicacionesFiscales { get; set; }
+
+        public virtual DbSet<Certificado> Certificados { get; set; }
+
+        public virtual DbSet<Receptor> Receptores { get; set; }
+
+        public virtual DbSet<Comprobante> Comprobantes { get; set; }
 
         protected override void OnModelCreating(System.Data.Entity.DbModelBuilder modelBuilder) {
             var user = modelBuilder.Entity<SecurityUser>()
@@ -117,62 +123,294 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("expedido_en_id");
 
             var ubicacion = modelBuilder.Entity<Ubicacion>()
-                .ToTable("sat_ubicacion");
+                // .ToTable("sat_ubicacion");
+                ;
             ubicacion.Property(p => p.UbicacionId)
                 .HasColumnName("ubicacion_id");
             ubicacion.Property(p => p.PublicKey)
                 .HasColumnName("public_key")
+                .IsRequired()
                 .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()));
             ubicacion.Property(p => p.Calle)
-                .HasColumnName("calle");
+                .HasColumnName("calle")
+                .IsOptional();
             ubicacion.Property(p => p.NoExterior)
-                .HasColumnName("no_exterior");
+                .HasColumnName("no_exterior")
+                .IsOptional();
             ubicacion.Property(p => p.NoInterior)
-                .HasColumnName("no_interior");
+                .HasColumnName("no_interior")
+                .IsOptional();
             ubicacion.Property(p => p.Colonia)
-                .HasColumnName("colonia");
+                .HasColumnName("colonia")
+                .IsOptional();
             ubicacion.Property(p => p.Localidad)
-                .HasColumnName("localidad");
+                .HasColumnName("localidad")
+                .IsOptional();
             ubicacion.Property(p => p.Referencia)
-                .HasColumnName("referencia");
+                .HasColumnName("referencia")
+                .IsOptional();
             ubicacion.Property(p => p.Municipio)
-                .HasColumnName("municipio");
+                .HasColumnName("municipio")
+                .IsOptional();
             ubicacion.Property(p => p.Estado)
-                .HasColumnName("estado");
+                .HasColumnName("estado")
+                .IsOptional();
             ubicacion.Property(p => p.Pais)
-                .HasColumnName("pais");
+                .HasColumnName("pais")
+                .IsRequired();
             ubicacion.Property(p => p.CodigoPostal)
-                .HasColumnName("codigo_postal");
+                .HasColumnName("codigo_postal")
+                .IsOptional();
 
-            var ubicacionFiscal = modelBuilder.Entity<UbicacionFiscal>()
-                .ToTable("sat_ubicacion_fiscal");
-            ubicacionFiscal.Property(p => p.UbicacionId)
-                .HasColumnName("ubicacion_fiscal_id");
-            ubicacionFiscal.Property(p => p.PublicKey)
+
+            modelBuilder.Entity<Ubicacion>()
+                .Map<Ubicacion>(m => m.Requires("ubicacion_type").HasValue("Ubicacion"))
+                .Map<UbicacionFiscal>(m => m.Requires("ubicacion_type").HasValue("UbicacionFiscal"))
+                .ToTable("sat_ubicacion");
+        
+            //modelBuilder.Entity<UbicacionFiscal>().Map(m =>
+            //{
+            //    m.MapInheritedProperties();
+            //    m.ToTable("UbicacionFiscal");
+            //});
+
+            //var ubicacionFiscal = modelBuilder.Entity<UbicacionFiscal>()
+            //    .ToTable("sat_ubicacion_fiscal");
+            //ubicacionFiscal.Property(p => p.UbicacionId)
+            //    .HasColumnName("ubicacion_fiscal_id");
+            //ubicacionFiscal.Property(p => p.PublicKey)
+            //    .HasColumnName("public_key")
+            //    .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()));
+            //ubicacionFiscal.Property(p => p.Calle)
+            //    .HasColumnName("calle");
+            //ubicacionFiscal.Property(p => p.NoExterior)
+            //    .HasColumnName("no_exterior");
+            //ubicacionFiscal.Property(p => p.NoInterior)
+            //    .HasColumnName("no_interior");
+            //ubicacionFiscal.Property(p => p.Colonia)
+            //    .HasColumnName("colonia");
+            //ubicacionFiscal.Property(p => p.Localidad)
+            //    .HasColumnName("localidad");
+            //ubicacionFiscal.Property(p => p.Referencia)
+            //    .HasColumnName("referencia");
+            //ubicacionFiscal.Property(p => p.Municipio)
+            //    .HasColumnName("municipio");
+            //ubicacionFiscal.Property(p => p.Estado)
+            //    .HasColumnName("estado");
+            //ubicacionFiscal.Property(p => p.Pais)
+            //    .HasColumnName("pais");
+            //ubicacionFiscal.Property(p => p.CodigoPostal)
+            //    .HasColumnName("codigo_postal");
+
+            var certificado = modelBuilder.Entity<Certificado>()
+                .ToTable("sat_certificado");
+            certificado.Property(p => p.CertificadoId)
+                .HasColumnName("certificado_id");
+            certificado.Property(p => p.PublicKey)
+                .HasColumnName("public_key")
+                .IsRequired()
+                .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()));
+            certificado.Property(p => p.NumSerie)
+                .HasColumnName("num_serie")
+                .IsRequired()
+                .HasMaxLength(20);
+            certificado.Property(p => p.RFC)
+                .HasColumnName("rfc")
+                .IsRequired()
+                .HasMaxLength(13);
+            certificado.Property(p => p.Inicia)
+                .HasColumnName("inicia")
+                .IsRequired();
+            certificado.Property(p => p.Finaliza)
+                .HasColumnName("finaliza")
+                .IsRequired();
+            certificado.Property(p => p.CertificadoBase64)
+                .HasColumnName("certificado")
+                //.HasMaxLength(20)
+                .IsRequired();
+            certificado.Property(p => p.PFXArchivo)
+                .HasColumnName("pfx_archivo");
+            certificado.Property(p => p.PFXContrasena)
+                .HasColumnName("pfx_contrasena")
+                .HasMaxLength(2048);
+            certificado.Property(p => p.Estado)
+                .HasColumnName("estado")
+                .IsRequired();
+
+
+            var regimenFiscal = modelBuilder.Entity<RegimenFiscal>()
+                .ToTable("sat_regimen_fiscal");
+            regimenFiscal.Property(p => p.RegimenFiscalId)
+                .HasColumnName("regimen_fiscal_id");
+            regimenFiscal.Property(p => p.Regimen)
+                .HasColumnName("regimen");
+
+            emisor.HasMany<Certificado>(p => p.Certificados)
+                .WithOptional()
+                .Map(pe=>pe.MapKey("emisor_id"));
+
+            emisor.HasMany<RegimenFiscal>(p => p.RegimenFiscal)
+                .WithOptional()
+                .Map(pe => pe.MapKey("emisor_id"));
+
+            var receptor = modelBuilder.Entity<Receptor>()
+                .ToTable("sat_receptor");
+            receptor.Property(p => p.ReceptorId)
+                .HasColumnName("receptor_id");
+            receptor.Property(p => p.PublicKey)
                 .HasColumnName("public_key")
                 .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()));
-            ubicacionFiscal.Property(p => p.Calle)
-                .HasColumnName("calle");
-            ubicacionFiscal.Property(p => p.NoExterior)
-                .HasColumnName("no_exterior");
-            ubicacionFiscal.Property(p => p.NoInterior)
-                .HasColumnName("no_interior");
-            ubicacionFiscal.Property(p => p.Colonia)
-                .HasColumnName("colonia");
-            ubicacionFiscal.Property(p => p.Localidad)
-                .HasColumnName("localidad");
-            ubicacionFiscal.Property(p => p.Referencia)
-                .HasColumnName("referencia");
-            ubicacionFiscal.Property(p => p.Municipio)
-                .HasColumnName("municipio");
-            ubicacionFiscal.Property(p => p.Estado)
-                .HasColumnName("estado");
-            ubicacionFiscal.Property(p => p.Pais)
-                .HasColumnName("pais");
-            ubicacionFiscal.Property(p => p.CodigoPostal)
-                .HasColumnName("codigo_postal");
+            receptor.Property(p => p.RFC)
+                .HasColumnName("rfc");
+            receptor.Property(p => p.Nombre)
+                .HasColumnName("nombre");
 
-            
+            receptor.Property(p => p.DomicilioId)
+                .HasColumnName("domicilio_id");
+
+            var comprobante = modelBuilder.Entity<Comprobante>()
+                .ToTable("sat_comprobante");
+            comprobante.Property(p => p.ComprobanteId)
+                .HasColumnName("comprobante_id");
+            comprobante.Property(p => p.PublicKey)
+                .HasColumnName("public_key")
+                .IsRequired()
+                .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()));
+            comprobante.Property(p => p.Version)
+                .HasColumnName("version")
+                .IsRequired()
+                .HasMaxLength(20);
+            comprobante.Property(p => p.Serie)
+                .HasColumnName("serie")
+                .IsOptional()
+                .HasMaxLength(25);
+            comprobante.Property(p => p.Folio)
+                .HasColumnName("folio")
+                .IsOptional()
+                .HasMaxLength(20);
+            comprobante.Property(p => p.Fecha)
+                .HasColumnName("fecha")
+                .IsRequired();
+            comprobante.Property(p => p.Sello)
+                .HasColumnName("sello")
+                .IsOptional() // porque sino no se puede guardar el comprobante antes de sellarse.
+                .HasMaxLength(2048);
+            comprobante.Property(p => p.FormaDePago)
+                .HasColumnName("forma_de_pago")
+                .IsRequired() // DEFAULT 'PAGO EN UNA SOLA EXHIBICION'
+                .HasMaxLength(256);
+            comprobante.Property(p => p.NoCertificado)
+                .HasColumnName("no_certificado")
+                .IsOptional() 
+                .HasMaxLength(20);
+            comprobante.Property(p => p.Certificado)
+                .HasColumnName("certificado")
+                .IsOptional()
+                .HasMaxLength(2048);
+            comprobante.Property(p => p.CondicionesDePago)
+                .HasColumnName("condiciones_de_pago")
+                .IsOptional()
+                .HasMaxLength(2048);
+            comprobante.Property(p => p.SubTotal)
+                .HasColumnName("sub_total")
+                .HasPrecision(18, 6)
+                .IsRequired();
+            comprobante.Property(p => p.Descuento)
+                .HasColumnName("descuento")
+                .HasPrecision(18, 6)
+                .IsOptional();
+            //comprobante.Ignore(p => p.DescuentoSpecified);
+            comprobante.Property(p => p.MotivoDescuento)
+                .HasColumnName("motivo_descuento")
+                .IsOptional()
+                .HasMaxLength(2048);
+            comprobante.Property(p => p.TipoCambio)
+                .HasColumnName("tipo_cambio")
+                .IsOptional()
+                .HasMaxLength(50);
+            comprobante.Property(p => p.Moneda)
+                .HasColumnName("moneda")
+                .IsOptional()
+                .HasMaxLength(50);
+            comprobante.Property(p => p.Total)
+                .HasColumnName("total")
+                .HasPrecision(18, 6)
+                .IsRequired();
+            comprobante.Property(p => p.TipoDeComprobante)
+                .HasColumnName("tipo_de_comprobante")
+                .HasMaxLength(50)
+                .IsRequired();
+            comprobante.Property(p => p.MetodoDePago)
+                .HasColumnName("metodo_de_pago")
+                .IsRequired() // Requerido
+                .HasMaxLength(256);
+            comprobante.Property(p => p.LugarExpedicion)
+                .HasColumnName("lugar_expedicion")
+                .IsRequired() // Requerido
+                .HasMaxLength(2048);
+            comprobante.Property(p => p.NumCtaPago)
+                .HasColumnName("num_cta_pago")
+                .IsOptional() 
+                .HasMaxLength(256);
+            comprobante.Property(p => p.FolioFiscalOrig)
+                .HasColumnName("folio_fiscal_orig")
+                .IsOptional() 
+                .HasMaxLength(256);
+            comprobante.Property(p => p.SerieFolioFiscalOrig)
+                .HasColumnName("serie_folio_fiscal_orig")
+                .IsOptional()
+                .HasMaxLength(256);
+            comprobante.Property(p => p.FechaFolioFiscalOrig)
+                .HasColumnName("fecha_folio_fiscal_orig")
+                .IsOptional();
+            //comprobante.Ignore(p => p.FechaFolioFiscalOrigSpecified);
+            comprobante.Property(p => p.MontoFolioFiscalOrig)
+                .HasColumnName("monto_folio_fiscal_orig")
+                .HasPrecision(18, 6)
+                .IsOptional();
+                //comprobante.Ignore(p => p.MontoFolioFiscalOrigSpecified);
+            comprobante.Property(p => p.EmisorId)
+                .HasColumnName("emisor_id");
+            comprobante.Property(p => p.ReceptorId)
+                .HasColumnName("receptor_id");
+
+
+            var concepto = modelBuilder.Entity<Concepto>()
+                .ToTable("sat_concepto");
+            concepto.Property(p => p.ConceptoId)
+                .HasColumnName("concepto_id");
+            concepto.Property(p => p.PublicKey)
+                .HasColumnName("public_key")
+                .IsRequired()
+                .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()));
+            concepto.Property(p => p.Cantidad)
+                .HasColumnName("cantidad")
+                .HasPrecision(18, 6)
+                .IsRequired();
+            concepto.Property(p => p.Unidad)
+                .HasColumnName("unidad")
+                .HasMaxLength(50)
+                .IsOptional();
+            concepto.Property(p => p.NoIdentificacion)
+                .HasColumnName("no_identificacion")
+                .HasMaxLength(256)
+                .IsOptional();
+            concepto.Property(p => p.Descripcion)
+                .HasColumnName("descripcion")
+                //.HasMaxLength(2048)
+                .IsOptional();
+            concepto.Property(p => p.ValorUnitario)
+                .HasColumnName("valor_unitario")
+                .HasPrecision(18, 6)
+                .IsRequired();
+            concepto.Property(p => p.Importe)
+                .HasColumnName("importe")
+                .HasPrecision(18, 6)
+                .IsRequired();
+
+            comprobante.HasMany<Concepto>(p => p.Conceptos)
+                .WithOptional()
+                .Map(pe => pe.MapKey("comprobante_id"));
         }
     }
 }

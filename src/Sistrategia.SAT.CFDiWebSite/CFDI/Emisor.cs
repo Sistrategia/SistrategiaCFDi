@@ -83,12 +83,81 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
         [ForeignKey("DomicilioFiscal")]
         public int? DomicilioFiscalId { get; set; }
+
+        /// <summary>
+        /// Nodo opcional para precisar la información de ubicación del domicilio fiscal del contribuyente emisor.
+        /// </summary>
+        /// <remarks>
+        /// Antes era requerido
+        /// <code>
+        /// <xs:element name="DomicilioFiscal" type="cfdi:t_UbicacionFiscal" minOccurs="0">
+        ///     <xs:annotation>
+        ///         <xs:documentation>Nodo opcional para precisar la información de ubicación del domicilio fiscal del contribuyente emisor</xs:documentation>
+        ///     </xs:annotation>
+        /// </xs:element>
+        /// </code>
+        /// </remarks>
+        //[XmlElement("DomicilioFiscal")]
         public virtual UbicacionFiscal DomicilioFiscal { get; set; }
 
         [ForeignKey("ExpedidoEn")]
         public int? ExpedidoEnId { get; set; }
-        public virtual UbicacionFiscal ExpedidoEn { get; set; }
 
+        /// <summary>
+        /// Nodo opcional para precisar la información de ubicación del domicilio en donde es emitido 
+        /// el comprobante fiscal en caso de que sea distinto del domicilio fiscal del contribuyente emisor.
+        /// </summary>
+        /// <remarks>
+        /// <code>
+        /// <xs:element name="ExpedidoEn" type="cfdi:t_Ubicacion" minOccurs="0">
+        ///     <xs:annotation>
+        ///         <xs:documentation>Nodo opcional para precisar la información de ubicación del domicilio en donde es emitido el comprobante fiscal en caso de que sea distinto del domicilio fiscal del contribuyente emisor.</xs:documentation>
+        ///     </xs:annotation>
+        /// </xs:element>
+        /// </code>
+        /// </remarks>
+        //[XmlElement("ExpedidoEn")]
+        public virtual Ubicacion ExpedidoEn { get; set; }
 
+        /// <summary>
+        /// Nodo requerido para incorporar los regímenes en los que tributa el contribuyente emisor. Puede contener más de un régimen.
+        /// </summary>
+        /// <remarks>
+        /// <code>
+        /// <xs:sequence>
+        ///   <xs:element name="RegimenFiscal" maxOccurs="unbounded">
+        ///     <xs:annotation>
+        ///       <xs:documentation>Nodo requerido para incorporar los regímenes en los que tributa el contribuyente emisor. Puede contener más de un régimen.</xs:documentation>
+        ///     </xs:annotation>
+        ///     <xs:complexType>
+        ///       <xs:attribute name="Regimen" use="required">
+        ///         <xs:annotation>
+        ///           <xs:documentation>Atributo requerido para incorporar el nombre del régimen en el que tributa el contribuyente emisor.</xs:documentation>
+        ///         </xs:annotation>
+        ///         <xs:simpleType>
+        ///           <xs:restriction base="xs:string">
+        ///             <xs:minLength value="1"/>
+        ///             <xs:whiteSpace value="collapse"/>
+        ///           </xs:restriction>
+        ///         </xs:simpleType>
+        ///       </xs:attribute>
+        ///     </xs:complexType>
+        ///   </xs:element>
+        /// </xs:sequence>        
+        /// </code>
+        /// </remarks>
+        //[XmlElement("RegimenFiscal", IsNullable = false)]
+        public virtual List<RegimenFiscal> RegimenFiscal { get; set; }
+
+        public virtual List<Certificado> Certificados { get; set; }
+    }
+
+    public class RegimenFiscal
+    {
+        public RegimenFiscal() { }
+        
+        [Key]
+        public int RegimenFiscalId { get; set; }
+        public string Regimen { get; set; }
     }
 }

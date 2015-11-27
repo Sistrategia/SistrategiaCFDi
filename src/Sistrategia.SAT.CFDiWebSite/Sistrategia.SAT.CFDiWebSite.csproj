@@ -282,6 +282,8 @@
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Emisor\Index.cshtml" />
     <Content Include="Views\Emisor\Create.cshtml" />
+    <Content Include="Views\Emisor\Detail.cshtml" />
+    <Content Include="Views\Emisor\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -305,7 +307,11 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="CFDI\Certificado.cs" />
+    <Compile Include="CFDI\Comprobante.cs" />
+    <Compile Include="CFDI\Concepto.cs" />
     <Compile Include="CFDI\Emisor.cs" />
+    <Compile Include="CFDI\Receptor.cs" />
     <Compile Include="CFDI\Ubicacion.cs" />
     <Compile Include="CFDI\UbicacionFiscal.cs" />
     <Compile Include="Controllers\AccountController.cs" />

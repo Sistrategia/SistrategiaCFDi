@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+  string ControllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+}
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8" />
@@ -25,6 +28,10 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                  <li @if (ControllerName.Equals("Emisor")) { @Html.Raw("class='active'") ; } else { @Html.Raw("") ; }>
+                    @Html.ActionLink("Emisores", "Index", "Emisor")                    
+                  </li>
+
                 </ul>
               @Html.Partial("_LoginPartial")
 

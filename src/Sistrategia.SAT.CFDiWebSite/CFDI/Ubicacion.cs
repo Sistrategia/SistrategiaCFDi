@@ -55,7 +55,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </remarks>
         [MaxLength(256)]
         [XmlAttribute("calle")]
-        public string Calle {
+        public virtual string Calle {
             get { return this.calle; }
             set { this.calle = SATManager.NormalizeWhiteSpace(value); }
         }
@@ -208,7 +208,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </remarks>
         [MaxLength(50)]
         [XmlAttribute("municipio")]
-        public string Municipio {
+        public virtual string Municipio {
             get { return this.municipio; }
             set { this.municipio = SATManager.NormalizeWhiteSpace(value); }
         }
@@ -233,7 +233,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </remarks>
         [MaxLength(50)]
         [XmlAttribute("estado")]
-        public string Estado {
+        public virtual string Estado {
             get { return this.estado; }
             set { this.estado = SATManager.NormalizeWhiteSpace(value); }
         }
@@ -255,10 +255,11 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         ///     </xs:simpleType>
         /// </xs:attribute>
         /// </code>
-        /// </remarks>
+        /// </remarks>        
+        [Required]
         [MaxLength(50)]
         [XmlAttribute("pais")]
-        public string Pais {
+        public virtual string Pais {
             get { return this.pais; }
             set { this.pais = SATManager.NormalizeWhiteSpace(value); }
         }
@@ -282,7 +283,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </remarks>
         [MaxLength(5)]
         [XmlAttribute("codigoPostal")]
-        public string CodigoPostal {
+        public virtual string CodigoPostal {
             get { return this.codigoPostal; }
             set { this.codigoPostal = SATManager.NormalizeWhiteSpace(value); }
         }

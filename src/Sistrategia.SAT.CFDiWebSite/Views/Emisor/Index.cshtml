@@ -1,7 +1,7 @@
 ﻿@using Sistrategia.SAT.CFDiWebSite.Models
 @model EmisorIndexViewModel
 @{
-    ViewBag.Title = "Lista de Emisores";
+    ViewBag.Title = "Lista de Emisores";    
 }
 
 <h1>@ViewBag.Title</h1>
@@ -15,9 +15,10 @@
       @*<caption>Test caption</caption>*@
       <thead>
         <tr>
-          <th>RFC</th>          
+          <th>@Html.DisplayNameFor(model => model.Emisores[0].RFC)</th>          
           <th>@LocalizedStrings.FullNameField</th>
           <th>@LocalizedStrings.Email</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -29,6 +30,11 @@
             <td>@emisor.Nombre</td>
             @*<td>@user.Modified.ToString()</td>*@
             <td>emisor.Email</td>
+            <td>
+              @Html.ActionLink("Edit", "Edit", new { id = emisor.PublicKey.ToString("N") }) |
+              @Html.ActionLink("Details", "Details", new { id = emisor.PublicKey.ToString("N") }) |
+              @Html.ActionLink("Delete", "Delete", new { id = emisor.PublicKey.ToString("N") })
+            </td>
           </tr>
         }
       </tbody>

@@ -1,10 +1,10 @@
 ﻿@using Sistrategia.SAT.CFDiWebSite.Models
-@model EmisorCreateViewModel
+@model EmisorDetailViewModel
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Detail";
 }
 
-<h1>@ViewBag.Title</h1>
+<h1>Detail</h1>
 
 @using (Html.BeginForm("Create", "Emisor", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
   @Html.AntiForgeryToken()
@@ -25,12 +25,6 @@
     </div>
   </div>
   <div class="form-group">
-    @Html.LabelFor(m => m.RegimenFiscal, new { @class = "col-md-2 control-label" })
-    <div class="col-md-10">
-      @Html.TextBoxFor(m => m.RegimenFiscal, new { @class = "form-control" })
-    </div>
-  </div>
-  <div class="form-group">
     @Html.LabelFor(m => m.Calle, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
       @Html.TextBoxFor(m => m.Calle, new { @class = "form-control" })
@@ -39,58 +33,57 @@
   <div class="form-group">
     @Html.LabelFor(m => m.NoExterior, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
-      @Html.TextBoxFor(m => m.NoExterior, new { @class = "form-control" })
+      @Html.PasswordFor(m => m.NoExterior, new { @class = "form-control" })
     </div>
   </div>
   <div class="form-group">
     @Html.LabelFor(m => m.NoInterior, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
-      @Html.TextBoxFor(m => m.NoInterior, new { @class = "form-control" })
+      @Html.PasswordFor(m => m.NoInterior, new { @class = "form-control" })
     </div>
   </div>
   <div class="form-group">
     @Html.LabelFor(m => m.Colonia, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
-      @Html.TextBoxFor(m => m.Colonia, new { @class = "form-control" })
-    </div>
-  </div>  
-  <div class="form-group">
-    @Html.LabelFor(m => m.Municipio, new { @class = "col-md-2 control-label" })
-    <div class="col-md-10">
-      @Html.TextBoxFor(m => m.Municipio, new { @class = "form-control" })
+      @Html.PasswordFor(m => m.Colonia, new { @class = "form-control" })
     </div>
   </div>
   <div class="form-group">
     @Html.LabelFor(m => m.Localidad, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
-      @Html.TextBoxFor(m => m.Localidad, new { @class = "form-control" })
+      @Html.PasswordFor(m => m.Localidad, new { @class = "form-control" })
     </div>
   </div>
   <div class="form-group">
-    @Html.LabelFor(m => m.Estado, new { @class = "col-md-2 control-label" })
+    @Html.LabelFor(m => m.Municipio, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
-      @Html.TextBoxFor(m => m.Estado, new { @class = "form-control" })
+      @Html.PasswordFor(m => m.Municipio, new { @class = "form-control" })
     </div>
   </div>
   <div class="form-group">
     @Html.LabelFor(m => m.CodigoPostal, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
-      @Html.TextBoxFor(m => m.CodigoPostal, new { @class = "form-control" })
+      @Html.PasswordFor(m => m.CodigoPostal, new { @class = "form-control" })
     </div>
   </div>
   <div class="form-group">
     @Html.LabelFor(m => m.Pais, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
-      @Html.TextBoxFor(m => m.Pais, new { @class = "form-control" })
+      @Html.PasswordFor(m => m.Pais, new { @class = "form-control" })
     </div>
   </div>
   <div class="form-group">
     @Html.LabelFor(m => m.Referencia, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
-      @Html.TextBoxFor(m => m.Referencia, new { @class = "form-control" })
+      @Html.PasswordFor(m => m.Referencia, new { @class = "form-control" })
     </div>
   </div>
-  
+  <div class="form-group">
+    @Html.LabelFor(m => m.RegimenFiscal, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.PasswordFor(m => m.RegimenFiscal, new { @class = "form-control" })
+    </div>
+  </div>
   <div class="form-group">
     <div class="col-md-offset-2 col-md-10">
       <input type="submit" class="btn btn-default" value="@LocalizedStrings.SaveButton" />

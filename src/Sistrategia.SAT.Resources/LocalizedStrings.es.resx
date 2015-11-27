@@ -294,4 +294,43 @@
   <data name="SaveButton" xml:space="preserve">
     <value>Guardar</value>
   </data>
+  <data name="FiscalNameField" xml:space="preserve">
+    <value>Nombre, denominación o razón social</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="AddressStreetField" xml:space="preserve">
+    <value>Calle</value>
+  </data>
+  <data name="AddressCityField" xml:space="preserve">
+    <value>Ciudad/Localidad</value>
+  </data>
+  <data name="AddressColonyField" xml:space="preserve">
+    <value>Colonia</value>
+  </data>
+  <data name="AddressCountryField" xml:space="preserve">
+    <value>País</value>
+  </data>
+  <data name="AddressCountyField" xml:space="preserve">
+    <value>Municipio/Delegación</value>
+  </data>
+  <data name="AddressExtNumberField" xml:space="preserve">
+    <value>Número exterior</value>
+  </data>
+  <data name="AddressIntNumberField" xml:space="preserve">
+    <value>Número interior</value>
+  </data>
+  <data name="AddressReferenceField" xml:space="preserve">
+    <value>Referencias</value>
+  </data>
+  <data name="AddressStateField" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="AddressZipField" xml:space="preserve">
+    <value>Código Postal</value>
+  </data>
+  <data name="FiscalRegimeField" xml:space="preserve">
+    <value>Régimen Fiscal</value>
+  </data>
 </root>
