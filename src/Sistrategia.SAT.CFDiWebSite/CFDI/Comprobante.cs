@@ -55,6 +55,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         ////private Concepto[] conceptos;
         //private virtual List<Concepto> conceptos;
         //private virtual Impuestos impuestos;
+        //private Impuestos impuestos;
 
         //private virtual Complemento complemento;
         //private Addenda addenda;
@@ -726,9 +727,13 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //    //set { this.currentData.Conceptos = value; }
         //}
 
-        ///// <summary>
-        ///// Nodo requerido para capturar los impuestos aplicables.
-        ///// </summary>
+        [ForeignKey("Impuestos")]
+        public int? ImpuestosId { get; set; }
+
+        /// <summary>
+        /// Nodo requerido para capturar los impuestos aplicables.
+        /// </summary>
+        public virtual Impuestos Impuestos { get; set; }
         //public Impuestos Impuestos {
         //    get { return this.impuestos; }
         //    set { this.impuestos = value; }
@@ -752,4 +757,320 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
     //    egreso,
     //    traslado
     //}
+
+    public class Impuestos
+    {
+        #region
+        private decimal? totalImpuestosRetenidos;
+        //private bool totalImpuestosRetenidosSpecified = false;
+        private decimal? totalImpuestosTrasladados;
+        //private bool totalImpuestosTrasladadosSpecified = false;
+        #endregion
+        [Key]
+        public int ImpuestosId { get; set; }
+
+        //[Required]
+        //public Guid PublicKey { get; set; }
+
+        /// <summary>
+        /// Nodo opcional para capturar los impuestos retenidos aplicables
+        /// </summary>
+        [XmlArrayItem("Retencion", IsNullable = false)]
+        public virtual List<Retencion> Retenciones { get; set; }
+        //public Retencion[] Retenciones {
+        //    get { return this.retenciones; }
+        //    set { this.retenciones = value; }
+        //}
+
+        /// <summary>
+        /// Nodo opcional para asentar o referir los impuestos trasladados aplicables
+        /// </summary>
+        [XmlArrayItem("Traslado", IsNullable = false)]
+        public virtual List<Traslado> Traslados { get; set; }
+        //public Traslado[] Traslados {
+        //    get { return this.traslados; }
+        //    set { this.traslados = value; }
+        //}
+
+        /// <summary>
+        /// Atributo opcional para expresar el total de los impuestos retenidos que se desprenden 
+        /// de los conceptos expresados en el comprobante fiscal digital a través de Internet.
+        /// </summary>
+        [XmlAttribute("totalImpuestosRetenidos")]
+        public decimal? TotalImpuestosRetenidos {
+            get { return this.totalImpuestosRetenidos; }
+            set { this.totalImpuestosRetenidos = value; }
+        }
+        //<xs:attribute name="totalImpuestosRetenidos" type="cfdi:t_Importe" use="optional">
+        //    <xs:annotation>
+        //    <xs:documentation>Atributo opcional para expresar el total de los impuestos retenidos que se desprenden de los conceptos expresados en el comprobante fiscal digital a través de Internet.</xs:documentation>
+        //    </xs:annotation>
+        //</xs:attribute>
+
+
+        //[XmlIgnore]
+        //public bool TotalImpuestosRetenidosSpecified {
+        //    get { return this.totalImpuestosRetenidosSpecified; }
+        //    set { this.totalImpuestosRetenidosSpecified = value; }
+        //}
+
+        /// <summary>
+        /// Atributo opcional para expresar el total de los impuestos trasladados que se desprenden 
+        /// de los conceptos expresados en el comprobante fiscal digital a través de Internet.
+        /// </summary>
+        [XmlAttribute("totalImpuestosTrasladados")]
+        public decimal? TotalImpuestosTrasladados {
+            get { return this.totalImpuestosTrasladados; }
+            set { this.totalImpuestosTrasladados = value; }
+        }
+        //<xs:attribute name="totalImpuestosTrasladados" type="cfdi:t_Importe" use="optional">
+        //    <xs:annotation>
+        //    <xs:documentation>Atributo opcional para expresar el total de los impuestos trasladados que se desprenden de los conceptos expresados en el comprobante fiscal digital a través de Internet.</xs:documentation>
+        //    </xs:annotation>
+        //</xs:attribute>
+
+        //[XmlIgnore]
+        //public bool TotalImpuestosTrasladadosSpecified {
+        //    get { return this.totalImpuestosTrasladadosSpecified; }
+        //    set { this.totalImpuestosTrasladadosSpecified = value; }
+        //}
+    }
+
+
+    public class Retencion
+    {
+        private Retencion() {
+            //this.PublicKey = Guid.NewGuid();
+        }
+
+        //private RetencionImpuesto impuesto;
+        private string impuesto;
+        private decimal importe;
+
+        [Key]
+        public int RetencionId { get; set; }
+
+        //[Required]
+        //public Guid PublicKey { get; set; }
+
+        /// <summary>
+        /// Atributo requerido para señalar el tipo de impuesto retenido
+        /// </summary>
+        /// <remarks>
+        /// <code>
+        /// <xs:attribute name="impuesto" use="required">
+        ///     <xs:annotation>
+        ///         <xs:documentation>Atributo requerido para señalar el tipo de impuesto retenido</xs:documentation>
+        ///     </xs:annotation>
+        ///     <xs:simpleType>
+        ///         <xs:restriction base="xs:string">
+        ///             <xs:whiteSpace value="collapse"/>
+        ///             <xs:enumeration value="ISR">
+        ///                 <xs:annotation>
+        ///                     <xs:documentation>Impuesto sobre la renta</xs:documentation>
+        ///                 </xs:annotation>
+        ///             </xs:enumeration>
+        ///             <xs:enumeration value="IVA">
+        ///                 <xs:annotation>
+        ///                     <xs:documentation>Impuesto al Valor Agregado</xs:documentation>
+        ///                 </xs:annotation>
+        ///             </xs:enumeration>
+        ///         </xs:restriction>
+        ///     </xs:simpleType>
+        /// </xs:attribute>
+        /// </code>
+        /// </remarks>
+        [XmlAttribute("impuesto")]
+        public string Impuesto {
+        //public RetencionImpuesto Impuesto {
+            get { return this.impuesto; }
+            set { this.impuesto = value; }
+        }
+
+        /// <summary>
+        /// Atributo requerido para señalar el importe o monto del impuesto retenido.
+        /// </summary>
+        /// <remarks>
+        /// <code>
+        /// <xs:attribute name="importe" type="cfdi:t_Importe" use="required">
+        ///   <xs:annotation>
+        ///     <xs:documentation>
+        ///       Atributo requerido para señalar el importe o monto del impuesto retenido.
+        ///     </xs:documentation>
+        ///   </xs:annotation>
+        /// </xs:attribute>
+        /// </code>
+        /// </remarks>
+        [XmlAttribute("importe")]
+        public decimal Importe {
+            get { return this.importe; }
+            set { this.importe = value; }
+        }
+
+        ///// <summary>
+        ///// Atributo requerido para señalar el tipo de impuesto retenido.
+        ///// </summary>
+        //[Serializable]
+        //[XmlType(AnonymousType = true, Namespace = "http://www.sat.gob.mx/cfd/3")]
+        //public enum RetencionImpuesto
+        //{
+        //    /// <summary>
+        //    /// Impuesto sobre la renta
+        //    /// </summary>
+        //    ISR,
+        //    /// <summary>
+        //    /// Impuesto al Valor Agregado
+        //    /// </summary>
+        //    IVA,
+        //}
+        ////<xs:simpleType>
+        ////    <xs:restriction base="xs:string">
+        ////        <xs:whiteSpace value="collapse"/>
+        ////        <xs:enumeration value="ISR">
+        ////            <xs:annotation>
+        ////                <xs:documentation>Impuesto sobre la renta</xs:documentation>
+        ////            </xs:annotation>
+        ////        </xs:enumeration>
+        ////        <xs:enumeration value="IVA">
+        ////            <xs:annotation>
+        ////                <xs:documentation>Impuesto al Valor Agregado</xs:documentation>
+        ////            </xs:annotation>
+        ////        </xs:enumeration>
+        ////    </xs:restriction>
+        ////</xs:simpleType>
+
+    }
+
+    public class Traslado
+    {
+        private Traslado() {
+            //this.PublicKey = Guid.NewGuid();
+        }
+
+        //private TrasladoImpuesto impuesto;
+        private string impuesto;
+        private decimal tasa;
+        private decimal importe;
+
+        [Key]
+        public int TrasladoId { get; set; }
+
+        //[Required]
+        //public Guid PublicKey { get; set; }
+
+        /// <summary>
+        /// Atributo requerido para señalar el tipo de impuesto trasladado.
+        /// </summary>
+        /// <remarks>
+        /// <code>
+        /// <xs:attribute name="impuesto" use="required">
+        ///   <xs:annotation>
+        ///     <xs:documentation>
+        ///       Atributo requerido para señalar el tipo de impuesto trasladado
+        ///     </xs:documentation>
+        ///   </xs:annotation>
+        ///   <xs:simpleType>
+        ///     <xs:restriction base="xs:string">
+        ///       <xs:whiteSpace value="collapse"/>
+        ///       <xs:enumeration value="IVA">
+        ///       <xs:annotation>
+        ///           <xs:documentation>Impuesto al Valor Agregado</xs:documentation>
+        ///       </xs:annotation>
+        ///       </xs:enumeration>
+        ///       <xs:enumeration value="IEPS">
+        ///          <xs:annotation>
+        ///               <xs:documentation>Impuesto especial sobre productos y servicios</xs:documentation>
+        ///           </xs:annotation>
+        ///       </xs:enumeration>
+        ///     </xs:restriction>
+        ///   </xs:simpleType>
+        /// </xs:attribute>
+        /// </code>
+        /// </remarks>
+        [XmlAttribute("impuesto")]
+        public string Impuesto {
+        //public TrasladoImpuesto Impuesto {
+            get { return this.impuesto; }
+            set { this.impuesto = value; }
+        }        
+
+        /// <summary>
+        /// Atributo requerido para señalar la tasa del impuesto que se traslada por cada concepto amparado en el comprobante.
+        /// </summary>
+        /// <remarks>
+        /// <code>
+        /// <xs:attribute name="tasa" type="cfdi:t_Importe" use="required">
+        ///   <xs:annotation>
+        ///     <xs:documentation>
+        ///       Atributo requerido para señalar la tasa del impuesto que se traslada por cada concepto amparado en el comprobante.
+        ///     </xs:documentation>
+        ///   </xs:annotation>
+        /// </xs:attribute>
+        /// </code>
+        /// </remarks>
+        [XmlAttribute("tasa")]
+        public decimal Tasa {
+            get { return this.tasa; }
+            set { this.tasa = value; }
+        }        
+
+        /// <summary>
+        /// Atributo requerido para señalar el importe del impuesto trasladado.
+        /// </summary>
+        /// <remarks>
+        /// <code>
+        /// <xs:attribute name="importe" type="cfdi:t_Importe" use="required">
+        ///   <xs:annotation>
+        ///     <xs:documentation>
+        ///       Atributo requerido para señalar el importe del impuesto trasladado.
+        ///     </xs:documentation>
+        ///   </xs:annotation>
+        /// </xs:attribute>
+        /// </code>
+        /// </remarks>
+        [XmlAttribute("importe")]
+        public decimal Importe {
+            get { return this.importe; }
+            set { this.importe = value; }
+        }
+    }
+
+    ///// <summary>
+    ///// Atributo requerido para señalar el tipo de impuesto trasladado
+    ///// </summary>
+    //[Serializable]
+    //[XmlType(AnonymousType = true, Namespace = "http://www.sat.gob.mx/cfd/3")]
+    //public enum TrasladoImpuesto
+    //{
+    //    /// <summary>
+    //    /// Impuesto al Valor Agregado
+    //    /// </summary>
+    //    IVA,
+    //    /// <summary>
+    //    /// Impuesto especial sobre productos y servicios
+    //    /// </summary>
+    //    IEPS,
+    //}
+    ////<xs:attribute name="impuesto" use="required">
+    ////    <xs:annotation>
+    ////    <xs:documentation>Atributo requerido para señalar el tipo de impuesto trasladado</xs:documentation>
+    ////    </xs:annotation>
+    ////    <xs:simpleType>
+    ////    <xs:restriction base="xs:string">
+    ////        <xs:whiteSpace value="collapse"/>
+    ////        <xs:enumeration value="IVA">
+    ////        <xs:annotation>
+    ////            <xs:documentation>Impuesto al Valor Agregado</xs:documentation>
+    ////        </xs:annotation>
+    ////        </xs:enumeration>
+    ////        <xs:enumeration value="IEPS">
+    ////        <xs:annotation>
+    ////            <xs:documentation>Impuesto especial sobre productos y servicios</xs:documentation>
+    ////        </xs:annotation>
+    ////        </xs:enumeration>
+    ////    </xs:restriction>
+    ////    </xs:simpleType>
+    ////</xs:attribute>
+    //}
+
 }

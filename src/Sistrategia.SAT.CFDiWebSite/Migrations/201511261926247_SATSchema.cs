@@ -59,13 +59,16 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         monto_folio_fiscal_orig = c.Decimal(precision: 18, scale: 6),
                         emisor_id = c.Int(),
                         receptor_id = c.Int(),
+                        impuestos_id = c.Int(),
                     })
                 .PrimaryKey(t => t.comprobante_id)
                 .ForeignKey("dbo.sat_emisor", t => t.emisor_id)
+                .ForeignKey("dbo.sat_impuestos", t => t.impuestos_id)
                 .ForeignKey("dbo.sat_receptor", t => t.receptor_id)
                 .Index(t => t.public_key)
                 .Index(t => t.emisor_id)
-                .Index(t => t.receptor_id);
+                .Index(t => t.receptor_id)
+                .Index(t => t.impuestos_id);
             
             CreateTable(
                 "dbo.sat_concepto",
@@ -138,6 +141,43 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 .Index(t => t.emisor_id);
             
             CreateTable(
+                "dbo.sat_impuestos",
+                c => new
+                    {
+                        impuestos_id = c.Int(nullable: false, identity: true),
+                        TotalImpuestosRetenidos = c.Decimal(precision: 18, scale: 2),
+                        TotalImpuestosTrasladados = c.Decimal(precision: 18, scale: 2),
+                    })
+                .PrimaryKey(t => t.impuestos_id);
+            
+            CreateTable(
+                "dbo.sat_retencion",
+                c => new
+                    {
+                        retencion_id = c.Int(nullable: false, identity: true),
+                        impuesto = c.String(),
+                        importe = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        impuesto_id = c.Int(),
+                    })
+                .PrimaryKey(t => t.retencion_id)
+                .ForeignKey("dbo.sat_impuestos", t => t.impuesto_id)
+                .Index(t => t.impuesto_id);
+            
+            CreateTable(
+                "dbo.sat_traslado",
+                c => new
+                    {
+                        traslado_id = c.Int(nullable: false, identity: true),
+                        impuesto = c.String(),
+                        tasa = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        importe = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        impuesto_id = c.Int(),
+                    })
+                .PrimaryKey(t => t.traslado_id)
+                .ForeignKey("dbo.sat_impuestos", t => t.impuesto_id)
+                .Index(t => t.impuesto_id);
+            
+            CreateTable(
                 "dbo.sat_receptor",
                 c => new
                     {
@@ -158,6 +198,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
         {
             DropForeignKey("dbo.sat_comprobante", "receptor_id", "dbo.sat_receptor");
             DropForeignKey("dbo.sat_receptor", "domicilio_id", "dbo.sat_ubicacion");
+            DropForeignKey("dbo.sat_comprobante", "impuestos_id", "dbo.sat_impuestos");
+            DropForeignKey("dbo.sat_traslado", "impuesto_id", "dbo.sat_impuestos");
+            DropForeignKey("dbo.sat_retencion", "impuesto_id", "dbo.sat_impuestos");
             DropForeignKey("dbo.sat_comprobante", "emisor_id", "dbo.sat_emisor");
             DropForeignKey("dbo.sat_regimen_fiscal", "emisor_id", "dbo.sat_emisor");
             DropForeignKey("dbo.sat_emisor", "expedido_en_id", "dbo.sat_ubicacion");
@@ -166,6 +209,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             DropForeignKey("dbo.sat_concepto", "comprobante_id", "dbo.sat_comprobante");
             DropIndex("dbo.sat_receptor", new[] { "domicilio_id" });
             DropIndex("dbo.sat_receptor", new[] { "public_key" });
+            DropIndex("dbo.sat_traslado", new[] { "impuesto_id" });
+            DropIndex("dbo.sat_retencion", new[] { "impuesto_id" });
             DropIndex("dbo.sat_regimen_fiscal", new[] { "emisor_id" });
             DropIndex("dbo.sat_ubicacion", new[] { "public_key" });
             DropIndex("dbo.sat_emisor", new[] { "expedido_en_id" });
@@ -173,12 +218,16 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             DropIndex("dbo.sat_emisor", new[] { "public_key" });
             DropIndex("dbo.sat_concepto", new[] { "comprobante_id" });
             DropIndex("dbo.sat_concepto", new[] { "public_key" });
+            DropIndex("dbo.sat_comprobante", new[] { "impuestos_id" });
             DropIndex("dbo.sat_comprobante", new[] { "receptor_id" });
             DropIndex("dbo.sat_comprobante", new[] { "emisor_id" });
             DropIndex("dbo.sat_comprobante", new[] { "public_key" });
             DropIndex("dbo.sat_certificado", new[] { "emisor_id" });
             DropIndex("dbo.sat_certificado", new[] { "public_key" });
             DropTable("dbo.sat_receptor");
+            DropTable("dbo.sat_traslado");
+            DropTable("dbo.sat_retencion");
+            DropTable("dbo.sat_impuestos");
             DropTable("dbo.sat_regimen_fiscal");
             DropTable("dbo.sat_ubicacion");
             DropTable("dbo.sat_emisor");

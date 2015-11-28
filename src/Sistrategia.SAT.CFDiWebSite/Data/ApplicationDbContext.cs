@@ -411,6 +411,59 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             comprobante.HasMany<Concepto>(p => p.Conceptos)
                 .WithOptional()
                 .Map(pe => pe.MapKey("comprobante_id"));
+
+            //comprobante.HasMany<Concepto>(p => p.Conceptos)
+            //    .WithOptional()
+            //    .Map(pe => pe.MapKey("comprobante_id"));
+
+            //var impuestos = modelBuilder.Entity<Impuestos>()
+            //    .HasRequired(i => i.Comprobante)
+            //    .WithOptional(c => c.Impuestos)
+
+            var impuestos = modelBuilder.Entity<Impuestos>()
+                .ToTable("sat_impuestos");
+
+            impuestos.Property(p => p.ImpuestosId)
+                .HasColumnName("impuestos_id");
+
+            comprobante.Property(p => p.ImpuestosId)
+                .HasColumnName("impuestos_id");
+
+            comprobante.HasOptional(c => c.Impuestos);
+                //<Impuestos>(p => p.Impuestos)
+                //.WithRequired()
+                //.Map(pe => pe.MapKey("impuestos_id"));
+
+            var retencion = modelBuilder.Entity<Retencion>()
+                .ToTable("sat_retencion");
+
+            retencion.Property(p => p.RetencionId)
+                .HasColumnName("retencion_id")
+                ;
+            retencion.Property(p => p.Impuesto)
+                .HasColumnName("impuesto");
+            retencion.Property(p => p.Importe)
+                .HasColumnName("importe");
+
+            impuestos.HasMany<Retencion>(p => p.Retenciones)
+                .WithOptional()
+                .Map(pe => pe.MapKey("impuesto_id"));
+
+            var traslado = modelBuilder.Entity<Traslado>()
+                .ToTable("sat_traslado");
+            traslado.Property(p => p.TrasladoId)
+                .HasColumnName("traslado_id")
+                ;
+            traslado.Property(p => p.Importe)
+                .HasColumnName("importe");
+            traslado.Property(p => p.Impuesto)
+                .HasColumnName("impuesto");
+            traslado.Property(p => p.Tasa)
+                .HasColumnName("tasa");
+
+            impuestos.HasMany<Traslado>(p => p.Traslados)
+                .WithOptional()
+                .Map(pe => pe.MapKey("impuesto_id"));
         }
     }
 }
