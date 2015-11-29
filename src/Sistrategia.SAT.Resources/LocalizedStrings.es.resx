@@ -333,4 +333,19 @@
   <data name="FiscalRegimeField" xml:space="preserve">
     <value>Régimen Fiscal</value>
   </data>
+  <data name="Emisor_DetailsDomicilioFiscalTitle" xml:space="preserve">
+    <value>Domicilio Fiscal</value>
+  </data>
+  <data name="Emisor_DetailsExpedidoEnTitle" xml:space="preserve">
+    <value>Expedido en</value>
+  </data>
+  <data name="Emisor_DetailsGeneralTitle" xml:space="preserve">
+    <value>Razón social y R.F.C.</value>
+  </data>
+  <data name="Emisor_DetailsSubtitle" xml:space="preserve">
+    <value>Información del contribuyente emisor de los comprobantes fiscales digitales por internet</value>
+  </data>
+  <data name="Emisor_DetailsTitle" xml:space="preserve">
+    <value>Detalles</value>
+  </data>
 </root>

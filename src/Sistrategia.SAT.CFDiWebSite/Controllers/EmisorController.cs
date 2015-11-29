@@ -47,6 +47,21 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     Referencia = string.IsNullOrEmpty(model.Referencia) ? null : model.Referencia
                 };
             }
+
+            if (!string.IsNullOrEmpty(model.ExpedidoEnPais)) {
+                emisor.ExpedidoEn = new Ubicacion {
+                    Pais = model.ExpedidoEnPais,
+                    Calle = string.IsNullOrEmpty(model.ExpedidoEnCalle) ? null : model.ExpedidoEnCalle,
+                    NoExterior = string.IsNullOrEmpty(model.ExpedidoEnNoExterior) ? null : model.ExpedidoEnNoExterior,
+                    NoInterior = string.IsNullOrEmpty(model.ExpedidoEnNoInterior) ? null : model.ExpedidoEnNoInterior,
+                    Colonia = string.IsNullOrEmpty(model.ExpedidoEnColonia) ? null : model.ExpedidoEnColonia,
+                    Localidad = string.IsNullOrEmpty(model.ExpedidoEnLocalidad) ? null : model.ExpedidoEnLocalidad,
+                    Municipio = string.IsNullOrEmpty(model.ExpedidoEnMunicipio) ? null : model.ExpedidoEnMunicipio,
+                    Estado = string.IsNullOrEmpty(model.ExpedidoEnEstado) ? null : model.ExpedidoEnEstado,
+                    CodigoPostal = string.IsNullOrEmpty(model.ExpedidoEnCodigoPostal) ? null : model.ExpedidoEnCodigoPostal,
+                    Referencia = string.IsNullOrEmpty(model.ExpedidoEnReferencia) ? null : model.ExpedidoEnReferencia
+                };
+            }
             //    emisor.DomicilioFiscal.Calle = model.Calle;
 
             this.DBContext.Emisores.Add(emisor);
@@ -63,6 +78,20 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             var emisor = DBContext.Emisores.Where(e => e.PublicKey == publicKey).SingleOrDefault();
 
             if (emisor==null)
+                return HttpNotFound();
+
+            var model = new EmisorDetailViewModel(emisor);
+            return View(model);
+        }
+
+        public ActionResult Details(string id) {
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var emisor = DBContext.Emisores.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            if (emisor == null)
                 return HttpNotFound();
 
             var model = new EmisorDetailViewModel(emisor);

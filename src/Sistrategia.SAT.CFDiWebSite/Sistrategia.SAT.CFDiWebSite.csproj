@@ -284,6 +284,7 @@
     <Content Include="Views\Emisor\Create.cshtml" />
     <Content Include="Views\Emisor\Detail.cshtml" />
     <Content Include="Views\Emisor\Edit.cshtml" />
+    <Content Include="Views\Emisor\Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

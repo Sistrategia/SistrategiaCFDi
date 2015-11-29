@@ -31,7 +31,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
 
         public virtual DbSet<Receptor> Receptores { get; set; }
 
-        public virtual DbSet<Comprobante> Comprobantes { get; set; }
+        public virtual DbSet<Comprobante> Comprobantes { get; set; }        
 
         protected override void OnModelCreating(System.Data.Entity.DbModelBuilder modelBuilder) {
             var user = modelBuilder.Entity<SecurityUser>()

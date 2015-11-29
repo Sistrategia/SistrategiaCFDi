@@ -1073,4 +1073,21 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
     ////</xs:attribute>
     //}
 
+
+    //public class Complemento // : System.Xml.XmlDocument
+    //{
+    //    public int ComplementoId { get; set; }
+
+    //    public virtual string Complemento { get; set; }
+
+    //    //private System.Xml.XmlElement[] any;
+
+    //    //[XmlAnyElement]
+    //    //public virtual List<System.Xml.XmlElement> Any { get; set; }
+    //    //public System.Xml.XmlElement[] Any {
+    //    //    get { return this.any; }
+    //    //    set { this.any = value; }
+    //    //}
+    //}
+
 }

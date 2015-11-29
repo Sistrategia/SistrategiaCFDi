@@ -336,4 +336,20 @@
   <data name="FiscalRegimeField" xml:space="preserve">
     <value>Fiscal Regime</value>
   </data>
+  <data name="Emisor_DetailsDomicilioFiscalTitle" xml:space="preserve">
+    <value>Fiscal Address</value>
+    <comment>Domicilio Fiscal</comment>
+  </data>
+  <data name="Emisor_DetailsExpedidoEnTitle" xml:space="preserve">
+    <value>Issuer's Physical Address</value>
+  </data>
+  <data name="Emisor_DetailsGeneralTitle" xml:space="preserve">
+    <value>Full Name and RFC</value>
+  </data>
+  <data name="Emisor_DetailsSubtitle" xml:space="preserve">
+    <value>Information about the issuer of the certified digital invoice (CFDi)</value>
+  </data>
+  <data name="Emisor_DetailsTitle" xml:space="preserve">
+    <value>Details</value>
+  </data>
 </root>

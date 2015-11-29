@@ -538,6 +538,51 @@ namespace Sistrategia.SAT.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fiscal Address.
+        /// </summary>
+        public static string Emisor_DetailsDomicilioFiscalTitle {
+            get {
+                return ResourceManager.GetString("Emisor_DetailsDomicilioFiscalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Issuer&apos;s Physical Address.
+        /// </summary>
+        public static string Emisor_DetailsExpedidoEnTitle {
+            get {
+                return ResourceManager.GetString("Emisor_DetailsExpedidoEnTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Full Name and RFC.
+        /// </summary>
+        public static string Emisor_DetailsGeneralTitle {
+            get {
+                return ResourceManager.GetString("Emisor_DetailsGeneralTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information about the issuer of the certified digital invoice (CFDi).
+        /// </summary>
+        public static string Emisor_DetailsSubtitle {
+            get {
+                return ResourceManager.GetString("Emisor_DetailsSubtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        public static string Emisor_DetailsTitle {
+            get {
+                return ResourceManager.GetString("Emisor_DetailsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable.
         /// </summary>
         public static string Enable {

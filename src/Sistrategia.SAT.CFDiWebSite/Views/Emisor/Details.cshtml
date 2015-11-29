@@ -1,0 +1,46 @@
+﻿@using Sistrategia.SAT.CFDiWebSite.Models
+@model EmisorDetailViewModel
+@{
+  ViewBag.Title = LocalizedStrings.Emisor_DetailsTitle;
+}
+@*.dl-horizontal*@ 
+<h1>@ViewBag.Title</h1>
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+  <h4>@LocalizedStrings.Emisor_DetailsSubtitle</h4>
+  <hr />
+  <h3>@LocalizedStrings.Emisor_DetailsGeneralTitle</h3>
+  <dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(m => m.Nombre):</dt>
+    <dd>@Html.DisplayFor(m => m.Nombre)</dd>
+    <dt>@Html.DisplayNameFor(m => m.RFC):</dt>
+    <dd>@Html.DisplayFor(m => m.RFC)</dd>    
+    <dt>@Html.DisplayNameFor(m => m.RegimenFiscal):</dt>
+    <dd>@Html.DisplayFor(m => m.RegimenFiscal)</dd>
+    </dl>
+
+    <h3>@LocalizedStrings.Emisor_DetailsDomicilioFiscalTitle</h3>
+    <dl class="dl-horizontal">     
+
+      <dt>@Html.DisplayNameFor(m => m.Calle):</dt>
+      <dd>@Html.DisplayFor(m => m.Calle)</dd>
+      <dt>@Html.DisplayNameFor(m => m.NoExterior):</dt>
+      <dd>@Html.DisplayFor(m => m.NoExterior)</dd>
+      <dt>@Html.DisplayNameFor(m => m.NoInterior):</dt>
+      <dd>@Html.DisplayFor(m => m.NoInterior)</dd>
+      <dt>@Html.DisplayNameFor(m => m.Colonia):</dt>
+      <dd>@Html.DisplayFor(m => m.Colonia)</dd>
+      <dt>@Html.DisplayNameFor(m => m.Municipio):</dt>
+      <dd>@Html.DisplayFor(m => m.Municipio)</dd>
+      <dt>@Html.DisplayNameFor(m => m.Localidad):</dt>
+      <dd>@Html.DisplayFor(m => m.Localidad)</dd>
+      <dt>@Html.DisplayNameFor(m => m.Estado):</dt>
+      <dd>@Html.DisplayFor(m => m.Estado)</dd>
+      <dt>@Html.DisplayNameFor(m => m.Pais):</dt>
+      <dd>@Html.DisplayFor(m => m.Pais)</dd>
+      <dt>@Html.DisplayNameFor(m => m.CodigoPostal):</dt>
+      <dd>@Html.DisplayFor(m => m.CodigoPostal)</dd>
+      <dt>@Html.DisplayNameFor(m => m.Referencia):</dt>
+      <dd>@Html.DisplayFor(m => m.Referencia)</dd>
+    </dl>
+</div>

@@ -24,7 +24,7 @@
       <tbody>
         @foreach (var emisor in Model.Emisores) {
           <tr>
-            <td>@Html.ActionLink(@emisor.RFC, "Detail", "Emisor", new { Id = @emisor.PublicKey.ToString("N") }, null)</td>
+            <td>@Html.ActionLink(@emisor.RFC, "Details", "Emisor", new { Id = @emisor.PublicKey.ToString("N") }, null)</td>
             @*<td>@Html.ActionLink(@user.UserName, "UserDetail", "Dev", new { Id = @user.PublicKey.ToString("N") }, null)</td>*@
             @*<td><a href="@item.Url">@item.Name</a></td>*@
             <td>@emisor.Nombre</td>
