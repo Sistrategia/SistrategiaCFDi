@@ -31,6 +31,12 @@
                   <li @if (ControllerName.Equals("Emisor")) { @Html.Raw("class='active'") ; } else { @Html.Raw("") ; }>
                     @Html.ActionLink("Emisores", "Index", "Emisor")                    
                   </li>
+                  <li @if (ControllerName.Equals("Receptor")) { @Html.Raw("class='active'")  ; } else { @Html.Raw("")  ; }>
+                    @Html.ActionLink("Receptores", "Index", "Receptor")
+                  </li>
+                  <li @if (ControllerName.Equals("Comprobante")) { @Html.Raw("class='active'")   ; } else { @Html.Raw("")   ; }>
+                    @Html.ActionLink("Comprobantes", "Index", "Comprobante")
+                  </li>
 
                 </ul>
               @Html.Partial("_LoginPartial")
