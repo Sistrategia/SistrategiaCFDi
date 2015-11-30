@@ -22,9 +22,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("SistrategiaCFDi", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @*@Html.ActionLink("SistrategiaCFDi", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
               @*<a class="navbar-brand sistrategiaLogo" href="@Url.Content("~/")"><img src="~/Content/Img/logo_header_white.png" class="img-responsive" /></a>*@
-              @*<a class="navbar-brand sistrategiaLogo" href="@Url.Content("~/")"><img src="https://sistrategiadrive.blob.core.windows.net/wwwroot/logo_header_white.png" class="img-responsive" /></a>*@
+              <a class="navbar-brand sistrategiaLogo" href="@Url.Content("~/")"><img src="https://sistrategiadrive.blob.core.windows.net/wwwroot/logo_header_white.png" class="img-responsive" /></a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -41,19 +41,19 @@
         </div>
     </div>
 
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-          <p class="pull-left">&copy; @DateTime.Now.Year - Sistrategia</p>
-          <div class="pull-right hidden-xs">
-            <ul class="nav navbar-nav navbar-right">
-              <li>@Html.ActionLink("English (US)", "ChangeLang", "Locale", new { Lang = "en-US", ReturnUrl = Url.Encode(Request.RawUrl) }, new { @class = "navbar-brand footer-lang-bar", @style = "font-size:11px;" })</li>
-              <li>@Html.ActionLink("Español (México)", "ChangeLang", "Locale", new { Lang = "es-MX", ReturnUrl = Url.Encode(Request.RawUrl) }, new { @class = "navbar-brand footer-lang-bar", @style = "font-size:11px;" })</li>
-            </ul>
-          </div>
-</footer>
-    </div>
+  <div class="container body-content shadow-z-2" style="margin-top:32px;background-color:#fff;">
+    @RenderBody()
+    <hr />
+    <footer>
+      <p class="pull-left">&copy; @DateTime.Now.Year - Sistrategia</p>
+      <div class="pull-right hidden-xs">
+        <ul class="nav navbar-nav navbar-right">
+          <li>@Html.ActionLink("English (US)", "ChangeLang", "Locale", new { Lang = "en-US", ReturnUrl = Url.Encode(Request.RawUrl) }, new { @class = "navbar-brand footer-lang-bar", @style = "font-size:11px;" })</li>
+          <li>@Html.ActionLink("Español (México)", "ChangeLang", "Locale", new { Lang = "es-MX", ReturnUrl = Url.Encode(Request.RawUrl) }, new { @class = "navbar-brand footer-lang-bar", @style = "font-size:11px;" })</li>
+        </ul>
+      </div>
+    </footer>
+  </div>
 
   @Scripts.Render("~/bundles/jquery")
   @Scripts.Render("~/bundles/bootstrap")

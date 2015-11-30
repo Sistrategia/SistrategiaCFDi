@@ -31,146 +31,158 @@
     </div>
   </div>
   <div class="form-group">
-    <a class="btn btn-default" role="button" data-toggle="collapse" href="#domiciliofiscal" aria-expanded="false" aria-controls="domiciliofiscal">
-      Agregar Domicilio Fiscal
-    </a>
-    <a class="btn btn-default" role="button" data-toggle="collapse" href="#expedidoEn" aria-expanded="false" aria-controls="expedidoEn">
-      Expedido En
-    </a>
+    <div class="col-md-offset-2 col-md-10">
+      <a class="btn btn-default" role="button" data-toggle="collapse" href="#domiciliofiscal" aria-expanded="false" aria-controls="domiciliofiscal">
+        Agregar Domicilio Fiscal
+      </a>      
+    </div>
   </div>
   
   <div class="collapse" id="domiciliofiscal">
     <h3>@LocalizedStrings.Emisor_DetailsDomicilioFiscalTitle</h3>
     <div class="form-group">
-      @Html.LabelFor(m => m.Calle, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.DomicilioFiscal.Calle, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Calle, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.DomicilioFiscal.Calle, new { @class = "form-control" })
       </div>
     </div>
 
     <div class="form-group">
-      @Html.LabelFor(m => m.NoExterior, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.DomicilioFiscal.NoExterior, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.NoExterior, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.DomicilioFiscal.NoExterior, new { @class = "form-control" })
       </div>
     </div>
     <div class="form-group">
-      @Html.LabelFor(m => m.NoInterior, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.DomicilioFiscal.NoInterior, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.NoInterior, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.DomicilioFiscal.NoInterior, new { @class = "form-control" })
       </div>
     </div>
     <div class="form-group">
-      @Html.LabelFor(m => m.Colonia, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.DomicilioFiscal.Colonia, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Colonia, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.DomicilioFiscal.Colonia, new { @class = "form-control" })
       </div>
     </div>
     <div class="form-group">
-      @Html.LabelFor(m => m.Municipio, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.DomicilioFiscal.Municipio, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Municipio, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.DomicilioFiscal.Municipio, new { @class = "form-control" })
       </div>
     </div>
     <div class="form-group">
-      @Html.LabelFor(m => m.Localidad, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.DomicilioFiscal.Localidad, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Localidad, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.DomicilioFiscal.Localidad, new { @class = "form-control" })
       </div>
     </div>
     <div class="form-group">
-      @Html.LabelFor(m => m.Estado, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.DomicilioFiscal.Estado, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Estado, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.DomicilioFiscal.Estado, new { @class = "form-control" })
       </div>
     </div>
     <div class="form-group">
-      @Html.LabelFor(m => m.CodigoPostal, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.DomicilioFiscal.CodigoPostal, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.CodigoPostal, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.DomicilioFiscal.CodigoPostal, new { @class = "form-control" })
       </div>
     </div>
     <div class="form-group">
-      @Html.LabelFor(m => m.Pais, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.DomicilioFiscal.Pais, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Pais, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.DomicilioFiscal.Pais, new { @class = "form-control" })
       </div>
     </div>
     <div class="form-group">
-      @Html.LabelFor(m => m.Referencia, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.DomicilioFiscal.Referencia, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Referencia, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.DomicilioFiscal.Referencia, new { @class = "form-control" })
       </div>
     </div>
+
+
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-10">
+        <a class="btn btn-default" role="button" data-toggle="collapse" href="#expedidoEn" aria-expanded="false" aria-controls="expedidoEn">
+          Expedido En
+        </a>
+      </div>
+    </div>
+
   </div>
+
+  
 
   <div class="collapse" id="expedidoEn">
     <h3>@LocalizedStrings.Emisor_DetailsExpedidoEnTitle</h3>
     <div class="form-group">
-      @Html.LabelFor(m => m.ExpedidoEnCalle, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.ExpedidoEn.Calle, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.ExpedidoEnCalle, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.ExpedidoEn.Calle, new { @class = "form-control" })
       </div>
     </div>
     <div class="form-group">
-      @Html.LabelFor(m => m.ExpedidoEnNoExterior, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.ExpedidoEn.NoExterior, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.ExpedidoEnNoExterior, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.ExpedidoEn.NoExterior, new { @class = "form-control" })
       </div>
     </div>
     <div class="form-group">
-      @Html.LabelFor(m => m.ExpedidoEnNoInterior, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.ExpedidoEn.NoInterior, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.ExpedidoEnNoInterior, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.ExpedidoEn.NoInterior, new { @class = "form-control" })
       </div>
     </div>
     <div class="form-group">
-      @Html.LabelFor(m => m.ExpedidoEnColonia, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.ExpedidoEn.Colonia, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.ExpedidoEnColonia, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.ExpedidoEn.Colonia, new { @class = "form-control" })
       </div>
     </div>
     <div class="form-group">
-      @Html.LabelFor(m => m.ExpedidoEnMunicipio, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.ExpedidoEn.Municipio, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.ExpedidoEnMunicipio, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.ExpedidoEn.Municipio, new { @class = "form-control" })
       </div>
     </div>
     <div class="form-group">
-      @Html.LabelFor(m => m.ExpedidoEnLocalidad, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.ExpedidoEn.Localidad, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.ExpedidoEnLocalidad, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.ExpedidoEn.Localidad, new { @class = "form-control" })
       </div>
     </div>
     <div class="form-group">
-      @Html.LabelFor(m => m.ExpedidoEnEstado, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.ExpedidoEn.Estado, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.ExpedidoEnEstado, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.ExpedidoEn.Estado, new { @class = "form-control" })
       </div>
     </div>
     <div class="form-group">
-      @Html.LabelFor(m => m.ExpedidoEnCodigoPostal, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.ExpedidoEn.CodigoPostal, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.ExpedidoEnCodigoPostal, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.ExpedidoEn.CodigoPostal, new { @class = "form-control" })
       </div>
     </div>
     <div class="form-group">
-      @Html.LabelFor(m => m.ExpedidoEnPais, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.ExpedidoEn.Pais, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.ExpedidoEnPais, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.ExpedidoEn.Pais, new { @class = "form-control" })
       </div>
     </div>
     <div class="form-group">
-      @Html.LabelFor(m => m.ExpedidoEnReferencia, new { @class = "col-md-2 control-label" })
+      @Html.LabelFor(m => m.ExpedidoEn.Referencia, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
-        @Html.TextBoxFor(m => m.ExpedidoEnReferencia, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.ExpedidoEn.Referencia, new { @class = "form-control" })
       </div>
     </div>
   </div>
 
+  <hr />
   <div class="form-group">
     <div class="col-md-offset-2 col-md-10">
-      <input type="submit" class="btn btn-default" value="@LocalizedStrings.SaveButton" />
+      <input type="submit" class="btn btn-primary" value="@LocalizedStrings.SaveButton" />
     </div>
   </div>
     }

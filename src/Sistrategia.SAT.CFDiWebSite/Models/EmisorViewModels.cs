@@ -16,23 +16,31 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         }
 
         public List<Emisor> Emisores { get; set; }
+
+        public string GetQrCode(string qrValue, int size) {
+            var barcodeWriter = new ZXing.BarcodeWriter {
+                Format = ZXing.BarcodeFormat.QR_CODE,
+                Options = new ZXing.Common.EncodingOptions
+                {
+                    Height = size, // height,
+                    Width = size, // width,
+                    Margin = 0, // margin
+                }
+            };
+            using (var bitmap = barcodeWriter.Write(qrValue))
+            using (var stream = new System.IO.MemoryStream()) {
+                bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Gif);
+                return String.Format("data:image/gif;base64,{0}", 
+                    Convert.ToBase64String(stream.ToArray()));
+            }            
+        }
     }
 
-    public class EmisorCreateViewModel
+    public class UbicacionViewModel
     {
-        public EmisorCreateViewModel() {
-
+        public UbicacionViewModel() {
         }
 
-        [Required]
-        [Display(Name = "RFC")]
-        public string RFC { get; set; }
-
-        [Required]
-        [Display(ResourceType = typeof(LocalizedStrings), Name = "FiscalNameField", ShortName = "Name")]
-        public string Nombre { get; set; }
-
-        //[Required]
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressStreetField")]
         public string Calle { get; set; }
 
@@ -62,39 +70,130 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressReferenceField")]
         public string Referencia { get; set; }
+    }
+
+    public class UbicacionFiscalViewModel
+    {
+        public UbicacionFiscalViewModel() {
+        }
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressStreetField")]
-        public string ExpedidoEnCalle { get; set; }
+        public string Calle { get; set; }
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressExtNumberField")]
-        public string ExpedidoEnNoExterior { get; set; }
+        public string NoExterior { get; set; }
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressIntNumberField")]
-        public string ExpedidoEnNoInterior { get; set; }
+        public string NoInterior { get; set; }
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressColonyField")]
-        public string ExpedidoEnColonia { get; set; }
+        public string Colonia { get; set; }
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressCityField")]
-        public string ExpedidoEnLocalidad { get; set; }
+        public string Localidad { get; set; }
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressCountyField")]
-        public string ExpedidoEnMunicipio { get; set; }
+        public string Municipio { get; set; }
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressStateField")]
-        public string ExpedidoEnEstado { get; set; }
+        public string Estado { get; set; }
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressCountryField")]
-        public string ExpedidoEnPais { get; set; }
+        public string Pais { get; set; }
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressZipField")]
-        public string ExpedidoEnCodigoPostal { get; set; }
+        public string CodigoPostal { get; set; }
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressReferenceField")]
-        public string ExpedidoEnReferencia { get; set; }
+        public string Referencia { get; set; }
+    }
+
+    public class EmisorCreateViewModel
+    {
+        public EmisorCreateViewModel() {
+
+        }
+
+        [Required]
+        [Display(Name = "RFC")]
+        public string RFC { get; set; }
+
+        [Required]
+        [Display(ResourceType = typeof(LocalizedStrings), Name = "FiscalNameField", ShortName = "Name")]
+        public string Nombre { get; set; }
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "FiscalRegimeField")]
         public string RegimenFiscal { get; set; }
+
+        public UbicacionFiscalViewModel DomicilioFiscal { get; set; }
+        public UbicacionViewModel ExpedidoEn { get; set; }
+
+        //[Required]
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressStreetField")]
+        //public string Calle { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressExtNumberField")]
+        //public string NoExterior { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressIntNumberField")]
+        //public string NoInterior { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressColonyField")]
+        //public string Colonia { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressCityField")]
+        //public string Localidad { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressCountyField")]
+        //public string Municipio { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressStateField")]
+        //public string Estado { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressCountryField")]
+        //public string Pais { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressZipField")]
+        //public string CodigoPostal { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressReferenceField")]
+        //public string Referencia { get; set; }
+
+
+        
+
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressStreetField")]
+        //public string ExpedidoEnCalle { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressExtNumberField")]
+        //public string ExpedidoEnNoExterior { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressIntNumberField")]
+        //public string ExpedidoEnNoInterior { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressColonyField")]
+        //public string ExpedidoEnColonia { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressCityField")]
+        //public string ExpedidoEnLocalidad { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressCountyField")]
+        //public string ExpedidoEnMunicipio { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressStateField")]
+        //public string ExpedidoEnEstado { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressCountryField")]
+        //public string ExpedidoEnPais { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressZipField")]
+        //public string ExpedidoEnCodigoPostal { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressReferenceField")]
+        //public string ExpedidoEnReferencia { get; set; }
+
+        
 
         // public Emisor Emisor { get; set; }
     }

@@ -16,6 +16,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 Emisores = this.DBContext.Emisores.ToList()
             };
             return View(model);
+
+            
         }
 
         public ActionResult Create() {
@@ -33,41 +35,62 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             if (!string.IsNullOrEmpty(model.Nombre))
                 emisor.Nombre = model.Nombre;
 
-            if (!string.IsNullOrEmpty(model.Pais)) {
-                emisor.DomicilioFiscal = new UbicacionFiscal {
-                    Pais = model.Pais,
-                    Calle = string.IsNullOrEmpty(model.Calle) ? null : model.Calle,
-                    NoExterior = string.IsNullOrEmpty(model.NoExterior) ? null : model.NoExterior,
-                    NoInterior = string.IsNullOrEmpty(model.NoInterior) ? null : model.NoInterior,
-                    Colonia = string.IsNullOrEmpty(model.Colonia) ? null : model.Colonia,
-                    Localidad = string.IsNullOrEmpty(model.Localidad) ? null : model.Localidad,
-                    Municipio = string.IsNullOrEmpty(model.Municipio) ? null : model.Municipio,
-                    Estado = string.IsNullOrEmpty(model.Estado) ? null : model.Estado,
-                    CodigoPostal = string.IsNullOrEmpty(model.CodigoPostal) ? null : model.CodigoPostal,
-                    Referencia = string.IsNullOrEmpty(model.Referencia) ? null : model.Referencia
-                };
+            if (model.DomicilioFiscal != null) {
+                if (!string.IsNullOrEmpty(model.DomicilioFiscal.Pais)) {
+                    emisor.DomicilioFiscal = new UbicacionFiscal {
+                        Pais = model.DomicilioFiscal.Pais,
+                        Calle = string.IsNullOrEmpty(model.DomicilioFiscal.Calle) ? null : model.DomicilioFiscal.Calle,
+                        NoExterior = string.IsNullOrEmpty(model.DomicilioFiscal.NoExterior) ? null : model.DomicilioFiscal.NoExterior,
+                        NoInterior = string.IsNullOrEmpty(model.DomicilioFiscal.NoInterior) ? null : model.DomicilioFiscal.NoInterior,
+                        Colonia = string.IsNullOrEmpty(model.DomicilioFiscal.Colonia) ? null : model.DomicilioFiscal.Colonia,
+                        Localidad = string.IsNullOrEmpty(model.DomicilioFiscal.Localidad) ? null : model.DomicilioFiscal.Localidad,
+                        Municipio = string.IsNullOrEmpty(model.DomicilioFiscal.Municipio) ? null : model.DomicilioFiscal.Municipio,
+                        Estado = string.IsNullOrEmpty(model.DomicilioFiscal.Estado) ? null : model.DomicilioFiscal.Estado,
+                        CodigoPostal = string.IsNullOrEmpty(model.DomicilioFiscal.CodigoPostal) ? null : model.DomicilioFiscal.CodigoPostal,
+                        Referencia = string.IsNullOrEmpty(model.DomicilioFiscal.Referencia) ? null : model.DomicilioFiscal.Referencia
+                    };
+                }
             }
 
-            if (!string.IsNullOrEmpty(model.ExpedidoEnPais)) {
-                emisor.ExpedidoEn = new Ubicacion {
-                    Pais = model.ExpedidoEnPais,
-                    Calle = string.IsNullOrEmpty(model.ExpedidoEnCalle) ? null : model.ExpedidoEnCalle,
-                    NoExterior = string.IsNullOrEmpty(model.ExpedidoEnNoExterior) ? null : model.ExpedidoEnNoExterior,
-                    NoInterior = string.IsNullOrEmpty(model.ExpedidoEnNoInterior) ? null : model.ExpedidoEnNoInterior,
-                    Colonia = string.IsNullOrEmpty(model.ExpedidoEnColonia) ? null : model.ExpedidoEnColonia,
-                    Localidad = string.IsNullOrEmpty(model.ExpedidoEnLocalidad) ? null : model.ExpedidoEnLocalidad,
-                    Municipio = string.IsNullOrEmpty(model.ExpedidoEnMunicipio) ? null : model.ExpedidoEnMunicipio,
-                    Estado = string.IsNullOrEmpty(model.ExpedidoEnEstado) ? null : model.ExpedidoEnEstado,
-                    CodigoPostal = string.IsNullOrEmpty(model.ExpedidoEnCodigoPostal) ? null : model.ExpedidoEnCodigoPostal,
-                    Referencia = string.IsNullOrEmpty(model.ExpedidoEnReferencia) ? null : model.ExpedidoEnReferencia
+            if (model.ExpedidoEn != null) {
+                if (!string.IsNullOrEmpty(model.ExpedidoEn.Pais)) {
+                    emisor.ExpedidoEn = new Ubicacion {
+                        Pais = model.ExpedidoEn.Pais,
+                        Calle = string.IsNullOrEmpty(model.ExpedidoEn.Calle) ? null : model.ExpedidoEn.Calle,
+                        NoExterior = string.IsNullOrEmpty(model.ExpedidoEn.NoExterior) ? null : model.ExpedidoEn.NoExterior,
+                        NoInterior = string.IsNullOrEmpty(model.ExpedidoEn.NoInterior) ? null : model.ExpedidoEn.NoInterior,
+                        Colonia = string.IsNullOrEmpty(model.ExpedidoEn.Colonia) ? null : model.ExpedidoEn.Colonia,
+                        Localidad = string.IsNullOrEmpty(model.ExpedidoEn.Localidad) ? null : model.ExpedidoEn.Localidad,
+                        Municipio = string.IsNullOrEmpty(model.ExpedidoEn.Municipio) ? null : model.ExpedidoEn.Municipio,
+                        Estado = string.IsNullOrEmpty(model.ExpedidoEn.Estado) ? null : model.ExpedidoEn.Estado,
+                        CodigoPostal = string.IsNullOrEmpty(model.ExpedidoEn.CodigoPostal) ? null : model.ExpedidoEn.CodigoPostal,
+                        Referencia = string.IsNullOrEmpty(model.ExpedidoEn.Referencia) ? null : model.ExpedidoEn.Referencia
+                    };
+                }
+            }            
+
+            if (!string.IsNullOrEmpty(model.RegimenFiscal)) 
+                emisor.RegimenFiscal = new List<RegimenFiscal> {
+                    new RegimenFiscal {
+                        Regimen = model.RegimenFiscal
+                    }
                 };
-            }
-            //    emisor.DomicilioFiscal.Calle = model.Calle;
+            
+
+            //if (!string.IsNullOrEmpty(model.RegimenFiscal)) {
+            //    if (emisor.RegimenFiscal == null)
+            //        emisor.RegimenFiscal = new List<RegimenFiscal>();
+            //    emisor.RegimenFiscal.Add(new RegimenFiscal {
+            //        Regimen = model.RegimenFiscal
+            //    });
+            //}
 
             this.DBContext.Emisores.Add(emisor);
             this.DBContext.SaveChanges();
 
-            return View(model);
+            return RedirectToAction("Details", new { Id = emisor.PublicKey.ToString("N") }); // "Index", "Home");
+
+            //return View(model);
         }
 
         public ActionResult Detail(string id) {

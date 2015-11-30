@@ -1,0 +1,47 @@
+﻿@using Sistrategia.SAT.CFDiWebSite.Models
+@model EmisorIndexViewModel
+@{
+  ViewBag.Title = "Lista de Emisores";
+}
+<div class="page-header clearfix">
+  <h1 class="pull-left">@ViewBag.Title</h1>
+  <div class="pull-right">
+    <div class="btn-group" style="bottom: 26px;position: relative;top:26px;">
+      @Html.ActionLink("Agregar", "Create", User.Identity.Name, new { @class = "btn btn-primary", @role = "button" })
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-hover">
+      @*<caption>Test caption</caption>*@
+      <thead>
+        <tr>
+          <th>@Html.DisplayNameFor(model => model.Emisores[0].RFC)</th>
+          <th>@LocalizedStrings.FullNameField</th>
+          @*<th>@LocalizedStrings.Email</th>*@
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (var emisor in Model.Emisores) {
+          <tr>
+            <td>@Html.ActionLink(@emisor.RFC, "Details", "Emisor", new { Id = @emisor.PublicKey.ToString("N") }, null)</td>
+            @*<td>@Html.ActionLink(@user.UserName, "UserDetail", "Dev", new { Id = @user.PublicKey.ToString("N") }, null)</td>*@
+            @*<td><a href="@item.Url">@item.Name</a></td>*@
+            <td>@emisor.Nombre</td>
+            @*<td>@user.Modified.ToString()</td>*@
+            @*<td>emisor.Email</td>*@
+            <td>
+              @Html.ActionLink("Edit", "Edit", new { id = emisor.PublicKey.ToString("N") }) |
+              @Html.ActionLink("Details", "Details", new { id = emisor.PublicKey.ToString("N") }) |
+              @Html.ActionLink("Delete", "Delete", new { id = emisor.PublicKey.ToString("N") })
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+  </div>
+</div>
