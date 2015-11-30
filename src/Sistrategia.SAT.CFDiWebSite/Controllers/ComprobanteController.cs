@@ -17,5 +17,38 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             };
             return View(model);
         }
+
+        public ActionResult Create() {
+            var model = new ComprobanteCreateViewModel();
+            model.Conceptos.Add(new ConceptoViewModel());
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Create(ComprobanteCreateViewModel model) {
+            
+
+            //var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            //if (comprobante == null)
+            //    return HttpNotFound();
+
+            //var model = new ComprbanteDetailViewModel(comprobante);
+            return View(model);
+        }
+
+        public ActionResult Details(string id) {
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            if (comprobante == null)
+                return HttpNotFound();
+
+            var model = new ComprbanteDetailViewModel(comprobante);
+            return View(model);
+        }
     }
 }

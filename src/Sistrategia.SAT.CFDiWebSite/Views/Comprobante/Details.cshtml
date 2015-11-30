@@ -1,0 +1,134 @@
+﻿@using Sistrategia.SAT.CFDiWebSite.Models
+@model ComprbanteDetailViewModel
+@{
+  ViewBag.Title = Model.Title;
+}
+
+<h1>@ViewBag.Title <br /><small>@Model.Receptor.RFC</small></h1>
+
+<div class="row">
+  <div class="col-md-9">
+    <p>
+      @Html.Raw(Model.Receptor.Domicilio.ToHtml())
+    </p>
+  </div>
+  <div class="col-md-3" >
+    <h2 style="font-weight:400;color:#FF6E40;">
+     @string.Format("{0:C}", Model.Total)
+    </h2>
+  </div>
+</div>
+
+
+<h2>
+  Conceptos
+</h2>
+
+<div class="row" style="font-weight:600">
+  <div class="col-md-1">
+    Cantidad
+  </div>
+  <div class="col-md-1">
+    Unidad
+  </div>
+  <div class="col-md-1">
+    Identificación
+  </div>
+  <div class="col-md-6">
+    Descripción
+  </div>
+  <div class="col-md-1">
+    Precio
+    @*Valor Unitario*@
+  </div>
+  @*<div class="col-md-1">
+      Moneda
+    </div>
+    <div class="col-md-1">
+      Tasa
+    </div>*@
+  <div class="col-md-1">
+    Importe
+  </div>
+  <div class="col-md-1">
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <hr style="margin: 2px 0;" />
+  </div>
+</div>
+
+@foreach (ConceptoViewModel concepto in Model.Conceptos) {
+  <div class="row">
+    <div class="col-md-1">
+      @string.Format("{0:0.00}", concepto.Cantidad)
+    </div>
+    <div class="col-md-1">
+      @concepto.Unidad
+    </div>
+    <div class="col-md-1">
+      @concepto.NoIdentificacion
+    </div>
+    <div class="col-md-6">
+      @concepto.Descripcion
+    </div>
+    <div class="col-md-1">
+      @string.Format("{0:C}", concepto.ValorUnitario)
+      @*@string.Format("{0:0.00}", concepto.ValorUnitario)*@
+    </div>
+
+    @*<div class="col-md-1">
+        0%
+      </div>*@
+    <div class="col-md-1">
+      @string.Format("{0:C}", concepto.Importe)
+    </div>
+    <div class="col-md-1">
+      @*<a class="btn btn-primary" href="#">Agregar</a>*@
+    </div>
+  </div>
+}
+
+@*<div class="row">
+  <div class="col-md-12">
+    <hr style="margin: 2px 0;" />
+  </div>
+</div>*@
+
+<div class="row">
+  <div class="col-md-12">
+    <hr style="margin: 56px 2px 0 0;" />
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-9">
+  </div>
+  <div class="col-md-1" style="font-weight:600">
+    Subtotal:
+  </div>
+  <div class="col-md-1">
+    @string.Format("{0:C}", Model.SubTotal)
+  </div>
+  <div class="col-md-1">
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-9">
+  </div>
+  <div class="col-md-1" style="font-weight:600">
+    Total:
+  </div>
+  <div class="col-md-1">
+    @string.Format("{0:C}", Model.Total)
+  </div>
+  <div class="col-md-1">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <p style="margin: 56px 2px 0 0;" >
+      </p>
+  </div>
+</div>

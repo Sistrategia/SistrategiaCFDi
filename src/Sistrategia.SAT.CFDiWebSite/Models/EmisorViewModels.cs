@@ -41,6 +41,21 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public UbicacionViewModel() {
         }
 
+        public UbicacionViewModel(Ubicacion ubicacion) {
+            if (ubicacion != null) {
+                this.Calle = ubicacion.Calle;
+                this.NoExterior = ubicacion.NoExterior;
+                this.NoInterior = ubicacion.NoInterior;
+                this.Colonia = ubicacion.Colonia;
+                this.Localidad = ubicacion.Localidad;
+                this.Municipio = ubicacion.Municipio;
+                this.Estado = ubicacion.Estado;
+                this.Pais = ubicacion.Pais;
+                this.CodigoPostal = ubicacion.CodigoPostal;
+                this.Referencia = ubicacion.Referencia;
+            }
+        }
+
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressStreetField")]
         public string Calle { get; set; }
 
@@ -70,11 +85,60 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressReferenceField")]
         public string Referencia { get; set; }
+
+        public string ToHtml() {
+            string result = "";
+
+            if(!string.IsNullOrEmpty(this.Calle))
+                result += this.Calle.Trim();
+
+            if (!string.IsNullOrEmpty(this.NoExterior))
+                result += " " + this.NoExterior.Trim();
+
+            if (!string.IsNullOrEmpty(this.NoInterior))
+                result += " " + this.NoInterior.Trim();
+
+            if (!string.IsNullOrEmpty(this.Colonia))
+                result += "<br />" + this.Colonia.Trim();
+
+            if (!string.IsNullOrEmpty(this.Municipio))
+                result += "<br />" + this.Municipio.Trim();
+
+            if (!string.IsNullOrEmpty(this.Localidad))
+                if (!this.Localidad.Equals(this.Municipio))
+                result += ", " + this.Localidad.Trim();
+
+            if (!string.IsNullOrEmpty(this.Estado))
+                result += ", " + this.Estado.Trim();
+
+            if (!string.IsNullOrEmpty(this.CodigoPostal))
+                result += "<br />" + this.CodigoPostal.Trim(); // C.P.:
+
+            if (!string.IsNullOrEmpty(this.Pais))
+                result += ", " + this.Pais.Trim();
+
+            return result.Trim();
+        }
     }
 
     public class UbicacionFiscalViewModel
     {
         public UbicacionFiscalViewModel() {
+        }
+
+        public UbicacionFiscalViewModel(UbicacionFiscal ubicacion) {
+            if (ubicacion != null) {
+                this.Calle = ubicacion.Calle;
+                this.NoExterior = ubicacion.NoExterior;
+                this.NoInterior = ubicacion.NoInterior;
+                this.Colonia = ubicacion.Colonia;
+                this.Localidad = ubicacion.Localidad;
+                this.Municipio = ubicacion.Municipio;
+                this.Estado = ubicacion.Estado;
+                this.Pais = ubicacion.Pais;
+                this.CodigoPostal = ubicacion.CodigoPostal;
+                this.Referencia = ubicacion.Referencia;
+            }
         }
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressStreetField")]
@@ -200,6 +264,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
     public class EmisorDetailViewModel
     {
+        public EmisorDetailViewModel() {
+
+        }
+
         public EmisorDetailViewModel(Emisor emisor) {
             if (emisor == null)
                 throw new ArgumentNullException("emisor");

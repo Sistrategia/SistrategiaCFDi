@@ -296,6 +296,10 @@
     <Content Include="Views\Emisor\IndexTable.cshtml" />
     <Content Include="Views\Receptor\Index.cshtml" />
     <Content Include="Views\Comprobante\Index.cshtml" />
+    <Content Include="Views\Receptor\Create.cshtml" />
+    <Content Include="Views\Receptor\Details.cshtml" />
+    <Content Include="Views\Comprobante\Details.cshtml" />
+    <Content Include="Views\Comprobante\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

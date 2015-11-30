@@ -1,0 +1,117 @@
+﻿@using Sistrategia.SAT.CFDiWebSite.Models
+@model ReceptorCreateViewModel
+@{
+  ViewBag.Title = "Crear nuevo receptor";
+}
+
+<h1>@ViewBag.Title</h1>
+
+@using (Html.BeginForm("Create", "Receptor", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
+  @Html.AntiForgeryToken()
+  <h4>@LocalizedStrings.Account_RegisterSubtitle</h4>
+  <hr />
+  @Html.ValidationSummary("", new { @class = "text-danger" })
+
+  <div class="form-group">
+    @Html.LabelFor(m => m.RFC, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.RFC, new { @class = "form-control" })
+    </div>
+  </div>
+  <div class="form-group">
+    @Html.LabelFor(m => m.Nombre, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
+    </div>
+  </div>
+  @*<div class="form-group">
+    @Html.LabelFor(m => m.RegimenFiscal, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.RegimenFiscal, new { @class = "form-control" })
+    </div>
+  </div>*@
+  
+  @*<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+      <a class="btn btn-default" role="button" data-toggle="collapse" href="#domicilio" aria-expanded="false" aria-controls="domicilio">
+        Agregar Domicilio
+      </a>
+    </div>
+  </div>*@
+
+  <div @*class="collapse"*@ id="domicilio">
+    <h3>@LocalizedStrings.Emisor_DetailsDomicilioFiscalTitle</h3>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Domicilio.Calle, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Domicilio.Calle, new { @class = "form-control" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(m => m.Domicilio.NoExterior, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Domicilio.NoExterior, new { @class = "form-control" })
+      </div>
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Domicilio.NoInterior, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Domicilio.NoInterior, new { @class = "form-control" })
+      </div>
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Domicilio.Colonia, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Domicilio.Colonia, new { @class = "form-control" })
+      </div>
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Domicilio.Municipio, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Domicilio.Municipio, new { @class = "form-control" })
+      </div>
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Domicilio.Localidad, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Domicilio.Localidad, new { @class = "form-control" })
+      </div>
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Domicilio.Estado, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Domicilio.Estado, new { @class = "form-control" })
+      </div>
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Domicilio.CodigoPostal, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Domicilio.CodigoPostal, new { @class = "form-control" })
+      </div>
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Domicilio.Pais, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Domicilio.Pais, new { @class = "form-control" })
+      </div>
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Domicilio.Referencia, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Domicilio.Referencia, new { @class = "form-control" })
+      </div>
+    </div>
+  </div>
+
+  <hr />
+  <div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+      <input type="submit" class="btn btn-primary" value="@LocalizedStrings.SaveButton" />
+    </div>
+  </div>
+}
+
+@section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
+}
