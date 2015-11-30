@@ -21,6 +21,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         public ActionResult Create() {
             var model = new ComprobanteCreateViewModel();
             model.Conceptos.Add(new ConceptoViewModel());
+            model.Conceptos.Add(new ConceptoViewModel());
+            model.Conceptos.Add(new ConceptoViewModel());
+            model.Conceptos.Add(new ConceptoViewModel());
             return View(model);
         }
 

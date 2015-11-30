@@ -41,15 +41,85 @@
     <div class="col-md-3">
       @Html.TextBoxFor(m => m.Receptor.RFC, new { @class = "form-control" })
     </div>
-  </div>
-  
+  </div>  
   @*<div class="form-group">
     @Html.LabelFor(m => m.Receptor.RegimenFiscal, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
       @Html.TextBoxFor(m => m.Receptor.RegimenFiscal, new { @class = "form-control" })
     </div>
   </div>*@
+  <div class="form-group">
+    <div class="col-md-offset-3 col-md-9">
+      <a class="btn btn-default" role="button" data-toggle="collapse" href="#domicilio" aria-expanded="false" aria-controls="domicilio">
+        Agregar Domicilio
+      </a>
+    </div>
+  </div>
 
+  <div class="collapse"id="domicilio">
+    <h3>@LocalizedStrings.Emisor_DetailsDomicilioFiscalTitle</h3>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Receptor.Domicilio.Calle, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Receptor.Domicilio.Calle, new { @class = "form-control" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(m => m.Receptor.Domicilio.NoExterior, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Receptor.Domicilio.NoExterior, new { @class = "form-control" })
+      </div>
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Receptor.Domicilio.NoInterior, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Receptor.Domicilio.NoInterior, new { @class = "form-control" })
+      </div>
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Receptor.Domicilio.Colonia, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Receptor.Domicilio.Colonia, new { @class = "form-control" })
+      </div>
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Receptor.Domicilio.Municipio, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Receptor.Domicilio.Municipio, new { @class = "form-control" })
+      </div>
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Receptor.Domicilio.Localidad, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Receptor.Domicilio.Localidad, new { @class = "form-control" })
+      </div>
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Receptor.Domicilio.Estado, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Receptor.Domicilio.Estado, new { @class = "form-control" })
+      </div>
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Receptor.Domicilio.CodigoPostal, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Receptor.Domicilio.CodigoPostal, new { @class = "form-control" })
+      </div>
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Receptor.Domicilio.Pais, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Receptor.Domicilio.Pais, new { @class = "form-control" })
+      </div>
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(m => m.Receptor.Domicilio.Referencia, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Receptor.Domicilio.Referencia, new { @class = "form-control" })
+      </div>
+    </div>
+  </div>
 
 
   <h2>
@@ -93,24 +163,28 @@
 
   for (var i = 0; i < Model.Conceptos.Count(); i++) { 
   //foreach (ConceptoViewModel concepto in Model.Conceptos) {
-    <div class="row">
+    <div class="row form-group">
       <div class="col-md-1">
-        <div class="col-md-7">
+        
           @Html.TextBoxFor(c => c.Conceptos[i].Cantidad, new { @class = "form-control" })
-        </div>
+    
 
         @*@string.Format("{0:0.00}", concepto.Cantidad)*@
       </div>
       <div class="col-md-1">
+        @Html.TextBoxFor(c => c.Conceptos[i].Unidad, new { @class = "form-control" })
         @*@concepto.Unidad*@
       </div>
       <div class="col-md-1">
+        @Html.TextBoxFor(c => c.Conceptos[i].NoIdentificacion, new { @class = "form-control" })
         @*@concepto.NoIdentificacion*@
       </div>
       <div class="col-md-6">
+        @Html.TextBoxFor(c => c.Conceptos[i].Descripcion, new { @class = "form-control" })
         @*@concepto.Descripcion*@
       </div>
       <div class="col-md-1">
+        @Html.TextBoxFor(c => c.Conceptos[i].ValorUnitario, new { @class = "form-control" })
         @*@string.Format("{0:C}", concepto.ValorUnitario)*@
         @*@string.Format("{0:0.00}", concepto.ValorUnitario)*@
       </div>
@@ -119,6 +193,7 @@
           0%
         </div>*@
       <div class="col-md-1">
+        @Html.TextBoxFor(c => c.Conceptos[i].Importe, new { @class = "form-control" })
         @*@string.Format("{0:C}", concepto.Importe)*@
       </div>
       <div class="col-md-1">
