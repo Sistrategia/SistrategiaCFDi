@@ -300,6 +300,7 @@
     <Content Include="Views\Receptor\Details.cshtml" />
     <Content Include="Views\Comprobante\Details.cshtml" />
     <Content Include="Views\Comprobante\Create.cshtml" />
+    <Content Include="Views\Dev\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -373,7 +374,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Dev\" />
     <Folder Include="Views\Locale\" />
   </ItemGroup>
   <ItemGroup>
