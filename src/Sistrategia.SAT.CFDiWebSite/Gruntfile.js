@@ -13,6 +13,7 @@
                 },
                 files: {
                     'Content/bootstrap.debug.css': 'Content/bootstrap.less',
+                    'Content/select2.debug.css': 'Content/select2.less',
                     //'Content/Site.debug.css': 'Content/Site.less',
                 }
             },
@@ -27,6 +28,7 @@
                 },
                 files: {
                     'Content/bootstrap.css': 'Content/bootstrap.less',
+                    'Content/select2.css': 'Content/select2.less',
                     //'Content/Site.css': 'Content/Site.less',
                 }
             }
