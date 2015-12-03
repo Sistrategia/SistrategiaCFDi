@@ -20,14 +20,20 @@ namespace Sistrategia.SAT.CFDiWebSite
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/select2").Include(
+                      "~/Scripts/select2.js"
+                      , "~/Scripts/select2/i18n/es.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css"
+                      //,"~/Content/select2.css"
                       , "~/Content/Site.css"
                 //, "~/Content/site.css"
                       ));
 
             bundles.Add(new StyleBundle("~/Content/welcome").Include(
                       "~/Content/bootstrap.css"
+                      ,"~/Content/select2.css"
                 , "~/Content/site.css"
                       //, "~/Content/Welcome.css"
 
