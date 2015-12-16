@@ -38,13 +38,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public UbicacionViewModel Domicilio { get; set; }
     }
 
-    public class ReceptorDetailViewModel
+    public class ReceptorDetailsViewModel
     {
-        public ReceptorDetailViewModel() {
+        public ReceptorDetailsViewModel() {
             this.Domicilio = new UbicacionViewModel();
         }
 
-        public ReceptorDetailViewModel(Receptor receptor) {
+        public ReceptorDetailsViewModel(Receptor receptor) {
             if (receptor == null)
                 throw new ArgumentNullException("receptor");
 

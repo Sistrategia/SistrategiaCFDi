@@ -21,7 +21,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
     {
         public ComprobanteCreateViewModel() {
             this.Emisor = new EmisorDetailViewModel();
-            this.Receptor = new ReceptorDetailViewModel();
+            this.Receptor = new ReceptorDetailsViewModel();
             this.Conceptos = new List<ConceptoViewModel>();
         }
 
@@ -34,7 +34,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             }
 
             if (comprobante.Receptor != null) {
-                this.Receptor = new ReceptorDetailViewModel(comprobante.Receptor);
+                this.Receptor = new ReceptorDetailsViewModel(comprobante.Receptor);
             }
 
             if (comprobante.Conceptos != null && comprobante.Conceptos.Count > 0) {
@@ -58,7 +58,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public decimal Total { get; set; }
 
         public EmisorDetailViewModel Emisor { get; set; }
-        public ReceptorDetailViewModel Receptor { get; set; }
+        public ReceptorDetailsViewModel Receptor { get; set; }
 
         public List<ConceptoViewModel> Conceptos { get; set; }
     }
@@ -74,7 +74,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             }
 
             if (comprobante.Receptor != null) {
-                this.Receptor = new ReceptorDetailViewModel(comprobante.Receptor);
+                this.Receptor = new ReceptorDetailsViewModel(comprobante.Receptor);
             }
 
             if (comprobante.Conceptos != null && comprobante.Conceptos.Count > 0) {
@@ -104,7 +104,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public decimal Total { get; set; }
 
         public EmisorDetailViewModel Emisor { get; set; }
-        public ReceptorDetailViewModel Receptor { get; set; }
+        public ReceptorDetailsViewModel Receptor { get; set; }
 
         public List<ConceptoViewModel> Conceptos { get; set; }
     }

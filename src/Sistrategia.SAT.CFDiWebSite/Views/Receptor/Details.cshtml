@@ -1,7 +1,49 @@
-﻿
+﻿@using Sistrategia.SAT.CFDiWebSite.Models
+@model ReceptorDetailsViewModel
 @{
-    ViewBag.Title = "Details";
+  ViewBag.Title = LocalizedStrings.Receptor_DetailsTitle;
 }
 
-<h2>Details</h2>
+@*.dl-horizontal*@
+<h1>@ViewBag.Title</h1>
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+  <h4>@LocalizedStrings.Receptor_DetailsSubtitle</h4>
+  <hr />
+  <h3>@LocalizedStrings.Emisor_DetailsGeneralTitle</h3>
+  <dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(m => m.Nombre):</dt>
+    <dd>@Html.DisplayFor(m => m.Nombre)</dd>
+    <dt>@Html.DisplayNameFor(m => m.RFC):</dt>
+    <dd>@Html.DisplayFor(m => m.RFC)</dd>
+    @*<dt>@Html.DisplayNameFor(m => m.RegimenFiscal):</dt>
+    <dd>@Html.DisplayFor(m => m.RegimenFiscal)</dd>*@
+  </dl>
+
+  <h3>@LocalizedStrings.Emisor_DetailsDomicilioFiscalTitle</h3>
+  <dl class="dl-horizontal">
+
+    <dt>@Html.DisplayNameFor(m => m.Domicilio.Calle):</dt>
+    <dd>@Html.DisplayFor(m => m.Domicilio.Calle)</dd>
+    <dt>@Html.DisplayNameFor(m => m.Domicilio.NoExterior):</dt>
+    <dd>@Html.DisplayFor(m => m.Domicilio.NoExterior)</dd>
+    <dt>@Html.DisplayNameFor(m => m.Domicilio.NoInterior):</dt>
+    <dd>@Html.DisplayFor(m => m.Domicilio.NoInterior)</dd>
+    <dt>@Html.DisplayNameFor(m => m.Domicilio.Colonia):</dt>
+    <dd>@Html.DisplayFor(m => m.Domicilio.Colonia)</dd>
+    <dt>@Html.DisplayNameFor(m => m.Domicilio.Municipio):</dt>
+    <dd>@Html.DisplayFor(m => m.Domicilio.Municipio)</dd>
+    <dt>@Html.DisplayNameFor(m => m.Domicilio.Localidad):</dt>
+    <dd>@Html.DisplayFor(m => m.Domicilio.Localidad)</dd>
+    <dt>@Html.DisplayNameFor(m => m.Domicilio.Estado):</dt>
+    <dd>@Html.DisplayFor(m => m.Domicilio.Estado)</dd>
+    <dt>@Html.DisplayNameFor(m => m.Domicilio.Pais):</dt>
+    <dd>@Html.DisplayFor(m => m.Domicilio.Pais)</dd>
+    <dt>@Html.DisplayNameFor(m => m.Domicilio.CodigoPostal):</dt>
+    <dd>@Html.DisplayFor(m => m.Domicilio.CodigoPostal)</dd>
+    <dt>@Html.DisplayNameFor(m => m.Domicilio.Referencia):</dt>
+    <dd>@Html.DisplayFor(m => m.Domicilio.Referencia)</dd>
+  </dl>
+</div>
+
 

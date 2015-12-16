@@ -74,7 +74,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             if (receptor == null)
                 return HttpNotFound();
 
-            var model = new ReceptorDetailViewModel(receptor);
+            var model = new ReceptorDetailsViewModel(receptor);
             return View(model);
         }
     }
