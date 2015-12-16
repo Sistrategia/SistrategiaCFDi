@@ -22,5 +22,19 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             var model = new CertificadoCreateViewModel();
             return View(model);
         }
+
+        public ActionResult Details(string id) {
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var certificado = DBContext.Certificados.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            if (certificado == null)
+                return HttpNotFound();
+
+            var model = new CertificadoDetailsViewModel(certificado);
+            return View(model);
+        }            
     }
 }

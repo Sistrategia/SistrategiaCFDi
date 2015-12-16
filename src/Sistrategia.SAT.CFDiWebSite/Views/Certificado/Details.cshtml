@@ -1,0 +1,33 @@
+﻿@using Sistrategia.SAT.CFDiWebSite.Models
+@model CertificadoDetailsViewModel
+@{
+    ViewBag.Title = "Details";
+}
+
+<h1>@ViewBag.Title</h1>
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+  <h4>@LocalizedStrings.Emisor_DetailsSubtitle</h4>
+  <hr />
+  <h3>@LocalizedStrings.Emisor_DetailsGeneralTitle</h3>
+  <dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(m => m.NumSerie):</dt>
+    <dd>@Html.DisplayFor(m => m.NumSerie)</dd>
+    <dt>@Html.DisplayNameFor(m => m.RFC):</dt>
+    <dd>@Html.DisplayFor(m => m.RFC)</dd>
+    <dt>@Html.DisplayNameFor(m => m.Inicia):</dt>
+    <dd>@Html.DisplayFor(m => m.Inicia)</dd>
+    <dt>@Html.DisplayNameFor(m => m.Finaliza):</dt>
+    <dd>@Html.DisplayFor(m => m.Finaliza)</dd>
+    <dt>@Html.DisplayNameFor(m => m.CertificadoBase64):</dt>
+    <dd><p style="word-wrap:break-word;">@Html.DisplayFor(m => m.CertificadoBase64)</p></dd>
+    @*<dt>@Html.DisplayNameFor(m => m.PFXContrasena):</dt>
+    <dd>@Html.DisplayFor(m => m.PFXContrasena)</dd>*@
+    <dt>@Html.DisplayNameFor(m => m.PFXContrasena):</dt>
+    <dd>@Html.DisplayFor(m => m.PFXContrasena)</dd>
+    <dt>@Html.DisplayNameFor(m => m.Estado):</dt>
+    <dd>@Html.DisplayFor(m => m.Estado)</dd>   
+  </dl>
+</div>
+
+

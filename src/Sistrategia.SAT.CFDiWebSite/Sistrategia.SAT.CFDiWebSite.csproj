@@ -361,6 +361,7 @@
     <Content Include="Views\Dev\Index.cshtml" />
     <Content Include="Views\Certificado\Index.cshtml" />
     <Content Include="Views\Certificado\Create.cshtml" />
+    <Content Include="Views\Certificado\Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
