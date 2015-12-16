@@ -35,6 +35,9 @@
                   <li @if (ControllerName.Equals("Receptor")) { @Html.Raw("class='active'")  ; } else { @Html.Raw("")  ; }>
                     @Html.ActionLink("Receptores", "Index", "Receptor")
                   </li>
+                  <li @if (ControllerName.Equals("Certificado")) { @Html.Raw("class='active'")    ; } else { @Html.Raw("")    ; }>
+                    @Html.ActionLink("Certificados", "Index", "Certificado")
+                  </li>
                   <li @if (ControllerName.Equals("Comprobante")) { @Html.Raw("class='active'")   ; } else { @Html.Raw("")   ; }>
                     @Html.ActionLink("Comprobantes", "Index", "Comprobante")
                   </li>
