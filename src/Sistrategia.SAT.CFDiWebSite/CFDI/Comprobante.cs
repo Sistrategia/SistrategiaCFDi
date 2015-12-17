@@ -839,7 +839,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
     public class Retencion
     {
-        private Retencion() {
+        public Retencion() {
             //this.PublicKey = Guid.NewGuid();
         }
 
@@ -943,7 +943,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
     public class Traslado
     {
-        private Traslado() {
+        public Traslado() {
             //this.PublicKey = Guid.NewGuid();
         }
 

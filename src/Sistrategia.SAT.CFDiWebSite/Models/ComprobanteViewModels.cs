@@ -6,6 +6,7 @@ using Microsoft.Owin.Security;
 //using Microsoft.Owin.Security;
 using Sistrategia.SAT.Resources;
 using Sistrategia.SAT.CFDiWebSite.CFDI;
+using System.Web.Mvc;
 
 namespace Sistrategia.SAT.CFDiWebSite.Models
 {
@@ -55,12 +56,23 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public string Folio { get; set; }
 
         public decimal SubTotal { get; set; }
+        public decimal IVA { get; set; }
+        public decimal TasaIVA { get; set; }
+        public decimal ISR { get; set; }
         public decimal Total { get; set; }
 
         public EmisorDetailViewModel Emisor { get; set; }
         public ReceptorDetailsViewModel Receptor { get; set; }
 
+
+        //public List<Receptor> Receptores { get; set; }
+        public IEnumerable<SelectListItem> Emisores { get; set; }
+        public IEnumerable<SelectListItem> Receptores { get; set; }
+
         public List<ConceptoViewModel> Conceptos { get; set; }
+
+        public int EmisorId { get; set; }
+        public int ReceptorId { get; set; }
     }
 
     public class ComprbanteDetailViewModel

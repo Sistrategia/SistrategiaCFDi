@@ -30,14 +30,55 @@
         @Html.TextBoxFor(m => m.Emisor.RegimenFiscal, new { @class = "form-control" })
       </div>
     </div>*@
-  <div class="form-group">
+  @*<div class="form-group">
     <div class="col-md-3 control-label">
     </div>    
     <div class="col-md-7">
       <select id="Receptor" class="form-control"></select>
     </div>
-    </div>
+  </div>*@
+
   <div class="form-group">
+    @Html.LabelFor(m => m.Folio, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.Folio, new { @class = "form-control" })
+    </div>
+  </div>
+
+  <div class="form-group">
+    @Html.LabelFor(m => m.Serie, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.Serie, new { @class = "form-control" })
+    </div>
+  </div>
+
+  @*<div class="form-group">
+    @Html.LabelFor(m => m.Emisor.RFC, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.Emisor.RFC, new { @class = "form-control" })
+    </div>
+  </div>*@
+
+  <div class="form-group">
+    <label class="col-md-3 control-label" for="Receptor_Nombre">Emisor</label>
+    @*@Html.LabelFor(m => m.Emisor.Nombre, new { @class = "col-md-3 control-label" })*@
+    <div class="col-md-7">
+      @Html.DropDownListFor(m => m.EmisorId, Model.Emisores)
+      @*<select id="Receptor" class="form-control"></select>*@
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-3 control-label" for="Receptor_Nombre">Receptor</label>
+    @*Receptor*@
+    <div class="col-md-7">
+      @Html.DropDownListFor(m => m.ReceptorId, Model.Receptores)
+      @*<select id="Receptor" class="form-control"></select>*@
+    </div>
+  </div>
+
+  
+  @*<div class="form-group">
     @Html.LabelFor(m => m.Receptor.Nombre, new { @class = "col-md-3 control-label" })
     <div class="col-md-7">
       @Html.TextBoxFor(m => m.Receptor.Nombre, new { @class = "form-control" })      
@@ -48,14 +89,16 @@
     <div class="col-md-3">
       @Html.TextBoxFor(m => m.Receptor.RFC, new { @class = "form-control" })
     </div>
-  </div>
+  </div>*@
+  
   @*<div class="form-group">
       @Html.LabelFor(m => m.Receptor.RegimenFiscal, new { @class = "col-md-2 control-label" })
       <div class="col-md-10">
         @Html.TextBoxFor(m => m.Receptor.RegimenFiscal, new { @class = "form-control" })
       </div>
     </div>*@
-  <div class="form-group">
+  
+  @*<div class="form-group">
     <div class="col-md-offset-3 col-md-9">
       <a class="btn btn-default" role="button" data-toggle="collapse" href="#domicilio" aria-expanded="false" aria-controls="domicilio">
         Agregar Domicilio
@@ -126,7 +169,7 @@
         @Html.TextBoxFor(m => m.Receptor.Domicilio.Referencia, new { @class = "form-control" })
       </div>
     </div>
-  </div>
+  </div>*@
 
 
   <h2>
@@ -221,25 +264,69 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-9">
+    <div class="col-md-8">
     </div>
     <div class="col-md-1" style="font-weight:600">
       Subtotal:
     </div>
+    <div class="col-md-1" style="font-weight:600">
+      
+    </div>
     <div class="col-md-1">
-      @string.Format("{0:C}", Model.SubTotal)
+      @*@string.Format("{0:C}", Model.SubTotal)*@
+      @Html.TextBoxFor(m => m.SubTotal, new { @class = "form-control" })
     </div>
     <div class="col-md-1">
     </div>
   </div>
+
   <div class="row">
-    <div class="col-md-9">
+    <div class="col-md-8">
+    </div>
+    <div class="col-md-1" style="font-weight:600">
+      ISR:
+    </div>
+    <div class="col-md-1" style="font-weight:600">
+     
+    </div>
+    <div class="col-md-1">
+      @*@string.Format("{0:C}", Model.SubTotal)*@
+      @Html.TextBoxFor(m => m.ISR, new { @class = "form-control" })
+    </div>
+    <div class="col-md-1">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+    </div>
+    <div class="col-md-1" style="font-weight:600">
+      IVA:
+    </div>
+    <div class="col-md-1" style="font-weight:600">
+      @Html.TextBoxFor(m => m.TasaIVA, new { @class = "form-control" })
+    </div>
+   
+    <div class="col-md-1">
+      @*@string.Format("{0:C}", Model.SubTotal)*@
+      @Html.TextBoxFor(m => m.IVA, new { @class = "form-control" })
+    </div>
+    <div class="col-md-1">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
     </div>
     <div class="col-md-1" style="font-weight:600">
       Total:
     </div>
+    <div class="col-md-1" style="font-weight:600">
+      
+    </div>
     <div class="col-md-1">
-      @string.Format("{0:C}", Model.Total)
+      @*@string.Format("{0:C}", Model.Total)*@
+      @Html.TextBoxFor(m => m.Total, new { @class = "form-control" })
     </div>
     <div class="col-md-1">
     </div>
@@ -269,7 +356,7 @@
     $(document).ready(function () {
       $.fn.select2.defaults.set('language', 'es');
 
-      $("#Receptor").select2({
+      $("#Receptore").select2({
         placeholder: "Seleccione",
         minimumInputLength: 2,
         allowClear: false,
