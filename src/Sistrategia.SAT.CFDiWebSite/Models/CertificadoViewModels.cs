@@ -40,8 +40,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         [Display(Name = "Finaliza")]
         public DateTime Finaliza { get; set; }
 
-        [Display(Name = "Certificado")]
-        public string CertificadoBase64 { get; set; }
+        //[Display(Name = "Certificado")]
+        [Required, DataType(DataType.Upload), Display(Name = "Certificado")]
+        public HttpPostedFileBase CertificadoArchivo { get; set; }
+        //public string CertificadoBase64 { get; set; }
 
         //[Display(Name = "Archivo PFX")]
         //public byte[] PFXArchivo { get; set; }
@@ -113,5 +115,11 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         //[Required]
         [Display(Name = "Estado")]
         public string Estado { get; set; }
+
+        [Display(Name="Issuer")]
+        public string Issuer { get; set; }
+
+        [Display(Name = "Subject")]
+        public string Subject { get; set; }
     }
 }
