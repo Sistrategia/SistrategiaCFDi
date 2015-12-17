@@ -45,6 +45,21 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             }
             model.Receptores = receptoresSelectList;
 
+            var certificados = DBContext.Certificados.ToList();
+            var certificadosSelectList = new List<SelectListItem>();
+            foreach (var certificado in certificados) {
+                certificadosSelectList.Add(new SelectListItem {
+                    Value = certificado.CertificadoId.ToString(),
+                    Text = certificado.NumSerie // + " - " + certificado.RFC
+                });
+            }
+            model.Certificados = certificadosSelectList;
+
+            model.FormaDePago = "PAGO EN UNA SOLA EXHIBICION";
+            model.MetodoDePago = "NO IDENTIFICADO";
+            model.LugarExpedicion = "MATRIZ";
+            model.TipoCambio = "1.00";
+
             //model.Receptores = 
             return View(model);
         }
@@ -67,7 +82,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             comprobante.Serie = model.Serie;
             comprobante.Folio = model.Folio;
             comprobante.Fecha = DateTime.Now;
-            comprobante.FormaDePago = "PAGO EN UNA SOLA EXHIBICION";
+            comprobante.FormaDePago = model.FormaDePago;
             comprobante.SubTotal = model.SubTotal;
             comprobante.Total = model.Total;
 
@@ -75,11 +90,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             //comprobante.Certificado;
             comprobante.TipoDeComprobante = "ingreso";
 
-            comprobante.MetodoDePago = "NO IDENTIFICADO";
-            comprobante.LugarExpedicion = "MATRIZ";
-            comprobante.TipoCambio = "1.00";
+            comprobante.FormaDePago = model.FormaDePago;
+            comprobante.MetodoDePago = model.MetodoDePago;
+            comprobante.LugarExpedicion = model.LugarExpedicion;
+            comprobante.TipoCambio = model.TipoCambio;
 
-
+            comprobante.NumCtaPago = model.NumCtaPago;
 
             comprobante.Conceptos = new List<Concepto>();
 
@@ -98,6 +114,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             }
 
             if (model.IVA > 0) {
+                comprobante.Impuestos = new Impuestos();
                 comprobante.Impuestos.TotalImpuestosTrasladados = model.IVA;
                 comprobante.Impuestos.Traslados = new List<Traslado>();
                 comprobante.Impuestos.Traslados.Add(new Traslado {
@@ -107,7 +124,24 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 });
             }
 
-            return View(model);
+            comprobante.PublicKey = Guid.NewGuid();
+
+            Certificado certificado = DBContext.Certificados.Find(model.CertificadoId);
+
+            if (certificado != null) {
+                comprobante.NoCertificado = certificado.NumSerie;
+                comprobante.Certificado = certificado.CertificadoBase64;
+            }
+
+            comprobante.Fecha = DateTime.Parse("2014-09-03T13:39:03");
+            DBContext.Comprobantes.Add(comprobante);
+            DBContext.SaveChanges();
+
+
+
+            return RedirectToAction("Details", new { id = comprobante.PublicKey });
+
+            //return View(model);
         }
 
         public ActionResult Details(string id) {
@@ -122,6 +156,128 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
             var model = new ComprbanteDetailViewModel(comprobante);
             return View(model);
+        }
+
+        public ActionResult ShowXml(string id) {
+
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+            
+            if (comprobante == null)
+                return HttpNotFound();
+
+            var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
+
+            //System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            //CFDIXmlTextWriter writer =
+            //    new CFDIXmlTextWriter(comprobante, ms, System.Text.Encoding.UTF8);
+            //writer.WriteXml();
+            //ms.Position = 0;
+            //System.IO.StreamReader reader = new System.IO.StreamReader(ms);
+            //string xml = reader.ReadToEnd();
+            //reader.Close();
+            //writer.Close();
+
+            //string xml = comprobante.GetXml();
+            string cadenaOriginal = comprobante.GetCadenaOriginal();
+
+            Response.ClearContent();
+            Response.ContentType = "application/xml";
+            Response.ContentEncoding = System.Text.Encoding.UTF8;
+
+            System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            CFDIXmlTextWriter writer =
+                new CFDIXmlTextWriter(comprobante, /*ms*/Response.OutputStream, System.Text.Encoding.UTF8);
+            writer.WriteXml();
+            ms.Position = 0;
+            writer.Close();
+
+            return File(ms, "text/xml");
+        }
+
+        public ActionResult ShowCadenaOriginal(string id) {
+
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            if (comprobante == null)
+                return HttpNotFound();
+
+            var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
+
+            //System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            //CFDIXmlTextWriter writer =
+            //    new CFDIXmlTextWriter(comprobante, ms, System.Text.Encoding.UTF8);
+            //writer.WriteXml();
+            //ms.Position = 0;
+            //System.IO.StreamReader reader = new System.IO.StreamReader(ms);
+            //string xml = reader.ReadToEnd();
+            //reader.Close();
+            //writer.Close();
+
+            //string xml = comprobante.GetXml();
+            string cadenaOriginal = comprobante.GetCadenaOriginal();
+
+            Response.ClearContent();
+            Response.ContentType = "plain/text";
+            Response.ContentEncoding = System.Text.Encoding.UTF8;
+
+            //System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            //CFDIXmlTextWriter writer =
+            //    new CFDIXmlTextWriter(comprobante, /*ms*/Response.OutputStream, System.Text.Encoding.UTF8);
+            //writer.WriteXml();
+            //ms.Position = 0;
+            //writer.Close();
+
+            return Content(cadenaOriginal, "text/plain"); // cadenaOriginal; // File(ms, "text/xml");
+        }
+
+        public ActionResult ShowSello(string id) {
+
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            if (comprobante == null)
+                return HttpNotFound();
+
+            var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
+
+            //System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            //CFDIXmlTextWriter writer =
+            //    new CFDIXmlTextWriter(comprobante, ms, System.Text.Encoding.UTF8);
+            //writer.WriteXml();
+            //ms.Position = 0;
+            //System.IO.StreamReader reader = new System.IO.StreamReader(ms);
+            //string xml = reader.ReadToEnd();
+            //reader.Close();
+            //writer.Close();
+
+            //string xml = comprobante.GetXml();
+            string cadenaOriginal = comprobante.GetCadenaOriginal();
+
+            
+
+            Response.ClearContent();
+            Response.ContentType = "plain/text";
+            Response.ContentEncoding = System.Text.Encoding.UTF8;
+
+            //System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            //CFDIXmlTextWriter writer =
+            //    new CFDIXmlTextWriter(comprobante, /*ms*/Response.OutputStream, System.Text.Encoding.UTF8);
+            //writer.WriteXml();
+            //ms.Position = 0;
+            //writer.Close();
+
+            return Content(certificado.GetSello(cadenaOriginal), "text/plain"); // cadenaOriginal; // File(ms, "text/xml");
         }
     }
 }

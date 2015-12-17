@@ -386,6 +386,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="CFDI\Certificado.cs" />
+    <Compile Include="CFDI\CFDIXmlTextWriter.cs" />
     <Compile Include="CFDI\Comprobante.cs" />
     <Compile Include="CFDI\Concepto.cs" />
     <Compile Include="CFDI\Emisor.cs" />

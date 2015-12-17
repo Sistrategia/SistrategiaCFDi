@@ -61,6 +61,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public decimal ISR { get; set; }
         public decimal Total { get; set; }
 
+        public string FormaDePago { get; set; }
+        public string MetodoDePago { get; set; }
+        public string NumCtaPago { get; set; }
+        public string LugarExpedicion { get; set; }
+        public string TipoCambio { get; set; }
+
         public EmisorDetailViewModel Emisor { get; set; }
         public ReceptorDetailsViewModel Receptor { get; set; }
 
@@ -68,11 +74,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         //public List<Receptor> Receptores { get; set; }
         public IEnumerable<SelectListItem> Emisores { get; set; }
         public IEnumerable<SelectListItem> Receptores { get; set; }
+        public IEnumerable<SelectListItem> Certificados { get; set; }
 
         public List<ConceptoViewModel> Conceptos { get; set; }
 
         public int EmisorId { get; set; }
         public int ReceptorId { get; set; }
+        public int CertificadoId { get; set; }
     }
 
     public class ComprbanteDetailViewModel

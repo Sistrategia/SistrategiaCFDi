@@ -38,18 +38,44 @@
     </div>
   </div>*@
 
+
   <div class="form-group">
-    @Html.LabelFor(m => m.Folio, new { @class = "col-md-2 control-label" })
-    <div class="col-md-10">
-      @Html.TextBoxFor(m => m.Folio, new { @class = "form-control" })
-    </div>
+    @*<label class="col-md-3 control-label" for="Receptor_Nombre">Emisor</label>*@
+    @*@Html.LabelFor(m => m.Emisor.Nombre, new { @class = "col-md-3 control-label" })*@
+    @*<div class="col-md-7">
+      @Html.DropDownListFor(m => m.EmisorId, Model.Emisores)
+      <select id="Receptor" class="form-control"></select>
+    </div>*@
   </div>
 
   <div class="form-group">
-    @Html.LabelFor(m => m.Serie, new { @class = "col-md-2 control-label" })
-    <div class="col-md-10">
+    <label class="col-md-2 control-label" for="Receptor_Nombre">Emisor</label>
+    @*<div class="col-md-10">
+      </div>*@
+    <div class="col-md-7">
+      @Html.DropDownListFor(m => m.EmisorId, Model.Emisores, new { @class = "form-control" })
+      @*<select id="Receptor" class="form-control"></select>*@
+    </div>
+
+    @Html.LabelFor(m => m.Serie, new { @class = "col-md-1 control-label" })
+    <div class="col-md-2">
       @Html.TextBoxFor(m => m.Serie, new { @class = "form-control" })
     </div>
+     
+    </div>
+
+  <div class="form-group">
+    <label class="col-md-2 control-label" for="Certificado_NumSerie">Certificado</label>
+    <div class="col-md-7">
+      @Html.DropDownListFor(m => m.CertificadoId, Model.Certificados, new { @class = "form-control" })     
+    </div>
+
+    @Html.LabelFor(m => m.Folio, new { @class = "col-md-1  control-label" })
+    <div class="col-md-2">
+      @Html.TextBoxFor(m => m.Folio, new { @class = "form-control" })
+    </div>
+
+   
   </div>
 
   @*<div class="form-group">
@@ -59,25 +85,52 @@
     </div>
   </div>*@
 
-  <div class="form-group">
-    <label class="col-md-3 control-label" for="Receptor_Nombre">Emisor</label>
-    @*@Html.LabelFor(m => m.Emisor.Nombre, new { @class = "col-md-3 control-label" })*@
-    <div class="col-md-7">
-      @Html.DropDownListFor(m => m.EmisorId, Model.Emisores)
-      @*<select id="Receptor" class="form-control"></select>*@
-    </div>
-  </div>
 
   <div class="form-group">
-    <label class="col-md-3 control-label" for="Receptor_Nombre">Receptor</label>
+    <label class="col-md-2 control-label" for="Receptor_Nombre">Receptor</label>
     @*Receptor*@
     <div class="col-md-7">
-      @Html.DropDownListFor(m => m.ReceptorId, Model.Receptores)
+      @Html.DropDownListFor(m => m.ReceptorId, Model.Receptores, new { @class = "form-control" })
+      @*<select id="Receptor" class="form-control"></select>*@
+    </div>
+
+    @Html.LabelFor(m => m.LugarExpedicion, new { @class = "col-md-1  control-label" })
+    <div class="col-md-2">
+      @Html.TextBoxFor(m => m.LugarExpedicion, new { @class = "form-control" })
+      @*<select id="Receptor" class="form-control"></select>*@
+    </div>
+
+  </div>
+
+  <div class="form-group">   
+    @Html.LabelFor(m => m.FormaDePago, new { @class = "col-md-2  control-label" })
+    <div class="col-md-7">
+    @Html.TextBoxFor(m => m.FormaDePago, new { @class = "form-control" })
       @*<select id="Receptor" class="form-control"></select>*@
     </div>
   </div>
 
-  
+  <div class="form-group">
+    @Html.LabelFor(m => m.MetodoDePago, new { @class = "col-md-2  control-label" })
+    <div class="col-md-7">
+      @Html.TextBoxFor(m => m.MetodoDePago, new { @class = "form-control" })
+      @*<select id="Receptor" class="form-control"></select>*@
+    </div>
+
+    @Html.LabelFor(m => m.NumCtaPago, new { @class = "col-md-1  control-label" })
+    <div class="col-md-2">
+      @Html.TextBoxFor(m => m.NumCtaPago, new { @class = "form-control" })     
+    </div>
+
+  </div>
+
+
+  //model.FormaDePago = "PAGO EN UNA SOLA EXHIBICION";
+  //model.MetodoDePago = "NO IDENTIFICADO";
+  //model.LugarExpedicion = "MATRIZ";
+  //model.TipoCambio = "1.00";
+
+
   @*<div class="form-group">
     @Html.LabelFor(m => m.Receptor.Nombre, new { @class = "col-md-3 control-label" })
     <div class="col-md-7">

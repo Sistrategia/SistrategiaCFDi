@@ -69,6 +69,57 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         }
         #endregion
 
+        public string DecimalFormat {
+            get {
+                return "0.00";
+                //if (string.IsNullOrEmpty(this.decimalFormat))
+                //    return SATManager.GetDecimalFormatDefault();
+                //else
+                //    return
+                //        this.decimalFormat;
+            }
+            //set { this.decimalFormat = value; }
+        }
+
+        public string GetXml() {
+            System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            CFDIXmlTextWriter writer =
+                new CFDIXmlTextWriter(this, ms, System.Text.Encoding.UTF8);
+            writer.WriteXml();
+            ms.Position = 0;
+            System.IO.StreamReader reader = new System.IO.StreamReader(ms);
+            string xml = reader.ReadToEnd();
+            reader.Close();
+            writer.Close();
+            return xml;
+        }
+
+        public string GetCadenaOriginal() {
+            string xml = this.GetXml();
+
+            System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
+            doc.LoadXml(xml);
+
+            System.Xml.Xsl.XslCompiledTransform xslt = new System.Xml.Xsl.XslCompiledTransform();
+
+            //using (System.IO.Stream stream = typeof(SATManager).Assembly.GetManifestResourceStream("Sistrategia.Server.SAT.XSLT.cadenaoriginal_3_2.xslt")) {
+            //using (System.Xml.XmlReader xmlReader = System.Xml.XmlReader.Create(stream)) {
+            // xslt.Load(xmlReader);
+            xslt.Load("http://www.sat.gob.mx/sitio_internet/cfd/3/cadenaoriginal_3_2/cadenaoriginal_3_2.xslt");
+
+            System.IO.MemoryStream ms2 = new System.IO.MemoryStream();
+            xslt.Transform(doc, null, ms2);
+            ms2.Position = 3;
+
+            System.IO.StreamReader sr = new System.IO.StreamReader(ms2);
+            string cadenaOriginal = sr.ReadToEnd();
+            sr.Close();
+
+            return cadenaOriginal;
+            //}
+            //}
+        }
+
         [Key]
         public int ComprobanteId { get; set; }
 

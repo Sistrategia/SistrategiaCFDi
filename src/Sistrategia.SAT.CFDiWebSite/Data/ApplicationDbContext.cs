@@ -374,6 +374,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             comprobante.Property(p => p.ReceptorId)
                 .HasColumnName("receptor_id");
 
+            comprobante.Ignore(p => p.DecimalFormat);
+
 
             var concepto = modelBuilder.Entity<Concepto>()
                 .ToTable("sat_concepto");
