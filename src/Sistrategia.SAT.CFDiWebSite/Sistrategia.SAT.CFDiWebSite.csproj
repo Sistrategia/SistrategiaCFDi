@@ -386,9 +386,16 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="CFDI\Certificado.cs" />
+    <Compile Include="CFDI\CFDIServiceInterfaces.cs" />
     <Compile Include="CFDI\CFDIXmlTextWriter.cs" />
     <Compile Include="CFDI\Comprobante.cs" />
     <Compile Include="CFDI\Concepto.cs" />
+    <Compile Include="CFDI\EDICOM\CFDiService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CFDI\EDICOM\TestCFDI\CFDiService.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CFDI\Emisor.cs" />
     <Compile Include="CFDI\Receptor.cs" />
     <Compile Include="CFDI\Ubicacion.cs" />
