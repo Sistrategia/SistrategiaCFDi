@@ -8,11 +8,11 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
     /// <summary>
     /// Complemento requerido para el Timbrado Fiscal Digital que da valides a un Comprobante Fiscal Digital.
     /// </summary>
-    public class TimbreFiscalDigital
+    public class TimbreFiscalDigital : Complemento
     {
-        private int timbreFiscalDigitalId;
+        //private int timbreFiscalDigitalId;
         //private Guid satTimbreId;
-        private Guid publicKey;
+        //private Guid publicKey;
         private string version;
         private string uuid;
         private DateTime fechaTimbrado;
@@ -25,15 +25,15 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //    set { this.satTimbreId = value; }
         //}
 
-        public int TimbreFiscalDigitalId {
-            get { return this.timbreFiscalDigitalId; }
-            set { this.timbreFiscalDigitalId = value; }
-        }
+        //public int TimbreFiscalDigitalId {
+        //    get { return this.timbreFiscalDigitalId; }
+        //    set { this.timbreFiscalDigitalId = value; }
+        //}
 
-        public Guid PublicKey {
-            get { return this.publicKey; }
-            set { this.publicKey = value; }
-        }
+        //public Guid PublicKey {
+        //    get { return this.publicKey; }
+        //    set { this.publicKey = value; }
+        //}
 
         //<xs:attribute name="version" use="required" fixed="1.0">
         //<xs:annotation>

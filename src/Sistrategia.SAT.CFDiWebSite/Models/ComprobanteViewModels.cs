@@ -153,6 +153,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
             this.PublicKey = comprobante.PublicKey;
 
+            this.Fecha = comprobante.Fecha.ToString("dd/MM/yyyy hh:mm:ss");
             this.Serie = comprobante.Serie;
             this.Folio = comprobante.Folio;
 
@@ -177,12 +178,26 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             this.EmisorCorreo = ConfigurationManager.AppSettings["InvoiceEmisorCorreo"];
             this.EmisorCifUrl = ConfigurationManager.AppSettings["InvoiceEmisorCifUrl"];
 
+            this.NoOrden = comprobante.ExtendedIntValue1.ToString();
+            this.NoCliente = comprobante.ExtendedIntValue2.ToString();
+
             //this.FechaTimbre
             //this.CadenaSAT = comprobante.GetCadenaSAT();
             //this.CBB
             //this.NumSerieSAT
             this.SelloCFD = comprobante.Sello;
-            //this.SelloSAT
+            //this.SelloSAT = comprobante.Complementos.
+            foreach (Complemento complemento in comprobante.Complementos) {
+                if (complemento is TimbreFiscalDigital) {
+                    TimbreFiscalDigital timbre = complemento as TimbreFiscalDigital;
+                    this.SelloSAT = timbre.SelloSAT;
+                    this.FechaTimbre = timbre.FechaTimbrado.ToString("dd/MM/yyyy hh:mm:ss");
+                    this.FolioFiscal = timbre.UUID;                    
+                    this.NumSerieSAT = timbre.NoCertificadoSAT;
+                    this.CadenaSAT = comprobante.GetCadenaSAT();
+                    this.CBB = comprobante.GetQrCode();
+                }
+            }
         }
 
         public string EmisorTelefono { get; set; }

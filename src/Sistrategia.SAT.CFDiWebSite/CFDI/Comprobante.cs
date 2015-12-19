@@ -5,6 +5,7 @@ using System.Data.Entity.Infrastructure.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Serialization;
+using System.Text;
 
 namespace Sistrategia.SAT.CFDiWebSite.CFDI
 {
@@ -17,8 +18,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         private DateTime fecha;
         private string sello;
 
-        //private string noAprobacion;
-        //private string anoAprobacion;
+        private string noAprobacion;
+        private string anoAprobacion;
 
         private string formaDePago;
         private string noCertificado;
@@ -46,8 +47,10 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         private decimal? montoFolioFiscalOrigField;
         //private bool montoFolioFiscalOrigFieldSpecified = false;
 
+       
 
-
+        private string decimalFormat;
+        private int? decimalPlaces = null;
 
         //private Emisor emisor;
         //private Receptor receptor;
@@ -71,14 +74,23 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
         public string DecimalFormat {
             get {
-                return "0.00";
-                //if (string.IsNullOrEmpty(this.decimalFormat))
-                //    return SATManager.GetDecimalFormatDefault();
-                //else
-                //    return
-                //        this.decimalFormat;
+                //return "0.00";
+                if (string.IsNullOrEmpty(this.decimalFormat))
+                    return SATManager.GetDecimalFormatDefault();
+                else
+                    return
+                        this.decimalFormat;
             }
-            //set { this.decimalFormat = value; }
+            set { this.decimalFormat = value; }
+        }
+
+        public int DecimalPlaces {
+            get {
+                if (this.decimalPlaces.HasValue)
+                    return this.decimalPlaces.Value;
+                else
+                    return SATManager.GetDecimalPlacesDefault();                
+            }
         }
 
         public string GetXml() {
@@ -118,6 +130,63 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             return cadenaOriginal;
             //}
             //}
+        }
+
+        public string GetCadenaSAT() {
+            //string xml = comprobante.GetXml();
+            //System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
+            //doc.LoadXml(xml);
+            // System.Xml.Xsl.XslCompiledTransform xslt = new System.Xml.Xsl.XslCompiledTransform();
+            //xslt.Load("http://www.sat.gob.mx/sitio_internet/cfd/3/cadenaoriginal_3_2/cadenaoriginal_3_2.xslt");
+            //System.IO.MemoryStream ms2 = new System.IO.MemoryStream();
+            //xslt.Transform(doc, null, ms2);
+            //ms2.Position = 3;
+            //System.IO.StreamReader sr = new System.IO.StreamReader(ms2);
+            //string cadenaOriginal = sr.ReadToEnd();           
+            //sr.Close();
+            //return cadenaOriginal;   
+
+            var comprobante = this;
+
+            if ((comprobante != null) && (comprobante.Complementos != null) && (comprobante.Complementos.Count > 0 )) {
+                foreach (Complemento complemento in comprobante.Complementos) {
+                    if (complemento is TimbreFiscalDigital) {
+                        TimbreFiscalDigital timbre = complemento as TimbreFiscalDigital;
+
+                        StringBuilder sb = new StringBuilder();
+                        sb.Append("||1.0|");
+                        sb.Append(timbre.UUID);
+                        sb.Append("|");
+                        sb.Append(timbre.FechaTimbrado.ToString("yyyy-MM-ddTHH:mm:ss"));
+                        sb.Append("|");
+                        sb.Append(timbre.SelloCFD);
+                        sb.Append("|");
+                        sb.Append(timbre.NoCertificadoSAT);
+                        sb.Append("||");
+                        return sb.ToString();
+
+                    }
+                }
+                
+            }
+           
+            return GetCadenaOriginal();
+        }
+
+        public string GetQrCode() {
+
+            if ((this.Complementos != null) && (this.Complementos.Count > 0)) {
+                foreach (Complemento complemento in this.Complementos) {
+                    if (complemento is TimbreFiscalDigital) {
+                        TimbreFiscalDigital timbre = complemento as TimbreFiscalDigital;
+                        string info = string.Format("?re={0}&rr={1}&tt={2}&id={3}",
+                        this.Emisor.RFC, this.Receptor.RFC, this.Total.ToString(this.DecimalFormat), timbre.UUID);
+                        string cbb = SATManager.GetQrCode(info);
+                        return cbb;
+                    }
+                }
+            }
+            return string.Empty;
         }
 
         [Key]
@@ -790,6 +859,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //    set { this.impuestos = value; }
         //}
 
+        //private Complemento complemento;
 
         ///// <summary>
         ///// Nodo opcional donde se incluirá el complemento Timbre Fiscal Digital de manera obligatoria 
@@ -800,6 +870,27 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //    get { return this.complemento; }
         //    set { this.complemento = value; }
         //}
+
+
+        //private List<Complemento> complementos;
+
+        /// <summary>
+        /// Nodo opcional donde se incluirá el complemento Timbre Fiscal Digital de manera obligatoria 
+        /// y los nodos complementarios determinados por el SAT, de acuerdo a las disposiciones particulares 
+        /// a un sector o actividad específica.
+        /// </summary>
+        public virtual List<Complemento> Complementos { get; set; }
+
+
+        public int? ExtendedIntValue1 { get; set; }
+        public int? ExtendedIntValue2 { get; set; }
+        public int? ExtendedIntValue3 { get; set; }
+
+        public string ExtendedStringValue1 { get; set; }
+        public string ExtendedStringValue2 { get; set; }
+        public string ExtendedStringValue3 { get; set; }
+
+
     }
 
     //public enum ComprobanteTipoDeComprobante
@@ -807,6 +898,55 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
     //    ingreso,
     //    egreso,
     //    traslado
+    //}
+
+    public class Complemento
+    {
+        [Key]
+        public int ComplementoId { get; set; }
+
+        //[Required]
+        //public Guid PublicKey { get; set; }
+
+        //private System.Xml.XmlElement[] any;
+
+        //[XmlAnyElement]
+        //public virtual List<System.Xml.XmlElement> Any { get; set; }
+        ////public System.Xml.XmlElement[] Any {
+        ////    get { return this.any; }
+        ////    set { this.any = value; }
+        ////}
+
+        //[ForeignKey("TimbreFiscalDigital")]
+        //public int? TimbreFiscalDigitalId { get; set; }
+
+        //public virtual TimbreFiscalDigital TimbreFiscalDigital { get; set; }
+
+        ///// <summary>
+        ///// Nodo opcional para capturar los impuestos retenidos aplicables
+        ///// </summary>
+        //[XmlArrayItem("Retencion", IsNullable = false)]
+        //public virtual List<Retencion> Retenciones { get; set; }
+        ////public Retencion[] Retenciones {
+        ////    get { return this.retenciones; }
+        ////    set { this.retenciones = value; }
+        ////}
+    }
+
+    //public class Complemento // : System.Xml.XmlDocument
+    //{
+    //    public int ComplementoId { get; set; }
+
+    //    public virtual string Complemento { get; set; }
+
+    //    //private System.Xml.XmlElement[] any;
+
+    //    //[XmlAnyElement]
+    //    //public virtual List<System.Xml.XmlElement> Any { get; set; }
+    //    //public System.Xml.XmlElement[] Any {
+    //    //    get { return this.any; }
+    //    //    set { this.any = value; }
+    //    //}
     //}
 
     public class Impuestos
@@ -1130,20 +1270,6 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
     //}
 
 
-    //public class Complemento // : System.Xml.XmlDocument
-    //{
-    //    public int ComplementoId { get; set; }
-
-    //    public virtual string Complemento { get; set; }
-
-    //    //private System.Xml.XmlElement[] any;
-
-    //    //[XmlAnyElement]
-    //    //public virtual List<System.Xml.XmlElement> Any { get; set; }
-    //    //public System.Xml.XmlElement[] Any {
-    //    //    get { return this.any; }
-    //    //    set { this.any = value; }
-    //    //}
-    //}
+ 
 
 }
