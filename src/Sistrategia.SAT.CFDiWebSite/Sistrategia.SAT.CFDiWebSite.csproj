@@ -362,6 +362,7 @@
     <Content Include="Views\Certificado\Index.cshtml" />
     <Content Include="Views\Certificado\Create.cshtml" />
     <Content Include="Views\Certificado\Details.cshtml" />
+    <Content Include="Views\Comprobante\ShowHtml.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -385,6 +386,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="CFDI\CantidadEnLetraConverter.cs" />
     <Compile Include="CFDI\Certificado.cs" />
     <Compile Include="CFDI\CFDIServiceInterfaces.cs" />
     <Compile Include="CFDI\CFDIXmlTextWriter.cs" />
@@ -398,6 +400,7 @@
     </Compile>
     <Compile Include="CFDI\Emisor.cs" />
     <Compile Include="CFDI\Receptor.cs" />
+    <Compile Include="CFDI\TimbreFiscalDigital.cs" />
     <Compile Include="CFDI\Ubicacion.cs" />
     <Compile Include="CFDI\UbicacionFiscal.cs" />
     <Compile Include="Controllers\AccountController.cs" />

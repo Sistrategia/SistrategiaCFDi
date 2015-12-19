@@ -1086,6 +1086,11 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         }
     }
 
+    //public class Complemento
+    //{
+
+    //}
+
     ///// <summary>
     ///// Atributo requerido para señalar el tipo de impuesto trasladado
     ///// </summary>

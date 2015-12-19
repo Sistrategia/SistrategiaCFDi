@@ -154,7 +154,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             if (comprobante == null)
                 return HttpNotFound();
 
-            var model = new ComprbanteDetailViewModel(comprobante);
+            var model = new ComprobanteDetailViewModel(comprobante);
             return View(model);
         }
 
@@ -278,6 +278,20 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             //writer.Close();
 
             return Content(certificado.GetSello(cadenaOriginal), "text/plain"); // cadenaOriginal; // File(ms, "text/xml");
+        }
+
+        public ActionResult ShowHtml(string id) {
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            if (comprobante == null)
+                return HttpNotFound();
+
+            var model = new ComprobanteHtmlViewModel(comprobante);
+            return View(model);
         }
     }
 }

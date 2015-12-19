@@ -7,6 +7,7 @@ using Microsoft.Owin.Security;
 using Sistrategia.SAT.Resources;
 using Sistrategia.SAT.CFDiWebSite.CFDI;
 using System.Web.Mvc;
+using System.Configuration;
 
 namespace Sistrategia.SAT.CFDiWebSite.Models
 {
@@ -83,9 +84,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public int CertificadoId { get; set; }
     }
 
-    public class ComprbanteDetailViewModel
+    public class ComprobanteDetailViewModel
     {
-        public ComprbanteDetailViewModel(Comprobante comprobante) {
+        public ComprobanteDetailViewModel(Comprobante comprobante) {
             if (comprobante == null)
                 throw new ArgumentNullException("comprobante");
 
@@ -122,6 +123,116 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         public decimal SubTotal { get; set; }
         public decimal Total { get; set; }
+
+        public EmisorDetailViewModel Emisor { get; set; }
+        public ReceptorDetailsViewModel Receptor { get; set; }
+
+        public List<ConceptoViewModel> Conceptos { get; set; }
+    }
+
+    public class ComprobanteHtmlViewModel
+    {
+        public ComprobanteHtmlViewModel(Comprobante comprobante) {
+            if (comprobante == null)
+                throw new ArgumentNullException("comprobante");
+
+            if (comprobante.Emisor != null) {
+                this.Emisor = new EmisorDetailViewModel(comprobante.Emisor);
+            }
+
+            if (comprobante.Receptor != null) {
+                this.Receptor = new ReceptorDetailsViewModel(comprobante.Receptor);
+            }
+
+            if (comprobante.Conceptos != null && comprobante.Conceptos.Count > 0) {
+                this.Conceptos = new List<ConceptoViewModel>();
+                foreach (Concepto concepto in comprobante.Conceptos) {
+                    this.Conceptos.Add(new ConceptoViewModel(concepto));
+                }
+            }
+
+            this.PublicKey = comprobante.PublicKey;
+
+            this.Serie = comprobante.Serie;
+            this.Folio = comprobante.Folio;
+
+            //this.FolioFiscal = comprobante.
+
+            this.SubTotal = comprobante.SubTotal;
+            if (comprobante.Impuestos != null && comprobante.Impuestos.TotalImpuestosTrasladados.HasValue)
+                this.IVA = comprobante.Impuestos.TotalImpuestosTrasladados.Value;
+            this.Total = comprobante.Total;
+
+            CantidadEnLetraConverter letraConverter = new CantidadEnLetraConverter();
+            letraConverter.Numero = comprobante.Total;
+            this.TotalLetra = letraConverter.letra();
+
+            this.MetodoDePago = comprobante.MetodoDePago;
+
+            this.MainCss = ConfigurationManager.AppSettings["InvoiceMainCss"];
+            this.PrintCss = ConfigurationManager.AppSettings["InvoicePrintCss"];
+
+            this.EmisorLogoUrl = ConfigurationManager.AppSettings["InvoiceEmisorLogoUrl"];
+            this.EmisorTelefono = ConfigurationManager.AppSettings["InvoiceEmisorTelefono"];
+            this.EmisorCorreo = ConfigurationManager.AppSettings["InvoiceEmisorCorreo"];
+            this.EmisorCifUrl = ConfigurationManager.AppSettings["InvoiceEmisorCifUrl"];
+
+            //this.FechaTimbre
+            //this.CadenaSAT = comprobante.GetCadenaSAT();
+            //this.CBB
+            //this.NumSerieSAT
+            this.SelloCFD = comprobante.Sello;
+            //this.SelloSAT
+        }
+
+        public string EmisorTelefono { get; set; }
+        public string EmisorCorreo { get; set; }
+
+        public string MainCss { get; set; }
+
+        public string PrintCss { get; set; }
+
+        public string EmisorLogoUrl { get; set; }
+
+        public string EmisorCifUrl { get; set; }
+
+        public Guid PublicKey { get; set; }
+
+        public string Status { get { return "A"; } }
+
+        //public string Title {
+        //    get {
+        //        return string.Format("{0}{1} - {2}", this.Serie, this.Folio, this.Receptor.Nombre);
+        //    }
+        //}
+
+        public string Serie { get; set; }
+        public string Folio { get; set; }
+
+        public string Fecha { get; set; }
+        public string FolioFiscal { get; set; }
+
+        public string NoOrden { get; set; }
+        public string NoCliente { get; set; }
+
+        public string MetodoDePago { get; set; }
+        public string NumCuenta { get; set; }
+        //public string NoOrden { get; set; }
+
+        public decimal SubTotal { get; set; }
+        public decimal IVA { get; set; }
+        public decimal Total { get; set; }
+
+        public string TotalLetra { get; set; }
+
+        public string FechaTimbre { get; set; }
+        public string CadenaSAT { get; set; }
+
+        public string CBB { get; set; }
+        public string NumSerieSAT { get; set; }
+
+        public string SelloCFD { get; set; }
+        public string SelloSAT { get; set; }
 
         public EmisorDetailViewModel Emisor { get; set; }
         public ReceptorDetailsViewModel Receptor { get; set; }
