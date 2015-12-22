@@ -282,8 +282,22 @@
       <DependentUpon>select2.debug.css</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
+    <None Include="Scripts\amplify-vsdoc.js" />
+    <Content Include="Scripts\amplify.js" />
+    <Content Include="Scripts\amplify.min.js" />
+    <Content Include="Scripts\amplify\amplify.core.js" />
+    <Content Include="Scripts\amplify\amplify.core.min.js" />
+    <Content Include="Scripts\amplify\amplify.request.js" />
+    <Content Include="Scripts\amplify\amplify.request.min.js" />
+    <Content Include="Scripts\amplify\amplify.store.js" />
+    <Content Include="Scripts\amplify\amplify.store.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\GPL-LICENSE.txt" />
+    <Content Include="Scripts\knockout-3.4.0.debug.js" />
+    <Content Include="Scripts\knockout-3.4.0.js" />
+    <Content Include="Scripts\MIT-LICENSE.txt" />
+    <Content Include="Scripts\README.txt" />
     <Content Include="Scripts\select2\i18n\az.js" />
     <Content Include="Scripts\select2\i18n\bg.js" />
     <Content Include="Scripts\select2\i18n\ca.js" />
