@@ -291,6 +291,14 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 return HttpNotFound();
 
             var model = new ComprobanteHtmlViewModel(comprobante);
+
+            if (comprobante.ViewTemplate != null) {
+                return View(comprobante.ViewTemplate.CodeName, model);
+            }
+            else if (comprobante.Emisor.ViewTemplate != null) {
+                return View(comprobante.Emisor.ViewTemplate.CodeName, model);
+            }
+
             return View(model);
         }
     }

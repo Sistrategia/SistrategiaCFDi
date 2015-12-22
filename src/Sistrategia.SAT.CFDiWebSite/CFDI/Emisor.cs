@@ -158,6 +158,10 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public string LogoUrl { get; set; }
 
         public virtual List<Certificado> Certificados { get; set; }
+
+        [ForeignKey("ViewTemplate")]
+        public int? ViewTemplateId { get; set; }
+        public virtual ViewTemplate ViewTemplate { get; set; }
     }
 
     public class RegimenFiscal

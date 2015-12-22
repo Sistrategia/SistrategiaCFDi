@@ -114,10 +114,24 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
             System.Xml.Xsl.XslCompiledTransform xslt = new System.Xml.Xsl.XslCompiledTransform();
 
-            //using (System.IO.Stream stream = typeof(SATManager).Assembly.GetManifestResourceStream("Sistrategia.Server.SAT.XSLT.cadenaoriginal_3_2.xslt")) {
-            //using (System.Xml.XmlReader xmlReader = System.Xml.XmlReader.Create(stream)) {
-            // xslt.Load(xmlReader);
-            xslt.Load("http://www.sat.gob.mx/sitio_internet/cfd/3/cadenaoriginal_3_2/cadenaoriginal_3_2.xslt");
+            ////using (System.IO.Stream stream = typeof(SATManager).Assembly.GetManifestResourceStream("Sistrategia.Server.SAT.XSLT.cadenaoriginal_3_2.xslt")) {
+            ////using (System.Xml.XmlReader xmlReader = System.Xml.XmlReader.Create(stream)) {
+            //// xslt.Load(xmlReader);
+            //xslt.Load("http://www.sat.gob.mx/sitio_internet/cfd/3/cadenaoriginal_3_2/cadenaoriginal_3_2.xslt");
+
+
+            try {
+                xslt.Load("http://www.sat.gob.mx/sitio_internet/cfd/3/cadenaoriginal_3_2/cadenaoriginal_3_2.xslts");
+            }
+            catch {
+
+                try {
+                    xslt.Load("https://sistrategial1.blob.core.windows.net/wwwimages/satcadenaoriginal/cadenaoriginal_3_2.xslt");
+                }
+                catch (Exception innerException) {
+                    throw; // new Sistrategia.Server.SAT.SATException("No se completó la creación del comprobante. No se puede establecer comunicación con el SAT intente mas tarde.", innerException);
+                }
+            }
 
             System.IO.MemoryStream ms2 = new System.IO.MemoryStream();
             xslt.Transform(doc, null, ms2);
@@ -275,33 +289,36 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             set { this.sello = value; }
         }
 
-        ///// <summary>
-        ///// Atributo requerido para precisar el número de aprobación emitido por el SAT, para el rango de folios al que pertenece el folio particular que ampara el comprobante fiscal digital.
-        ///// </summary>
-        ///// <remarks>
-        ///// Este atributo no está presente en la versión 3.0 y 3.2 (Exclusivo de CFD)
-        ///// </remarks>
-        //[XmlAttribute("noAprobacion", DataType = "integer")]
-        ////[XmlAttributeAttribute("noAprobacion", typeof(System.Decimal))]
-        //public string NoAprobacion {
-        //    get { return this.currentData.NoAprobacion; }
-        //    set { this.currentData.NoAprobacion = value; }
-        //}
+        /// <summary>
+        /// Atributo requerido para precisar el número de aprobación emitido por el SAT, para el rango de folios al que pertenece el folio particular que ampara el comprobante fiscal digital.
+        /// </summary>
+        /// <remarks>
+        /// Este atributo no está presente en la versión 3.0 y 3.2 (Exclusivo de CFD)
+        /// </remarks>
+        [XmlAttribute("noAprobacion", DataType = "integer")]
+        //[XmlAttributeAttribute("noAprobacion", typeof(System.Decimal))]
+        public string NoAprobacion {
+            get { return this.noAprobacion; }
+            set { this.noAprobacion = value; }
+            //get { return this.currentData.NoAprobacion; }
+            //set { this.currentData.NoAprobacion = value; }
+        }
 
-        ///// <summary>
-        ///// Atributo requerido para precisar el año en que se solicito el folio que se están utilizando para emitir el comprobante fiscal digital.
-        ///// </summary>
-        ///// <remarks>
-        ///// 4 Dígitos
-        ///// Este atributo empezó en la versión 2.0 hasta la versión 2.2 (no se encuentra en la versión 1.0)
-        ///// Este atributo no está presente en la versión 3.0 y 3.2 (Exclusivo de CFD)
-        ///// </remarks>
-        //[XmlAttribute("anoAprobacion", DataType = "integer")]
-        //public string AnoAprobacion {
-        //    get { return this.currentData.AnoAprobacion; }
-        //    set { this.currentData.AnoAprobacion = value; }
-        //}
-
+        /// <summary>
+        /// Atributo requerido para precisar el año en que se solicito el folio que se están utilizando para emitir el comprobante fiscal digital.
+        /// </summary>
+        /// <remarks>
+        /// 4 Dígitos
+        /// Este atributo empezó en la versión 2.0 hasta la versión 2.2 (no se encuentra en la versión 1.0)
+        /// Este atributo no está presente en la versión 3.0 y 3.2 (Exclusivo de CFD)
+        /// </remarks>
+        [XmlAttribute("anoAprobacion", DataType = "integer")]
+        public string AnoAprobacion {
+            get { return this.anoAprobacion; }
+            set { this.anoAprobacion = value; }
+            //get { return this.currentData.AnoAprobacion; }
+            //set { this.currentData.AnoAprobacion = value; }
+        }
 
         /// <summary>
         /// Atributo requerido para precisar la forma de pago que aplica para este comprobante fiscal digital a través de Internet. Se utiliza para expresar Pago en una sola exhibición o número de parcialidad pagada contra el total de  parcialidades, Parcialidad 1 de X.
@@ -881,6 +898,11 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </summary>
         public virtual List<Complemento> Complementos { get; set; }
 
+        public virtual List<ReceptorCorreoEntrega> CorreosEntrega { get; set; }
+
+        [ForeignKey("ViewTemplate")]
+        public int? ViewTemplateId { get; set; }
+        public virtual ViewTemplate ViewTemplate { get; set; }
 
         public int? ExtendedIntValue1 { get; set; }
         public int? ExtendedIntValue2 { get; set; }
@@ -890,6 +912,14 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public string ExtendedStringValue2 { get; set; }
         public string ExtendedStringValue3 { get; set; }
 
+        [XmlIgnore]
+        public string GeneratedXmlUrl { get; set; }
+
+        [XmlIgnore]
+        public string GeneratedPDFUrl { get; set; }
+
+        [XmlIgnore]
+        public string Status { get; set; }
 
     }
 
@@ -1269,7 +1299,21 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
     ////</xs:attribute>
     //}
 
+    public class ViewTemplate
+    {
+        [Key]
+        public int ViewTemplateId { get; set; }
+        public string DisplayName { get; set; }
+        public string Description { get; set; }
 
- 
+        public string CodeName { get; set; }
+    }
 
+    public class ReceptorCorreoEntrega
+    {
+        [Key]
+        public int ReceptorCorreoEntregaId { get; set; }
+        public string Correo { get; set; }
+        //public string Nombre { get; set; }
+    }
 }

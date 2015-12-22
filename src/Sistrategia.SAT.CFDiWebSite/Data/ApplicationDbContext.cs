@@ -33,6 +33,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
 
         public virtual DbSet<Comprobante> Comprobantes { get; set; }
 
+        public virtual DbSet<ViewTemplate> ViewTemplates { get; set; }
+
         protected override void OnModelCreating(System.Data.Entity.DbModelBuilder modelBuilder) {
             var user = modelBuilder.Entity<SecurityUser>()
                 .ToTable("security_user");
@@ -304,6 +306,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("sello")
                 .IsOptional() // porque sino no se puede guardar el comprobante antes de sellarse.
                 .HasMaxLength(2048);
+            comprobante.Property(p => p.NoAprobacion)
+                .HasColumnName("no_aprobacion")
+                .IsOptional();
+            comprobante.Property(p => p.AnoAprobacion)
+                .HasColumnName("ano_aprobacion")
+                .IsOptional();
             comprobante.Property(p => p.FormaDePago)
                 .HasColumnName("forma_de_pago")
                 .IsRequired() // DEFAULT 'PAGO EN UNA SOLA EXHIBICION'
@@ -397,8 +405,18 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             comprobante.Property(p => p.ExtendedStringValue2)
                 .HasColumnName("extended_string_value_2");
             comprobante.Property(p => p.ExtendedStringValue3)
-                .HasColumnName("extended_string_value_3");                    
+                .HasColumnName("extended_string_value_3");
 
+            comprobante.Property(p => p.GeneratedXmlUrl)
+                .HasColumnName("generated_xml_url")
+                .HasMaxLength(1024);
+            comprobante.Property(p => p.GeneratedPDFUrl)
+                .HasColumnName("generated_pdf_url")
+                .HasMaxLength(1024);
+
+            comprobante.Property(p => p.Status)
+                .HasColumnName("status")
+                .HasMaxLength(50);
 
             var concepto = modelBuilder.Entity<Concepto>()
                 .ToTable("sat_concepto");
@@ -432,6 +450,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("importe")
                 .HasPrecision(18, 6)
                 .IsRequired();
+            concepto.Property(p => p.Ordinal)
+                .HasColumnName("ordinal");
 
             comprobante.HasMany<Concepto>(p => p.Conceptos)
                 .WithOptional()
@@ -517,6 +537,40 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("no_certificado_sat");
             timbre.Property(p => p.SelloSAT)
                 .HasColumnName("sello_sat");
+
+
+            var viewTemplate = modelBuilder.Entity<ViewTemplate>()
+                .ToTable("ui_view_template");
+            viewTemplate.Property(p => p.ViewTemplateId)
+                .HasColumnName("view_template_id");
+            viewTemplate.Property(p => p.DisplayName)
+                .HasColumnName("display_name")
+                .HasMaxLength(256);
+            viewTemplate.Property(p => p.Description)
+                .HasColumnName("description")
+                .HasMaxLength(2048);
+            viewTemplate.Property(p => p.CodeName)
+                .HasColumnName("code_name")
+                .HasMaxLength(128);
+
+            comprobante.Property(p => p.ViewTemplateId)
+                .HasColumnName("view_template_id");
+
+            emisor.Property(p => p.ViewTemplateId)
+                .HasColumnName("view_template_id");
+
+            var receptorCorreoEntrega = modelBuilder.Entity<ReceptorCorreoEntrega>()
+                .ToTable("sat_receptor_correo_entrega");
+
+            receptorCorreoEntrega.Property(p => p.ReceptorCorreoEntregaId)
+                .HasColumnName("receptor_correo_entrega_id");
+            receptorCorreoEntrega.Property(p => p.Correo)
+                .HasColumnName("correo")
+                .HasMaxLength(256);
+
+            comprobante.HasMany<ReceptorCorreoEntrega>(p => p.CorreosEntrega)
+                .WithOptional()
+                .Map(pe => pe.MapKey("comprobante_id"));
         }
                 
     }

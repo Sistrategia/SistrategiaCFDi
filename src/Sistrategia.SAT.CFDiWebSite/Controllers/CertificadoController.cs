@@ -9,6 +9,7 @@ using System.IO;
 
 namespace Sistrategia.SAT.CFDiWebSite.Controllers
 {
+    [Authorize]
     public class CertificadoController : BaseController
     {
         // GET: Certificado

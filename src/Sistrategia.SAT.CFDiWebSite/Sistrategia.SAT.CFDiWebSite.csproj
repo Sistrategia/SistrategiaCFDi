@@ -368,6 +368,8 @@
     <Content Include="Views\Certificado\Create.cshtml" />
     <Content Include="Views\Certificado\Details.cshtml" />
     <Content Include="Views\Comprobante\ShowHtml.cshtml" />
+    <Content Include="Views\Comprobante\ddm1.cshtml" />
+    <Content Include="Views\Comprobante\ddm2.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
