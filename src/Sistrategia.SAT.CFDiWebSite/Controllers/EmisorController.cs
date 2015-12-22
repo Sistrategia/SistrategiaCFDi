@@ -75,7 +75,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         Regimen = model.RegimenFiscal
                     }
                 };
-            
+
+            emisor.Telefono = string.IsNullOrWhiteSpace(model.Telefono) ? null : model.Telefono;
+            emisor.Correo = string.IsNullOrWhiteSpace(model.Correo) ? null : model.Correo;
+
+            emisor.CifUrl = string.IsNullOrWhiteSpace(model.CifUrl) ? null : model.CifUrl;
+            emisor.LogoUrl = string.IsNullOrWhiteSpace(model.LogoUrl) ? null : model.LogoUrl;
 
             //if (!string.IsNullOrEmpty(model.RegimenFiscal)) {
             //    if (emisor.RegimenFiscal == null)
@@ -131,8 +136,24 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         [HttpPost]
         public ActionResult Edit(EmisorEditViewModel model) {
             //Guid publicKey = Guid.Parse(id);
-            //var emisor = DBContext.Emisores.Where(e => e.PublicKey == publicKey).SingleOrDefault();
-            
+            if (ModelState.IsValid) {
+                var emisor = DBContext.Emisores.Where(e => e.PublicKey == model.PublicKey).SingleOrDefault();
+                if (emisor != null) {
+                    emisor.RFC = model.RFC;
+                    emisor.Nombre = model.Nombre;
+                    //emisor.RegimenFiscal
+
+                    emisor.Telefono = string.IsNullOrWhiteSpace(model.Telefono) ? null : model.Telefono;
+                    emisor.Correo = string.IsNullOrWhiteSpace(model.Correo) ? null : model.Correo;
+
+                    emisor.CifUrl = string.IsNullOrWhiteSpace(model.CifUrl) ? null : model.CifUrl;
+                    emisor.LogoUrl = string.IsNullOrWhiteSpace(model.LogoUrl) ? null : model.LogoUrl;
+                }
+
+                DBContext.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
             return View(model);
         }
     }

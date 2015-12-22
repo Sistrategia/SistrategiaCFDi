@@ -50,6 +50,10 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MessagingToolkit.QRCode, Version=1.0.3541.23206, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>CommonDlls\MessagingToolkit.QRCode.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
@@ -170,6 +174,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CommonDlls\MessagingToolkit.QRCode.dll" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
@@ -277,8 +282,22 @@
       <DependentUpon>select2.debug.css</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
+    <None Include="Scripts\amplify-vsdoc.js" />
+    <Content Include="Scripts\amplify.js" />
+    <Content Include="Scripts\amplify.min.js" />
+    <Content Include="Scripts\amplify\amplify.core.js" />
+    <Content Include="Scripts\amplify\amplify.core.min.js" />
+    <Content Include="Scripts\amplify\amplify.request.js" />
+    <Content Include="Scripts\amplify\amplify.request.min.js" />
+    <Content Include="Scripts\amplify\amplify.store.js" />
+    <Content Include="Scripts\amplify\amplify.store.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\GPL-LICENSE.txt" />
+    <Content Include="Scripts\knockout-3.4.0.debug.js" />
+    <Content Include="Scripts\knockout-3.4.0.js" />
+    <Content Include="Scripts\MIT-LICENSE.txt" />
+    <Content Include="Scripts\README.txt" />
     <Content Include="Scripts\select2\i18n\az.js" />
     <Content Include="Scripts\select2\i18n\bg.js" />
     <Content Include="Scripts\select2\i18n\ca.js" />
@@ -359,6 +378,12 @@
     <Content Include="Views\Comprobante\Details.cshtml" />
     <Content Include="Views\Comprobante\Create.cshtml" />
     <Content Include="Views\Dev\Index.cshtml" />
+    <Content Include="Views\Certificado\Index.cshtml" />
+    <Content Include="Views\Certificado\Create.cshtml" />
+    <Content Include="Views\Certificado\Details.cshtml" />
+    <Content Include="Views\Comprobante\ShowHtml.cshtml" />
+    <Content Include="Views\Comprobante\ddm1.cshtml" />
+    <Content Include="Views\Comprobante\ddm2.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -382,15 +407,26 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="CFDI\CantidadEnLetraConverter.cs" />
     <Compile Include="CFDI\Certificado.cs" />
+    <Compile Include="CFDI\CFDIServiceInterfaces.cs" />
+    <Compile Include="CFDI\CFDIXmlTextWriter.cs" />
     <Compile Include="CFDI\Comprobante.cs" />
     <Compile Include="CFDI\Concepto.cs" />
+    <Compile Include="CFDI\EDICOM\CFDiService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CFDI\EDICOM\TestCFDI\CFDiService.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CFDI\Emisor.cs" />
     <Compile Include="CFDI\Receptor.cs" />
+    <Compile Include="CFDI\TimbreFiscalDigital.cs" />
     <Compile Include="CFDI\Ubicacion.cs" />
     <Compile Include="CFDI\UbicacionFiscal.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CertificadoController.cs" />
     <Compile Include="Controllers\ComprobanteController.cs" />
     <Compile Include="Controllers\DevController.cs" />
     <Compile Include="Controllers\EmisorController.cs" />
@@ -412,6 +448,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\CertificadoViewModels.cs" />
     <Compile Include="Models\ComprobanteViewModels.cs" />
     <Compile Include="Models\EmisorViewModels.cs" />
     <Compile Include="Models\ReceptorViewModels.cs" />

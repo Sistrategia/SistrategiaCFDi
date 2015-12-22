@@ -17,6 +17,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         private string descripcion;
         private decimal valorUnitario;
         private decimal importe;
+        private int ordinal;
         #endregion
 
         [Key]
@@ -244,6 +245,12 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public decimal Importe {
             get { return this.importe; }
             set { this.importe = value; }
+        }
+
+        [XmlIgnore]
+        public int Ordinal {
+            get { return this.ordinal; }
+            set { this.ordinal = value; }
         }
     }
 }

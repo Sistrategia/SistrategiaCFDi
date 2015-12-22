@@ -348,4 +348,10 @@
   <data name="Emisor_DetailsTitle" xml:space="preserve">
     <value>Detalles</value>
   </data>
+  <data name="Receptor_DetailsSubtitle" xml:space="preserve">
+    <value>Información del contribuyente receptor de los comprobantes fiscales digitales por internet</value>
+  </data>
+  <data name="Receptor_DetailsTitle" xml:space="preserve">
+    <value>Detalles</value>
+  </data>
 </root>

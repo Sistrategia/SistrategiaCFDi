@@ -1,5 +1,6 @@
 namespace Sistrategia.SAT.CFDiWebSite.Migrations
 {
+    using Sistrategia.SAT.CFDiWebSite.CFDI;
     using Sistrategia.SAT.CFDiWebSite.Security;
     using System;
     using System.Data.Entity;
@@ -20,7 +21,15 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 r => r.Name,
                 new SecurityRole { Id = 1, Name = "User" },
                 new SecurityRole { Id = 2, Name = "Administrator" },
-                new SecurityRole { Id = 3, Name = "Developer" }
+                new SecurityRole { Id = 3, Name = "Backstage" },
+                new SecurityRole { Id = 4, Name = "Developer" }
+             );
+             context.SaveChanges();
+
+             context.ViewTemplates.AddOrUpdate(
+                 v => v.CodeName,
+                 new ViewTemplate { ViewTemplateId = 1, CodeName = "ddm1", DisplayName = "ddm1", Description = "ddm1"},
+                 new ViewTemplate { ViewTemplateId = 2, CodeName = "ddm2", DisplayName = "ddm2", Description = "ddm2"}
              );
              context.SaveChanges();
         }

@@ -1,0 +1,47 @@
+﻿@using Sistrategia.SAT.CFDiWebSite.Models
+@model CertificadoIndexViewModel
+@{
+    ViewBag.Title = "Lista de Certificados Digitales";
+}
+
+<div class="page-header clearfix">
+  <h1 class="pull-left">@ViewBag.Title</h1>
+  <div class="pull-right">
+    <div class="btn-group" style="bottom: 26px;position: relative;top:26px;">
+      @Html.ActionLink("Agregar", "Create", null, new { @class = "btn btn-primary", @role = "button" })
+    </div>
+  </div>
+</div> 
+
+
+<div class="row">
+  <div class="col-md-12">
+    <ul class="media-list list-inline">
+      @foreach (var certificado in Model.Certificados) {
+        <li class="media">
+          <div class="media-left">
+            <a style="text-decoration: none" href="@Url.Action("Details", new { Id = certificado.PublicKey.ToString("N") })" >
+              <div class="circle noselect">
+                @*<img src="@Model.GetQrCode(emisor.RFC, 64)" />*@
+                <span>@certificado.RFC.Substring(0, 1)</span>
+              </div>
+            </a>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">@Html.ActionLink(certificado.NumSerie, "Details", "Certificado", new { Id = certificado.PublicKey.ToString("N") }, null)</h4>
+            <h5 class="media-heading">
+              @certificado.RFC
+              @*@if (emisor.RegimenFiscal != null && emisor.RegimenFiscal.Count > 0) {
+                  <br /> @emisor.RegimenFiscal[0].Regimen
+                }*@
+            </h5>
+            @*@Html.ActionLink("Edit", "Edit", new { id = emisor.PublicKey.ToString("N") }) |
+              @Html.ActionLink("Details", "Details", new { id = emisor.PublicKey.ToString("N") }) |
+              @Html.ActionLink("Delete", "Delete", new { id = emisor.PublicKey.ToString("N") })*@
+          </div>
+        </li>
+      }
+    </ul>
+
+  </div>
+</div>

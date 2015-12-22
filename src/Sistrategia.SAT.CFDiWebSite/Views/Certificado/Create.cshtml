@@ -1,0 +1,93 @@
+﻿@using Sistrategia.SAT.CFDiWebSite.Models
+@model CertificadoCreateViewModel
+@{
+  ViewBag.Title = "Crear nuevo certificado";
+}
+
+
+<h1>@ViewBag.Title</h1>
+
+
+@using (Html.BeginForm("Create", "Certificado", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" })) {
+  @Html.AntiForgeryToken()
+  <h4>@LocalizedStrings.Account_RegisterSubtitle</h4>
+  <hr />
+  @Html.ValidationSummary("", new { @class = "text-danger" })
+
+  <div class="form-group">
+    @Html.LabelFor(m => m.NumSerie, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.NumSerie, new { @class = "form-control" })
+    </div>
+  </div>
+  <div class="form-group">
+    @Html.LabelFor(m => m.RFC, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.RFC, new { @class = "form-control" })
+    </div>
+  </div>
+  
+  <div class="form-group">
+      @Html.LabelFor(m => m.Inicia, new { @class = "col-md-2 control-label" })
+      <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Inicia, new { @class = "form-control" })
+      </div>
+    </div>
+
+  <div class="form-group">
+    @Html.LabelFor(m => m.Finaliza, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.Finaliza, new { @class = "form-control" })
+    </div>
+  </div>
+
+  @*<div class="form-group">
+    @Html.LabelFor(m => m.CertificadoBase64, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.CertificadoBase64, new { @class = "form-control" })
+    </div>
+  </div>*@
+
+  <div class="form-group">
+    @Html.LabelFor(m => m.CertificadoArchivo, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.CertificadoArchivo, new { @class = "form-control", type = "file" })
+    </div>
+  </div>
+
+  <div class="form-group">
+    @Html.LabelFor(m => m.PFXArchivo, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.PFXArchivo, new { @class = "form-control", type = "file" })
+    </div>
+  </div>
+
+  <div class="form-group">
+    @Html.LabelFor(m => m.PFXContrasena, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.PFXContrasena, new { @class = "form-control" })
+    </div>
+  </div>
+
+  <div class="form-group">
+    @Html.LabelFor(m => m.Estado, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.Estado, new { @class = "form-control" })
+    </div>
+  </div>
+
+  <hr />
+  <div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+      <input type="submit" class="btn btn-primary" value="@LocalizedStrings.SaveButton" />
+    </div>
+  </div>
+}
+
+@section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
+

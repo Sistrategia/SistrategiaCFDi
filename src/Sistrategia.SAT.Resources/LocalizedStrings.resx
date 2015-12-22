@@ -352,4 +352,10 @@
   <data name="Emisor_DetailsTitle" xml:space="preserve">
     <value>Details</value>
   </data>
+  <data name="Receptor_DetailsSubtitle" xml:space="preserve">
+    <value>Information about the recipient of the digital certified invoice (CFDi)</value>
+  </data>
+  <data name="Receptor_DetailsTitle" xml:space="preserve">
+    <value>Details</value>
+  </data>
 </root>

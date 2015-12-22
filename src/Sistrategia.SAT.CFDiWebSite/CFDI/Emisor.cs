@@ -152,7 +152,16 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //[XmlElement("RegimenFiscal", IsNullable = false)]
         public virtual List<RegimenFiscal> RegimenFiscal { get; set; }
 
+        public string Telefono { get; set; }
+        public string Correo { get; set; }
+        public string CifUrl { get; set; }
+        public string LogoUrl { get; set; }
+
         public virtual List<Certificado> Certificados { get; set; }
+
+        [ForeignKey("ViewTemplate")]
+        public int? ViewTemplateId { get; set; }
+        public virtual ViewTemplate ViewTemplate { get; set; }
     }
 
     public class RegimenFiscal

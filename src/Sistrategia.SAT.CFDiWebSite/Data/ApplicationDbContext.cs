@@ -31,7 +31,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
 
         public virtual DbSet<Receptor> Receptores { get; set; }
 
-        public virtual DbSet<Comprobante> Comprobantes { get; set; }        
+        public virtual DbSet<Comprobante> Comprobantes { get; set; }
+
+        public virtual DbSet<ViewTemplate> ViewTemplates { get; set; }
 
         protected override void OnModelCreating(System.Data.Entity.DbModelBuilder modelBuilder) {
             var user = modelBuilder.Entity<SecurityUser>()
@@ -122,6 +124,15 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             emisor.Property(p => p.ExpedidoEnId)
                 .HasColumnName("expedido_en_id");
 
+            emisor.Property(p => p.Telefono)
+                .HasColumnName("telefono");
+            emisor.Property(p => p.Correo)
+                .HasColumnName("correo");
+            emisor.Property(p => p.LogoUrl)
+                .HasColumnName("logo_url");
+            emisor.Property(p => p.CifUrl)
+                .HasColumnName("cif_url");
+
             var ubicacion = modelBuilder.Entity<Ubicacion>()
                 // .ToTable("sat_ubicacion");
                 ;
@@ -167,7 +178,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .Map<Ubicacion>(m => m.Requires("ubicacion_type").HasValue("Ubicacion"))
                 .Map<UbicacionFiscal>(m => m.Requires("ubicacion_type").HasValue("UbicacionFiscal"))
                 .ToTable("sat_ubicacion");
-        
+
             //modelBuilder.Entity<UbicacionFiscal>().Map(m =>
             //{
             //    m.MapInheritedProperties();
@@ -247,7 +258,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
 
             emisor.HasMany<Certificado>(p => p.Certificados)
                 .WithOptional()
-                .Map(pe=>pe.MapKey("emisor_id"));
+                .Map(pe => pe.MapKey("emisor_id"));
 
             emisor.HasMany<RegimenFiscal>(p => p.RegimenFiscal)
                 .WithOptional()
@@ -295,13 +306,19 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("sello")
                 .IsOptional() // porque sino no se puede guardar el comprobante antes de sellarse.
                 .HasMaxLength(2048);
+            comprobante.Property(p => p.NoAprobacion)
+                .HasColumnName("no_aprobacion")
+                .IsOptional();
+            comprobante.Property(p => p.AnoAprobacion)
+                .HasColumnName("ano_aprobacion")
+                .IsOptional();
             comprobante.Property(p => p.FormaDePago)
                 .HasColumnName("forma_de_pago")
                 .IsRequired() // DEFAULT 'PAGO EN UNA SOLA EXHIBICION'
                 .HasMaxLength(256);
             comprobante.Property(p => p.NoCertificado)
                 .HasColumnName("no_certificado")
-                .IsOptional() 
+                .IsOptional()
                 .HasMaxLength(20);
             comprobante.Property(p => p.Certificado)
                 .HasColumnName("certificado")
@@ -350,11 +367,11 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasMaxLength(2048);
             comprobante.Property(p => p.NumCtaPago)
                 .HasColumnName("num_cta_pago")
-                .IsOptional() 
+                .IsOptional()
                 .HasMaxLength(256);
             comprobante.Property(p => p.FolioFiscalOrig)
                 .HasColumnName("folio_fiscal_orig")
-                .IsOptional() 
+                .IsOptional()
                 .HasMaxLength(256);
             comprobante.Property(p => p.SerieFolioFiscalOrig)
                 .HasColumnName("serie_folio_fiscal_orig")
@@ -368,12 +385,38 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("monto_folio_fiscal_orig")
                 .HasPrecision(18, 6)
                 .IsOptional();
-                //comprobante.Ignore(p => p.MontoFolioFiscalOrigSpecified);
+            //comprobante.Ignore(p => p.MontoFolioFiscalOrigSpecified);
             comprobante.Property(p => p.EmisorId)
                 .HasColumnName("emisor_id");
             comprobante.Property(p => p.ReceptorId)
                 .HasColumnName("receptor_id");
 
+            comprobante.Ignore(p => p.DecimalFormat);
+
+            comprobante.Property(p => p.ExtendedIntValue1)
+                .HasColumnName("extended_int_value_1");
+            comprobante.Property(p => p.ExtendedIntValue2)
+                .HasColumnName("extended_int_value_2");
+            comprobante.Property(p => p.ExtendedIntValue3)
+                .HasColumnName("extended_int_value_3");
+
+            comprobante.Property(p => p.ExtendedStringValue1)
+                .HasColumnName("extended_string_value_1");
+            comprobante.Property(p => p.ExtendedStringValue2)
+                .HasColumnName("extended_string_value_2");
+            comprobante.Property(p => p.ExtendedStringValue3)
+                .HasColumnName("extended_string_value_3");
+
+            comprobante.Property(p => p.GeneratedXmlUrl)
+                .HasColumnName("generated_xml_url")
+                .HasMaxLength(1024);
+            comprobante.Property(p => p.GeneratedPDFUrl)
+                .HasColumnName("generated_pdf_url")
+                .HasMaxLength(1024);
+
+            comprobante.Property(p => p.Status)
+                .HasColumnName("status")
+                .HasMaxLength(50);
 
             var concepto = modelBuilder.Entity<Concepto>()
                 .ToTable("sat_concepto");
@@ -407,6 +450,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("importe")
                 .HasPrecision(18, 6)
                 .IsRequired();
+            concepto.Property(p => p.Ordinal)
+                .HasColumnName("ordinal");
 
             comprobante.HasMany<Concepto>(p => p.Conceptos)
                 .WithOptional()
@@ -430,9 +475,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("impuestos_id");
 
             comprobante.HasOptional(c => c.Impuestos);
-                //<Impuestos>(p => p.Impuestos)
-                //.WithRequired()
-                //.Map(pe => pe.MapKey("impuestos_id"));
+            //<Impuestos>(p => p.Impuestos)
+            //.WithRequired()
+            //.Map(pe => pe.MapKey("impuestos_id"));
 
             var retencion = modelBuilder.Entity<Retencion>()
                 .ToTable("sat_retencion");
@@ -464,6 +509,69 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             impuestos.HasMany<Traslado>(p => p.Traslados)
                 .WithOptional()
                 .Map(pe => pe.MapKey("impuesto_id"));
+
+            var complemento = modelBuilder.Entity<Complemento>()
+                .ToTable("sat_complemento");
+            complemento.Property(p => p.ComplementoId)
+                .HasColumnName("complemento_id");
+
+            comprobante.HasMany<Complemento>(p => p.Complementos)
+                .WithOptional()
+                .Map(pe => pe.MapKey("comprobante_id"));
+
+
+            var timbre = modelBuilder.Entity<TimbreFiscalDigital>()
+                .ToTable("sat_timbre_fiscal_digital");
+            //timbre.Property(p => p.TimbreFiscalDigitalId)
+            //    .HasColumnName("timbre_fiscal_digital_id");
+            //PublicKey
+            timbre.Property(p => p.Version)
+                .HasColumnName("version");
+            timbre.Property(p => p.UUID)
+                .HasColumnName("uuid");
+            timbre.Property(p => p.FechaTimbrado)
+                .HasColumnName("fecha_timbrado");
+            timbre.Property(p => p.SelloCFD)
+                .HasColumnName("sello_cfd");
+            timbre.Property(p => p.NoCertificadoSAT)
+                .HasColumnName("no_certificado_sat");
+            timbre.Property(p => p.SelloSAT)
+                .HasColumnName("sello_sat");
+
+
+            var viewTemplate = modelBuilder.Entity<ViewTemplate>()
+                .ToTable("ui_view_template");
+            viewTemplate.Property(p => p.ViewTemplateId)
+                .HasColumnName("view_template_id");
+            viewTemplate.Property(p => p.DisplayName)
+                .HasColumnName("display_name")
+                .HasMaxLength(256);
+            viewTemplate.Property(p => p.Description)
+                .HasColumnName("description")
+                .HasMaxLength(2048);
+            viewTemplate.Property(p => p.CodeName)
+                .HasColumnName("code_name")
+                .HasMaxLength(128);
+
+            comprobante.Property(p => p.ViewTemplateId)
+                .HasColumnName("view_template_id");
+
+            emisor.Property(p => p.ViewTemplateId)
+                .HasColumnName("view_template_id");
+
+            var receptorCorreoEntrega = modelBuilder.Entity<ReceptorCorreoEntrega>()
+                .ToTable("sat_receptor_correo_entrega");
+
+            receptorCorreoEntrega.Property(p => p.ReceptorCorreoEntregaId)
+                .HasColumnName("receptor_correo_entrega_id");
+            receptorCorreoEntrega.Property(p => p.Correo)
+                .HasColumnName("correo")
+                .HasMaxLength(256);
+
+            comprobante.HasMany<ReceptorCorreoEntrega>(p => p.CorreosEntrega)
+                .WithOptional()
+                .Map(pe => pe.MapKey("comprobante_id"));
         }
+                
     }
 }

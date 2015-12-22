@@ -29,16 +29,20 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                  @if (User.Identity.IsAuthenticated) { 
                   <li @if (ControllerName.Equals("Emisor")) { @Html.Raw("class='active'") ; } else { @Html.Raw("") ; }>
                     @Html.ActionLink("Emisores", "Index", "Emisor")                    
                   </li>
                   <li @if (ControllerName.Equals("Receptor")) { @Html.Raw("class='active'")  ; } else { @Html.Raw("")  ; }>
                     @Html.ActionLink("Receptores", "Index", "Receptor")
                   </li>
+                  <li @if (ControllerName.Equals("Certificado")) { @Html.Raw("class='active'")    ; } else { @Html.Raw("")    ; }>
+                    @Html.ActionLink("Certificados", "Index", "Certificado")
+                  </li>
                   <li @if (ControllerName.Equals("Comprobante")) { @Html.Raw("class='active'")   ; } else { @Html.Raw("")   ; }>
                     @Html.ActionLink("Comprobantes", "Index", "Comprobante")
                   </li>
-
+                  }
                 </ul>
               @Html.Partial("_LoginPartial")
 
@@ -52,11 +56,12 @@
     @RenderBody()
     <hr />
     <footer>
-      <p class="pull-left">&copy; @DateTime.Now.Year - Sistrategia</p>
+      <p class="pull-left">Copyright &copy; @DateTime.Now.Year - Sistrategia. All Rights Reserved. </p>
       <div class="pull-right hidden-xs">
-        <ul class="nav navbar-nav navbar-right">
-          <li>@Html.ActionLink("English (US)", "ChangeLang", "Locale", new { Lang = "en-US", ReturnUrl = Url.Encode(Request.RawUrl) }, new { @class = "navbar-brand footer-lang-bar", @style = "font-size:11px;" })</li>
-          <li>@Html.ActionLink("Español (México)", "ChangeLang", "Locale", new { Lang = "es-MX", ReturnUrl = Url.Encode(Request.RawUrl) }, new { @class = "navbar-brand footer-lang-bar", @style = "font-size:11px;" })</li>
+        <ul class="list-inline">
+          @*class="nav navbar-nav navbar-right"*@
+          <li>@Html.ActionLink("English (US)", "ChangeLang", "Locale", new { Lang = "en-US", ReturnUrl = Url.Encode(Request.RawUrl) }, new { @class = "footer-lang-bar", @style = "font-size:11px;" })</li>
+          <li>@Html.ActionLink("Español (México)", "ChangeLang", "Locale", new { Lang = "es-MX", ReturnUrl = Url.Encode(Request.RawUrl) }, new { @class = "footer-lang-bar", @style = "font-size:11px;" })</li>@*navbar-brand footer-lang-bar*@
         </ul>
       </div>
     </footer>
