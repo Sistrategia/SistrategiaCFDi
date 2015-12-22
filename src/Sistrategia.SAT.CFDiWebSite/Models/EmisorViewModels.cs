@@ -192,6 +192,23 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public UbicacionFiscalViewModel DomicilioFiscal { get; set; }
         public UbicacionViewModel ExpedidoEn { get; set; }
 
+        [Required]
+        [Display(Name = "Correo")]
+        [EmailAddress]
+        public string Correo { get; set; }
+
+        [Required]
+        [Display(Name = "Telefono")]
+        public string Telefono { get; set; }
+
+        [Required]
+        [Display(Name = "CifUrl")]
+        public string CifUrl { get; set; }
+
+        [Required]
+        [Display(Name = "LogoUrl")]
+        public string LogoUrl { get; set; }
+
         //[Required]
         //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressStreetField")]
         //public string Calle { get; set; }
@@ -290,6 +307,16 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
                 this.Referencia = emisor.DomicilioFiscal.Referencia;
             }
             //this.RegimenFiscal = emisor.RegimenFiscal;
+
+            //  this.EmisorLogoUrl = comprobante.Emisor.LogoUrl;
+            //this.EmisorTelefono = comprobante.Emisor.Telefono;
+            //this.EmisorCorreo = comprobante.Emisor.Correo;
+            //this.EmisorCifUrl = comprobante.Emisor.CifUrl;
+
+            this.Correo = emisor.Correo;
+            this.Telefono = emisor.Telefono;
+            this.CifUrl = emisor.CifUrl;
+            this.LogoUrl = emisor.LogoUrl;
         }
 
         [Required]
@@ -299,6 +326,23 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         [Required]
         [Display(ResourceType = typeof(LocalizedStrings), Name = "FiscalNameField", ShortName = "Name")]
         public string Nombre { get; set; }
+
+        [Required]
+        [Display(Name = "Correo")]
+        [EmailAddress]
+        public string Correo { get; set; }
+
+        [Required]
+        [Display(Name = "Telefono")]
+        public string Telefono { get; set; }
+
+        [Required]
+        [Display(Name = "CifUrl")]
+        public string CifUrl { get; set; }
+
+        [Required]
+        [Display(Name = "LogoUrl")]
+        public string LogoUrl { get; set; }
 
         //[Required]
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressStreetField")]
@@ -376,6 +420,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             if (emisor == null)
                 throw new ArgumentNullException("emisor");
 
+            this.PublicKey = emisor.PublicKey;
+
             this.RFC = emisor.RFC;
             this.Nombre = emisor.Nombre;
             if (emisor.RegimenFiscal != null && emisor.RegimenFiscal.Count > 0)
@@ -394,7 +440,14 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
                 this.Referencia = emisor.DomicilioFiscal.Referencia;
             }
             //this.RegimenFiscal = emisor.RegimenFiscal;
+
+            this.Correo = emisor.Correo;
+            this.Telefono = emisor.Telefono;
+            this.CifUrl = emisor.CifUrl;
+            this.LogoUrl = emisor.LogoUrl;
         }
+
+        public Guid PublicKey { get; set; }
 
         [Required]
         [Display(Name = "RFC")]
@@ -403,6 +456,23 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         [Required]
         [Display(ResourceType = typeof(LocalizedStrings), Name = "FiscalNameField", ShortName = "Name")]
         public string Nombre { get; set; }
+
+        [Required]
+        [Display(Name = "Correo")]
+        [EmailAddress]
+        public string Correo { get; set; }
+
+        [Required]
+        [Display(Name = "Telefono")]
+        public string Telefono { get; set; }
+
+        //[Required]
+        [Display(Name = "CifUrl")]
+        public string CifUrl { get; set; }
+
+        //[Required]
+        [Display(Name = "LogoUrl")]
+        public string LogoUrl { get; set; }
 
         //[Required]
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressStreetField")]

@@ -116,6 +116,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         nombre = c.String(maxLength: 256),
                         domicilio_fiscal_id = c.Int(),
                         expedido_en_id = c.Int(),
+                        telefono = c.String(),
+                        correo = c.String(),
+                        cif_url = c.String(),
+                        logo_url = c.String(),
                     })
                 .PrimaryKey(t => t.emisor_id)
                 .ForeignKey("dbo.sat_ubicacion", t => t.domicilio_fiscal_id)

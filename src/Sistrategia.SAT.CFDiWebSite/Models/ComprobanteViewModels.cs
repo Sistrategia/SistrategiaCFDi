@@ -173,10 +173,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             this.MainCss = ConfigurationManager.AppSettings["InvoiceMainCss"];
             this.PrintCss = ConfigurationManager.AppSettings["InvoicePrintCss"];
 
-            this.EmisorLogoUrl = ConfigurationManager.AppSettings["InvoiceEmisorLogoUrl"];
-            this.EmisorTelefono = ConfigurationManager.AppSettings["InvoiceEmisorTelefono"];
-            this.EmisorCorreo = ConfigurationManager.AppSettings["InvoiceEmisorCorreo"];
-            this.EmisorCifUrl = ConfigurationManager.AppSettings["InvoiceEmisorCifUrl"];
+            this.EmisorLogoUrl = comprobante.Emisor.LogoUrl;
+            this.EmisorTelefono = comprobante.Emisor.Telefono;
+            this.EmisorCorreo = comprobante.Emisor.Correo;
+            this.EmisorCifUrl = comprobante.Emisor.CifUrl;
 
             this.NoOrden = comprobante.ExtendedIntValue1.ToString();
             this.NoCliente = comprobante.ExtendedIntValue2.ToString();

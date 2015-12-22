@@ -11,7 +11,7 @@
   <h4>@LocalizedStrings.Account_RegisterSubtitle</h4>
   <hr />
   @Html.ValidationSummary("", new { @class = "text-danger" })
-
+  @Html.HiddenFor(m => m.PublicKey)
   <div class="form-group">
     @Html.LabelFor(m => m.RFC, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
@@ -24,6 +24,27 @@
       @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
     </div>
   </div>
+
+  <div class="form-group">
+    @Html.LabelFor(m => m.RegimenFiscal, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.RegimenFiscal, new { @class = "form-control" })
+    </div>
+  </div>
+
+  <div class="form-group">
+    @Html.LabelFor(m => m.Telefono, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.Telefono, new { @class = "form-control" })
+    </div>
+  </div>
+  <div class="form-group">
+    @Html.LabelFor(m => m.Correo, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.Correo, new { @class = "form-control" })
+    </div>
+  </div>
+
   <div class="form-group">
     @Html.LabelFor(m => m.Calle, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
@@ -78,12 +99,21 @@
       @Html.TextBoxFor(m => m.Referencia, new { @class = "form-control" })
     </div>
   </div>
+
   <div class="form-group">
-    @Html.LabelFor(m => m.RegimenFiscal, new { @class = "col-md-2 control-label" })
+    @Html.LabelFor(m => m.CifUrl, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
-      @Html.TextBoxFor(m => m.RegimenFiscal, new { @class = "form-control" })
+      @Html.TextBoxFor(m => m.CifUrl, new { @class = "form-control" })
     </div>
   </div>
+
+  <div class="form-group">
+    @Html.LabelFor(m => m.LogoUrl, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.LogoUrl, new { @class = "form-control" })
+    </div>
+  </div>
+
   <div class="form-group">
     <div class="col-md-offset-2 col-md-10">
       <input type="submit" class="btn btn-default" value="@LocalizedStrings.SaveButton" />

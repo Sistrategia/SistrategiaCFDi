@@ -122,6 +122,15 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             emisor.Property(p => p.ExpedidoEnId)
                 .HasColumnName("expedido_en_id");
 
+            emisor.Property(p => p.Telefono)
+                .HasColumnName("telefono");
+            emisor.Property(p => p.Correo)
+                .HasColumnName("correo");
+            emisor.Property(p => p.LogoUrl)
+                .HasColumnName("logo_url");
+            emisor.Property(p => p.CifUrl)
+                .HasColumnName("cif_url");
+
             var ubicacion = modelBuilder.Entity<Ubicacion>()
                 // .ToTable("sat_ubicacion");
                 ;

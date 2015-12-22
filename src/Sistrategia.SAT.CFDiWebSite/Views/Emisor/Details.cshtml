@@ -6,21 +6,24 @@
 @*.dl-horizontal*@ 
 <h1>@ViewBag.Title</h1>
 <p class="text-success">@ViewBag.StatusMessage</p>
-<div>
+@*<div>*@
   <h4>@LocalizedStrings.Emisor_DetailsSubtitle</h4>
   <hr />
-  <h3>@LocalizedStrings.Emisor_DetailsGeneralTitle</h3>
-  <dl class="dl-horizontal">
-    <dt>@Html.DisplayNameFor(m => m.Nombre):</dt>
-    <dd>@Html.DisplayFor(m => m.Nombre)</dd>
-    <dt>@Html.DisplayNameFor(m => m.RFC):</dt>
-    <dd>@Html.DisplayFor(m => m.RFC)</dd>    
-    <dt>@Html.DisplayNameFor(m => m.RegimenFiscal):</dt>
-    <dd>@Html.DisplayFor(m => m.RegimenFiscal)</dd>
+
+  <div class="row">
+  <div class="col-md-8">
+    <h3>@LocalizedStrings.Emisor_DetailsGeneralTitle</h3>
+    <dl class="dl-horizontal">
+      <dt>@Html.DisplayNameFor(m => m.Nombre):</dt>
+      <dd>@Html.DisplayFor(m => m.Nombre)</dd>
+      <dt>@Html.DisplayNameFor(m => m.RFC):</dt>
+      <dd>@Html.DisplayFor(m => m.RFC)</dd>
+      <dt>@Html.DisplayNameFor(m => m.RegimenFiscal):</dt>
+      <dd>@Html.DisplayFor(m => m.RegimenFiscal)</dd>
     </dl>
 
     <h3>@LocalizedStrings.Emisor_DetailsDomicilioFiscalTitle</h3>
-    <dl class="dl-horizontal">     
+    <dl class="dl-horizontal">
 
       <dt>@Html.DisplayNameFor(m => m.Calle):</dt>
       <dd>@Html.DisplayFor(m => m.Calle)</dd>
@@ -42,5 +45,23 @@
       <dd>@Html.DisplayFor(m => m.CodigoPostal)</dd>
       <dt>@Html.DisplayNameFor(m => m.Referencia):</dt>
       <dd>@Html.DisplayFor(m => m.Referencia)</dd>
-    </dl>
+    </dl>    
+  </div>
+    <div class="col-md-4">
+      <h3>Contacto e Imágenes</h3>
+      <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(m => m.Telefono):</dt>
+        <dd>@Html.DisplayFor(m => m.Telefono)</dd>
+        <dt>@Html.DisplayNameFor(m => m.Correo):</dt>
+        <dd>@Html.DisplayFor(m => m.Correo)</dd>
+      </dl>
+      @*<h3>Imágenes</h3>*@
+      <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(m => m.LogoUrl):</dt>
+        <dd><img style="margin-bottom:24px; max-height:64px;" src="@Model.LogoUrl" /></dd>
+        <dt>@Html.DisplayNameFor(m => m.CifUrl):</dt>
+        <dd><img style="max-height:198px;" src="@Model.CifUrl" /></dd>
+      </dl>
 </div>
+  </div>
+@*</div>*@
