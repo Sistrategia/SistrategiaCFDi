@@ -1,453 +1,422 @@
 ﻿@using Sistrategia.SAT.CFDiWebSite.Models
 @model ComprobanteCreateViewModel
 @{
-  ViewBag.Title = "Create";
+    ViewBag.Title = "Crear un comprobante";
 }
 
-<h1>Crear un comprobante</h1>
-
-@using (Html.BeginForm("Create", "Comprobante", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
-  @Html.AntiForgeryToken()
-  <h4>@LocalizedStrings.Account_RegisterSubtitle</h4>
-  <hr />
-  @Html.ValidationSummary("", new { @class = "text-danger" })
-
-  @*<div class="form-group">
-      @Html.LabelFor(m => m.Emisor.RFC, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Emisor.RFC, new { @class = "form-control" })
-      </div>
+<div class="col-md-12">
+    <h1 class="text-center">Crear un comprobante</h1>
+    <br />
+</div>
+<div class="col-md-12">
+    <div class='alert alert-danger text-center' id="danger"></div>
+</div>
+<div class="col-md-12">
+    <div id="initial_model_id">
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Serie, new { @class = "col-md-1 control-label" })
+                <div class="col-md-1">
+                    <input class="form-control" type="text" data-bind="value: Serie" />
+                </div>
+                @Html.LabelFor(m => m.Folio, new { @class = "col-md-1  control-label" })
+                <div class="col-md-1">
+                    <input class="form-control" type="text" data-bind="value: Folio" />
+                </div>
+                @Html.LabelFor(m => m.LugarExpedicion, new { @class = "col-md-2  control-label" })
+                <div class="col-md-6">
+                    <input class="form-control" type="text" data-bind="value: LugarExpedicion" />
+                </div>               
+            </div>
+        </div>
+        <br />
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Emisor, new { @class = "col-md-1  control-label" })
+                <div class="col-md-5">
+                    <select class="form-control" data-bind="value: EmisorId" id="EmisorId"></select>
+                </div>
+                @Html.LabelFor(m => m.Receptor, new { @class = "col-md-1  control-label" })
+                <div class="col-md-5">
+                    <select class="form-control" data-bind="value: ReceptorId" id="ReceptorId"></select>
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Certificados, new { @class = "col-md-1  control-label" })
+                <div class="col-md-5">
+                    @Html.DropDownListFor(m => m.CertificadoId, Model.Certificados, new { @class = "form-control", @data_bind = "value: CertificadoId" })
+                </div>
+                @Html.LabelFor(m => m.FormaDePago, new { @class = "col-md-1  control-label" })
+                <div class="col-md-5">
+                    <input class="form-control" type="text" data-bind="value: FormaDePago" />
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(m => m.MetodoDePago, new { @class = "col-md-2  control-label" })
+                <div class="col-md-4">
+                    <input class="form-control" type="text" data-bind="value: MetodoDePago" />
+                </div>
+                @Html.LabelFor(m => m.NumCtaPago, new { @class = "col-md-1  control-label" })
+                <div class="col-md-5">
+                    <input class="form-control" type="text" data-bind="value: NumCtaPago" />
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Emisor.Nombre, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Emisor.Nombre, new { @class = "form-control" })
-      </div>
+    <div id="conceptos_model_id">
+        <div class="col-md-12">
+            <h2 class="text-center">Conceptos</h2>
+            <br />
+        </div>
+        <div class="col-md-1">
+            <input type="text" class="form-control" data-bind="value: Cantidad" placeholder="Cantidad">
+        </div>
+        <div class="col-md-1">
+            <input type="text" class="form-control" data-bind="value: Unidad" placeholder="Unidad">
+        </div>
+        <div class="col-md-2">
+            <input type="text" class="form-control" data-bind="value: NoIdentificacion" placeholder="Identificación">
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" data-bind="value: Descripcion" placeholder="Descripción">
+        </div>
+        <div class="col-md-1">
+            <input type="text" class="form-control" data-bind="value: ValorUnitario" placeholder="Precio">
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-default form-control" data-bind="enable: (Cantidad().length > 0 && Unidad().length > 0 && NoIdentificacion().length > 0 && Descripcion().length > 0 && ValorUnitario().length > 0), click: addItem">Agregar</button>
+        </div>
+        <div class="col-md-12"><br /></div>
+        <div class="col-md-12" data-bind="visible: HasItems()">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">N°</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Unidad</th>
+                        <th class="text-center">Identificación</th>
+                        <th class="text-center">Descripción</th>
+                        <th class="text-center">Precio</th>
+                        <th class="text-center">Importe</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody data-bind='foreach: Items'>
+                    <tr>
+                        <td data-bind='text: ConceptoOrdinal' class="text-center"></td>
+                        <td data-bind='text: ConceptoCantidad' class="text-center"></td>
+                        <td data-bind='text: ConceptoUnidad' class="text-center"></td>
+                        <td data-bind='text: ConceptoNoIdentificacion' class="text-center"></td>
+                        <td data-bind='text: ConceptoDescripcion' class="text-center"></td>
+                        <td data-bind='text: ConceptoValorUnitario' class="text-center"></td>
+                        <td data-bind='text: ConceptoImporte' class="text-center"></td>
+                        <td class="text-center">
+                            <a href="#" class="btn btn-danger btn-sm" data-bind="click: $root.removeSelected">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Emisor.RegimenFiscal, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Emisor.RegimenFiscal, new { @class = "form-control" })
-      </div>
-    </div>*@
-  @*<div class="form-group">
-    <div class="col-md-3 control-label">
-    </div>    
-    <div class="col-md-7">
-      <select id="Receptor" class="form-control"></select>
-    </div>
-  </div>*@
-
-
-  <div class="form-group">
-    @*<label class="col-md-3 control-label" for="Receptor_Nombre">Emisor</label>*@
-    @*@Html.LabelFor(m => m.Emisor.Nombre, new { @class = "col-md-3 control-label" })*@
-    @*<div class="col-md-7">
-      @Html.DropDownListFor(m => m.EmisorId, Model.Emisores)
-      <select id="Receptor" class="form-control"></select>
-    </div>*@
-  </div>
-
-  <div class="form-group">
-    <label class="col-md-2 control-label" for="Receptor_Nombre">Emisor</label>
-    @*<div class="col-md-10">
-      </div>*@
-    <div class="col-md-7">
-      @Html.DropDownListFor(m => m.EmisorId, Model.Emisores, new { @class = "form-control" })
-      @*<select id="Receptor" class="form-control"></select>*@
-    </div>
-
-    @Html.LabelFor(m => m.Serie, new { @class = "col-md-1 control-label" })
-    <div class="col-md-2">
-      @Html.TextBoxFor(m => m.Serie, new { @class = "form-control" })
-    </div>
-     
-    </div>
-
-  <div class="form-group">
-    <label class="col-md-2 control-label" for="Certificado_NumSerie">Certificado</label>
-    <div class="col-md-7">
-      @Html.DropDownListFor(m => m.CertificadoId, Model.Certificados, new { @class = "form-control" })     
-    </div>
-
-    @Html.LabelFor(m => m.Folio, new { @class = "col-md-1  control-label" })
-    <div class="col-md-2">
-      @Html.TextBoxFor(m => m.Folio, new { @class = "form-control" })
-    </div>
-
-   
-  </div>
-
-  @*<div class="form-group">
-    @Html.LabelFor(m => m.Emisor.RFC, new { @class = "col-md-2 control-label" })
-    <div class="col-md-10">
-      @Html.TextBoxFor(m => m.Emisor.RFC, new { @class = "form-control" })
-    </div>
-  </div>*@
-
-
-  <div class="form-group">
-    <label class="col-md-2 control-label" for="Receptor_Nombre">Receptor</label>
-    @*Receptor*@
-    <div class="col-md-7">
-      @Html.DropDownListFor(m => m.ReceptorId, Model.Receptores, new { @class = "form-control" })
-      @*<select id="Receptor" class="form-control"></select>*@
-    </div>
-
-    @Html.LabelFor(m => m.LugarExpedicion, new { @class = "col-md-1  control-label" })
-    <div class="col-md-2">
-      @Html.TextBoxFor(m => m.LugarExpedicion, new { @class = "form-control" })
-      @*<select id="Receptor" class="form-control"></select>*@
-    </div>
-
-  </div>
-
-  <div class="form-group">   
-    @Html.LabelFor(m => m.FormaDePago, new { @class = "col-md-2  control-label" })
-    <div class="col-md-7">
-    @Html.TextBoxFor(m => m.FormaDePago, new { @class = "form-control" })
-      @*<select id="Receptor" class="form-control"></select>*@
-    </div>
-  </div>
-
-  <div class="form-group">
-    @Html.LabelFor(m => m.MetodoDePago, new { @class = "col-md-2  control-label" })
-    <div class="col-md-7">
-      @Html.TextBoxFor(m => m.MetodoDePago, new { @class = "form-control" })
-      @*<select id="Receptor" class="form-control"></select>*@
-    </div>
-
-    @Html.LabelFor(m => m.NumCtaPago, new { @class = "col-md-1  control-label" })
-    <div class="col-md-2">
-      @Html.TextBoxFor(m => m.NumCtaPago, new { @class = "form-control" })     
-    </div>
-
-  </div>
-
-
-  //model.FormaDePago = "PAGO EN UNA SOLA EXHIBICION";
-  //model.MetodoDePago = "NO IDENTIFICADO";
-  //model.LugarExpedicion = "MATRIZ";
-  //model.TipoCambio = "1.00";
-
-
-  @*<div class="form-group">
-    @Html.LabelFor(m => m.Receptor.Nombre, new { @class = "col-md-3 control-label" })
-    <div class="col-md-7">
-      @Html.TextBoxFor(m => m.Receptor.Nombre, new { @class = "form-control" })      
-    </div>
-  </div>
-  <div class="form-group">
-    @Html.LabelFor(m => m.Receptor.RFC, new { @class = "col-md-3 control-label" })
-    <div class="col-md-3">
-      @Html.TextBoxFor(m => m.Receptor.RFC, new { @class = "form-control" })
-    </div>
-  </div>*@
-  
-  @*<div class="form-group">
-      @Html.LabelFor(m => m.Receptor.RegimenFiscal, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.RegimenFiscal, new { @class = "form-control" })
-      </div>
-    </div>*@
-  
-  @*<div class="form-group">
-    <div class="col-md-offset-3 col-md-9">
-      <a class="btn btn-default" role="button" data-toggle="collapse" href="#domicilio" aria-expanded="false" aria-controls="domicilio">
-        Agregar Domicilio
-      </a>
-    </div>
-  </div>
-
-  <div class="collapse" id="domicilio">
-    <h3>@LocalizedStrings.Emisor_DetailsDomicilioFiscalTitle</h3>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.Calle, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.Calle, new { @class = "form-control" })
-      </div>
-    </div>
-
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.NoExterior, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.NoExterior, new { @class = "form-control" })
-      </div>
-    </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.NoInterior, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.NoInterior, new { @class = "form-control" })
-      </div>
-    </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.Colonia, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.Colonia, new { @class = "form-control" })
-      </div>
-    </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.Municipio, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.Municipio, new { @class = "form-control" })
-      </div>
-    </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.Localidad, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.Localidad, new { @class = "form-control" })
-      </div>
-    </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.Estado, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.Estado, new { @class = "form-control" })
-      </div>
-    </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.CodigoPostal, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.CodigoPostal, new { @class = "form-control" })
-      </div>
-    </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.Pais, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.Pais, new { @class = "form-control" })
-      </div>
-    </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.Referencia, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.Referencia, new { @class = "form-control" })
-      </div>
-    </div>
-  </div>*@
-
-
-  <h2>
-    Conceptos
-  </h2>
-
-  <div class="row" style="font-weight:600">
-    <div class="col-md-1">
-      Cantidad
-    </div>
-    <div class="col-md-1">
-      Unidad
-    </div>
-    <div class="col-md-1">
-      Identificación
-    </div>
-    <div class="col-md-6">
-      Descripción
-    </div>
-    <div class="col-md-1">
-      Precio
-      @*Valor Unitario*@
-    </div>
-    @*<div class="col-md-1">
-        Moneda
-      </div>
-      <div class="col-md-1">
-        Tasa
-      </div>*@
-    <div class="col-md-1">
-      Importe
-    </div>
-    <div class="col-md-1">
-    </div>
-  </div>
-  <div class="row">
     <div class="col-md-12">
-      <hr style="margin: 2px 0;" />
+        <hr />
     </div>
-  </div>
+    <div id="impuestos_model_id">
+        <div class="col-md-8">
+            <div class="col-md-12">
+                <h3 class="text-center" style="margin-top: 0px;">Impuestos trasladados</h3>
+                <br />
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" data-bind="value: TrasladosImpuesto" placeholder="Impuesto">
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" data-bind="value: TrasladosImporte" placeholder="Tasa">
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" data-bind="value: TrasladosTasa" placeholder="Importe">
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-default form-control" data-bind="enable: (TrasladosImpuesto().length > 0 && TrasladosImporte().length > 0 && TrasladosTasa().length > 0), click: addTraslado">Agregar</button>
+            </div>
+            <div class="col-md-12"><br /></div>
+            <div class="col-md-12" data-bind="visible: TrasladosHasItems()">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">N°</th>
+                            <th class="text-center">Impuesto</th>
+                            <th class="text-center">Tasa</th>
+                            <th class="text-center">Importe</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: TrasladosItems">
+                        <tr>
+                            <td data-bind='text: TrasladadoOrdinal' class="text-center"></td>
+                            <td data-bind='text: TrasladadoImpuesto' class="text-center"></td>
+                            <td data-bind='text: TrasladadoTasa' class="text-center"></td>
+                            <td data-bind='text: TrasladadoImporte' class="text-center"></td>
+                            <td class="text-center">
+                                <a href="#" class="btn btn-danger btn-sm" data-bind="click: $root.removeTraslado">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <h3 class="text-center" style="margin-top: 0px;">Impuestos retenidos</h3>
+                <br />
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" data-bind="value: RetencionesImpuesto" placeholder="Impuesto">
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" data-bind="value: RetencionesImporte" placeholder="Importe">
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-default form-control" data-bind="enable: (RetencionesImpuesto().length > 0 && RetencionesImporte().length > 0), click: addRetencion">Agregar</button>
+            </div>
+            <div class="col-md-12"><br /></div>
+            <div class="col-md-12" data-bind="visible: RetencionesHasItems()">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Impuesto</th>
+                            <th class="text-center">Importe</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: RetencionesItems">
+                        <tr>
+                            <td data-bind='text: RetencionOrdinal' class="text-center"></td>
+                            <td data-bind='text: RetencionImpuesto' class="text-center"></td>
+                            <td data-bind='text: RetencionImporte' class="text-center"></td>
+                            <td class="text-center">
+                                <a href="#" class="btn btn-danger btn-sm" data-bind="click: $root.removeRetencion">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="col-md-8" style="font-weight:600">
+                Subtotal:
+            </div>
+            <div class="col-md-4">
+                <input class="form-control" data-bind="value: SubTotal" type="text" />
+                <br />
+            </div>
 
-  for (var i = 0; i < Model.Conceptos.Count(); i++) {
-    //foreach (ConceptoViewModel concepto in Model.Conceptos) {
-    <div class="row form-group">
-      <div class="col-md-1">
+            <div class="col-md-8" style="font-weight:600">
+                Total de impuestos trasladados:
+            </div>
+            <div class="col-md-4">
+                <input class="form-control" data-bind="value: TotalTraslados" type="text"  />
+                <br />
+            </div>
 
-        @Html.TextBoxFor(c => c.Conceptos[i].Cantidad, new { @class = "form-control" })
-
-
-        @*@string.Format("{0:0.00}", concepto.Cantidad)*@
-      </div>
-      <div class="col-md-1">
-        @Html.TextBoxFor(c => c.Conceptos[i].Unidad, new { @class = "form-control" })
-        @*@concepto.Unidad*@
-      </div>
-      <div class="col-md-1">
-        @Html.TextBoxFor(c => c.Conceptos[i].NoIdentificacion, new { @class = "form-control" })
-        @*@concepto.NoIdentificacion*@
-      </div>
-      <div class="col-md-6">
-        @Html.TextBoxFor(c => c.Conceptos[i].Descripcion, new { @class = "form-control" })
-        @*@concepto.Descripcion*@
-      </div>
-      <div class="col-md-1">
-        @Html.TextBoxFor(c => c.Conceptos[i].ValorUnitario, new { @class = "form-control" })
-        @*@string.Format("{0:C}", concepto.ValorUnitario)*@
-        @*@string.Format("{0:0.00}", concepto.ValorUnitario)*@
-      </div>
-
-      @*<div class="col-md-1">
-          0%
-        </div>*@
-      <div class="col-md-1">
-        @Html.TextBoxFor(c => c.Conceptos[i].Importe, new { @class = "form-control" })
-        @*@string.Format("{0:C}", concepto.Importe)*@
-      </div>
-      <div class="col-md-1">
-        @*<a class="btn btn-primary" href="#">Agregar</a>*@
-      </div>
+            <div class="col-md-8" style="font-weight:600">
+                Total de impuestos retenidos:
+            </div>
+            <div class="col-md-4" style="font-weight:600">
+                <input class="form-control" data-bind="value: TotalRetenciones" type="text"  />
+                <br />
+            </div>
+            <div class="col-md-8" style="font-weight:600">
+                Total:
+            </div>
+            <div class="col-md-4">
+                <input class="form-control" data-bind="value: Total" type="text" />
+                <br />
+            </div>
+        </div>
     </div>
-  }
-
-  @*<div class="row">
-      <div class="col-md-12">
-        <hr style="margin: 2px 0;" />
-      </div>
-    </div>*@
-
-  <div class="row">
     <div class="col-md-12">
-      <hr style="margin: 56px 2px 0 0;" />
+        <hr />
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-8">
+    <div class="form-group">
+        <div class="col-md-offset-9 col-md-12">
+            <input type="submit" class="btn btn-lg btn-primary" id="enviar_datos" value="@LocalizedStrings.SaveButton" />
+        </div>
     </div>
-    <div class="col-md-1" style="font-weight:600">
-      Subtotal:
+    <div class="col-md-12">
+        <hr />
     </div>
-    <div class="col-md-1" style="font-weight:600">
-      
-    </div>
-    <div class="col-md-1">
-      @*@string.Format("{0:C}", Model.SubTotal)*@
-      @Html.TextBoxFor(m => m.SubTotal, new { @class = "form-control" })
-    </div>
-    <div class="col-md-1">
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-8">
-    </div>
-    <div class="col-md-1" style="font-weight:600">
-      ISR:
-    </div>
-    <div class="col-md-1" style="font-weight:600">
-     
-    </div>
-    <div class="col-md-1">
-      @*@string.Format("{0:C}", Model.SubTotal)*@
-      @Html.TextBoxFor(m => m.ISR, new { @class = "form-control" })
-    </div>
-    <div class="col-md-1">
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-8">
-    </div>
-    <div class="col-md-1" style="font-weight:600">
-      IVA:
-    </div>
-    <div class="col-md-1" style="font-weight:600">
-      @Html.TextBoxFor(m => m.TasaIVA, new { @class = "form-control" })
-    </div>
-   
-    <div class="col-md-1">
-      @*@string.Format("{0:C}", Model.SubTotal)*@
-      @Html.TextBoxFor(m => m.IVA, new { @class = "form-control" })
-    </div>
-    <div class="col-md-1">
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-8">
-    </div>
-    <div class="col-md-1" style="font-weight:600">
-      Total:
-    </div>
-    <div class="col-md-1" style="font-weight:600">
-      
-    </div>
-    <div class="col-md-1">
-      @*@string.Format("{0:C}", Model.Total)*@
-      @Html.TextBoxFor(m => m.Total, new { @class = "form-control" })
-    </div>
-    <div class="col-md-1">
-    </div>
-  </div>
-
-  @*<div class="row">
-      <div class="col-md-12">
-        <p style="margin: 56px 2px 0 0;">
-        </p>
-      </div>
-    </div>*@
+</div>
 
 
-
-  <hr />
-  <div class="form-group">
-    <div class="col-md-offset-2 col-md-10">
-      <input type="submit" class="btn btn-primary" value="@LocalizedStrings.SaveButton" />
+<div id="alerta" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="progress progress-striped active" style="margin-bottom: 0px;">
+                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">Procesando...</div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-}
+</div>
 
 @section Scripts {
-  @Scripts.Render("~/bundles/jqueryval")
-  @Scripts.Render("~/bundles/select2")
-  <script type="text/javascript">
+ @Scripts.Render("~/bundles/jqueryval")
+ @Scripts.Render("~/bundles/select2")
+ @Scripts.Render("~/bundles/KOAmplify")
+ <script src="@Url.Content("~/Scripts/ViewModelsKO/ComprobanteCreate.js")"></script>    
+ <script type="text/javascript">
     $(document).ready(function () {
-      $.fn.select2.defaults.set('language', 'es');
+        // #region Select2 JS
+        $.fn.select2.defaults.set('language', 'es');
 
-      $("#Receptore").select2({
-        placeholder: "Seleccione",
-        minimumInputLength: 2,
-        allowClear: false,
-        //ajax: {
-        //    url: "https://api.github.com/search/repositories",
-        //    dataType: 'json',
-        //    delay: 250,
-        //    data: function (params) {
-        //        return {
-        //            q: params.term, // search term
-        //            page: params.page
-        //        };
-        //    },
-        //    processResults: function (data, params) {
-        //        // parse the results into the format expected by Select2
-        //        // since we are using custom formatting functions we do not need to
-        //        // alter the remote JSON data, except to indicate that infinite
-        //        // scrolling can be used
-        //        params.page = params.page || 1;
+        $("#EmisorId").select2({
+            placeholder: "Seleccione",
+            minimumInputLength: 2,
+            allowClear: true,
+            ajax: {
+                url: "@Url.Action("GetIdByEmisores", "Comprobante")",
+                 dataType: 'json',
+                 contentType: 'application/json; charset=utf-8',
+                 delay: 250,
+                 data: function (params) {
+                     return {
+                         value: params.term
+                     };
+                 },
+                 processResults: function (data) {
+                     return {
+                         results: data
+                     };
+                 },
+                 cache: true
+             },
+             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+         });
 
-        //        return {
-        //            results: data.items,
-        //            pagination: {
-        //                more: (params.page * 30) < data.total_count
-        //            }
-        //        };
-        //    },
-        //    cache: true
-        //},
-        //escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-        //minimumInputLength: 1,
-        //templateResult: formatRepo, // omitted for brevity, see the source of this page
-        //templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
-      });
+         $("#ReceptorId").select2({
+             placeholder: "Seleccione",
+             minimumInputLength: 2,
+             allowClear: true,
+             ajax: {
+                 url: "@Url.Action("GetIdByReceptores", "Comprobante")",
+                 dataType: 'json',
+                 contentType: 'application/json; charset=utf-8',
+                 delay: 250,
+                 data: function (params) {
+                     return {
+                         value: params.term
+                     };
+                 },
+                 processResults: function (data) {
+                     return {
+                         results: data
+                     };
+                 },
+                 cache: true
+             },
+             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+         });
+       // #endregion Select2 JS
+        
+       $("#danger").hide();
+       var initial_model = new InitialModel('InitialModel');
+       var conceptos_model = new ConceptosModel('ConceptosModel');
+       var impuestos_model = new ImpuestosModel('ImpuestosModel');
+
+       ko.applyBindings(initial_model, document.getElementById("initial_model_id"));
+       ko.applyBindings(conceptos_model, document.getElementById("conceptos_model_id"));
+       ko.applyBindings(impuestos_model, document.getElementById("impuestos_model_id"));
+
+       $("#enviar_datos").on("click", function (e) {
+          e.preventDefault();
+
+          var conceptos = new Array();
+          var traslados = new Array();
+          var retenciones = new Array();
+
+          if (conceptos_model.Items().length > 0) {              for (var i = 0; i < conceptos_model.Items().length; i++) {
+                  conceptos.push({
+                      Cantidad: conceptos_model.Items()[i].ConceptoCantidad(),
+                      Unidad: conceptos_model.Items()[i].ConceptoUnidad(),
+                      NoIdentificacion: conceptos_model.Items()[i].ConceptoNoIdentificacion(),
+                      Descripcion: conceptos_model.Items()[i].ConceptoDescripcion(),
+                      ValorUnitario: conceptos_model.Items()[i].ConceptoValorUnitario(),
+                      Importe: conceptos_model.Items()[i].ConceptoImporte()
+                  });              
+              }          }
+
+          if (impuestos_model.TrasladosItems().length > 0) {
+              for (var i = 0; i < impuestos_model.TrasladosItems().length; i++) {
+                  traslados.push({
+                      Impuesto: impuestos_model.TrasladosItems()[i].TrasladadoImpuesto(),
+                      Tasa: impuestos_model.TrasladosItems()[i].TrasladadoTasa(),
+                      Importe: impuestos_model.TrasladosItems()[i].TrasladadoImporte(),
+                  });
+              }
+          }
+
+          if (impuestos_model.RetencionesItems().length > 0) {
+              for (var i = 0; i < impuestos_model.RetencionesItems().length; i++) {
+                  retenciones.push({
+                      Impuesto: impuestos_model.RetencionesItems()[i].RetencionImpuesto(),
+                      Importe: impuestos_model.RetencionesItems()[i].RetencionImporte(),
+                  });
+              }
+          }
+
+          var myobject = {
+              EmisorId: initial_model.EmisorId(),
+              ReceptorId: initial_model.ReceptorId(),
+              Serie: initial_model.Serie(),
+              Folio: initial_model.Folio(),
+              FormaDePago: initial_model.FormaDePago(),
+              MetodoDePago: initial_model.MetodoDePago(),
+              LugarExpedicion: initial_model.LugarExpedicion(),
+              NumCtaPago: initial_model.NumCtaPago(),
+              CertificadoId: initial_model.CertificadoId(),
+              SubTotal: impuestos_model.SubTotal(),
+              TotalImpuestosTrasladados: impuestos_model.TotalTraslados(),
+              TotalImpuestosRetenidos: impuestos_model.TotalRetenciones(),
+              Total: impuestos_model.Total(),
+              Conceptos: conceptos,
+              Traslados: traslados,
+              Retenciones: retenciones
+          }
+
+          $.ajax({
+              url: "@Url.Action("Create", "Comprobante")",
+              type: "POST",
+              data: myobject,
+              beforeSend: function () {
+                  $("#alerta").modal({
+                      show: true,
+                      keyboard: false
+                  });
+                  $("#danger").empty();
+              },
+              success: function (data) {
+                  $("#alerta").modal('hide');
+                  if (data.error == false) {
+                     alert("Creado!!!")
+                  }
+                  else {
+                      $("#danger").show().append(data.errorMsg);
+                      $("html, body").scrollTop(0);
+                  }
+              }
+          });
+       });
+
     });
   </script>
 }
-
-
-
-

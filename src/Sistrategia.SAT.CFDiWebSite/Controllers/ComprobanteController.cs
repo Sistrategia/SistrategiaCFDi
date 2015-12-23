@@ -18,6 +18,58 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             return View(model);
         }
 
+        public JsonResult GetIdByEmisores(string value, int pageSize = 10)
+        {
+            try
+            {
+                var emisores = DBContext.Emisores.Where(x => x.Nombre.Contains(value) || x.RFC.Contains(value))
+                                                 .Take(pageSize).ToList();
+
+                List<dynamic> itemList = new List<dynamic>();
+                foreach (var emisor in emisores)
+                {
+                   var dynamicItems = new
+                    {
+                        id = emisor.EmisorId.ToString(),
+                        text = emisor.Nombre + " - " + emisor.RFC
+                    };
+                   itemList.Add(dynamicItems);
+                }
+                return Json(itemList.ToArray(), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                var result = new { resp = false, error = ex.Message };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult GetIdByReceptores(string value, int pageSize = 10)
+        {
+            try
+            {
+                var receptores = DBContext.Receptores.Where(x => x.Nombre.Contains(value) || x.RFC.Contains(value))
+                                                     .Take(pageSize).ToList();
+
+                List<dynamic> itemList = new List<dynamic>();
+                foreach (var receptor in receptores)
+                {
+                    var dynamicItems = new
+                    {
+                        id = receptor.ReceptorId.ToString(),
+                        text = receptor.Nombre + " - " + receptor.RFC
+                    };
+                    itemList.Add(dynamicItems);
+                }
+                return Json(itemList.ToArray(), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                var result = new { resp = false, error = ex.Message };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public ActionResult Create() {
             var model = new ComprobanteCreateViewModel();
             model.Conceptos.Add(new ConceptoViewModel());
@@ -113,16 +165,33 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 }
             }
 
-            if (model.IVA > 0) {
-                comprobante.Impuestos = new Impuestos();
-                comprobante.Impuestos.TotalImpuestosTrasladados = model.IVA;
-                comprobante.Impuestos.Traslados = new List<Traslado>();
-                comprobante.Impuestos.Traslados.Add(new Traslado {
-                    Impuesto = "IVA",
-                    Tasa = model.TasaIVA, //  16.00M,
-                    Importe = model.IVA
+            
+        
+            comprobante.Impuestos = new Impuestos();            
+            comprobante.Impuestos.Traslados = new List<Traslado>();
+
+            foreach (var modelTraslado in model.Traslados)
+            {
+                comprobante.Impuestos.Traslados.Add(new Traslado
+                {
+                  Importe = modelTraslado.Importe,
+                  Impuesto  = modelTraslado.Impuesto,
+                  Tasa  = modelTraslado.Tasa,
                 });
             }
+
+            comprobante.Impuestos.Retenciones = new List<Retencion>();
+            foreach (var modelRetencion in model.Retenciones)
+            {
+                comprobante.Impuestos.Retenciones.Add(new Retencion
+                {
+                    Importe = modelRetencion.Importe,
+                    Impuesto = modelRetencion.Impuesto,
+                });
+            }
+
+            comprobante.Impuestos.TotalImpuestosRetenidos = model.TotalImpuestosRetenidos;
+            comprobante.Impuestos.TotalImpuestosTrasladados = model.TotalImpuestosTrasladados;
 
             comprobante.PublicKey = Guid.NewGuid();
 

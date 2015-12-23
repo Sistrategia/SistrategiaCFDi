@@ -24,6 +24,10 @@ namespace Sistrategia.SAT.CFDiWebSite
                       "~/Scripts/select2.js"
                       , "~/Scripts/select2/i18n/es.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/KOAmplify").Include(
+                      "~/Scripts/amplify/amplify.store.min.js"
+                    , "~/Scripts/knockout-3.4.0.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css"
                       //,"~/Content/select2.css"
