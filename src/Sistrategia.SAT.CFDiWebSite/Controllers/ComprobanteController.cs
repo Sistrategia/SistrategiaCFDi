@@ -135,10 +135,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             var comprobante = new Comprobante();
 
             comprobante.EmisorId = model.EmisorId;
+            comprobante.Emisor = DBContext.Emisores.Find(model.EmisorId); // .Where(e => e.PublicKey == publicKey).SingleOrDefault();
             comprobante.ReceptorId = model.ReceptorId;
+            comprobante.Receptor = DBContext.Receptores.Find(model.ReceptorId); // .Where(e => e.PublicKey == publicKey).SingleOrDefault();
             comprobante.Serie = model.Serie;
             comprobante.Folio = model.Folio;
-            comprobante.Fecha = DateTime.Now;
+            comprobante.Fecha = DateTime.Now + SATManager.GetCFDIServiceTimeSpan();
             comprobante.FormaDePago = model.FormaDePago;
             comprobante.SubTotal = model.SubTotal;
             comprobante.Total = model.Total;
@@ -207,15 +209,16 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 comprobante.Certificado = certificado.CertificadoBase64;
             }
 
-            comprobante.Fecha = DateTime.Parse("2014-09-03T13:39:03");
+          //   comprobante.Fecha = DateTime.Parse("2014-09-03T13:39:03");
+
+            
+            //comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == comprobante.PublicKey).SingleOrDefault();
 
             string cadenaOriginal = comprobante.GetCadenaOriginal();
             comprobante.Sello = certificado.GetSello(cadenaOriginal);
 
             DBContext.Comprobantes.Add(comprobante);
             DBContext.SaveChanges();
-
-
 
             return RedirectToAction("Details", new { id = comprobante.PublicKey });
 
@@ -233,6 +236,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 return HttpNotFound();
 
             var model = new ComprobanteDetailViewModel(comprobante);
+          
             return View(model);
         }
 
@@ -482,6 +486,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                 SATManager manager = new SATManager();
                 bool response = manager.GetCFDI(user, password, comprobante);
+                if (response)
+                    DBContext.SaveChanges();
 
                 //byte[] response = Sistrategia.Server.SAT.SATManager.GetCFDI(user, password, file);
 
