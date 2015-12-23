@@ -39,7 +39,7 @@
           <div class="col-md-2">
             @*<a href="#"><span style="font-size:20px; font-weight:normal;color:#7986CB;" class="glyphicon glyphicon-pencil"></span></a>&nbsp*@
             <a href="@Url.Action("ShowXml", new { id = comprobante.PublicKey.ToString("N") })"><span style="font-size:20px; font-weight:normal;color:#a0a0a0;" class="glyphicon glyphicon-envelope"></span></a>&nbsp;&nbsp;
-            <a href="#"><span style="font-size:20px; font-weight:normal;color:#a0a0a0;" class="glyphicon glyphicon-qrcode"></span></a>&nbsp;&nbsp;
+            <a href="@Url.Action("GetTimbre", new { id = comprobante.PublicKey.ToString("N") })"><span style="font-size:20px; font-weight:normal;color:#a0a0a0;" class="glyphicon glyphicon-qrcode"></span></a>&nbsp;&nbsp;
             <a href="@Url.Action("ShowHtml", new { id = comprobante.PublicKey.ToString("N") })"><span style="font-size:20px; font-weight:normal;color:#a0a0a0;" class="glyphicon glyphicon-print"></span></a>
             @*<a href="#"><span style="font-size:20px; font-weight:normal;color:#7986CB;" class="glyphicon glyphicon-remove"></span></a>&nbsp;*@            
           </div>

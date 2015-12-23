@@ -1,0 +1,17 @@
+﻿@using Sistrategia.SAT.CFDiWebSite.Models
+@model ComprobanteDetailViewModel
+@{
+  ViewBag.Title = Model.Title; // "Get Timbre";
+}
+
+<h1>@ViewBag.Title <br /><small>@Model.Receptor.RFC</small></h1>
+
+@using (Html.BeginForm("GetTimbre", "Comprobante", new { id = @Model.PublicKey }, FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
+  @Html.AntiForgeryToken()
+  <h4>@LocalizedStrings.Account_RegisterSubtitle</h4>
+  <hr />
+  @Html.ValidationSummary("", new { @class = "text-danger" })
+
+  <input type="submit" class="btn btn-primary" value="Timbrar" /> @*@LocalizedStrings.SaveButton*@
+
+}
