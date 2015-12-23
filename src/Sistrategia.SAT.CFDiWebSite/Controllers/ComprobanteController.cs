@@ -18,11 +18,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             return View(model);
         }
 
-        public JsonResult GetIdByEmisores(string value)
+        public JsonResult GetIdByEmisores(string value, int pageSize = 10)
         {
             try
             {
-                var emisores = DBContext.Emisores.Where(x => x.Nombre.Contains(value) || x.RFC.Contains(value)).ToList();
+                var emisores = DBContext.Emisores.Where(x => x.Nombre.Contains(value) || x.RFC.Contains(value))
+                                                 .Take(pageSize).ToList();
+
                 List<dynamic> itemList = new List<dynamic>();
                 foreach (var emisor in emisores)
                 {
@@ -42,11 +44,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             }
         }
 
-        public JsonResult GetIdByReceptores(string value)
+        public JsonResult GetIdByReceptores(string value, int pageSize = 10)
         {
             try
             {
-                var receptores = DBContext.Receptores.Where(x => x.Nombre.Contains(value) || x.RFC.Contains(value)).ToList();
+                var receptores = DBContext.Receptores.Where(x => x.Nombre.Contains(value) || x.RFC.Contains(value))
+                                                     .Take(pageSize).ToList();
+
                 List<dynamic> itemList = new List<dynamic>();
                 foreach (var receptor in receptores)
                 {

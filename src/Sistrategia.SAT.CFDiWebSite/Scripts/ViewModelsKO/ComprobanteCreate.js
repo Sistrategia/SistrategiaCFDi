@@ -6,7 +6,7 @@
     $("#EmisorId").select2({
         placeholder: "Seleccione",
         minimumInputLength: 2,
-        allowClear: false,
+        allowClear: true,
         ajax: {
             url: "/es-ES/Comprobante/GetIdByEmisores",
             dataType: 'json',
@@ -30,7 +30,7 @@
     $("#ReceptorId").select2({
         placeholder: "Seleccione",
         minimumInputLength: 2,
-        allowClear: false,
+        allowClear: true,
         ajax: {
             url: "/es-ES/Comprobante/GetIdByReceptores",
             dataType: 'json',
@@ -69,11 +69,46 @@
         };
     })(ko);
     var InitialModel = function (modelId) {
-        var self = this;       
+        var self = this;
+        self.EmisorId = ko.observable("");
+        self.ReceptorId = ko.observable("");
+        self.Serie = ko.observable("");
+        self.Folio = ko.observable("");
+        self.FormaDePago = ko.observable("");
+        self.MetodoDePago = ko.observable("");
+        self.LugarExpedicion = ko.observable("");
+        self.NumCtaPago = ko.observable("");
+        self.CertificadoId = ko.observable("");
     }    var ConceptosModel = function (modelId) {
         var self = this;
+        self.Cantidad = ko.observable("");
+        self.Unidad = ko.observable("");
+        self.NoIdentificacion = ko.observable("");
+        self.Descripcion = ko.observable("");
+        self.ValorUnitario = ko.observable("");
+        self.Importe = ko.observable("");
     }
     var ImpuestosModel = function (modelId) {
         var self = this;
+        self.TrasladosImpuesto = ko.observable("");
+        self.TrasladosImporte = ko.observable("");
+        self.TrasladosTasa = ko.observable("");
+
+        self.RetencionesImpuesto = ko.observable("");
+        self.RetencionesImporte = ko.observable("");
+
+        self.SubTotal = ko.observable(0);
+        self.TotalTraslados = ko.observable(0);
+        self.TotalRetenciones = ko.observable(0);
+        self.Total = ko.observable(0);
     }
+
+    var initial_model = new InitialModel('InitialModel');
+    var conceptos_model = new ConceptosModel('ConceptosModel');
+    var impuestos_model = new ImpuestosModel('ImpuestosModel');
+
+    ko.applyBindings(initial_model, document.getElementById("initial_model_id"));
+    ko.applyBindings(conceptos_model, document.getElementById("conceptos_model_id"));
+    ko.applyBindings(impuestos_model, document.getElementById("impuestos_model_id"));
+
 });

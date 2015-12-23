@@ -9,202 +9,206 @@
     <br />
 </div>
 <div class="col-md-12">
-    <div class="form-horizontal">
-        <div class="form-group">
-            @Html.LabelFor(m => m.Serie, new { @class = "col-md-1 control-label" })
-            <div class="col-md-1">
-                @Html.TextBoxFor(m => m.Serie, new { @class = "form-control" })
-            </div>
-            @Html.LabelFor(m => m.Folio, new { @class = "col-md-1  control-label" })
-            <div class="col-md-1">
-                @Html.TextBoxFor(m => m.Folio, new { @class = "form-control" })
-            </div>
-            @Html.LabelFor(m => m.LugarExpedicion, new { @class = "col-md-2  control-label" })
-            <div class="col-md-3">
-                @Html.TextBoxFor(m => m.LugarExpedicion, new { @class = "form-control" })
-            </div>
-            @Html.LabelFor(m => m.NumCtaPago, new { @class = "col-md-1  control-label" })
-            <div class="col-md-2">
-                @Html.TextBoxFor(m => m.NumCtaPago, new { @class = "form-control" })
-            </div>
-        </div>
-    </div>
-    <br />
-    <div class="form-horizontal">
-        <div class="form-group">
-            @Html.LabelFor(m => m.Emisor, new { @class = "col-md-1  control-label" })
-            <div class="col-md-5">
-                <select class="form-control" id="EmisorId" name="EmisorId"></select>
-            </div>
-            @Html.LabelFor(m => m.Receptor, new { @class = "col-md-1  control-label" })
-            <div class="col-md-5">
-                <select class="form-control" id="ReceptorId" name="ReceptorId"></select>
-            </div>
-        </div>       
-    </div>
-    <div class="form-horizontal">
-        <div class="form-group">
-            @Html.LabelFor(m => m.Certificados, new { @class = "col-md-1  control-label" })
-            <div class="col-md-5">
-                @Html.DropDownListFor(m => m.CertificadoId, Model.Certificados, new { @class = "form-control" })
-            </div>
-            @Html.LabelFor(m => m.FormaDePago, new { @class = "col-md-1  control-label" })
-            <div class="col-md-5">
-                @Html.TextBoxFor(m => m.FormaDePago, new { @class = "form-control" })
+    <div id="initial_model_id">
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Serie, new { @class = "col-md-1 control-label" })
+                <div class="col-md-1">
+                    <input class="form-control" type="text" data-bind="value: Serie" />
+                </div>
+                @Html.LabelFor(m => m.Folio, new { @class = "col-md-1  control-label" })
+                <div class="col-md-1">
+                    <input class="form-control" type="text" data-bind="value: Folio" />
+                </div>
+                @Html.LabelFor(m => m.LugarExpedicion, new { @class = "col-md-2  control-label" })
+                <div class="col-md-3">
+                    <input class="form-control" type="text" data-bind="value: LugarExpedicion" />
+                </div>
+                @Html.LabelFor(m => m.NumCtaPago, new { @class = "col-md-1  control-label" })
+                <div class="col-md-2">
+                    <input class="form-control" type="text" data-bind="value: NumCtaPago" />
+                </div>
             </div>
         </div>
-    </div>
-    <div class="form-horizontal">
-        <div class="form-group">
-            @Html.LabelFor(m => m.MetodoDePago, new { @class = "col-md-2  control-label" })
-            <div class="col-md-4">
-                @Html.TextBoxFor(m => m.MetodoDePago, new { @class = "form-control" })
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12">
-        <h2 class="text-center">Conceptos</h2>
         <br />
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Emisor, new { @class = "col-md-1  control-label" })
+                <div class="col-md-5">
+                    <select class="form-control" data-bind="value: EmisorId" id="EmisorId"></select>
+                </div>
+                @Html.LabelFor(m => m.Receptor, new { @class = "col-md-1  control-label" })
+                <div class="col-md-5">
+                    <select class="form-control" data-bind="value: ReceptorId" id="ReceptorId"></select>
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Certificados, new { @class = "col-md-1  control-label" })
+                <div class="col-md-5">
+                    @Html.DropDownListFor(m => m.CertificadoId, Model.Certificados, new { @class = "form-control", @data_bind = "value: CertificadoId" })
+                </div>
+                @Html.LabelFor(m => m.FormaDePago, new { @class = "col-md-1  control-label" })
+                <div class="col-md-5">
+                    <input class="form-control" type="text" data-bind="value: FormaDePago" />
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(m => m.MetodoDePago, new { @class = "col-md-2  control-label" })
+                <div class="col-md-4">
+                    <input class="form-control" type="text" data-bind="value: MetodoDePago" />
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-1">
-        <input type="text" class="form-control" data-bind="" placeholder="Cantidad">
-    </div>
-    <div class="col-md-1">
-        <input type="text" class="form-control" data-bind="" placeholder="Unidad">
-    </div>
-    <div class="col-md-2">
-        <input type="text" class="form-control" data-bind="" placeholder="Identificación">
-    </div>
-    <div class="col-md-4">
-        <input type="text" class="form-control" data-bind="" placeholder="Descripción">
-    </div>
-    <div class="col-md-1">
-        <input type="text" class="form-control" data-bind="" placeholder="Precio">
-    </div>
-    <div class="col-md-1">
-        <input type="text" class="form-control" data-bind="" placeholder="Importe">
-    </div>
-    <div class="col-md-2">
-        <button type="button" class="btn btn-default form-control" data-bind="">Agregar</button>
-    </div>
-    <div class="col-md-12"><br /></div>
-    <div class="col-md-12">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th class="text-center">Cantidad</th>
-                    <th class="text-center">Unidad</th>
-                    <th class="text-center">Identificación</th>
-                    <th class="text-center">Descripción</th>
-                    <th class="text-center">Precio</th>
-                    <th class="text-center">Importe</th>
-                    <th class="text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody data-bind=''>
-                <tr>                
-                </tr>
-            </tbody>
-        </table>
+    <div id="conceptos_model_id">
+        <div class="col-md-12">
+            <h2 class="text-center">Conceptos</h2>
+            <br />
+        </div>
+        <div class="col-md-1">
+            <input type="text" class="form-control" data-bind="value: Cantidad" placeholder="Cantidad">
+        </div>
+        <div class="col-md-1">
+            <input type="text" class="form-control" data-bind="value: Unidad" placeholder="Unidad">
+        </div>
+        <div class="col-md-2">
+            <input type="text" class="form-control" data-bind="value: NoIdentificacion" placeholder="Identificación">
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" data-bind="value: Descripcion" placeholder="Descripción">
+        </div>
+        <div class="col-md-1">
+            <input type="text" class="form-control" data-bind="value: ValorUnitario" placeholder="Precio">
+        </div>
+        <div class="col-md-1">
+            <input type="text" class="form-control" data-bind="value: Importe" placeholder="Importe">
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-default form-control" data-bind="enable: (Cantidad().length > 0 && Unidad().length > 0 && NoIdentificacion().length > 0 && Descripcion().length > 0 && ValorUnitario().length > 0 && Importe().length > 0)">Agregar</button>
+        </div>
+        <div class="col-md-12"><br /></div>
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Unidad</th>
+                        <th class="text-center">Identificación</th>
+                        <th class="text-center">Descripción</th>
+                        <th class="text-center">Precio</th>
+                        <th class="text-center">Importe</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody data-bind=''>
+                    <tr></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
     <div class="col-md-12">
         <hr />
     </div>
-    <div class="col-md-8">
-        <div class="col-md-12">
-            <h3 class="text-center" style="margin-top: 0px;">Impuestos trasladados</h3>
-            <br />
+    <div id="impuestos_model_id">
+        <div class="col-md-8">
+            <div class="col-md-12">
+                <h3 class="text-center" style="margin-top: 0px;">Impuestos trasladados</h3>
+                <br />
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" data-bind="value: TrasladosImpuesto" placeholder="Impuesto">
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" data-bind="value: TrasladosImporte" placeholder="Tasa">
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" data-bind="value: TrasladosTasa" placeholder="Importe">
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-default form-control" data-bind="enable: (TrasladosImpuesto().length > 0 && TrasladosImporte().length > 0 && TrasladosTasa().length > 0)">Agregar</button>
+            </div>
+            <div class="col-md-12"><br /></div>
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Impuesto</th>
+                            <th class="text-center">Tasa</th>
+                            <th class="text-center">Importe</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind=''>
+                        <tr></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <h3 class="text-center" style="margin-top: 0px;">Impuestos retenidos</h3>
+                <br />
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" data-bind="value: RetencionesImpuesto" placeholder="Impuesto">
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" data-bind="value: RetencionesImporte" placeholder="Importe">
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-default form-control" data-bind="enable: (RetencionesImpuesto().length > 0 && RetencionesImporte().length > 0)">Agregar</button>
+            </div>
+            <div class="col-md-12"><br /></div>
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Impuesto</th>
+                            <th class="text-center">Importe</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind=''>
+                        <tr></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="col-md-3">
-            <input type="text" class="form-control" data-bind="" placeholder="Impuesto">
-        </div>
-        <div class="col-md-3">
-            <input type="text" class="form-control" data-bind="" placeholder="Tasa">
-        </div>
-        <div class="col-md-3">
-            <input type="text" class="form-control" data-bind="" placeholder="Importe">
-        </div>
-        <div class="col-md-2">
-            <button type="button" class="btn btn-default form-control" data-bind="">Agregar</button>
-        </div>
-        <div class="col-md-12"><br /></div>
-        <div class="col-md-12">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th class="text-center">Impuesto</th>
-                        <th class="text-center">Tasa</th>
-                        <th class="text-center">Importe</th>
-                        <th class="text-center">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody data-bind=''>
-                    <tr></tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-md-12">
-            <h3 class="text-center" style="margin-top: 0px;">Impuestos retenidos</h3>
-            <br />
-        </div>
-        <div class="col-md-3">
-            <input type="text" class="form-control" data-bind="" placeholder="Impuesto">
-        </div>
-        <div class="col-md-3">
-            <input type="text" class="form-control" data-bind="" placeholder="Importe">
-        </div>
-        <div class="col-md-2">
-            <button type="button" class="btn btn-default form-control" data-bind="">Agregar</button>
-        </div>
-        <div class="col-md-12"><br /></div>
-        <div class="col-md-12">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th class="text-center">Impuesto</th>
-                        <th class="text-center">Importe</th>
-                        <th class="text-center">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody data-bind=''>
-                    <tr></tr>
-                </tbody>
-            </table>
+        <div class="col-md-4">
+            <div class="col-md-8" style="font-weight:600">
+                Subtotal:
+            </div>
+            <div class="col-md-4">
+                <input class="form-control" data-bind="value: SubTotal" type="text" />
+                <br />
+            </div>
+
+            <div class="col-md-8" style="font-weight:600">
+                Total de impuestos trasladados:
+            </div>
+            <div class="col-md-4">
+                <input class="form-control" data-bind="value: TotalTraslados" type="text"  />
+                <br />
+            </div>
+
+            <div class="col-md-8" style="font-weight:600">
+                Total de impuestos retenidos:
+            </div>
+            <div class="col-md-4" style="font-weight:600">
+                <input class="form-control" data-bind="value: TotalRetenciones" type="text"  />
+                <br />
+            </div>
+            <div class="col-md-8" style="font-weight:600">
+                Total:
+            </div>
+            <div class="col-md-4">
+                <input class="form-control" data-bind="value: Total" type="text" />
+                <br />
+            </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="col-md-8" style="font-weight:600">
-            Subtotal:
-        </div>
-        <div class="col-md-4">
-            @Html.TextBoxFor(m => m.SubTotal, new { @class = "form-control" })
-            <br />
-        </div>
-
-        <div class="col-md-8" style="font-weight:600">
-            Total de impuestos trasladados:
-        </div>
-        <div class="col-md-4">
-            @Html.TextBoxFor(m => m.ISR, new { @class = "form-control" })
-            <br />
-        </div>
-
-        <div class="col-md-8" style="font-weight:600">
-            Total de impuestos retenidos:
-        </div>
-        <div class="col-md-4" style="font-weight:600">
-            @Html.TextBoxFor(m => m.TasaIVA, new { @class = "form-control" })
-            <br />
-        </div>
-        <div class="col-md-8" style="font-weight:600">
-            Total:
-        </div>
-        <div class="col-md-4">
-            @Html.TextBoxFor(m => m.Total, new { @class = "form-control col-md-1" })
-            <br />
-        </div>
-    </div>
-    
     <div class="col-md-12">
         <hr />
     </div>
