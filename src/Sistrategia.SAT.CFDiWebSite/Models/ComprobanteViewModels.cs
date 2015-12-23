@@ -25,6 +25,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             this.Emisor = new EmisorDetailViewModel();
             this.Receptor = new ReceptorDetailsViewModel();
             this.Conceptos = new List<ConceptoViewModel>();
+            this.Retenciones = new List<RetencionViewModel>();
+            this.Traslados = new List<TrasladoViewModel>();
         }
 
         public ComprobanteCreateViewModel(Comprobante comprobante) {
@@ -46,20 +48,46 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
                 }
             }
 
+            if (comprobante.Impuestos.Traslados != null && comprobante.Impuestos.Traslados.Count > 0)
+            {
+                this.Traslados = new List<TrasladoViewModel>();
+                foreach (Traslado traslado in comprobante.Impuestos.Traslados)
+                {
+                    this.Traslados.Add(new TrasladoViewModel(traslado));
+                }
+            }
+
+            if (comprobante.Impuestos.Retenciones != null && comprobante.Impuestos.Retenciones.Count > 0)
+            {
+                this.Retenciones = new List<RetencionViewModel>();
+                foreach (Retencion retencion in comprobante.Impuestos.Retenciones)
+                {
+                    this.Retenciones.Add(new RetencionViewModel(retencion));
+                }
+            }
+
             this.Serie = comprobante.Serie;
             this.Folio = comprobante.Folio;
 
             this.SubTotal = comprobante.SubTotal;
             this.Total = comprobante.Total;
+
+            this.TotalImpuestosRetenidos = comprobante.Impuestos.TotalImpuestosRetenidos;
+            this.TotalImpuestosTrasladados = comprobante.Impuestos.TotalImpuestosTrasladados;
         }
 
         public string Serie { get; set; }
         public string Folio { get; set; }
 
         public decimal SubTotal { get; set; }
-        public decimal IVA { get; set; }
-        public decimal TasaIVA { get; set; }
-        public decimal ISR { get; set; }
+
+        //public decimal IVA { get; set; }
+        //public decimal TasaIVA { get; set; }
+        //public decimal ISR { get; set; }
+
+        public decimal? TotalImpuestosRetenidos { get; set; }
+        public decimal? TotalImpuestosTrasladados { get; set; }
+
         public decimal Total { get; set; }
 
         public string FormaDePago { get; set; }
@@ -78,6 +106,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public IEnumerable<SelectListItem> Certificados { get; set; }
 
         public List<ConceptoViewModel> Conceptos { get; set; }
+        public List<TrasladoViewModel> Traslados { get; set; }
+        public List<RetencionViewModel> Retenciones { get; set; }
 
         public int EmisorId { get; set; }
         public int ReceptorId { get; set; }
@@ -277,5 +307,40 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public decimal ValorUnitario { get; set; }
         public decimal Importe { get; set; }
 
+    }
+
+    public class TrasladoViewModel
+    {
+
+        public TrasladoViewModel()
+        {
+        }
+
+        public TrasladoViewModel(Traslado traslado)
+        {            
+            this.Importe = traslado.Importe;
+            this.Impuesto = traslado.Impuesto;
+            this.Tasa = traslado.Tasa;
+        }
+
+        public decimal Importe { get; set; }
+        public string Impuesto { get; set; }
+        public decimal Tasa { get; set; }
+    }
+
+    public class RetencionViewModel
+    {
+        public RetencionViewModel()
+        {
+        }
+
+        public RetencionViewModel(Retencion retencion)
+        {
+            this.Importe = retencion.Importe;
+            this.Impuesto = retencion.Impuesto;
+        }
+
+        public decimal Importe { get; set; }
+        public string Impuesto { get; set; }
     }
 }

@@ -165,16 +165,33 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 }
             }
 
-            if (model.IVA > 0) {
-                comprobante.Impuestos = new Impuestos();
-                comprobante.Impuestos.TotalImpuestosTrasladados = model.IVA;
-                comprobante.Impuestos.Traslados = new List<Traslado>();
-                comprobante.Impuestos.Traslados.Add(new Traslado {
-                    Impuesto = "IVA",
-                    Tasa = model.TasaIVA, //  16.00M,
-                    Importe = model.IVA
+            
+        
+            comprobante.Impuestos = new Impuestos();            
+            comprobante.Impuestos.Traslados = new List<Traslado>();
+
+            foreach (var modelTraslado in model.Traslados)
+            {
+                comprobante.Impuestos.Traslados.Add(new Traslado
+                {
+                  Importe = modelTraslado.Importe,
+                  Impuesto  = modelTraslado.Impuesto,
+                  Tasa  = modelTraslado.Tasa,
                 });
             }
+
+            comprobante.Impuestos.Retenciones = new List<Retencion>();
+            foreach (var modelRetencion in model.Retenciones)
+            {
+                comprobante.Impuestos.Retenciones.Add(new Retencion
+                {
+                    Importe = modelRetencion.Importe,
+                    Impuesto = modelRetencion.Impuesto,
+                });
+            }
+
+            comprobante.Impuestos.TotalImpuestosRetenidos = model.TotalImpuestosRetenidos;
+            comprobante.Impuestos.TotalImpuestosTrasladados = model.TotalImpuestosTrasladados;
 
             comprobante.PublicKey = Guid.NewGuid();
 
