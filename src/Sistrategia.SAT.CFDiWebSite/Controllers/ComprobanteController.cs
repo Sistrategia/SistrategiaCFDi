@@ -18,6 +18,54 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             return View(model);
         }
 
+        public JsonResult GetIdByEmisores(string value)
+        {
+            try
+            {
+                var emisores = DBContext.Emisores.Where(x => x.Nombre.Contains(value) || x.RFC.Contains(value)).ToList();
+                List<dynamic> itemList = new List<dynamic>();
+                foreach (var emisor in emisores)
+                {
+                   var dynamicItems = new
+                    {
+                        id = emisor.EmisorId.ToString(),
+                        text = emisor.Nombre + " - " + emisor.RFC
+                    };
+                   itemList.Add(dynamicItems);
+                }
+                return Json(itemList.ToArray(), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                var result = new { resp = false, error = ex.Message };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult GetIdByReceptores(string value)
+        {
+            try
+            {
+                var receptores = DBContext.Receptores.Where(x => x.Nombre.Contains(value) || x.RFC.Contains(value)).ToList();
+                List<dynamic> itemList = new List<dynamic>();
+                foreach (var receptor in receptores)
+                {
+                    var dynamicItems = new
+                    {
+                        id = receptor.ReceptorId.ToString(),
+                        text = receptor.Nombre + " - " + receptor.RFC
+                    };
+                    itemList.Add(dynamicItems);
+                }
+                return Json(itemList.ToArray(), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                var result = new { resp = false, error = ex.Message };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public ActionResult Create() {
             var model = new ComprobanteCreateViewModel();
             model.Conceptos.Add(new ConceptoViewModel());

@@ -1,453 +1,226 @@
 ﻿@using Sistrategia.SAT.CFDiWebSite.Models
 @model ComprobanteCreateViewModel
 @{
-  ViewBag.Title = "Create";
+    ViewBag.Title = "Crear un comprobante";
 }
 
-<h1>Crear un comprobante</h1>
-
-@using (Html.BeginForm("Create", "Comprobante", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
-  @Html.AntiForgeryToken()
-  <h4>@LocalizedStrings.Account_RegisterSubtitle</h4>
-  <hr />
-  @Html.ValidationSummary("", new { @class = "text-danger" })
-
-  @*<div class="form-group">
-      @Html.LabelFor(m => m.Emisor.RFC, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Emisor.RFC, new { @class = "form-control" })
-      </div>
+<div class="col-md-12">
+    <h1 class="text-center">Crear un comprobante</h1>
+    <br />
+</div>
+<div class="col-md-12">
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Serie, new { @class = "col-md-1 control-label" })
+            <div class="col-md-1">
+                @Html.TextBoxFor(m => m.Serie, new { @class = "form-control" })
+            </div>
+            @Html.LabelFor(m => m.Folio, new { @class = "col-md-1  control-label" })
+            <div class="col-md-1">
+                @Html.TextBoxFor(m => m.Folio, new { @class = "form-control" })
+            </div>
+            @Html.LabelFor(m => m.LugarExpedicion, new { @class = "col-md-2  control-label" })
+            <div class="col-md-3">
+                @Html.TextBoxFor(m => m.LugarExpedicion, new { @class = "form-control" })
+            </div>
+            @Html.LabelFor(m => m.NumCtaPago, new { @class = "col-md-1  control-label" })
+            <div class="col-md-2">
+                @Html.TextBoxFor(m => m.NumCtaPago, new { @class = "form-control" })
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Emisor.Nombre, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Emisor.Nombre, new { @class = "form-control" })
-      </div>
+    <br />
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Emisor, new { @class = "col-md-1  control-label" })
+            <div class="col-md-5">
+                <select class="form-control" id="EmisorId" name="EmisorId"></select>
+            </div>
+            @Html.LabelFor(m => m.Receptor, new { @class = "col-md-1  control-label" })
+            <div class="col-md-5">
+                <select class="form-control" id="ReceptorId" name="ReceptorId"></select>
+            </div>
+        </div>       
     </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Emisor.RegimenFiscal, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Emisor.RegimenFiscal, new { @class = "form-control" })
-      </div>
-    </div>*@
-  @*<div class="form-group">
-    <div class="col-md-3 control-label">
-    </div>    
-    <div class="col-md-7">
-      <select id="Receptor" class="form-control"></select>
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Certificados, new { @class = "col-md-1  control-label" })
+            <div class="col-md-5">
+                @Html.DropDownListFor(m => m.CertificadoId, Model.Certificados, new { @class = "form-control" })
+            </div>
+            @Html.LabelFor(m => m.FormaDePago, new { @class = "col-md-1  control-label" })
+            <div class="col-md-5">
+                @Html.TextBoxFor(m => m.FormaDePago, new { @class = "form-control" })
+            </div>
+        </div>
     </div>
-  </div>*@
-
-
-  <div class="form-group">
-    @*<label class="col-md-3 control-label" for="Receptor_Nombre">Emisor</label>*@
-    @*@Html.LabelFor(m => m.Emisor.Nombre, new { @class = "col-md-3 control-label" })*@
-    @*<div class="col-md-7">
-      @Html.DropDownListFor(m => m.EmisorId, Model.Emisores)
-      <select id="Receptor" class="form-control"></select>
-    </div>*@
-  </div>
-
-  <div class="form-group">
-    <label class="col-md-2 control-label" for="Receptor_Nombre">Emisor</label>
-    @*<div class="col-md-10">
-      </div>*@
-    <div class="col-md-7">
-      @Html.DropDownListFor(m => m.EmisorId, Model.Emisores, new { @class = "form-control" })
-      @*<select id="Receptor" class="form-control"></select>*@
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(m => m.MetodoDePago, new { @class = "col-md-2  control-label" })
+            <div class="col-md-4">
+                @Html.TextBoxFor(m => m.MetodoDePago, new { @class = "form-control" })
+            </div>
+        </div>
     </div>
-
-    @Html.LabelFor(m => m.Serie, new { @class = "col-md-1 control-label" })
-    <div class="col-md-2">
-      @Html.TextBoxFor(m => m.Serie, new { @class = "form-control" })
-    </div>
-     
-    </div>
-
-  <div class="form-group">
-    <label class="col-md-2 control-label" for="Certificado_NumSerie">Certificado</label>
-    <div class="col-md-7">
-      @Html.DropDownListFor(m => m.CertificadoId, Model.Certificados, new { @class = "form-control" })     
-    </div>
-
-    @Html.LabelFor(m => m.Folio, new { @class = "col-md-1  control-label" })
-    <div class="col-md-2">
-      @Html.TextBoxFor(m => m.Folio, new { @class = "form-control" })
-    </div>
-
-   
-  </div>
-
-  @*<div class="form-group">
-    @Html.LabelFor(m => m.Emisor.RFC, new { @class = "col-md-2 control-label" })
-    <div class="col-md-10">
-      @Html.TextBoxFor(m => m.Emisor.RFC, new { @class = "form-control" })
-    </div>
-  </div>*@
-
-
-  <div class="form-group">
-    <label class="col-md-2 control-label" for="Receptor_Nombre">Receptor</label>
-    @*Receptor*@
-    <div class="col-md-7">
-      @Html.DropDownListFor(m => m.ReceptorId, Model.Receptores, new { @class = "form-control" })
-      @*<select id="Receptor" class="form-control"></select>*@
-    </div>
-
-    @Html.LabelFor(m => m.LugarExpedicion, new { @class = "col-md-1  control-label" })
-    <div class="col-md-2">
-      @Html.TextBoxFor(m => m.LugarExpedicion, new { @class = "form-control" })
-      @*<select id="Receptor" class="form-control"></select>*@
-    </div>
-
-  </div>
-
-  <div class="form-group">   
-    @Html.LabelFor(m => m.FormaDePago, new { @class = "col-md-2  control-label" })
-    <div class="col-md-7">
-    @Html.TextBoxFor(m => m.FormaDePago, new { @class = "form-control" })
-      @*<select id="Receptor" class="form-control"></select>*@
-    </div>
-  </div>
-
-  <div class="form-group">
-    @Html.LabelFor(m => m.MetodoDePago, new { @class = "col-md-2  control-label" })
-    <div class="col-md-7">
-      @Html.TextBoxFor(m => m.MetodoDePago, new { @class = "form-control" })
-      @*<select id="Receptor" class="form-control"></select>*@
-    </div>
-
-    @Html.LabelFor(m => m.NumCtaPago, new { @class = "col-md-1  control-label" })
-    <div class="col-md-2">
-      @Html.TextBoxFor(m => m.NumCtaPago, new { @class = "form-control" })     
-    </div>
-
-  </div>
-
-
-  //model.FormaDePago = "PAGO EN UNA SOLA EXHIBICION";
-  //model.MetodoDePago = "NO IDENTIFICADO";
-  //model.LugarExpedicion = "MATRIZ";
-  //model.TipoCambio = "1.00";
-
-
-  @*<div class="form-group">
-    @Html.LabelFor(m => m.Receptor.Nombre, new { @class = "col-md-3 control-label" })
-    <div class="col-md-7">
-      @*@Html.TextBoxFor(m => m.Receptor.Nombre, new { @class = "form-control"})*@
-      <select id="Receptor" class="form-control"></select> 
-    </div>
-  </div>
-  <div class="form-group">
-    @Html.LabelFor(m => m.Receptor.RFC, new { @class = "col-md-3 control-label" })
-    <div class="col-md-3">
-      @Html.TextBoxFor(m => m.Receptor.RFC, new { @class = "form-control" })
-    </div>
-  </div>*@
-  
-  @*<div class="form-group">
-      @Html.LabelFor(m => m.Receptor.RegimenFiscal, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.RegimenFiscal, new { @class = "form-control" })
-      </div>
-    </div>*@
-  
-  @*<div class="form-group">
-    <div class="col-md-offset-3 col-md-9">
-      <a class="btn btn-default" role="button" data-toggle="collapse" href="#domicilio" aria-expanded="false" aria-controls="domicilio">
-        Agregar Domicilio
-      </a>
-    </div>
-  </div>
-
-  <div class="collapse" id="domicilio">
-    <h3>@LocalizedStrings.Emisor_DetailsDomicilioFiscalTitle</h3>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.Calle, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.Calle, new { @class = "form-control" })
-      </div>
-    </div>
-
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.NoExterior, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.NoExterior, new { @class = "form-control" })
-      </div>
-    </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.NoInterior, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.NoInterior, new { @class = "form-control" })
-      </div>
-    </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.Colonia, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.Colonia, new { @class = "form-control" })
-      </div>
-    </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.Municipio, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.Municipio, new { @class = "form-control" })
-      </div>
-    </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.Localidad, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.Localidad, new { @class = "form-control" })
-      </div>
-    </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.Estado, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.Estado, new { @class = "form-control" })
-      </div>
-    </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.CodigoPostal, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.CodigoPostal, new { @class = "form-control" })
-      </div>
-    </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.Pais, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.Pais, new { @class = "form-control" })
-      </div>
-    </div>
-    <div class="form-group">
-      @Html.LabelFor(m => m.Receptor.Domicilio.Referencia, new { @class = "col-md-2 control-label" })
-      <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Receptor.Domicilio.Referencia, new { @class = "form-control" })
-      </div>
-    </div>
-  </div>*@
-
-
-  <h2>
-    Conceptos
-  </h2>
-
-  <div class="row" style="font-weight:600">
-    <div class="col-md-1">
-      Cantidad
-    </div>
-    <div class="col-md-1">
-      Unidad
-    </div>
-    <div class="col-md-1">
-      Identificación
-    </div>
-    <div class="col-md-6">
-      Descripción
-    </div>
-    <div class="col-md-1">
-      Precio
-      @*Valor Unitario*@
-    </div>
-    @*<div class="col-md-1">
-        Moneda
-      </div>
-      <div class="col-md-1">
-        Tasa
-      </div>*@
-    <div class="col-md-1">
-      Importe
-    </div>
-    <div class="col-md-1">
-    </div>
-  </div>
-  <div class="row">
     <div class="col-md-12">
-      <hr style="margin: 2px 0;" />
+        <h2 class="text-center">Conceptos</h2>
+        <br />
     </div>
-  </div>
-
-  for (var i = 0; i < Model.Conceptos.Count(); i++) {
-    //foreach (ConceptoViewModel concepto in Model.Conceptos) {
-    <div class="row form-group">
-      <div class="col-md-1">
-
-        @Html.TextBoxFor(c => c.Conceptos[i].Cantidad, new { @class = "form-control" })
-
-
-        @*@string.Format("{0:0.00}", concepto.Cantidad)*@
-      </div>
-      <div class="col-md-1">
-        @Html.TextBoxFor(c => c.Conceptos[i].Unidad, new { @class = "form-control" })
-        @*@concepto.Unidad*@
-      </div>
-      <div class="col-md-1">
-        @Html.TextBoxFor(c => c.Conceptos[i].NoIdentificacion, new { @class = "form-control" })
-        @*@concepto.NoIdentificacion*@
-      </div>
-      <div class="col-md-6">
-        @Html.TextBoxFor(c => c.Conceptos[i].Descripcion, new { @class = "form-control" })
-        @*@concepto.Descripcion*@
-      </div>
-      <div class="col-md-1">
-        @Html.TextBoxFor(c => c.Conceptos[i].ValorUnitario, new { @class = "form-control" })
-        @*@string.Format("{0:C}", concepto.ValorUnitario)*@
-        @*@string.Format("{0:0.00}", concepto.ValorUnitario)*@
-      </div>
-
-      @*<div class="col-md-1">
-          0%
-        </div>*@
-      <div class="col-md-1">
-        @Html.TextBoxFor(c => c.Conceptos[i].Importe, new { @class = "form-control" })
-        @*@string.Format("{0:C}", concepto.Importe)*@
-      </div>
-      <div class="col-md-1">
-        @*<a class="btn btn-primary" href="#">Agregar</a>*@
-      </div>
+    <div class="col-md-1">
+        <input type="text" class="form-control" data-bind="" placeholder="Cantidad">
     </div>
-  }
-
-  @*<div class="row">
-      <div class="col-md-12">
-        <hr style="margin: 2px 0;" />
-      </div>
-    </div>*@
-
-  <div class="row">
+    <div class="col-md-1">
+        <input type="text" class="form-control" data-bind="" placeholder="Unidad">
+    </div>
+    <div class="col-md-2">
+        <input type="text" class="form-control" data-bind="" placeholder="Identificación">
+    </div>
+    <div class="col-md-4">
+        <input type="text" class="form-control" data-bind="" placeholder="Descripción">
+    </div>
+    <div class="col-md-1">
+        <input type="text" class="form-control" data-bind="" placeholder="Precio">
+    </div>
+    <div class="col-md-1">
+        <input type="text" class="form-control" data-bind="" placeholder="Importe">
+    </div>
+    <div class="col-md-2">
+        <button type="button" class="btn btn-default form-control" data-bind="">Agregar</button>
+    </div>
+    <div class="col-md-12"><br /></div>
     <div class="col-md-12">
-      <hr style="margin: 56px 2px 0 0;" />
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">Cantidad</th>
+                    <th class="text-center">Unidad</th>
+                    <th class="text-center">Identificación</th>
+                    <th class="text-center">Descripción</th>
+                    <th class="text-center">Precio</th>
+                    <th class="text-center">Importe</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody data-bind=''>
+                <tr>                
+                </tr>
+            </tbody>
+        </table>
     </div>
-  </div>
-  <div class="row">
+    <div class="col-md-12">
+        <hr />
+    </div>
     <div class="col-md-8">
+        <div class="col-md-12">
+            <h3 class="text-center" style="margin-top: 0px;">Impuestos trasladados</h3>
+            <br />
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" data-bind="" placeholder="Impuesto">
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" data-bind="" placeholder="Tasa">
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" data-bind="" placeholder="Importe">
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-default form-control" data-bind="">Agregar</button>
+        </div>
+        <div class="col-md-12"><br /></div>
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">Impuesto</th>
+                        <th class="text-center">Tasa</th>
+                        <th class="text-center">Importe</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody data-bind=''>
+                    <tr></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-12">
+            <h3 class="text-center" style="margin-top: 0px;">Impuestos retenidos</h3>
+            <br />
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" data-bind="" placeholder="Impuesto">
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" data-bind="" placeholder="Importe">
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-default form-control" data-bind="">Agregar</button>
+        </div>
+        <div class="col-md-12"><br /></div>
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">Impuesto</th>
+                        <th class="text-center">Importe</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody data-bind=''>
+                    <tr></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="col-md-1" style="font-weight:600">
-      Subtotal:
-    </div>
-    <div class="col-md-1" style="font-weight:600">
-      
-    </div>
-    <div class="col-md-1">
-      @*@string.Format("{0:C}", Model.SubTotal)*@
-      @Html.TextBoxFor(m => m.SubTotal, new { @class = "form-control" })
-    </div>
-    <div class="col-md-1">
-    </div>
-  </div>
+    <div class="col-md-4">
+        <div class="col-md-8" style="font-weight:600">
+            Subtotal:
+        </div>
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.SubTotal, new { @class = "form-control" })
+            <br />
+        </div>
 
-  <div class="row">
-    <div class="col-md-8">
-    </div>
-    <div class="col-md-1" style="font-weight:600">
-      ISR:
-    </div>
-    <div class="col-md-1" style="font-weight:600">
-     
-    </div>
-    <div class="col-md-1">
-      @*@string.Format("{0:C}", Model.SubTotal)*@
-      @Html.TextBoxFor(m => m.ISR, new { @class = "form-control" })
-    </div>
-    <div class="col-md-1">
-    </div>
-  </div>
+        <div class="col-md-8" style="font-weight:600">
+            Total de impuestos trasladados:
+        </div>
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.ISR, new { @class = "form-control" })
+            <br />
+        </div>
 
-  <div class="row">
-    <div class="col-md-8">
+        <div class="col-md-8" style="font-weight:600">
+            Total de impuestos retenidos:
+        </div>
+        <div class="col-md-4" style="font-weight:600">
+            @Html.TextBoxFor(m => m.TasaIVA, new { @class = "form-control" })
+            <br />
+        </div>
+        <div class="col-md-8" style="font-weight:600">
+            Total:
+        </div>
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.Total, new { @class = "form-control col-md-1" })
+            <br />
+        </div>
     </div>
-    <div class="col-md-1" style="font-weight:600">
-      IVA:
+    
+    <div class="col-md-12">
+        <hr />
     </div>
-    <div class="col-md-1" style="font-weight:600">
-      @Html.TextBoxFor(m => m.TasaIVA, new { @class = "form-control" })
+    <div class="form-group">
+        <div class="col-md-offset-9 col-md-12">
+            <input type="submit" class="btn btn-lg btn-primary" value="@LocalizedStrings.SaveButton" />
+        </div>
     </div>
-   
-    <div class="col-md-1">
-      @*@string.Format("{0:C}", Model.SubTotal)*@
-      @Html.TextBoxFor(m => m.IVA, new { @class = "form-control" })
+    <div class="col-md-12">
+        <hr />
     </div>
-    <div class="col-md-1">
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-8">
-    </div>
-    <div class="col-md-1" style="font-weight:600">
-      Total:
-    </div>
-    <div class="col-md-1" style="font-weight:600">
-      
-    </div>
-    <div class="col-md-1">
-      @*@string.Format("{0:C}", Model.Total)*@
-      @Html.TextBoxFor(m => m.Total, new { @class = "form-control" })
-    </div>
-    <div class="col-md-1">
-    </div>
-  </div>
-
-  @*<div class="row">
-      <div class="col-md-12">
-        <p style="margin: 56px 2px 0 0;">
-        </p>
-      </div>
-    </div>*@
-
-
-
-  <hr />
-  <div class="form-group">
-    <div class="col-md-offset-2 col-md-10">
-      <input type="submit" class="btn btn-primary" value="@LocalizedStrings.SaveButton" />
-    </div>
-  </div>
-}
+</div>
 
 @section Scripts {
-  @Scripts.Render("~/bundles/select2")
-  <script type="text/javascript">
-    $(document).ready(function () {
-      $.fn.select2.defaults.set('language', 'es');
-
-      $("#Receptore").select2({
-        placeholder: "Seleccione",
-        minimumInputLength: 2,
-        allowClear: false,
-        //ajax: {
-        //    url: "https://api.github.com/search/repositories",
-        //    dataType: 'json',
-        //    delay: 250,
-        //    data: function (params) {
-        //        return {
-        //            q: params.term, // search term
-        //            page: params.page
-        //        };
-        //    },
-        //    processResults: function (data, params) {
-        //        // parse the results into the format expected by Select2
-        //        // since we are using custom formatting functions we do not need to
-        //        // alter the remote JSON data, except to indicate that infinite
-        //        // scrolling can be used
-        //        params.page = params.page || 1;
-
-        //        return {
-        //            results: data.items,
-        //            pagination: {
-        //                more: (params.page * 30) < data.total_count
-        //            }
-        //        };
-        //    },
-        //    cache: true
-        //},
-        //escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-        //minimumInputLength: 1,
-        //templateResult: formatRepo, // omitted for brevity, see the source of this page
-        //templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
-      });
-    });
-  </script>
+ @Scripts.Render("~/bundles/jqueryval")
+ @Scripts.Render("~/bundles/select2")
+ @Scripts.Render("~/bundles/KOAmplify")
+ <script src="@Url.Content("~/Scripts/ViewModelsKO/ComprobanteCreate.js")"></script>    
 }
-
-
-
-
