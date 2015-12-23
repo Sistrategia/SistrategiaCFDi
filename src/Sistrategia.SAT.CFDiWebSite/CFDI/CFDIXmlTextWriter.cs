@@ -112,23 +112,23 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                 writer.WriteAttributeString("sello", comprobante.Sello);
 
 
-            //switch (comprobante.Version) {
-            //    case "1.0":
-            //        // if (!string.IsNullOrEmpty(comprobante.NoAprobacion))
-            //        writer.WriteAttributeString("noAprobacion", comprobante.NoAprobacion);
-            //        break;
-            //    case "2.0":
-            //    case "2.2":
-            //        // if (!string.IsNullOrEmpty(comprobante.NoAprobacion))
-            //        writer.WriteAttributeString("noAprobacion", comprobante.NoAprobacion);
-            //        // if (!string.IsNullOrEmpty(comprobante.AnoAprobacion))
-            //        writer.WriteAttributeString("anoAprobacion", comprobante.AnoAprobacion);
-            //        break;
-            //    case "3.0":
-            //    case "3.2":
-            //    default:
-            //        break;
-            //}
+            switch (comprobante.Version) {
+                case "1.0":
+                    // if (!string.IsNullOrEmpty(comprobante.NoAprobacion))
+                    writer.WriteAttributeString("noAprobacion", comprobante.NoAprobacion);
+                    break;
+                case "2.0":
+                case "2.2":
+                    // if (!string.IsNullOrEmpty(comprobante.NoAprobacion))
+                    writer.WriteAttributeString("noAprobacion", comprobante.NoAprobacion);
+                    // if (!string.IsNullOrEmpty(comprobante.AnoAprobacion))
+                    writer.WriteAttributeString("anoAprobacion", comprobante.AnoAprobacion);
+                    break;
+                case "3.0":
+                case "3.2":
+                default:
+                    break;
+            }
 
             switch (comprobante.Version) {
                 case "1.0":
@@ -881,42 +881,58 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             writer.WriteEndElement();
 
 
+            if (comprobante.Complementos != null && comprobante.Complementos.Count > 0) {
+
+                 switch (comprobante.Version) {
+                    case "1.0":
+                        writer.WriteStartElement("Complemento");
+                        break;
+                    case "2.0":
+                    case "2.2":
+                        writer.WriteStartElement("Complemento", "http://www.sat.gob.mx/cfd/2");
+                        break;
+                    case "3.0":
+                    case "3.2":
+                    default:
+                        writer.WriteStartElement("cfdi", "Complemento", "http://www.sat.gob.mx/cfd/3");
+                        break;
+                }
+
+                 foreach (Complemento complemento in comprobante.Complementos) {
+
+                     if (complemento is TimbreFiscalDigital) {
+                         TimbreFiscalDigital timbre = (TimbreFiscalDigital)complemento;
+
+                         writer.WriteStartElement("tfd", "TimbreFiscalDigital", "http://www.sat.gob.mx/TimbreFiscalDigital");                           
+                         writer.WriteAttributeString("xmlns", "tfd", null, "http://www.sat.gob.mx/TimbreFiscalDigital");
+                         //writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
+                         writer.WriteAttributeString("xsi", "schemaLocation", "http://www.w3.org/2001/XMLSchema-instance", "http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/TimbreFiscalDigital/TimbreFiscalDigital.xsd");
+                    
+                         writer.WriteAttributeString("version", timbre.Version);
+                         writer.WriteAttributeString("UUID", timbre.UUID);
+                         writer.WriteAttributeString("FechaTimbrado", timbre.FechaTimbrado.ToString("yyyy-MM-ddTHH:mm:ss"));
+                         writer.WriteAttributeString("selloCFD", timbre.SelloCFD);
+                         writer.WriteAttributeString("noCertificadoSAT", timbre.NoCertificadoSAT);
+                         writer.WriteAttributeString("selloSAT", timbre.SelloSAT);
+
+                         writer.WriteEndElement();
+                     }
+
+                     //if (comprobante.Complemento.Nomina != null && comprobante.Complemento.NominaSpecified) {
+                     //    writer.WriteStartElement("nomina", "Nomina", "http://www.sat.gob.mx/cfd/3");
+                     //    writer.WriteAttributeString("version", comprobante.Complemento.Nomina.Version);
+                     //    writer.WriteEndElement();
+                     //    // end Nomina
+                     //}                     
+
+                 }
 
 
-            //if (comprobante.Complemento != null && (false
-            //   || (comprobante.Complemento.TimbreFiscalDigital != null && comprobante.Complemento.TimbreFiscalDigitalSpecified)
-            //   || (comprobante.Complemento.Nomina != null && comprobante.Complemento.NominaSpecified)
-            //    )) {
-
-            //    switch (comprobante.Version) {
-            //        case "1.0":
-            //            writer.WriteStartElement("Complemento");
-            //            break;
-            //        case "2.0":
-            //        case "2.2":
-            //            writer.WriteStartElement("Complemento", "http://www.sat.gob.mx/cfd/2");
-            //            break;
-            //        case "3.0":
-            //        case "3.2":
-            //        default:
-            //            writer.WriteStartElement("cfdi", "Complemento", "http://www.sat.gob.mx/cfd/3");
-            //            break;
-            //    }
-
-            //    if (comprobante.Complemento.Nomina != null && comprobante.Complemento.NominaSpecified) {
-
-            //        writer.WriteStartElement("nomina", "Nomina", "http://www.sat.gob.mx/cfd/3");
-
-            //        writer.WriteAttributeString("version", comprobante.Complemento.Nomina.Version);
+                writer.WriteEndElement();
+                // end Complemento
+            }
 
 
-            //        writer.WriteEndElement();
-            //        // end Nomina
-            //    }
-
-            //    writer.WriteEndElement();
-            //    // end Complemento
-            //}
 
 
 

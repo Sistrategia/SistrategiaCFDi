@@ -120,6 +120,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             if (comprobante == null)
                 throw new ArgumentNullException("comprobante");
 
+            this.PublicKey = comprobante.PublicKey;
+
             if (comprobante.Emisor != null) {
                 this.Emisor = new EmisorDetailViewModel(comprobante.Emisor);
             }
@@ -140,6 +142,11 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
             this.SubTotal = comprobante.SubTotal;
             this.Total = comprobante.Total;
+
+            this.CadenaOriginal = comprobante.GetCadenaOriginal();
+            //this.Sello = comprobante.Sello;
+            this.Sello = comprobante.Sello;
+            //this.Sello = comprobante.Sello;
         }
 
         public string Title {
@@ -148,11 +155,16 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             }
         }
 
+        public Guid PublicKey { get; set; }
+
         public string Serie { get; set; }
         public string Folio { get; set; }
 
         public decimal SubTotal { get; set; }
         public decimal Total { get; set; }
+
+        public string CadenaOriginal { get; set; }
+        public string Sello { get; set; }
 
         public EmisorDetailViewModel Emisor { get; set; }
         public ReceptorDetailsViewModel Receptor { get; set; }

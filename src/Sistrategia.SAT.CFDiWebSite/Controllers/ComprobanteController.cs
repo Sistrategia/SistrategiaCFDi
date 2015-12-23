@@ -5,6 +5,11 @@ using System.Web;
 using System.Web.Mvc;
 using Sistrategia.SAT.CFDiWebSite.Models;
 using Sistrategia.SAT.CFDiWebSite.CFDI;
+using System.Configuration;
+using System.IO;
+using System.IO.Compression;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Sistrategia.SAT.CFDiWebSite.Controllers
 {
@@ -203,6 +208,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             }
 
             comprobante.Fecha = DateTime.Parse("2014-09-03T13:39:03");
+
+            string cadenaOriginal = comprobante.GetCadenaOriginal();
+            comprobante.Sello = certificado.GetSello(cadenaOriginal);
+
             DBContext.Comprobantes.Add(comprobante);
             DBContext.SaveChanges();
 
@@ -307,6 +316,25 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             return Content(cadenaOriginal, "text/plain"); // cadenaOriginal; // File(ms, "text/xml");
         }
 
+        public ActionResult ShowCadenaOriginal64(string id) {
+
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            if (comprobante == null)
+                return HttpNotFound();
+
+            string cadenaOriginal = comprobante.GetCadenaOriginal();
+            Response.ClearContent();
+            Response.ContentType = "plain/text";
+            Response.ContentEncoding = System.Text.Encoding.UTF8;
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(cadenaOriginal);
+            return Content(System.Convert.ToBase64String(plainTextBytes), "text/plain"); // cadenaOriginal; // File(ms, "text/xml");
+        }
+
         public ActionResult ShowSello(string id) {
 
             Guid publicKey;
@@ -349,6 +377,26 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             return Content(certificado.GetSello(cadenaOriginal), "text/plain"); // cadenaOriginal; // File(ms, "text/xml");
         }
 
+        public ActionResult ShowSello64(string id) {
+
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            if (comprobante == null)
+                return HttpNotFound();
+
+            var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
+            string cadenaOriginal = comprobante.GetCadenaOriginal();
+            Response.ClearContent();
+            Response.ContentType = "plain/text";
+            Response.ContentEncoding = System.Text.Encoding.UTF8;
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(certificado.GetSello(cadenaOriginal));
+            return Content(System.Convert.ToBase64String(plainTextBytes), "text/plain"); // cadenaOriginal; // File(ms, "text/xml");
+        }
+
         public ActionResult ShowHtml(string id) {
             Guid publicKey;
             if (!Guid.TryParse(id, out publicKey))
@@ -368,6 +416,123 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 return View(comprobante.Emisor.ViewTemplate.CodeName, model);
             }
 
+            return View(model);
+        }
+
+        public ActionResult GetTimbre(string id) {
+
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            if (comprobante == null)
+                return HttpNotFound();
+
+            var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
+
+            
+
+            var model = new ComprobanteDetailViewModel(comprobante);
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult GetTimbre(string id, FormCollection formCollection) {
+        //public ActionResult GetTimbre(string id, ComprobanteDetailViewModel model) {
+        //public ActionResult GetTimbre(ComprobanteDetailViewModel model) {
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            if (comprobante == null)
+                return HttpNotFound();
+
+            var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
+
+            string user = ConfigurationManager.AppSettings["CfdiServiceUser"];
+            string password = ConfigurationManager.AppSettings["CfdiServicePassword"];
+
+            var model = new ComprobanteDetailViewModel(comprobante);
+
+            string invoiceFileName = DateTime.Now.ToString("yyyyMMddHmmss_" + comprobante.PublicKey.ToString("N"));
+            //comprobante.WriteXml(invoicesPath + invoiceFileName + "_send.xml");
+
+            
+
+            //manager.GetCFDI(user, password, comprobante, certificado);
+            
+
+            //// Comprimir y enviar al servicio web
+            //string pathFile = invoicesPath + invoiceFileName + "_send.xml";
+            //Ionic.Zip.ZipFile zip = new Ionic.Zip.ZipFile();
+            //string saveToFilePath = invoicesPath + invoiceFileName + "_send.zip";
+            //zip.AddFile(pathFile, "");
+            //zip.Save(saveToFilePath);
+
+            //string filePath = invoicesPath + invoiceFileName + "_send.zip";
+            //string responsePath = invoicesPath + invoiceFileName + "_response.zip";
+
+            
+
+            try {
+
+                SATManager manager = new SATManager();
+                bool response = manager.GetCFDI(user, password, comprobante);
+
+                //byte[] response = Sistrategia.Server.SAT.SATManager.GetCFDI(user, password, file);
+
+            //    byte[] response = Sistrategia.Server.SAT.SATManager.GetCFDI(user, password, filePath, responsePath);
+            //    Ionic.Zip.ZipFile zipR = Ionic.Zip.ZipFile.Read(invoicesPath + invoiceFileName + "_response.zip");
+            //    zipR.ExtractAll(invoicesPath, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);
+            //    zipR.Dispose();
+            //    //return File(invoicesPath + "SIGN_" + invoiceFileName + "_send.xml", "text/xml");
+
+            //    /* Insert Timbre */
+            //    System.Xml.XmlDocument invoice = new System.Xml.XmlDocument();
+            //    invoice.Load(invoicesPath + "SIGN_" + invoiceFileName + "_send.xml");
+            //    System.Xml.XmlNamespaceManager nsmgr = new System.Xml.XmlNamespaceManager(invoice.NameTable);
+            //    nsmgr.AddNamespace("cfdi", "http://www.sat.gob.mx/cfd/3");
+            //    nsmgr.AddNamespace("tfd", "http://www.sat.gob.mx/TimbreFiscalDigital");
+            //    System.Xml.XmlNode timbre = invoice.SelectSingleNode("//tfd:TimbreFiscalDigital", nsmgr);
+
+            //    Sistrategia.Server.SAT.CFDI.Comprobante comprobante2 = Sistrategia.Server.SAT.SATManager.GetComprobante(Guid.Parse(post["comprobanteId"]));
+            //    comprobante2.Complemento = new Sistrategia.Server.SAT.CFDI.ComprobanteComplemento();
+            //    comprobante2.Complemento.TimbreFiscalDigitalSpecified = true;
+            //    comprobante2.Complemento.TimbreFiscalDigital = new Sistrategia.Server.SAT.CFDI.ComprobanteTimbre();
+            //    comprobante2.Complemento.TimbreFiscalDigital.SatTimbreId = Guid.NewGuid();
+            //    comprobante2.Complemento.TimbreFiscalDigital.Version = timbre.Attributes.GetNamedItem("version").Value.ToString();
+            //    comprobante2.Complemento.TimbreFiscalDigital.UUID = timbre.Attributes.GetNamedItem("UUID").Value.ToString();
+            //    comprobante2.Complemento.TimbreFiscalDigital.FechaTimbrado = DateTime.Parse(timbre.Attributes.GetNamedItem("FechaTimbrado").Value);
+            //    comprobante2.Complemento.TimbreFiscalDigital.SelloCFD = timbre.Attributes.GetNamedItem("selloCFD").Value.ToString();
+            //    comprobante2.Complemento.TimbreFiscalDigital.NoCertificadoSAT = timbre.Attributes.GetNamedItem("noCertificadoSAT").Value.ToString();
+            //    comprobante2.Complemento.TimbreFiscalDigital.SelloSAT = timbre.Attributes.GetNamedItem("selloSAT").Value.ToString();
+
+            //    string invoiceXml = string.Empty;
+            //    StreamReader streamReader = new StreamReader(invoicesPath + "SIGN_" + invoiceFileName + "_send.xml");
+            //    invoiceXml = streamReader.ReadToEnd();
+            //    streamReader.Close();
+
+            //    if (Sistrategia.Server.SAT.SATManager.InsertComprobanteTimbre(comprobante2)) {
+            //        string QRCODE = "?re=" + comprobante.Emisor.RFC + "&rr=" + comprobante.Receptor.RFC + "&tt=" + comprobante.Total + "&id=" + comprobante2.Complemento.TimbreFiscalDigital.UUID;
+            //        TempData["msg2"] = "¡Timbrado exitoso!";
+            //    }
+            //    /* Insert Timbre */
+
+            //    return RedirectToAction("View", "Invoice", new { id = comprobante.ComprobanteId.ToString() });
+            }
+            catch (Exception ex) {
+                TempData["msg"] = ex.Message.ToString();
+                return View(model);
+            //    return View();
+            }
+
+
+
+            
             return View(model);
         }
     }
