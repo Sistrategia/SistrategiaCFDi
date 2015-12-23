@@ -247,6 +247,25 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             return Content(cadenaOriginal, "text/plain"); // cadenaOriginal; // File(ms, "text/xml");
         }
 
+        public ActionResult ShowCadenaOriginal64(string id) {
+
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            if (comprobante == null)
+                return HttpNotFound();
+
+            string cadenaOriginal = comprobante.GetCadenaOriginal();
+            Response.ClearContent();
+            Response.ContentType = "plain/text";
+            Response.ContentEncoding = System.Text.Encoding.UTF8;
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(cadenaOriginal);
+            return Content(System.Convert.ToBase64String(plainTextBytes), "text/plain"); // cadenaOriginal; // File(ms, "text/xml");
+        }
+
         public ActionResult ShowSello(string id) {
 
             Guid publicKey;
@@ -289,6 +308,26 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             return Content(certificado.GetSello(cadenaOriginal), "text/plain"); // cadenaOriginal; // File(ms, "text/xml");
         }
 
+        public ActionResult ShowSello64(string id) {
+
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            if (comprobante == null)
+                return HttpNotFound();
+
+            var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
+            string cadenaOriginal = comprobante.GetCadenaOriginal();
+            Response.ClearContent();
+            Response.ContentType = "plain/text";
+            Response.ContentEncoding = System.Text.Encoding.UTF8;
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(certificado.GetSello(cadenaOriginal));
+            return Content(System.Convert.ToBase64String(plainTextBytes), "text/plain"); // cadenaOriginal; // File(ms, "text/xml");
+        }
+
         public ActionResult ShowHtml(string id) {
             Guid publicKey;
             if (!Guid.TryParse(id, out publicKey))
@@ -324,6 +363,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
             var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
 
+            
+
             var model = new ComprobanteDetailViewModel(comprobante);
             return View(model);
         }
@@ -351,7 +392,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             string invoiceFileName = DateTime.Now.ToString("yyyyMMddHmmss_" + comprobante.PublicKey.ToString("N"));
             //comprobante.WriteXml(invoicesPath + invoiceFileName + "_send.xml");
 
+            
 
+            //manager.GetCFDI(user, password, comprobante, certificado);
+            
 
             //// Comprimir y enviar al servicio web
             //string pathFile = invoicesPath + invoiceFileName + "_send.xml";
@@ -367,64 +411,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
             try {
 
-                using (MemoryStream ms = new MemoryStream()) {
-                    using (MemoryStream zipMs = new MemoryStream()) {
-                        CFDIXmlTextWriter writer =
-                            new CFDIXmlTextWriter(comprobante, ms, System.Text.Encoding.UTF8);
-                        writer.WriteXml();
-                        ms.Position = 0;
-                        // writer.Close(); // NO porque cierra a ms
-
-                        using (ZipArchive zip = new ZipArchive(zipMs, ZipArchiveMode.Create, true)) {
-                            var entry = zip.CreateEntry(invoiceFileName + "_send.xml");
-                            using (Stream s = entry.Open()) {
-                                ms.CopyTo(s);
-                            }
-                            zipMs.Flush();
-                        }
-
-
-                        CloudStorageAccount account = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["AzureDefaultStorageConnectionString"]);
-                        CloudBlobClient client = account.CreateCloudBlobClient();
-
-                        // Create the blob storage container 
-                        CloudBlobContainer container = client.GetContainerReference(ConfigurationManager.AppSettings["AzureDefaultStorage"]);
-                        // container.CreateIfNotExists();
-
-                        // Create the blob in the container 
-                        CloudBlockBlob blob = container.GetBlockBlobReference(invoiceFileName + "_send.zip");
-
-                        //zipMs.Flush();
-
-                        //zip.Dispose();
-                        zipMs.Position = 0;
-
-                        // Upload the zip and store it in the blob 
-                        // using (FileStream fs = zip zipFile.OpenRead())
-                        blob.UploadFromStream(zipMs);
-                        //zipMs.Close();
-                        blob.Properties.ContentType = "application/x-zip-compressed";
-                        blob.SetMetadata();
-                        blob.SetProperties();
-                        // zip.Dispose();
-                        //zipMs.Dispose();
-
-
-
-
-                        //byte[] file = null;
-                        //int lenght = (int)ms.Length;
-
-                        //file = new byte[lenght];
-                        //int count;
-                        //int sum = 0;
-
-                        //while ((count = ms.Read(file, sum, lenght - sum)) > 0)
-                        //    sum += count;
-
-                        // ms.Close();
-                    } //zipMs.Close();
-                } // ms.Close();
+                SATManager manager = new SATManager();
+                bool response = manager.GetCFDI(user, password, comprobante);
 
                 //byte[] response = Sistrategia.Server.SAT.SATManager.GetCFDI(user, password, file);
 

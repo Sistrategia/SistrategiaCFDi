@@ -8,6 +8,12 @@ using Sistrategia.SAT.CFDiWebSite.Messaging;
 using Sistrategia.SAT.CFDiWebSite.Data;
 using System.Drawing;
 using MessagingToolkit.QRCode.Codec;
+using System.IO;
+using Sistrategia.SAT.CFDiWebSite.CFDI;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+using System.Configuration;
+using System.IO.Compression;
 //using MessagingToolkit.Barcode.QRCode;
 
 namespace Sistrategia.SAT.CFDiWebSite
@@ -77,9 +83,135 @@ namespace Sistrategia.SAT.CFDiWebSite
 
         #endregion
 
+
+
+
+
+        public bool GetCFDI(string user, string password, CFDI.Comprobante comprobante) {
+            //throw new NotImplementedException();
+
+            string invoiceFileName = DateTime.Now.ToString("yyyyMMddHmmss_" + comprobante.PublicKey.ToString("N"));
+            byte[] sendFileBytes;
+            byte[] responseFileBytes;
+
+
+            CloudStorageAccount account = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["AzureDefaultStorageConnectionString"]);
+            CloudBlobClient client = account.CreateCloudBlobClient();
+            CloudBlobContainer container = client.GetContainerReference(ConfigurationManager.AppSettings["AzureDefaultStorage"]);
+
+            try {
+
+                
+
+
+                using (MemoryStream ms = new MemoryStream()) {
+                    using (MemoryStream zipMs = new MemoryStream()) {
+                        CFDIXmlTextWriter writer =
+                            new CFDIXmlTextWriter(comprobante, ms, System.Text.Encoding.UTF8);
+                        writer.WriteXml();
+                        ms.Position = 0;
+
+                        using (ZipArchive zip = new ZipArchive(zipMs, ZipArchiveMode.Create, true)) {
+                            var entry = zip.CreateEntry(invoiceFileName + "_send.xml");
+                            using (Stream s = entry.Open()) {
+                                ms.CopyTo(s);
+                            }
+                            zipMs.Flush();
+                        } // zip.Dispose() => Close();
+
+                       
+                        // container.CreateIfNotExists();
+                        CloudBlockBlob blob = container.GetBlockBlobReference(invoiceFileName + "_send.zip");
+                        zipMs.Position = 0;
+
+                        blob.UploadFromStream(zipMs);
+                        blob.Properties.ContentType = "application/x-zip-compressed";
+                        blob.SetMetadata();
+                        blob.SetProperties();
+
+                        zipMs.Position = 0;
+                        sendFileBytes = zipMs.ToArray();
+                    } // zipMs.Dispose() => Close();
+                } // ms.Dispose() => Close();
+
+                CFDI.EDICOM.TestCFDI.CFDiService webService = new CFDI.EDICOM.TestCFDI.CFDiService();
+                responseFileBytes = webService.getCfdiTest(user, password, sendFileBytes);
+
+                CloudBlockBlob blob2 = container.GetBlockBlobReference(invoiceFileName + "_response.zip");
+                //zipMs.Position = 0;
+
+                blob2.UploadFromByteArray(responseFileBytes, 0, responseFileBytes.Length); // .UploadFromStream(zipMs);
+                blob2.Properties.ContentType = "application/x-zip-compressed";
+                blob2.SetMetadata();
+                blob2.SetProperties();
+
+                using (var responseStream = new MemoryStream(responseFileBytes)) {
+                    using (var archive = new ZipArchive(responseStream, ZipArchiveMode.Read, true)) {
+                        var fileInArchive = archive.Entries[0]; //
+                        using (var entryStream = fileInArchive.Open()) {
+                            using (var reader = new StreamReader(entryStream)) {
+                                string output = reader.ReadToEnd();
+
+
+                                System.Xml.XmlDocument invoice = new System.Xml.XmlDocument();
+                                invoice.LoadXml(output);
+                                
+                                System.Xml.XmlNamespaceManager nsmgr = new System.Xml.XmlNamespaceManager(invoice.NameTable);
+                                nsmgr.AddNamespace("cfdi", "http://www.sat.gob.mx/cfd/3");
+                                nsmgr.AddNamespace("tfd", "http://www.sat.gob.mx/TimbreFiscalDigital");
+                                System.Xml.XmlNode timbre = invoice.SelectSingleNode("//tfd:TimbreFiscalDigital", nsmgr);
+
+                                TimbreFiscalDigital complemento = new TimbreFiscalDigital();
+
+                                complemento.Version = timbre.Attributes.GetNamedItem("version").Value.ToString();
+                                complemento.UUID = timbre.Attributes.GetNamedItem("UUID").Value.ToString();
+                                complemento.FechaTimbrado = DateTime.Parse(timbre.Attributes.GetNamedItem("FechaTimbrado").Value);
+                                complemento.SelloCFD = timbre.Attributes.GetNamedItem("selloCFD").Value.ToString();
+                                complemento.NoCertificadoSAT = timbre.Attributes.GetNamedItem("noCertificadoSAT").Value.ToString();
+                                complemento.SelloSAT = timbre.Attributes.GetNamedItem("selloSAT").Value.ToString();
+
+                                if (comprobante.Complementos == null)
+                                    comprobante.Complementos = new List<Complemento>();
+                                comprobante.Complementos.Add(complemento);
+                                //Complemento complemento = new Complemento();
+                                //complemento.
+
+
+                                //           //    Sistrategia.Server.SAT.CFDI.Comprobante comprobante2 = Sistrategia.Server.SAT.SATManager.GetComprobante(Guid.Parse(post["comprobanteId"]));
+                                //           //    comprobante2.Complemento = new Sistrategia.Server.SAT.CFDI.ComprobanteComplemento();
+                                //           //    comprobante2.Complemento.TimbreFiscalDigitalSpecified = true;
+                                //           //    comprobante2.Complemento.TimbreFiscalDigital = new Sistrategia.Server.SAT.CFDI.ComprobanteTimbre();
+                                //           //    comprobante2.Complemento.TimbreFiscalDigital.SatTimbreId = Guid.NewGuid();
+                                //           //    comprobante2.Complemento.TimbreFiscalDigital.Version = timbre.Attributes.GetNamedItem("version").Value.ToString();
+                                //           //    comprobante2.Complemento.TimbreFiscalDigital.UUID = timbre.Attributes.GetNamedItem("UUID").Value.ToString();
+                                //           //    comprobante2.Complemento.TimbreFiscalDigital.FechaTimbrado = DateTime.Parse(timbre.Attributes.GetNamedItem("FechaTimbrado").Value);
+                                //           //    comprobante2.Complemento.TimbreFiscalDigital.SelloCFD = timbre.Attributes.GetNamedItem("selloCFD").Value.ToString();
+                                //           //    comprobante2.Complemento.TimbreFiscalDigital.NoCertificadoSAT = timbre.Attributes.GetNamedItem("noCertificadoSAT").Value.ToString();
+                                //           //    comprobante2.Complemento.TimbreFiscalDigital.SelloSAT = timbre.Attributes.GetNamedItem("selloSAT").Value.ToString();
+
+                            }
+                        }
+                        //using (var fileToCompressStream = new MemoryStream(fileBytes)) {
+                        //    fileToCompressStream.CopyTo(entryStream);
+                        //}
+                    }                    
+                }
+
+
+
+            }
+            catch (Exception ex){
+                CloudBlockBlob blob2 = container.GetBlockBlobReference(invoiceFileName + "_exception.txt");
+                //zipMs.Position = 0;
+                blob2.UploadText(ex.ToString());
+                blob2.Properties.ContentType = "text/plain";
+                blob2.SetMetadata();
+                blob2.SetProperties();
+            }
+
+            return true;
+        }
         
-
-
     }
 
 
@@ -137,6 +269,136 @@ namespace Sistrategia.SAT.CFDiWebSite
     }
 
 }
+
+
+#region Another Code To review
+
+ ////// Comprimir y enviar al servicio web
+ //           //string pathFile = invoicesPath + invoiceFileName + "_send.xml";
+ //           //Ionic.Zip.ZipFile zip = new Ionic.Zip.ZipFile();
+ //           //string saveToFilePath = invoicesPath + invoiceFileName + "_send.zip";
+ //           //zip.AddFile(pathFile, "");
+ //           //zip.Save(saveToFilePath);
+
+ //           //string filePath = invoicesPath + invoiceFileName + "_send.zip";
+ //           //string responsePath = invoicesPath + invoiceFileName + "_response.zip";
+
+            
+
+ //           try {
+
+ //               using (MemoryStream ms = new MemoryStream()) {
+ //                   using (MemoryStream zipMs = new MemoryStream()) {
+ //                       CFDIXmlTextWriter writer =
+ //                           new CFDIXmlTextWriter(comprobante, ms, System.Text.Encoding.UTF8);
+ //                       writer.WriteXml();
+ //                       ms.Position = 0;
+ //                       // writer.Close(); // NO porque cierra a ms
+
+ //                       using (ZipArchive zip = new ZipArchive(zipMs, ZipArchiveMode.Create, true)) {
+ //                           var entry = zip.CreateEntry(invoiceFileName + "_send.xml");
+ //                           using (Stream s = entry.Open()) {
+ //                               ms.CopyTo(s);
+ //                           }
+ //                           zipMs.Flush();
+ //                       }
+
+
+ //                       CloudStorageAccount account = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["AzureDefaultStorageConnectionString"]);
+ //                       CloudBlobClient client = account.CreateCloudBlobClient();
+
+ //                       // Create the blob storage container 
+ //                       CloudBlobContainer container = client.GetContainerReference(ConfigurationManager.AppSettings["AzureDefaultStorage"]);
+ //                       // container.CreateIfNotExists();
+
+ //                       // Create the blob in the container 
+ //                       CloudBlockBlob blob = container.GetBlockBlobReference(invoiceFileName + "_send.zip");
+
+ //                       //zipMs.Flush();
+
+ //                       //zip.Dispose();
+ //                       zipMs.Position = 0;
+
+ //                       // Upload the zip and store it in the blob 
+ //                       // using (FileStream fs = zip zipFile.OpenRead())
+ //                       blob.UploadFromStream(zipMs);
+ //                       //zipMs.Close();
+ //                       blob.Properties.ContentType = "application/x-zip-compressed";
+ //                       blob.SetMetadata();
+ //                       blob.SetProperties();
+ //                       // zip.Dispose();
+ //                       //zipMs.Dispose();
+
+
+
+
+ //                       //byte[] file = null;
+ //                       //int lenght = (int)ms.Length;
+
+ //                       //file = new byte[lenght];
+ //                       //int count;
+ //                       //int sum = 0;
+
+ //                       //while ((count = ms.Read(file, sum, lenght - sum)) > 0)
+ //                       //    sum += count;
+
+ //                       // ms.Close();
+ //                   } //zipMs.Close();
+ //               } // ms.Close();
+
+ //               //byte[] response = Sistrategia.Server.SAT.SATManager.GetCFDI(user, password, file);
+
+ //           //    byte[] response = Sistrategia.Server.SAT.SATManager.GetCFDI(user, password, filePath, responsePath);
+ //           //    Ionic.Zip.ZipFile zipR = Ionic.Zip.ZipFile.Read(invoicesPath + invoiceFileName + "_response.zip");
+ //           //    zipR.ExtractAll(invoicesPath, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);
+ //           //    zipR.Dispose();
+ //           //    //return File(invoicesPath + "SIGN_" + invoiceFileName + "_send.xml", "text/xml");
+
+ //           //    /* Insert Timbre */
+ //           //    System.Xml.XmlDocument invoice = new System.Xml.XmlDocument();
+ //           //    invoice.Load(invoicesPath + "SIGN_" + invoiceFileName + "_send.xml");
+ //           //    System.Xml.XmlNamespaceManager nsmgr = new System.Xml.XmlNamespaceManager(invoice.NameTable);
+ //           //    nsmgr.AddNamespace("cfdi", "http://www.sat.gob.mx/cfd/3");
+ //           //    nsmgr.AddNamespace("tfd", "http://www.sat.gob.mx/TimbreFiscalDigital");
+ //           //    System.Xml.XmlNode timbre = invoice.SelectSingleNode("//tfd:TimbreFiscalDigital", nsmgr);
+
+ //           //    Sistrategia.Server.SAT.CFDI.Comprobante comprobante2 = Sistrategia.Server.SAT.SATManager.GetComprobante(Guid.Parse(post["comprobanteId"]));
+ //           //    comprobante2.Complemento = new Sistrategia.Server.SAT.CFDI.ComprobanteComplemento();
+ //           //    comprobante2.Complemento.TimbreFiscalDigitalSpecified = true;
+ //           //    comprobante2.Complemento.TimbreFiscalDigital = new Sistrategia.Server.SAT.CFDI.ComprobanteTimbre();
+ //           //    comprobante2.Complemento.TimbreFiscalDigital.SatTimbreId = Guid.NewGuid();
+ //           //    comprobante2.Complemento.TimbreFiscalDigital.Version = timbre.Attributes.GetNamedItem("version").Value.ToString();
+ //           //    comprobante2.Complemento.TimbreFiscalDigital.UUID = timbre.Attributes.GetNamedItem("UUID").Value.ToString();
+ //           //    comprobante2.Complemento.TimbreFiscalDigital.FechaTimbrado = DateTime.Parse(timbre.Attributes.GetNamedItem("FechaTimbrado").Value);
+ //           //    comprobante2.Complemento.TimbreFiscalDigital.SelloCFD = timbre.Attributes.GetNamedItem("selloCFD").Value.ToString();
+ //           //    comprobante2.Complemento.TimbreFiscalDigital.NoCertificadoSAT = timbre.Attributes.GetNamedItem("noCertificadoSAT").Value.ToString();
+ //           //    comprobante2.Complemento.TimbreFiscalDigital.SelloSAT = timbre.Attributes.GetNamedItem("selloSAT").Value.ToString();
+
+ //           //    string invoiceXml = string.Empty;
+ //           //    StreamReader streamReader = new StreamReader(invoicesPath + "SIGN_" + invoiceFileName + "_send.xml");
+ //           //    invoiceXml = streamReader.ReadToEnd();
+ //           //    streamReader.Close();
+
+ //           //    if (Sistrategia.Server.SAT.SATManager.InsertComprobanteTimbre(comprobante2)) {
+ //           //        string QRCODE = "?re=" + comprobante.Emisor.RFC + "&rr=" + comprobante.Receptor.RFC + "&tt=" + comprobante.Total + "&id=" + comprobante2.Complemento.TimbreFiscalDigital.UUID;
+ //           //        TempData["msg2"] = "¡Timbrado exitoso!";
+ //           //    }
+ //           //    /* Insert Timbre */
+
+ //           //    return RedirectToAction("View", "Invoice", new { id = comprobante.ComprobanteId.ToString() });
+ //           }
+ //           catch (Exception ex) {
+ //               TempData["msg"] = ex.Message.ToString();
+ //               return View(model);
+ //           //    return View();
+ //           }
+
+
+
+            
+ //           return View(model);
+
+#endregion
 
 #region Code To Review
 
