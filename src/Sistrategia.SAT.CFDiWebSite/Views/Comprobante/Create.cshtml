@@ -151,10 +151,10 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <input type="text" class="form-control" data-bind="value: TrasladosImporte" placeholder="Tasa">
+              <input type="text" class="form-control" data-bind="value: TrasladosTasa" placeholder="Tasa">
             </div>
             <div class="col-md-3">
-                <input type="text" class="form-control" data-bind="value: TrasladosTasa" placeholder="Importe">
+              <input type="text" class="form-control" data-bind="value: TrasladosImporte" placeholder="Importe">
             </div>
             <div class="col-md-2">
                 <button type="button" class="btn btn-default form-control" data-bind="enable: (TrasladosImpuesto().length > 0 && TrasladosImporte().length > 0 && TrasladosTasa().length > 0), click: addTraslado">Agregar</button>
@@ -346,7 +346,8 @@
          });
          // #endregion Select2 JS
         
-         $("#danger").hide();
+         $("#danger").hide();
+
          var initial_model = new InitialModel('InitialModel');
          var conceptos_model = new ConceptosModel('ConceptosModel');
          var impuestos_model = new ImpuestosModel('ImpuestosModel');
@@ -371,7 +372,8 @@
                  var traslados = new Array();
                  var retenciones = new Array();
 
-                 if (conceptos_model.Items().length > 0) {                     for (var i = 0; i < conceptos_model.Items().length; i++) {
+                 if (conceptos_model.Items().length > 0) {
+                     for (var i = 0; i < conceptos_model.Items().length; i++) {
                          conceptos.push({
                              Cantidad: conceptos_model.Items()[i].ConceptoCantidad(),
                              Unidad: conceptos_model.Items()[i].ConceptoUnidad(),
@@ -380,7 +382,8 @@
                              ValorUnitario: conceptos_model.Items()[i].ConceptoValorUnitario(),
                              Importe: conceptos_model.Items()[i].ConceptoImporte()
                          });              
-                     }                 }
+                     }
+                 }
 
                  if (impuestos_model.TrasladosItems().length > 0) {
                      for (var i = 0; i < impuestos_model.TrasladosItems().length; i++) {

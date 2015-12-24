@@ -14,26 +14,29 @@
             return result;
         };
     })(ko);
-var InitialModel = function (modelId) {
+
+var InitialModel = function (modelId) {
     var self = this;
     self.EmisorId = ko.observable("");
     self.ReceptorId = ko.observable("");
     self.Serie = ko.observable("");
     self.Folio = ko.observable("");
-    self.FormaDePago = ko.observable("Pago en una sola exhibición");
+    self.FormaDePago = ko.observable("PAGO EN UNA SOLA EXHIBICION");
     self.MetodoDePago = ko.observable("");
-    self.LugarExpedicion = ko.observable("Matriz");
+    self.LugarExpedicion = ko.observable("MATRIZ");
     self.NumCtaPago = ko.observable("");
     self.CertificadoId = ko.observable("");
     self.IsRequiredNumCtaPago = ko.observable(false);
 
     self.MetodoDePago.subscribe(function (newValue) {
-        if (newValue == 'Efectivo' || newValue == 'No identificado' || newValue == '')
+        if (newValue == 'Efectivo' || newValue == 'No Identificado' || newValue == '')
             self.IsRequiredNumCtaPago(false);
         else
             self.IsRequiredNumCtaPago(true);
     });
-}var Concepto = function () {
+}
+
+var Concepto = function () {
     this.ConceptoCantidad = null;
     this.ConceptoUnidad = null;
     this.ConceptoNoIdentificacion = null;
@@ -41,17 +44,21 @@
     this.ConceptoValorUnitario = null;
     this.ConceptoImporte = null;
     this.ConceptoOrdinal = null;
-}var ConceptosModel = function (modelId) {
+}
+
+var ConceptosModel = function (modelId) {
     var self = this;
     self.Cantidad = ko.observable("");
-    self.Unidad = ko.observable("");
+    self.Unidad = ko.observable("pza");
     self.NoIdentificacion = ko.observable("");
     self.Descripcion = ko.observable("");
     self.ValorUnitario = ko.observable("");
     self.Importe = ko.observable("");
 
     self.Ordinal = ko.observable(0);
-    self.Items = ko.observableArray([]);    self.HasItems = ko.observable(false);
+    self.Items = ko.observableArray([]);
+    self.HasItems = ko.observable(false);
+
     self.addItem = function () {
         if (self.Cantidad() != "" && self.Unidad() != "" && self.NoIdentificacion() != "" && self.Descripcion() != "" && self.ValorUnitario() != "") {
             self.Ordinal(self.Ordinal() + 1);
@@ -69,7 +76,7 @@
             self.Items.push(concepto);
             
             self.Cantidad("");
-            self.Unidad("");
+            self.Unidad("pza");
             self.NoIdentificacion("");
             self.Descripcion("");
             self.ValorUnitario("");
@@ -109,9 +116,9 @@ var Retencion = function () {
 
 var ImpuestosModel = function (modelId) {
     var self = this;
-    self.TrasladosImpuesto = ko.observable("");
+    self.TrasladosImpuesto = ko.observable("IVA");
     self.TrasladosImporte = ko.observable("");
-    self.TrasladosTasa = ko.observable("");
+    self.TrasladosTasa = ko.observable("16.00");
 
     self.RetencionesImpuesto = ko.observable("");
     self.RetencionesImporte = ko.observable("");
@@ -122,10 +129,12 @@ var ImpuestosModel = function (modelId) {
     self.Total = ko.observable(0);
 
     self.TrasladosOrdinal = ko.observable(0);
-    self.TrasladosItems = ko.observableArray([]);    self.TrasladosHasItems = ko.observable(false);
+    self.TrasladosItems = ko.observableArray([]);
+    self.TrasladosHasItems = ko.observable(false);
    
     self.RetencionesOrdinal = ko.observable(0);
-    self.RetencionesItems = ko.observableArray([]);    self.RetencionesHasItems = ko.observable(false);
+    self.RetencionesItems = ko.observableArray([]);
+    self.RetencionesHasItems = ko.observable(false);
 
     self.addTraslado = function () {
         if (self.TrasladosImpuesto() != "" && self.TrasladosImporte() != "" && self.TrasladosTasa() != "") {
@@ -137,9 +146,9 @@ var ImpuestosModel = function (modelId) {
             trasladado.TrasladadoOrdinal = ko.observable(self.TrasladosOrdinal());
             self.TrasladosItems.push(trasladado);
 
-            self.TrasladosImpuesto("");
+            self.TrasladosImpuesto("IVA");
             self.TrasladosImporte("");
-            self.TrasladosTasa("");
+            self.TrasladosTasa("16.00");
         }
     };
 
