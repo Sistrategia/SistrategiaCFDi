@@ -122,107 +122,112 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(ComprobanteCreateViewModel model) {
-            
+        public JsonResult Create(ComprobanteCreateViewModel model) {
+            try
+            {
+                var comprobante = new Comprobante();
 
-            //var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+                comprobante.EmisorId = model.EmisorId;
+                comprobante.Emisor = DBContext.Emisores.Find(model.EmisorId); // .Where(e => e.PublicKey == publicKey).SingleOrDefault();
+                comprobante.ReceptorId = model.ReceptorId;
+                comprobante.Receptor = DBContext.Receptores.Find(model.ReceptorId); // .Where(e => e.PublicKey == publicKey).SingleOrDefault();
+                comprobante.Serie = model.Serie;
+                comprobante.Folio = model.Folio;
+                comprobante.Fecha = DateTime.Now + SATManager.GetCFDIServiceTimeSpan();
+                comprobante.FormaDePago = model.FormaDePago;
+                comprobante.SubTotal = model.SubTotal;
+                comprobante.Total = model.Total;
 
-            //if (comprobante == null)
-            //    return HttpNotFound();
+                //comprobante.NoCertificado;
+                //comprobante.Certificado;
+                comprobante.TipoDeComprobante = "ingreso";
 
-            //var model = new ComprbanteDetailViewModel(comprobante);
+                comprobante.FormaDePago = model.FormaDePago;
+                comprobante.MetodoDePago = model.MetodoDePago;
+                comprobante.LugarExpedicion = model.LugarExpedicion;
+                comprobante.TipoCambio = model.TipoCambio;
 
-            var comprobante = new Comprobante();
+                comprobante.NumCtaPago = model.NumCtaPago;
 
-            comprobante.EmisorId = model.EmisorId;
-            comprobante.Emisor = DBContext.Emisores.Find(model.EmisorId); // .Where(e => e.PublicKey == publicKey).SingleOrDefault();
-            comprobante.ReceptorId = model.ReceptorId;
-            comprobante.Receptor = DBContext.Receptores.Find(model.ReceptorId); // .Where(e => e.PublicKey == publicKey).SingleOrDefault();
-            comprobante.Serie = model.Serie;
-            comprobante.Folio = model.Folio;
-            comprobante.Fecha = DateTime.Now + SATManager.GetCFDIServiceTimeSpan();
-            comprobante.FormaDePago = model.FormaDePago;
-            comprobante.SubTotal = model.SubTotal;
-            comprobante.Total = model.Total;
+                comprobante.Conceptos = new List<Concepto>();
 
-            //comprobante.NoCertificado;
-            //comprobante.Certificado;
-            comprobante.TipoDeComprobante = "ingreso";
+                foreach (var modelConcepto in model.Conceptos)
+                {
+                    if (!string.IsNullOrEmpty(modelConcepto.Descripcion))
+                    {
+                        comprobante.Conceptos.Add(new Concepto
+                        {
+                            Cantidad = modelConcepto.Cantidad,
+                            Unidad = modelConcepto.Unidad,
+                            NoIdentificacion = modelConcepto.NoIdentificacion,
+                            Descripcion = modelConcepto.Descripcion,
+                            ValorUnitario = modelConcepto.ValorUnitario,
+                            Importe = modelConcepto.Importe,
+                            PublicKey = Guid.NewGuid()
+                        });
+                    }
+                }
 
-            comprobante.FormaDePago = model.FormaDePago;
-            comprobante.MetodoDePago = model.MetodoDePago;
-            comprobante.LugarExpedicion = model.LugarExpedicion;
-            comprobante.TipoCambio = model.TipoCambio;
+                comprobante.Impuestos = new Impuestos();
+                comprobante.Impuestos.Traslados = new List<Traslado>();
 
-            comprobante.NumCtaPago = model.NumCtaPago;
-
-            comprobante.Conceptos = new List<Concepto>();
-
-            foreach (var modelConcepto in model.Conceptos) {
-                if (!string.IsNullOrEmpty(modelConcepto.Descripcion)) {
-                    comprobante.Conceptos.Add(new Concepto {
-                        Cantidad = modelConcepto.Cantidad,
-                        Unidad = modelConcepto.Unidad,
-                        NoIdentificacion = modelConcepto.NoIdentificacion,
-                        Descripcion = modelConcepto.Descripcion,
-                        ValorUnitario = modelConcepto.ValorUnitario,
-                        Importe = modelConcepto.Importe,
-                        PublicKey = Guid.NewGuid()
+                foreach (var modelTraslado in model.Traslados)
+                {
+                    comprobante.Impuestos.Traslados.Add(new Traslado
+                    {
+                        Importe = modelTraslado.Importe,
+                        Impuesto = modelTraslado.Impuesto,
+                        Tasa = modelTraslado.Tasa,
                     });
                 }
-            }
 
-            
-        
-            comprobante.Impuestos = new Impuestos();            
-            comprobante.Impuestos.Traslados = new List<Traslado>();
-
-            foreach (var modelTraslado in model.Traslados)
-            {
-                comprobante.Impuestos.Traslados.Add(new Traslado
+                comprobante.Impuestos.Retenciones = new List<Retencion>();
+                foreach (var modelRetencion in model.Retenciones)
                 {
-                  Importe = modelTraslado.Importe,
-                  Impuesto  = modelTraslado.Impuesto,
-                  Tasa  = modelTraslado.Tasa,
-                });
-            }
+                    comprobante.Impuestos.Retenciones.Add(new Retencion
+                    {
+                        Importe = modelRetencion.Importe,
+                        Impuesto = modelRetencion.Impuesto,
+                    });
+                }
 
-            comprobante.Impuestos.Retenciones = new List<Retencion>();
-            foreach (var modelRetencion in model.Retenciones)
-            {
-                comprobante.Impuestos.Retenciones.Add(new Retencion
+                comprobante.Impuestos.TotalImpuestosRetenidos = model.TotalImpuestosRetenidos;
+                comprobante.Impuestos.TotalImpuestosTrasladados = model.TotalImpuestosTrasladados;
+
+                comprobante.PublicKey = Guid.NewGuid();
+
+                Certificado certificado = DBContext.Certificados.Find(model.CertificadoId);
+
+                if (certificado != null)
                 {
-                    Importe = modelRetencion.Importe,
-                    Impuesto = modelRetencion.Impuesto,
-                });
+                    comprobante.NoCertificado = certificado.NumSerie;
+                    comprobante.Certificado = certificado.CertificadoBase64;
+                }
+
+                string cadenaOriginal = comprobante.GetCadenaOriginal();
+                comprobante.Sello = certificado.GetSello(cadenaOriginal);
+
+                DBContext.Comprobantes.Add(comprobante);
+                DBContext.SaveChanges();
+
+                TempData["success"] = "Se ha creado la dieta correctamente";
+                var data = new
+                {
+                    error = false,
+                    errorMsg = "",
+                    comprobanteId = comprobante.PublicKey
+                };
+                return Json(data);
             }
-
-            comprobante.Impuestos.TotalImpuestosRetenidos = model.TotalImpuestosRetenidos;
-            comprobante.Impuestos.TotalImpuestosTrasladados = model.TotalImpuestosTrasladados;
-
-            comprobante.PublicKey = Guid.NewGuid();
-
-            Certificado certificado = DBContext.Certificados.Find(model.CertificadoId);
-
-            if (certificado != null) {
-                comprobante.NoCertificado = certificado.NumSerie;
-                comprobante.Certificado = certificado.CertificadoBase64;
-            }
-
-          //   comprobante.Fecha = DateTime.Parse("2014-09-03T13:39:03");
-
-            
-            //comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == comprobante.PublicKey).SingleOrDefault();
-
-            string cadenaOriginal = comprobante.GetCadenaOriginal();
-            comprobante.Sello = certificado.GetSello(cadenaOriginal);
-
-            DBContext.Comprobantes.Add(comprobante);
-            DBContext.SaveChanges();
-
-            return RedirectToAction("Details", new { id = comprobante.PublicKey });
-
-            //return View(model);
+            catch (Exception ex)
+            {
+                var data = new
+                {
+                    error = true,
+                    errorMsg = ex.Message.ToString()
+                };
+                return Json(data);
+            }     
         }
 
         public ActionResult Details(string id) {

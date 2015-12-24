@@ -20,11 +20,19 @@
     self.ReceptorId = ko.observable("");
     self.Serie = ko.observable("");
     self.Folio = ko.observable("");
-    self.FormaDePago = ko.observable("");
+    self.FormaDePago = ko.observable("Pago en una sola exhibición");
     self.MetodoDePago = ko.observable("");
-    self.LugarExpedicion = ko.observable("");
+    self.LugarExpedicion = ko.observable("Matriz");
     self.NumCtaPago = ko.observable("");
     self.CertificadoId = ko.observable("");
+    self.IsRequiredNumCtaPago = ko.observable(false);
+
+    self.MetodoDePago.subscribe(function (newValue) {
+        if (newValue == 'Efectivo' || newValue == 'No identificado' || newValue == '')
+            self.IsRequiredNumCtaPago(false);
+        else
+            self.IsRequiredNumCtaPago(true);
+    });
 }var Concepto = function () {
     this.ConceptoCantidad = null;
     this.ConceptoUnidad = null;
