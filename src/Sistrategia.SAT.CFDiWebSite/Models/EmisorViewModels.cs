@@ -289,6 +289,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             if (emisor == null)
                 throw new ArgumentNullException("emisor");
 
+            this.PublicKey = emisor.PublicKey;
+
             this.RFC = emisor.RFC;
             this.Nombre = emisor.Nombre;
             if (emisor.RegimenFiscal != null && emisor.RegimenFiscal.Count > 0)
@@ -408,6 +410,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "FiscalRegimeField")]
         public string RegimenFiscal { get; set; }
+
+        public Guid PublicKey { get; set; }
     }
 
     public class EmisorEditViewModel
