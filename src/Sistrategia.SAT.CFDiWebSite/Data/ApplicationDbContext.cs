@@ -247,6 +247,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             certificado.Property(p => p.Estado)
                 .HasColumnName("estado")
                 .IsRequired();
+            certificado.Property(p => p.Ordinal)
+               .HasColumnName("ordinal")          
+               //.IsRequired();
+               ;
 
 
             var regimenFiscal = modelBuilder.Entity<RegimenFiscal>()
@@ -255,6 +259,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("regimen_fiscal_id");
             regimenFiscal.Property(p => p.Regimen)
                 .HasColumnName("regimen");
+            regimenFiscal.Property(p => p.Ordinal)
+               .HasColumnName("ordinal");
 
             emisor.HasMany<Certificado>(p => p.Certificados)
                 .WithOptional()
@@ -316,14 +322,26 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("forma_de_pago")
                 .IsRequired() // DEFAULT 'PAGO EN UNA SOLA EXHIBICION'
                 .HasMaxLength(256);
-            comprobante.Property(p => p.NoCertificado)
-                .HasColumnName("no_certificado")
-                .IsOptional()
-                .HasMaxLength(20);
-            comprobante.Property(p => p.Certificado)
-                .HasColumnName("certificado")
-                .IsOptional()
-                .HasMaxLength(2048);
+            //comprobante.Property(p => p.NoCertificado)
+            //    .HasColumnName("no_certificado")
+            //    .IsOptional()
+            //    .HasMaxLength(20);
+            //comprobante.Property(p => p.Certificado)
+            //    .HasColumnName("certificado")
+            //    .IsOptional()
+            //    .HasMaxLength(2048);
+            comprobante.Ignore(p => p.NoCertificado);
+            comprobante.Ignore(p => p.CertificadoBase64);
+            comprobante.Property(p => p.CertificadoId)
+                .HasColumnName("certificado_id");
+            comprobante.Property(p => p.HasNoCertificado)
+                .HasColumnName("has_no_certificado");
+                //.HasMaxLength(20)
+                //.IsOptional()
+            comprobante.Property(p => p.HasCertificado)
+                .HasColumnName("has_certificado");
+                //.IsOptional()
+                //.HasMaxLength(2048);
             comprobante.Property(p => p.CondicionesDePago)
                 .HasColumnName("condiciones_de_pago")
                 .IsOptional()
@@ -490,6 +508,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             retencion.Property(p => p.Importe)
                 .HasColumnName("importe");
 
+            retencion.Property(p => p.Ordinal)
+                .HasColumnName("ordinal");
+
             impuestos.HasMany<Retencion>(p => p.Retenciones)
                 .WithOptional()
                 .Map(pe => pe.MapKey("impuesto_id"));
@@ -506,6 +527,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             traslado.Property(p => p.Tasa)
                 .HasColumnName("tasa");
 
+            traslado.Property(p => p.Ordinal)
+                .HasColumnName("ordinal");
+
             impuestos.HasMany<Traslado>(p => p.Traslados)
                 .WithOptional()
                 .Map(pe => pe.MapKey("impuesto_id"));
@@ -514,6 +538,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .ToTable("sat_complemento");
             complemento.Property(p => p.ComplementoId)
                 .HasColumnName("complemento_id");
+            complemento.Property(p => p.Ordinal)
+                .HasColumnName("ordinal");
 
             comprobante.HasMany<Complemento>(p => p.Complementos)
                 .WithOptional()
