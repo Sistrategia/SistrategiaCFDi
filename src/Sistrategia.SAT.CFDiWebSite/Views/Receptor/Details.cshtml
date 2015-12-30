@@ -4,13 +4,28 @@
   ViewBag.Title = LocalizedStrings.Receptor_DetailsTitle;
 }
 
+
+
+<div class="page-header clearfix">
+  <div class="pull-left">
+    <h1>@ViewBag.Title</h1>
+    <h4>@LocalizedStrings.Receptor_DetailsSubtitle</h4>
+  </div>
+  <div class="pull-right">
+    <div class="btn-group" style="bottom: 26px;position: relative;top:26px;">
+      @Html.ActionLink("Editar", "Edit", new { id = Model.PublicKey.ToString("N") }, new { @class = "btn btn-primary", @role = "button" })
+    </div>
+  </div>
+</div> 
+
+
 @*.dl-horizontal*@
-<h1>@ViewBag.Title</h1>
+@*<h1>@ViewBag.Title</h1>*@
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
-  <h4>@LocalizedStrings.Receptor_DetailsSubtitle</h4>
-  <hr />
-  <h3>@LocalizedStrings.Emisor_DetailsGeneralTitle</h3>
+  @*<h4>@LocalizedStrings.Receptor_DetailsSubtitle</h4>
+  <hr />*@
+  @*<h3>@LocalizedStrings.Emisor_DetailsGeneralTitle</h3>*@
   <dl class="dl-horizontal">
     <dt>@Html.DisplayNameFor(m => m.Nombre):</dt>
     <dd>@Html.DisplayFor(m => m.Nombre)</dd>

@@ -15,9 +15,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             var model = new EmisorIndexViewModel {
                 Emisores = this.DBContext.Emisores.ToList()
             };
-            return View(model);
-
-            
+            return View(model);            
         }
 
         public ActionResult Create() {
@@ -135,23 +133,81 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
         [HttpPost]
         public ActionResult Edit(EmisorEditViewModel model) {
-            //Guid publicKey = Guid.Parse(id);
+            Guid publicKey = model.PublicKey; //  Guid.Parse(id);            
             if (ModelState.IsValid) {
-                var emisor = DBContext.Emisores.Where(e => e.PublicKey == model.PublicKey).SingleOrDefault();
-                if (emisor != null) {
-                    emisor.RFC = model.RFC;
-                    emisor.Nombre = model.Nombre;
-                    //emisor.RegimenFiscal
+                //var emisor = DBContext.Emisores.Where(e => e.PublicKey == model.PublicKey).SingleOrDefault();
+                //if (emisor != null) {
+                //    emisor.RFC = model.RFC;
+                //    emisor.Nombre = model.Nombre;
+                //    //emisor.RegimenFiscal
+                //    emisor.Telefono = string.IsNullOrWhiteSpace(model.Telefono) ? null : model.Telefono;
+                //    emisor.Correo = string.IsNullOrWhiteSpace(model.Correo) ? null : model.Correo;
+                //    emisor.CifUrl = string.IsNullOrWhiteSpace(model.CifUrl) ? null : model.CifUrl;
+                //    emisor.LogoUrl = string.IsNullOrWhiteSpace(model.LogoUrl) ? null : model.LogoUrl;
+                //}
+                //DBContext.SaveChanges();
+                //return RedirectToAction("Index");
+                var originalEmisor = DBContext.Emisores.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+                var newEmisor = new Emisor();
 
-                    emisor.Telefono = string.IsNullOrWhiteSpace(model.Telefono) ? null : model.Telefono;
-                    emisor.Correo = string.IsNullOrWhiteSpace(model.Correo) ? null : model.Correo;
+                newEmisor.RFC = model.RFC;
 
-                    emisor.CifUrl = string.IsNullOrWhiteSpace(model.CifUrl) ? null : model.CifUrl;
-                    emisor.LogoUrl = string.IsNullOrWhiteSpace(model.LogoUrl) ? null : model.LogoUrl;
-                }
+                if (!string.IsNullOrEmpty(model.Nombre))
+                    newEmisor.Nombre = model.Nombre;
 
-                DBContext.SaveChanges();
-                return RedirectToAction("Index");
+                //if (model.DomicilioFiscal != null) {
+                    if (!string.IsNullOrEmpty(model.Pais)) {
+                        newEmisor.DomicilioFiscal = new UbicacionFiscal {
+                            Pais = model.Pais,
+                            Calle = string.IsNullOrEmpty(model.Calle) ? null : model.Calle,
+                            NoExterior = string.IsNullOrEmpty(model.NoExterior) ? null : model.NoExterior,
+                            NoInterior = string.IsNullOrEmpty(model.NoInterior) ? null : model.NoInterior,
+                            Colonia = string.IsNullOrEmpty(model.Colonia) ? null : model.Colonia,
+                            Localidad = string.IsNullOrEmpty(model.Localidad) ? null : model.Localidad,
+                            Municipio = string.IsNullOrEmpty(model.Municipio) ? null : model.Municipio,
+                            Estado = string.IsNullOrEmpty(model.Estado) ? null : model.Estado,
+                            CodigoPostal = string.IsNullOrEmpty(model.CodigoPostal) ? null : model.CodigoPostal,
+                            Referencia = string.IsNullOrEmpty(model.Referencia) ? null : model.Referencia
+                        };
+                    }
+                //}
+
+                //if (model.ExpedidoEn != null) {
+                    if (!string.IsNullOrEmpty(model.ExpedidoEnPais)) {
+                        newEmisor.ExpedidoEn = new Ubicacion {
+                            Pais = model.ExpedidoEnPais,
+                            Calle = string.IsNullOrEmpty(model.ExpedidoEnCalle) ? null : model.ExpedidoEnCalle,
+                            NoExterior = string.IsNullOrEmpty(model.ExpedidoEnNoExterior) ? null : model.ExpedidoEnNoExterior,
+                            NoInterior = string.IsNullOrEmpty(model.ExpedidoEnNoInterior) ? null : model.ExpedidoEnNoInterior,
+                            Colonia = string.IsNullOrEmpty(model.ExpedidoEnColonia) ? null : model.ExpedidoEnColonia,
+                            Localidad = string.IsNullOrEmpty(model.ExpedidoEnLocalidad) ? null : model.ExpedidoEnLocalidad,
+                            Municipio = string.IsNullOrEmpty(model.ExpedidoEnMunicipio) ? null : model.ExpedidoEnMunicipio,
+                            Estado = string.IsNullOrEmpty(model.ExpedidoEnEstado) ? null : model.ExpedidoEnEstado,
+                            CodigoPostal = string.IsNullOrEmpty(model.ExpedidoEnCodigoPostal) ? null : model.ExpedidoEnCodigoPostal,
+                            Referencia = string.IsNullOrEmpty(model.ExpedidoEnReferencia) ? null : model.ExpedidoEnReferencia
+                        };
+                    }
+                //}
+
+                if (!string.IsNullOrEmpty(model.RegimenFiscal))
+                    newEmisor.RegimenFiscal = new List<RegimenFiscal> {
+                    new RegimenFiscal {
+                        Regimen = model.RegimenFiscal
+                    }
+                };
+
+                newEmisor.Telefono = string.IsNullOrWhiteSpace(model.Telefono) ? null : model.Telefono;
+                newEmisor.Correo = string.IsNullOrWhiteSpace(model.Correo) ? null : model.Correo;
+
+                newEmisor.CifUrl = string.IsNullOrWhiteSpace(model.CifUrl) ? null : model.CifUrl;
+                newEmisor.LogoUrl = string.IsNullOrWhiteSpace(model.LogoUrl) ? null : model.LogoUrl;
+
+                originalEmisor.Status = "I";
+                this.DBContext.Emisores.Add(newEmisor);
+                this.DBContext.SaveChanges();
+
+                return RedirectToAction("Details", new { Id = newEmisor.PublicKey.ToString("N") }); // "Index", "Home");
+
             }
 
             return View(model);
