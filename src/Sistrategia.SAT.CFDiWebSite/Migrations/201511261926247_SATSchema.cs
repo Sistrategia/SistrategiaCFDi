@@ -21,6 +21,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         pfx_archivo = c.Binary(),
                         pfx_contrasena = c.String(maxLength: 2048),
                         estado = c.String(nullable: false),
+                        ordinal = c.Int(nullable: false),
                         emisor_id = c.Int(),
                     })
                 .PrimaryKey(t => t.certificado_id)
@@ -42,8 +43,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         no_aprobacion = c.String(),
                         ano_aprobacion = c.String(),
                         forma_de_pago = c.String(nullable: false, maxLength: 256),
-                        no_certificado = c.String(maxLength: 20),
-                        certificado = c.String(maxLength: 2048),
+                        certificado_id = c.Int(),
+                        has_no_certificado = c.Boolean(nullable: false),
+                        has_certificado = c.Boolean(nullable: false),
                         condiciones_de_pago = c.String(maxLength: 2048),
                         sub_total = c.Decimal(nullable: false, precision: 18, scale: 6),
                         descuento = c.Decimal(precision: 18, scale: 6),
@@ -74,11 +76,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         status = c.String(maxLength: 50),
                     })
                 .PrimaryKey(t => t.comprobante_id)
+                .ForeignKey("dbo.sat_certificado", t => t.certificado_id)
                 .ForeignKey("dbo.sat_emisor", t => t.emisor_id)
                 .ForeignKey("dbo.sat_impuestos", t => t.impuestos_id)
                 .ForeignKey("dbo.sat_receptor", t => t.receptor_id)
                 .ForeignKey("dbo.ui_view_template", t => t.view_template_id)
                 .Index(t => t.public_key)
+                .Index(t => t.certificado_id)
                 .Index(t => t.emisor_id)
                 .Index(t => t.receptor_id)
                 .Index(t => t.impuestos_id)
@@ -89,6 +93,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 c => new
                     {
                         complemento_id = c.Int(nullable: false, identity: true),
+                        ordinal = c.Int(),
                         comprobante_id = c.Int(),
                     })
                 .PrimaryKey(t => t.complemento_id)
@@ -179,6 +184,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                     {
                         regimen_fiscal_id = c.Int(nullable: false, identity: true),
                         regimen = c.String(),
+                        ordinal = c.Int(nullable: false),
                         emisor_id = c.Int(),
                     })
                 .PrimaryKey(t => t.regimen_fiscal_id)
@@ -213,6 +219,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         retencion_id = c.Int(nullable: false, identity: true),
                         impuesto = c.String(),
                         importe = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        ordinal = c.Int(),
                         impuesto_id = c.Int(),
                     })
                 .PrimaryKey(t => t.retencion_id)
@@ -227,6 +234,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         impuesto = c.String(),
                         tasa = c.Decimal(nullable: false, precision: 18, scale: 2),
                         importe = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        ordinal = c.Int(),
                         impuesto_id = c.Int(),
                     })
                 .PrimaryKey(t => t.traslado_id)
@@ -284,6 +292,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             DropForeignKey("dbo.sat_receptor_correo_entrega", "comprobante_id", "dbo.sat_comprobante");
             DropForeignKey("dbo.sat_concepto", "comprobante_id", "dbo.sat_comprobante");
             DropForeignKey("dbo.sat_complemento", "comprobante_id", "dbo.sat_comprobante");
+            DropForeignKey("dbo.sat_comprobante", "certificado_id", "dbo.sat_certificado");
             DropIndex("dbo.sat_timbre_fiscal_digital", new[] { "complemento_id" });
             DropIndex("dbo.sat_receptor", new[] { "domicilio_id" });
             DropIndex("dbo.sat_receptor", new[] { "public_key" });
@@ -303,6 +312,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             DropIndex("dbo.sat_comprobante", new[] { "impuestos_id" });
             DropIndex("dbo.sat_comprobante", new[] { "receptor_id" });
             DropIndex("dbo.sat_comprobante", new[] { "emisor_id" });
+            DropIndex("dbo.sat_comprobante", new[] { "certificado_id" });
             DropIndex("dbo.sat_comprobante", new[] { "public_key" });
             DropIndex("dbo.sat_certificado", new[] { "emisor_id" });
             DropIndex("dbo.sat_certificado", new[] { "public_key" });

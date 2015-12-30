@@ -150,21 +150,21 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                 case "1.0":
                     if (!string.IsNullOrEmpty(comprobante.NoCertificado))
                         writer.WriteAttributeString("noCertificado", comprobante.NoCertificado);
-                    if (!string.IsNullOrEmpty(comprobante.Certificado))
-                        writer.WriteAttributeString("certificado", comprobante.Certificado);
+                    if (!string.IsNullOrEmpty(comprobante.CertificadoBase64))
+                        writer.WriteAttributeString("certificado", comprobante.CertificadoBase64);
                     break;
                 case "2.0":
                 case "2.2":
                     writer.WriteAttributeString("noCertificado", comprobante.NoCertificado); // requerido en el esquema
-                    if (!string.IsNullOrEmpty(comprobante.Certificado))
-                        writer.WriteAttributeString("certificado", comprobante.Certificado);
+                    if (!string.IsNullOrEmpty(comprobante.CertificadoBase64))
+                        writer.WriteAttributeString("certificado", comprobante.CertificadoBase64);
                     break;
                 case "3.0":
                 case "3.2":
                 default:
                     // REQUERIDOS
                     writer.WriteAttributeString("noCertificado", comprobante.NoCertificado); // requerido en el esquema
-                    writer.WriteAttributeString("certificado", comprobante.Certificado); // requerido en el esquema
+                    writer.WriteAttributeString("certificado", comprobante.CertificadoBase64); // requerido en el esquema
                     break;
             }
 

@@ -23,7 +23,9 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
         private string formaDePago;
         private string noCertificado;
+        private bool hasNoCertificado;
         private string certificado;
+        private bool hasCertificado;
         private string condicionesDePago;
         private decimal subTotal;
         //private decimal descuento;
@@ -373,10 +375,35 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </remarks>
         [XmlAttribute("noCertificado")]
         public string NoCertificado {
-            get { return this.noCertificado; }
+            get {
+                if (this.HasNoCertificado && this.Certificado != null)
+                    return this.Certificado.NumSerie;
+                else
+                    return null;
+            }
             set { this.noCertificado = value; }
         }
 
+        [ForeignKey("Certificado")]
+        public int? CertificadoId { get; set; }
+
+        [XmlIgnore()]
+        public virtual Certificado Certificado { get; set; }
+        //    get { return this.certificado; }
+        //    set { this.certificado = value; }
+        //}
+
+        [XmlIgnore]
+        public bool HasNoCertificado {
+            get { return this.hasNoCertificado; }
+            set { this.hasNoCertificado = value; }
+        }
+
+        [XmlIgnore]
+        public bool HasCertificado {
+            get { return this.hasCertificado; }
+            set { this.hasCertificado = value; }
+        }
 
         /// <summary>
         /// Atributo requerido que sirve para expresar el certificado de sello digital que ampara al comprobante como texto, en formato base 64.
@@ -398,10 +425,18 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </code>
         /// </remarks>
         [XmlAttribute("certificado")]
-        public string Certificado {
-            get { return this.certificado; }
+        public string CertificadoBase64 {
+            get {
+                if (this.HasCertificado && this.Certificado != null)
+                    return this.Certificado.CertificadoBase64;
+                else
+                    return null;
+            }
+            //get { return this.certificado; }
             set { this.certificado = value; }
         }
+
+        
 
         /// <summary>
         /// Atributo opcional para expresar las condiciones comerciales aplicables para el pago del comprobante fiscal digital a través de Internet.
@@ -935,6 +970,9 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         [Key]
         public int ComplementoId { get; set; }
 
+        [XmlIgnore]
+        public int? Ordinal { get; set; }
+
         //[Required]
         //public Guid PublicKey { get; set; }
 
@@ -1160,6 +1198,9 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         ////    </xs:restriction>
         ////</xs:simpleType>
 
+        [XmlIgnore]
+        public int? Ordinal { get; set; }
+
     }
 
     public class Traslado
@@ -1254,6 +1295,9 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             get { return this.importe; }
             set { this.importe = value; }
         }
+
+        [XmlIgnore]
+        public int? Ordinal { get; set; }
     }
 
     //public class Complemento

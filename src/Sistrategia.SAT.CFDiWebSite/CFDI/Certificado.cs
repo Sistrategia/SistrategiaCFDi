@@ -32,6 +32,9 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public string PFXContrasena { get; set; }
         public string Estado { get; set; }
 
+        // [XmlIgnore]
+        public int Ordinal { get; set; }
+
         public string GetNumeroSerie() {
             System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(this.PFXArchivo,
                  this.PFXContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);

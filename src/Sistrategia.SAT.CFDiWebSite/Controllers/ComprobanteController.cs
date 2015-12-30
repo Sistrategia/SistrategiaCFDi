@@ -200,8 +200,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                 if (certificado != null)
                 {
-                    comprobante.NoCertificado = certificado.NumSerie;
-                    comprobante.Certificado = certificado.CertificadoBase64;
+                    // comprobante.NoCertificado = certificado.NumSerie;
+                    // comprobante.Certificado = certificado.CertificadoBase64;
+                    comprobante.CertificadoId = certificado.CertificadoId;
+                    comprobante.Certificado = certificado;
+                    comprobante.HasNoCertificado = true;
+                    comprobante.HasCertificado = true;
                 }
 
                 string cadenaOriginal = comprobante.GetCadenaOriginal();
