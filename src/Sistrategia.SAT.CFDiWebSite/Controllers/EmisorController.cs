@@ -88,6 +88,11 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             //    });
             //}
 
+            if (model.ViewTemplateId != null) {
+                emisor.ViewTemplateId = model.ViewTemplateId;
+                emisor.ViewTemplate = this.DBContext.ViewTemplates.Find(model.ViewTemplateId); // .Where(v => v.PublicKey == publicKey).SingleOrDefault();
+            }
+
             this.DBContext.Emisores.Add(emisor);
             this.DBContext.SaveChanges();
 
@@ -201,6 +206,11 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                 newEmisor.CifUrl = string.IsNullOrWhiteSpace(model.CifUrl) ? null : model.CifUrl;
                 newEmisor.LogoUrl = string.IsNullOrWhiteSpace(model.LogoUrl) ? null : model.LogoUrl;
+
+                if (model.ViewTemplateId != null) {
+                    newEmisor.ViewTemplateId = model.ViewTemplateId;
+                    newEmisor.ViewTemplate = this.DBContext.ViewTemplates.Find(model.ViewTemplateId); // .Where(v => v.PublicKey == publicKey).SingleOrDefault();
+                }
 
                 originalEmisor.Status = "I";
                 this.DBContext.Emisores.Add(newEmisor);

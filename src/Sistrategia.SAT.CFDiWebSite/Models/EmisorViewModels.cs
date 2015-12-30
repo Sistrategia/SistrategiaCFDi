@@ -175,7 +175,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
     public class EmisorCreateViewModel
     {
         public EmisorCreateViewModel() {
-
+            this.ViewTemplateId = 2;
         }
 
         [Required]
@@ -208,6 +208,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         [Required]
         [Display(Name = "LogoUrl")]
         public string LogoUrl { get; set; }
+
+        public int? ViewTemplateId { get; set; }
 
         //[Required]
         //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressStreetField")]
@@ -319,6 +321,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             this.Telefono = emisor.Telefono;
             this.CifUrl = emisor.CifUrl;
             this.LogoUrl = emisor.LogoUrl;
+
+            this.ViewTemplateId = emisor.ViewTemplateId;
         }
 
         [Required]
@@ -412,6 +416,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public string RegimenFiscal { get; set; }
 
         public Guid PublicKey { get; set; }
+
+        public int? ViewTemplateId { get; set; }
     }
 
     public class EmisorEditViewModel
@@ -449,6 +455,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             this.Telefono = emisor.Telefono;
             this.CifUrl = emisor.CifUrl;
             this.LogoUrl = emisor.LogoUrl;
+            this.ViewTemplateId = emisor.ViewTemplateId;
         }
 
         public Guid PublicKey { get; set; }
@@ -541,5 +548,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "FiscalRegimeField")]
         public string RegimenFiscal { get; set; }
+
+        public int? ViewTemplateId { get; set; }
     }
 }
