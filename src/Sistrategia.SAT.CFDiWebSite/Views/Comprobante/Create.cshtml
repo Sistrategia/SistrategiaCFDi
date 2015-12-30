@@ -9,7 +9,7 @@
     <br />
 </div>
 <div class="col-md-12">
-    <div class='alert alert-danger text-center' id="danger"></div>
+    <div class='text-center' id="danger"></div>
 </div>
 <div class="col-md-12">
     <div id="initial_model_id">
@@ -432,15 +432,15 @@
                              show: true,
                              keyboard: false
                          });
-                         $("#danger").empty();
+                         $("#danger").removeClass("alert alert-danger").empty();
                      },
                      success: function (data) {
                          $("#alerta").modal('hide');
                          if (data.error == false) {
                              window.location.href = "@Url.Action("Details", "Comprobante")/"+ data.comprobanteId +"";
                          }
-                         else {
-                             $("#danger").show().append(data.errorMsg);
+                         else {                             
+                             $("#danger").addClass("alert alert-danger").show().append(data.errorMsg);
                              $("html, body").scrollTop(0);
                          }
                      }
