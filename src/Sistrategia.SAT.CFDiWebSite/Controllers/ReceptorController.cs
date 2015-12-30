@@ -13,7 +13,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
     {
         public ActionResult Index() {
             var model = new ReceptorIndexViewModel {
-                Receptores = this.DBContext.Receptores.ToList()
+                Receptores = this.DBContext.Receptores.Where(r => r.Status == "A").ToList()
             };
             return View(model);
         }

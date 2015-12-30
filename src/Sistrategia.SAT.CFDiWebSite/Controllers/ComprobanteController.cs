@@ -27,7 +27,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         {
             try
             {
-                var emisores = DBContext.Emisores.Where(x => x.Nombre.Contains(value) || x.RFC.Contains(value))
+                var emisores = DBContext.Emisores.Where(x => x.Status == "A" && ( x.Nombre.Contains(value) || x.RFC.Contains(value)))
                                                  .Take(pageSize).ToList();
 
                 List<dynamic> itemList = new List<dynamic>();
@@ -53,8 +53,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         {
             try
             {
-                var receptores = DBContext.Receptores.Where(x => x.Nombre.Contains(value) || x.RFC.Contains(value))
-                                                     .Take(pageSize).ToList();
+                var receptores = DBContext.Receptores.Where(x => x.Status == "A" && (x.Nombre.Contains(value) || x.RFC.Contains(value)))
+                                                 .Take(pageSize).ToList();               
 
                 List<dynamic> itemList = new List<dynamic>();
                 foreach (var receptor in receptores)

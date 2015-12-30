@@ -13,7 +13,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
     {
         public ActionResult Index() {
             var model = new EmisorIndexViewModel {
-                Emisores = this.DBContext.Emisores.ToList()
+                Emisores = this.DBContext.Emisores.Where(e=>e.Status == "A").ToList()
             };
             return View(model);            
         }
