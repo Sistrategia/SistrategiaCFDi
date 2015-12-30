@@ -13,6 +13,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public Receptor()
             : base() {
             this.PublicKey = Guid.NewGuid();
+            this.Status = "A";
         }
 
         #region Private Fields
@@ -110,5 +111,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             get { return this.domicilio; }
             set { this.domicilio = value; }
         }
+
+        [XmlIgnore]
+        public string Status { get; set; }
     }
 }

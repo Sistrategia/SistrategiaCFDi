@@ -134,8 +134,10 @@ namespace Sistrategia.SAT.CFDiWebSite
                     } // zipMs.Dispose() => Close();
                 } // ms.Dispose() => Close();
 
-                CFDI.EDICOM.TestCFDI.CFDiService webService = new CFDI.EDICOM.TestCFDI.CFDiService();
-                responseFileBytes = webService.getCfdiTest(user, password, sendFileBytes);
+                //CFDI.EDICOM.TestCFDI.CFDiService webService = new CFDI.EDICOM.TestCFDI.CFDiService();                
+                //responseFileBytes = webService.getCfdiTest(user, password, sendFileBytes);
+                ICFDIService webService = CFDiServiceFactory.Create(); 
+                responseFileBytes = webService.GetCFDI(user, password, sendFileBytes);
 
                 CloudBlockBlob blob2 = container.GetBlockBlobReference(invoiceFileName + "_response.zip");
                 //zipMs.Position = 0;
@@ -214,6 +216,19 @@ namespace Sistrategia.SAT.CFDiWebSite
         
     }
 
+    public class CFDiServiceFactory
+    {
+
+        internal static ICFDIService Create() {
+            switch (ConfigurationManager.AppSettings["cfdiService"]) {
+                case "CFDI.EDICOM.CFDiService":
+                    return new CFDI.EDICOM.CFDiService();
+                case "CFDI.EDICOM.TestCFDI.CFDiService":
+                default:
+                    return new CFDI.EDICOM.TestCFDI.CFDiService();
+            }
+        }
+    }
 
     internal class QrCodeModel
     {

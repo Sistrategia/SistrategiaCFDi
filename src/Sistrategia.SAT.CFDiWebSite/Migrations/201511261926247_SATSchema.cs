@@ -147,6 +147,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         cif_url = c.String(),
                         logo_url = c.String(),
                         view_template_id = c.Int(),
+                        status = c.String(maxLength: 50),
                     })
                 .PrimaryKey(t => t.emisor_id)
                 .ForeignKey("dbo.sat_ubicacion", t => t.domicilio_fiscal_id)
@@ -250,6 +251,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         rfc = c.String(),
                         nombre = c.String(),
                         domicilio_id = c.Int(),
+                        status = c.String(maxLength: 50),
                     })
                 .PrimaryKey(t => t.receptor_id)
                 .ForeignKey("dbo.sat_ubicacion", t => t.domicilio_id)
