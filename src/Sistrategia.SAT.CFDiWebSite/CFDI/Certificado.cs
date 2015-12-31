@@ -38,6 +38,11 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public string GetNumeroSerie() {
             System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(this.PFXArchivo,
                  this.PFXContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);
+
+            return Certificado.GetSerialNumberString(cert);
+        }
+
+        public static string GetSerialNumberString(System.Security.Cryptography.X509Certificates.X509Certificate2 cert) {
             var hexString = cert.GetSerialNumberString();
             var sb = new StringBuilder();
             for (int i = 0; i < hexString.Length; i += 2) {
@@ -58,5 +63,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             string sello = Convert.ToBase64String(binSignature);
             return sello;
         }
+
+      
     }
 }

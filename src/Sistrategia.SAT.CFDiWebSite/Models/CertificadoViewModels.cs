@@ -24,21 +24,21 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public CertificadoCreateViewModel() {
         }
 
-        [Required]
-        [Display(Name = "Número de serie")]
-        public string NumSerie { get; set; }
+        //[Required]
+        //[Display(Name = "Número de serie")]
+        //public string NumSerie { get; set; }
 
-        [Required]
-        [Display(Name = "R.F.C.")]
-        public string RFC { get; set; }
+        //[Required]
+        //[Display(Name = "R.F.C.")]
+        //public string RFC { get; set; }
 
-        [Required]
-        [Display(Name = "Inicia")]
-        public DateTime Inicia { get; set; }
+        //[Required]
+        //[Display(Name = "Inicia")]
+        //public DateTime Inicia { get; set; }
 
-        [Required]
-        [Display(Name = "Finaliza")]
-        public DateTime Finaliza { get; set; }
+        //[Required]
+        //[Display(Name = "Finaliza")]
+        //public DateTime Finaliza { get; set; }
 
         //[Display(Name = "Certificado")]
         [Required, DataType(DataType.Upload), Display(Name = "Certificado")]
@@ -51,7 +51,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public HttpPostedFileBase PFXArchivo { get; set; }
 
         [Required]
-        [Display(Name = "Contraseña del PFX")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Contraseña del PFX")] // [Display(Name = "Contraseña del Cert")]
         public string PFXContrasena { get; set; }
 
         //[Required]

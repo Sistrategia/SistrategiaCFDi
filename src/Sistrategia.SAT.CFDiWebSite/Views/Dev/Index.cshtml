@@ -1,7 +1,18 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Configuración Avanzada";
 }
 
-<h1>Index</h1>
+<h1>@ViewBag.Title</h1>
+<hr />
+
+<dl class="dl-horizontal">
+
+  <dt>cfdiService: </dt>
+  <dd>@ViewBag.cfdiService</dd>
+
+  <dt>cfdiServiceTimeSpan: </dt>
+  <dd>@ViewBag.cfdiServiceTimeSpan</dd>
+
+</dl>
 

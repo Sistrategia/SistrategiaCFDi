@@ -27,7 +27,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         {
             try
             {
-                var emisores = DBContext.Emisores.Where(x => x.Nombre.Contains(value) || x.RFC.Contains(value))
+                var emisores = DBContext.Emisores.Where(x => x.Status == "A" && ( x.Nombre.Contains(value) || x.RFC.Contains(value)))
                                                  .Take(pageSize).ToList();
 
                 List<dynamic> itemList = new List<dynamic>();
@@ -53,8 +53,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         {
             try
             {
-                var receptores = DBContext.Receptores.Where(x => x.Nombre.Contains(value) || x.RFC.Contains(value))
-                                                     .Take(pageSize).ToList();
+                var receptores = DBContext.Receptores.Where(x => x.Status == "A" && (x.Nombre.Contains(value) || x.RFC.Contains(value)))
+                                                 .Take(pageSize).ToList();               
 
                 List<dynamic> itemList = new List<dynamic>();
                 foreach (var receptor in receptores)
@@ -63,6 +63,32 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     {
                         id = receptor.ReceptorId.ToString(),
                         text = receptor.Nombre + " - " + receptor.RFC
+                    };
+                    itemList.Add(dynamicItems);
+                }
+                return Json(itemList.ToArray(), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                var result = new { resp = false, error = ex.Message };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult GetIdByCertificados(int emisorId, int pageSize = 10)
+        {
+            try
+            {
+                var emisor = DBContext.Emisores.Where(x => x.EmisorId == emisorId).First();
+                var certificados = emisor.Certificados.Where(x => x.Estado == "A").Take(pageSize).ToList();
+
+                List<dynamic> itemList = new List<dynamic>();
+                foreach (var certificado in certificados)
+                {
+                    var dynamicItems = new
+                    {
+                        id = certificado.CertificadoId.ToString(),
+                        text = certificado.NumSerie
                     };
                     itemList.Add(dynamicItems);
                 }

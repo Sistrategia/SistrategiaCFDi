@@ -15,6 +15,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public Emisor()
             : base() {
             this.PublicKey = Guid.NewGuid();
+            this.Status = "A";
         }
 
         //private string rfc;
@@ -162,6 +163,9 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         [ForeignKey("ViewTemplate")]
         public int? ViewTemplateId { get; set; }
         public virtual ViewTemplate ViewTemplate { get; set; }
+
+        //[XmlIgnore]
+        public string Status { get; set; }
     }
 
     public class RegimenFiscal

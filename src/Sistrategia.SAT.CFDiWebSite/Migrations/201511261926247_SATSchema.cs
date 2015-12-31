@@ -54,8 +54,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         moneda = c.String(maxLength: 50),
                         total = c.Decimal(nullable: false, precision: 18, scale: 6),
                         tipo_de_comprobante = c.String(nullable: false, maxLength: 50),
-                        metodo_de_pago = c.String(nullable: false, maxLength: 256),
-                        lugar_expedicion = c.String(nullable: false, maxLength: 2048),
+                        metodo_de_pago = c.String(maxLength: 256),
+                        lugar_expedicion = c.String(maxLength: 2048),
                         num_cta_pago = c.String(maxLength: 256),
                         folio_fiscal_orig = c.String(maxLength: 256),
                         serie_folio_fiscal_orig = c.String(maxLength: 256),
@@ -147,6 +147,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         cif_url = c.String(),
                         logo_url = c.String(),
                         view_template_id = c.Int(),
+                        status = c.String(maxLength: 50),
                     })
                 .PrimaryKey(t => t.emisor_id)
                 .ForeignKey("dbo.sat_ubicacion", t => t.domicilio_fiscal_id)
@@ -250,6 +251,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         rfc = c.String(),
                         nombre = c.String(),
                         domicilio_id = c.Int(),
+                        status = c.String(maxLength: 50),
                     })
                 .PrimaryKey(t => t.receptor_id)
                 .ForeignKey("dbo.sat_ubicacion", t => t.domicilio_id)

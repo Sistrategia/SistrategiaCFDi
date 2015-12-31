@@ -661,7 +661,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
             if (comprobante.Conceptos != null && comprobante.Conceptos.Count > 0) {
                 //foreach (ComprobanteConcepto concepto in comprobante.Conceptos) {
-                foreach (Concepto concepto in comprobante.Conceptos) {
+                foreach (Concepto concepto in comprobante.Conceptos.OrderBy(p => p.Ordinal)) {
 
                     switch (comprobante.Version) {
                         case "1.0":
@@ -783,7 +783,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                             break;
                     }
                     //foreach (ComprobanteImpuestosRetencion retencion in comprobante.Impuestos.Retenciones) {
-                    foreach (Retencion retencion in comprobante.Impuestos.Retenciones) {
+                    foreach (Retencion retencion in comprobante.Impuestos.Retenciones.OrderBy(r => r.Ordinal)) {
 
                         switch (comprobante.Version) {
                             case "1.0":
@@ -833,7 +833,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                             break;
                     }
                     //foreach (ComprobanteImpuestosTraslado traslado in comprobante.Impuestos.Traslados) {
-                    foreach (Traslado traslado in comprobante.Impuestos.Traslados) {
+                    foreach (Traslado traslado in comprobante.Impuestos.Traslados.OrderBy(t => t.Ordinal)) {
 
                         switch (comprobante.Version) {
                             case "1.0":
@@ -898,7 +898,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                         break;
                 }
 
-                 foreach (Complemento complemento in comprobante.Complementos) {
+                 foreach (Complemento complemento in comprobante.Complementos.OrderBy(c => c.Ordinal)) {
 
                      if (complemento is TimbreFiscalDigital) {
                          TimbreFiscalDigital timbre = (TimbreFiscalDigital)complemento;
