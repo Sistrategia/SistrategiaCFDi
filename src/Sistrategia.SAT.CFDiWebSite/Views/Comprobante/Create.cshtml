@@ -341,7 +341,8 @@
                     type: "POST",
                     data: { emisorId: $("#EmisorId").val() },
                     beforeSend: function () {
-                        $("#CertificadoId").prop( "disabled", true ).empty();
+                        $("#CertificadoId").prop("disabled", true).empty();
+                        $("#CertificadoId").append("<option value=''>Seleccione</option>");
                     },
                     success: function (data) {
                         $.each(data, function (i, item) {
