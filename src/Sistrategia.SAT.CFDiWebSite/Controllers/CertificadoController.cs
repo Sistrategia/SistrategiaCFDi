@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Sistrategia.SAT.CFDiWebSite.Models;
 using Sistrategia.SAT.CFDiWebSite.CFDI;
 using System.IO;
+using System.Text;
 
 namespace Sistrategia.SAT.CFDiWebSite.Controllers
 {
@@ -32,19 +33,19 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         public ActionResult Create(CertificadoCreateViewModel model) {
             //var model = new CertificadoCreateViewModel();
            if (ModelState.IsValid) {
-                if (model.PFXArchivo == null || model.PFXArchivo.ContentLength == 0) {
+               if (model.CertificadoArchivo == null || model.CertificadoArchivo.ContentLength == 0) {
                     return View();
                 }
                 try {
                     // var user = UserManager.FindById(this.GetUserId());
                     Guid publicKey = Guid.NewGuid();
                     Certificado certificado = new Certificado();
-                    certificado.NumSerie = model.NumSerie;
-                    certificado.RFC = model.RFC;
-                    certificado.Inicia = model.Inicia; // DateTime.Parse(post["inicia"].ToString(), new System.Globalization.CultureInfo("es-MX"));
-                    certificado.Finaliza = model.Finaliza;
-                    //certificado.CertificadoBase64 = model.CertificadoArchivo;
-                    //certificado.PFXArchivo = model.PFXArchivo;
+                    //certificado.NumSerie = model.NumSerie;
+                    //certificado.RFC = model.RFC;
+                    //certificado.Inicia = model.Inicia; // DateTime.Parse(post["inicia"].ToString(), new System.Globalization.CultureInfo("es-MX"));
+                    //certificado.Finaliza = model.Finaliza;
+                    ////certificado.CertificadoBase64 = model.CertificadoArchivo;
+                    ////certificado.PFXArchivo = model.PFXArchivo;
 
                     certificado.PFXContrasena = model.PFXContrasena;
                     certificado.Estado = model.Estado;
@@ -53,7 +54,30 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         MemoryStream target = new MemoryStream();
                         model.CertificadoArchivo.InputStream.CopyTo(target);
                         Byte[] data = target.ToArray();
+                        //certificado.PFXArchivo = data;
                         certificado.CertificadoBase64 = Convert.ToBase64String(data);
+
+                        System.Security.Cryptography.SHA1CryptoServiceProvider sha1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
+                        System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(data, certificado.PFXContrasena);
+                        // cert.FriendlyName.ToString();
+
+                        certificado.NumSerie = Certificado.GetSerialNumberString(cert);
+                        
+                        //certificado.RFC = cert.GetNameInfo(System.Security.Cryptography.X509Certificates.X509NameType.SimpleName, false);
+                        string[] subject = cert.Subject.Split(',');
+                        foreach (string strVal in subject) {
+                            string value = strVal.Trim();
+                            if (value.StartsWith("OID.2.5.4.45=")) {
+                                string value2 = value.Replace("OID.2.5.4.45=", "");
+                                certificado.RFC = value2.Substring(0, value2.IndexOf('/') >= 0 ? value2.IndexOf('/') : value2.Length).Trim();
+                            }
+                        }
+
+                        certificado.Inicia = DateTime.Parse(cert.GetEffectiveDateString());
+                        certificado.Finaliza = DateTime.Parse(cert.GetExpirationDateString());
+                        //certificado.CertificadoBase64 = model.CertificadoArchivo;
+                        //certificado.PFXArchivo = model.PFXArchivo;
+
                     }
 
                     if (model.PFXArchivo != null) {
@@ -61,7 +85,39 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         model.PFXArchivo.InputStream.CopyTo(target2);
                         Byte[] dataPFX = target2.ToArray();
                         certificado.PFXArchivo = dataPFX;
+
+
+
+                    //    MemoryStream target3 = new MemoryStream();
+                    //    model.CertificadoArchivo.InputStream.Position = 0;
+                    //    model.CertificadoArchivo.InputStream.CopyTo(target3);
+                    //    Byte[] data3 = target3.ToArray();
+                    //    //string certificadoBase64 = Convert.ToBase64String(data);
+
+                        
+                    //    //System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(certificado.PFXArchivo,
+                    //    //     certificado.PFXContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);
+                    //    //System.Security.Cryptography.RSACryptoServiceProvider rsaCryptoIPT = (System.Security.Cryptography.RSACryptoServiceProvider)cert.PrivateKey;
+
+
+
+
                     }
+                    //else {
+                    //    MemoryStream target3 = new MemoryStream();
+                    //    model.CertificadoArchivo.InputStream.CopyTo(target3);
+                    //    Byte[] data3 = target3.ToArray();
+                    //    //string certificadoBase64 = Convert.ToBase64String(data);
+
+                    //    System.Security.Cryptography.SHA1CryptoServiceProvider sha1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
+                    //    System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(data3, certificado.PFXContrasena);
+                    //    cert.FriendlyName.ToString();
+                    //    //System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(certificado.PFXArchivo,
+                    //    //     certificado.PFXContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);
+                    //    System.Security.Cryptography.RSACryptoServiceProvider rsaCryptoIPT = (System.Security.Cryptography.RSACryptoServiceProvider)cert.PrivateKey;
+
+
+                    //}
 
                     this.DBContext.Certificados.Add(certificado);
                     this.DBContext.SaveChanges();
@@ -86,6 +142,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
 
             System.Security.Cryptography.SHA1CryptoServiceProvider sha1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
+            //System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(certificado.PFXArchivo,
+            //     certificado.PFXContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);
+            //// System.Security.Cryptography.RSACryptoServiceProvider rsaCryptoIPT = (System.Security.Cryptography.RSACryptoServiceProvider)cert.PrivateKey;
             System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(certificado.PFXArchivo,
                  certificado.PFXContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);
             System.Security.Cryptography.RSACryptoServiceProvider rsaCryptoIPT = (System.Security.Cryptography.RSACryptoServiceProvider)cert.PrivateKey;
@@ -103,6 +162,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             //model.Issuer = cert.Issuer;
             model.Issuer = cert.IssuerName.Name;
             model.Subject = cert.GetNameInfo(System.Security.Cryptography.X509Certificates.X509NameType.SimpleName, false);
+
+           
 
             model.Issuer = cert.GetEffectiveDateString();
             model.Issuer = cert.GetExpirationDateString();
