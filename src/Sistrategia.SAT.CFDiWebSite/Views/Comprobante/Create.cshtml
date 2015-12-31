@@ -46,7 +46,7 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.Certificados, new { @class = "col-md-1  control-label" })
                 <div class="col-md-5">
-                    @Html.DropDownListFor(m => m.CertificadoId, Model.Certificados, new { @class = "form-control", @data_bind = "value: CertificadoId" })
+                    <select class="form-control" data-bind="value: CertificadoId" id="CertificadoId"></select>
                 </div>
                 @Html.LabelFor(m => m.FormaDePago, new { @class = "col-md-1  control-label" })
                 <div class="col-md-5">
@@ -88,13 +88,13 @@
         <div class="col-md-1">
             <input type="text" class="form-control" data-bind="value: Unidad" placeholder="Unidad">
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
             <input type="text" class="form-control" data-bind="value: NoIdentificacion" placeholder="Identificación">
         </div>
-        <div class="col-md-4">
+        <div class="col-md-5">
             <input type="text" class="form-control" data-bind="value: Descripcion" placeholder="Descripción">
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
             <input type="text" class="form-control" data-bind="value: ValorUnitario" placeholder="Precio">
         </div>
         <div class="col-md-2">
@@ -229,33 +229,33 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="col-md-8" style="font-weight:600">
+            <div class="col-md-7" style="font-weight:600">
                 Subtotal:
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <input class="form-control" data-bind="value: SubTotal" type="text" />
                 <br />
             </div>
 
-            <div class="col-md-8" style="font-weight:600">
+            <div class="col-md-7" style="font-weight:600">
                 Total de impuestos trasladados:
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <input class="form-control" data-bind="value: TotalTraslados" type="text"  />
                 <br />
             </div>
 
-            <div class="col-md-8" style="font-weight:600">
+            <div class="col-md-7" style="font-weight:600">
                 Total de impuestos retenidos:
             </div>
-            <div class="col-md-4" style="font-weight:600">
+            <div class="col-md-5" style="font-weight:600">
                 <input class="form-control" data-bind="value: TotalRetenciones" type="text"  />
                 <br />
             </div>
-            <div class="col-md-8" style="font-weight:600">
+            <div class="col-md-7" style="font-weight:600">
                 Total:
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <input class="form-control" data-bind="value: Total" type="text" />
                 <br />
             </div>
@@ -293,160 +293,224 @@
  @Scripts.Render("~/bundles/KOAmplify")
  <script src="@Url.Content("~/Scripts/ViewModelsKO/ComprobanteCreate.js")"></script>    
  <script type="text/javascript">
-     $(document).ready(function () {
-         // #region Select2 JS
-         $.fn.select2.defaults.set('language', 'es');
+    $(document).ready(function () {
+        // #region Select2 JS
+        $.fn.select2.defaults.set('language', 'es');
 
-         $("#EmisorId").select2({
-             placeholder: "Seleccione",
-             minimumInputLength: 2,
-             allowClear: true,
-             ajax: {
-                 url: "@Url.Action("GetIdByEmisores", "Comprobante")",
-                 dataType: 'json',
-                 contentType: 'application/json; charset=utf-8',
-                 delay: 250,
-                 data: function (params) {
-                     return {
-                         value: params.term
-                     };
-                 },
-                 processResults: function (data) {
-                     return {
-                         results: data
-                     };
-                 },
-                 cache: true
-             },
-             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-         });
+        $("#EmisorId").select2({
+            placeholder: "Seleccione",
+            minimumInputLength: 2,
+            allowClear: true,
+            ajax: {
+                url: "@Url.Action("GetIdByEmisores", "Comprobante")",
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        value: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+        })
 
-         $("#ReceptorId").select2({
-             placeholder: "Seleccione",
-             minimumInputLength: 2,
-             allowClear: true,
-             ajax: {
-                 url: "@Url.Action("GetIdByReceptores", "Comprobante")",
-                 dataType: 'json',
-                 contentType: 'application/json; charset=utf-8',
-                 delay: 250,
-                 data: function (params) {
-                     return {
-                         value: params.term
-                     };
-                 },
-                 processResults: function (data) {
-                     return {
-                         results: data
-                     };
-                 },
-                 cache: true
-             },
-             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-         });
-         // #endregion Select2 JS
-        
-         $("#danger").hide();
+        $("#CertificadoId").prop("disabled", true);
 
-         var initial_model = new InitialModel('InitialModel');
-         var conceptos_model = new ConceptosModel('ConceptosModel');
-         var impuestos_model = new ImpuestosModel('ImpuestosModel');
+        $("#EmisorId").on("change", function (e) {
+            e.preventDefault();
+            if ($("#EmisorId").val() != null && $("#EmisorId").val() != undefined) {
+                $.ajax({
+                    url: "@Url.Action("GetIdByCertificados", "Comprobante")",
+                    type: "POST",
+                    data: { emisorId: $("#EmisorId").val() },
+                    beforeSend: function () {
+                        $("#CertificadoId").prop( "disabled", true ).empty();
+                    },
+                    success: function (data) {
+                        $.each(data, function (i, item) {
+                            $("#CertificadoId").prop("disabled", false).append("<option value='" + data[i].id + "'>" + data[i].text + "</option>");
+                        });
+                    }
+                });
+            }
+        });
 
-         ko.applyBindings(initial_model, document.getElementById("initial_model_id"));
-         ko.applyBindings(conceptos_model, document.getElementById("conceptos_model_id"));
-         ko.applyBindings(impuestos_model, document.getElementById("impuestos_model_id"));
+        $("#ReceptorId").select2({
+            placeholder: "Seleccione",
+            minimumInputLength: 2,
+            allowClear: true,
+            ajax: {
+                url: "@Url.Action("GetIdByReceptores", "Comprobante")",
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        value: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+        });
 
-         $("#enviar_datos").on("click", function (e) {
-             e.preventDefault();
-            
-             if ((initial_model.MetodoDePago() != 'Efectivo'
-                 && initial_model.MetodoDePago() != 'No identificado')
-                 && (initial_model.NumCtaPago().length > 6
-                 || initial_model.NumCtaPago().length < 4))
-             {
-                 alert("¡El valor de NumCtaPago debe contener entre 4 hasta 6 caracteres!");
-             }
-             else
-             {
-                 var conceptos = new Array();
-                 var traslados = new Array();
-                 var retenciones = new Array();
+        // #endregion Select2 JS
 
-                 if (conceptos_model.Items().length > 0) {
-                     for (var i = 0; i < conceptos_model.Items().length; i++) {
-                         conceptos.push({
-                             Cantidad: conceptos_model.Items()[i].ConceptoCantidad(),
-                             Unidad: conceptos_model.Items()[i].ConceptoUnidad(),
-                             NoIdentificacion: conceptos_model.Items()[i].ConceptoNoIdentificacion(),
-                             Descripcion: conceptos_model.Items()[i].ConceptoDescripcion(),
-                             ValorUnitario: conceptos_model.Items()[i].ConceptoValorUnitario(),
-                             Importe: conceptos_model.Items()[i].ConceptoImporte()
-                         });              
-                     }
-                 }
+        $("#danger").hide();
 
-                 if (impuestos_model.TrasladosItems().length > 0) {
-                     for (var i = 0; i < impuestos_model.TrasladosItems().length; i++) {
-                         traslados.push({
-                             Impuesto: impuestos_model.TrasladosItems()[i].TrasladadoImpuesto(),
-                             Tasa: impuestos_model.TrasladosItems()[i].TrasladadoTasa(),
-                             Importe: impuestos_model.TrasladosItems()[i].TrasladadoImporte(),
-                         });
-                     }
-                 }
+        var initial_model = new InitialModel('InitialModel');
+        var conceptos_model = new ConceptosModel('ConceptosModel');
+        var impuestos_model = new ImpuestosModel('ImpuestosModel');
 
-                 if (impuestos_model.RetencionesItems().length > 0) {
-                     for (var i = 0; i < impuestos_model.RetencionesItems().length; i++) {
-                         retenciones.push({
-                             Impuesto: impuestos_model.RetencionesItems()[i].RetencionImpuesto(),
-                             Importe: impuestos_model.RetencionesItems()[i].RetencionImporte(),
-                         });
-                     }
-                 }
+        conceptos_model.Items.subscribe(function (newValue) {
+            if (newValue.length > 0) {
+                var importeTotalConceptos = 0;
+                for (var i = 0; i < newValue.length; i++) {
+                    importeTotalConceptos += Math.round(parseFloat(newValue[i].ConceptoImporte()) * 100) / 100;
+                }
+                impuestos_model.SubTotal(Math.round(parseFloat(importeTotalConceptos) * 100) / 100);                                
+            } else {
+                impuestos_model.SubTotal(0);
+            }
+            var totalidad = Math.round(parseFloat(((impuestos_model.SubTotal() + impuestos_model.TotalTraslados()) - impuestos_model.TotalRetenciones()) * 100)) / 100;
+            impuestos_model.Total(totalidad);
+        });
 
-                 var myobject = {
-                     EmisorId: initial_model.EmisorId(),
-                     ReceptorId: initial_model.ReceptorId(),
-                     Serie: initial_model.Serie(),
-                     Folio: initial_model.Folio(),
-                     FormaDePago: initial_model.FormaDePago(),
-                     MetodoDePago: initial_model.MetodoDePago(),
-                     LugarExpedicion: initial_model.LugarExpedicion(),
-                     NumCtaPago: initial_model.NumCtaPago(),
-                     CertificadoId: initial_model.CertificadoId(),
-                     SubTotal: impuestos_model.SubTotal(),
-                     TotalImpuestosTrasladados: impuestos_model.TotalTraslados(),
-                     TotalImpuestosRetenidos: impuestos_model.TotalRetenciones(),
-                     Total: impuestos_model.Total(),
-                     Conceptos: conceptos,
-                     Traslados: traslados,
-                     Retenciones: retenciones
-                 }
+        impuestos_model.TrasladosItems.subscribe(function (newValue) {
+            if (newValue.length > 0) {              
+              var importeTotalTrasladados = null;
+              for (var i = 0; i < newValue.length; i++) {
+                  importeTotalTrasladados += Math.round(parseFloat(newValue[i].TrasladadoImporte()) * 100) / 100;
+              }
+              impuestos_model.TotalTraslados(Math.round(parseFloat(importeTotalTrasladados) * 100) / 100);
+            }
+            else {
+                impuestos_model.TotalTraslados(0);
+            }
+            var totalidad = Math.round(parseFloat(((impuestos_model.SubTotal() + impuestos_model.TotalTraslados()) - impuestos_model.TotalRetenciones()) * 100)) / 100;
+            impuestos_model.Total(totalidad);
+        });
 
-                 $.ajax({
-                     url: "@Url.Action("Create", "Comprobante")",
-                     type: "POST",
-                     data: myobject,
-                     beforeSend: function () {
-                         $("#alerta").modal({
-                             show: true,
-                             keyboard: false
-                         });
-                         $("#danger").removeClass("alert alert-danger").empty();
-                     },
-                     success: function (data) {
-                         $("#alerta").modal('hide');
-                         if (data.error == false) {
-                             window.location.href = "@Url.Action("Details", "Comprobante")/"+ data.comprobanteId +"";
-                         }
-                         else {                             
-                             $("#danger").addClass("alert alert-danger").show().append(data.errorMsg);
-                             $("html, body").scrollTop(0);
-                         }
-                     }
-                 });
-             }
-       });
+        impuestos_model.RetencionesItems.subscribe(function (newValue) {
+            if (newValue.length > 0) {
+                var importeTotalRetenciones = 0;
+                for (var i = 0; i < newValue.length; i++) {
+                    importeTotalRetenciones += Math.round(parseFloat(newValue[i].RetencionImporte()) * 100) / 100;
+                }
+                impuestos_model.TotalRetenciones(Math.round(parseFloat(importeTotalRetenciones) * 100) / 100);
+            }
+            else {
+                impuestos_model.TotalRetenciones(0);
+            }
+            var totalidad = Math.round(parseFloat(((impuestos_model.SubTotal() + impuestos_model.TotalTraslados()) - impuestos_model.TotalRetenciones()) * 100)) / 100;
+            impuestos_model.Total(totalidad);
+        });
+
+        ko.applyBindings(initial_model, document.getElementById("initial_model_id"));
+        ko.applyBindings(conceptos_model, document.getElementById("conceptos_model_id"));
+        ko.applyBindings(impuestos_model, document.getElementById("impuestos_model_id"));
+
+        $("#enviar_datos").on("click", function (e) {
+            e.preventDefault();
+
+            if ((initial_model.MetodoDePago() != 'Efectivo'
+                && initial_model.MetodoDePago() != 'No identificado')
+                && (initial_model.NumCtaPago().length > 6
+                || initial_model.NumCtaPago().length < 4)) {
+                alert("¡El valor de NumCtaPago debe contener entre 4 hasta 6 caracteres!");
+            }
+            else {
+                var conceptos = new Array();
+                var traslados = new Array();
+                var retenciones = new Array();
+
+                if (conceptos_model.Items().length > 0) {
+                    for (var i = 0; i < conceptos_model.Items().length; i++) {
+                        conceptos.push({
+                            Cantidad: conceptos_model.Items()[i].ConceptoCantidad(),
+                            Unidad: conceptos_model.Items()[i].ConceptoUnidad(),
+                            NoIdentificacion: conceptos_model.Items()[i].ConceptoNoIdentificacion(),
+                            Descripcion: conceptos_model.Items()[i].ConceptoDescripcion(),
+                            ValorUnitario: conceptos_model.Items()[i].ConceptoValorUnitario(),
+                            Importe: conceptos_model.Items()[i].ConceptoImporte()
+                        });
+                    }
+                }
+
+                if (impuestos_model.TrasladosItems().length > 0) {
+                    for (var i = 0; i < impuestos_model.TrasladosItems().length; i++) {
+                        traslados.push({
+                            Impuesto: impuestos_model.TrasladosItems()[i].TrasladadoImpuesto(),
+                            Tasa: impuestos_model.TrasladosItems()[i].TrasladadoTasa(),
+                            Importe: impuestos_model.TrasladosItems()[i].TrasladadoImporte(),
+                        });
+                    }
+                }
+
+                if (impuestos_model.RetencionesItems().length > 0) {
+                    for (var i = 0; i < impuestos_model.RetencionesItems().length; i++) {
+                        retenciones.push({
+                            Impuesto: impuestos_model.RetencionesItems()[i].RetencionImpuesto(),
+                            Importe: impuestos_model.RetencionesItems()[i].RetencionImporte(),
+                        });
+                    }
+                }
+
+                var myobject = {
+                    EmisorId: initial_model.EmisorId(),
+                    ReceptorId: initial_model.ReceptorId(),
+                    Serie: initial_model.Serie(),
+                    Folio: initial_model.Folio(),
+                    FormaDePago: initial_model.FormaDePago(),
+                    MetodoDePago: initial_model.MetodoDePago(),
+                    LugarExpedicion: initial_model.LugarExpedicion(),
+                    NumCtaPago: initial_model.NumCtaPago(),
+                    CertificadoId: initial_model.CertificadoId(),
+                    SubTotal: impuestos_model.SubTotal(),
+                    TotalImpuestosTrasladados: impuestos_model.TotalTraslados(),
+                    TotalImpuestosRetenidos: impuestos_model.TotalRetenciones(),
+                    Total: impuestos_model.Total(),
+                    Conceptos: conceptos,
+                    Traslados: traslados,
+                    Retenciones: retenciones
+                }
+
+                $.ajax({
+                    url: "@Url.Action("Create", "Comprobante")",
+                    type: "POST",
+                    data: myobject,
+                    beforeSend: function () {
+                        $("#alerta").modal({
+                            show: true,
+                            keyboard: false
+                        });
+                        $("#danger").removeClass("alert alert-danger").empty();
+                    },
+                    success: function (data) {
+                        $("#alerta").modal('hide');
+                        if (data.error == false) {
+                            window.location.href = "@Url.Action("Details", "Comprobante")/" + data.comprobanteId + "";
+                        }
+                        else {
+                            $("#danger").addClass("alert alert-danger").show().append(data.errorMsg);
+                            $("html, body").scrollTop(0);
+                        }
+                    }
+                });
+            }
+        });
 
     });
   </script>

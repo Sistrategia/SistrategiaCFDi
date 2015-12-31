@@ -75,6 +75,32 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             }
         }
 
+        public JsonResult GetIdByCertificados(int emisorId, int pageSize = 10)
+        {
+            try
+            {
+                var emisor = DBContext.Emisores.Where(x => x.EmisorId == emisorId).First();
+                var certificados = emisor.Certificados.Where(x => x.Estado == "A").Take(pageSize).ToList();
+
+                List<dynamic> itemList = new List<dynamic>();
+                foreach (var certificado in certificados)
+                {
+                    var dynamicItems = new
+                    {
+                        id = certificado.CertificadoId.ToString(),
+                        text = certificado.NumSerie
+                    };
+                    itemList.Add(dynamicItems);
+                }
+                return Json(itemList.ToArray(), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                var result = new { resp = false, error = ex.Message };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public ActionResult Create() {
             var model = new ComprobanteCreateViewModel();
             model.Conceptos.Add(new ConceptoViewModel());
