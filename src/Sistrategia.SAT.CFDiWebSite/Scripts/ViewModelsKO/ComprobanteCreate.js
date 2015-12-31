@@ -29,7 +29,7 @@ var InitialModel = function (modelId) {
     self.IsRequiredNumCtaPago = ko.observable(false);
 
     self.MetodoDePago.subscribe(function (newValue) {
-        if (newValue == 'Efectivo' || newValue == 'No Identificado' || newValue == '')
+        if (newValue == 'Efectivo' || newValue == 'No identificado' || newValue == '')
             self.IsRequiredNumCtaPago(false);
         else
             self.IsRequiredNumCtaPago(true);
@@ -63,6 +63,9 @@ var ConceptosModel = function (modelId) {
         if (self.Cantidad() != "" && self.Unidad() != "" && self.NoIdentificacion() != "" && self.Descripcion() != "" && self.ValorUnitario() != "") {
             self.Ordinal(self.Ordinal() + 1);
             self.Importe(self.Cantidad() * self.ValorUnitario());
+
+            var sumaImporte = ((Math.round(parseFloat(self.Cantidad()) * 100) / 100) * (Math.round(parseFloat(self.ValorUnitario()) * 100) / 100));
+            self.Importe((Math.round(parseFloat(sumaImporte) * 100) / 100));
 
             var concepto = new Concepto();            
             concepto.ConceptoCantidad = ko.observable(self.Cantidad());
@@ -141,8 +144,8 @@ var ImpuestosModel = function (modelId) {
             self.TrasladosOrdinal(self.TrasladosOrdinal() + 1);
             var trasladado = new Trasladado();
             trasladado.TrasladadoImpuesto = ko.observable(self.TrasladosImpuesto());
-            trasladado.TrasladadoTasa = ko.observable(self.TrasladosImporte());
-            trasladado.TrasladadoImporte = ko.observable(self.TrasladosTasa());
+            trasladado.TrasladadoTasa = ko.observable(self.TrasladosTasa());
+            trasladado.TrasladadoImporte = ko.observable(self.TrasladosImporte());
             trasladado.TrasladadoOrdinal = ko.observable(self.TrasladosOrdinal());
             self.TrasladosItems.push(trasladado);
 

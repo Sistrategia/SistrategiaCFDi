@@ -128,3 +128,32 @@ h4 a{
     /*background-color: #337ab7;*/
     /*border-color: #2e6da4;*/
 }
+
+table{
+    width:100%;
+}
+table td {
+    vertical-align:top;   
+}
+
+@media (max-width: 761px) {
+    table, thead, tbody, tfoot, th, td, tr {
+        display: block;
+        width:100%;
+    }
+
+    table tbody tr {
+        float:left;
+        width:100%;
+        margin-bottom: 15px;
+    }
+
+    table tbody tr td:first-child { 
+     height:100px;
+     width:15%;
+    }
+
+    table tbody tr td:first-child { 
+     float:left;
+    }
+}

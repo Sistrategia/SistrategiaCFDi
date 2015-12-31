@@ -13,44 +13,55 @@
   </div>
 </div>
 
+<br />
+@foreach (var comprobante in Model.Comprobantes)
+{
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <a href="@Url.Action("~/Comprobante/Details/" + comprobante.PublicKey.ToString("N"))">
+                        <div class="circle noselect">
+                            <span>@comprobante.Receptor.Nombre.Substring(0, 1)</span>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <h4 class="media-heading">@Html.ActionLink(string.Format("{0}{1} - {2}", @comprobante.Serie, @comprobante.Folio, @comprobante.Receptor.Nombre), "Details", "Comprobante", new { Id = @comprobante.PublicKey.ToString("N") }, null)</h4>
+                    <h5 class="media-heading">@comprobante.Fecha.ToLongDateString()</h5>
+                </td>
+                <td>
+                    <h4 class="media-heading">
+                        <span style="font-weight:600;color:#7986CB;" class="">@comprobante.Total.ToString("C") MXN</span>
+                    </h4>
+                </td>
+                <td>                    
+                    <a href="#"><span style="font-size:20px; font-weight:normal;color:#a0a0a0;" class="glyphicon glyphicon-envelope"></span></a>&nbsp;&nbsp;
+                    <a href="@Url.Action("ShowXml", new { id = comprobante.PublicKey.ToString("N") })" class="hidden-xs"><span style="font-size:20px; font-weight:normal;color:#a0a0a0;" class="glyphicon glyphicon-file"></span></a>&nbsp;&nbsp;
+                    <a href="@Url.Action("ShowHtml", new { id = comprobante.PublicKey.ToString("N") })" class="hidden-xs"><span style="font-size:20px; font-weight:normal;color:#a0a0a0;" class="glyphicon glyphicon-print"></span></a>&nbsp;
+                    <div class="btn-group pull-right">
+                        <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-top:0px;">
+                            <span style="font-size:20px; font-weight:normal;color:#333;" class="glyphicon glyphicon-option-vertical"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#"><span style="font-size:20px; font-weight:normal;color:#7986CB;" class="glyphicon glyphicon-pencil"></span> Editar</a></li>
+                            <li><a href="#"><span style="font-size:20px; font-weight:normal;color:#7986CB;" class="glyphicon glyphicon-qrcode"></span> Timbrar</a></li>
+                            @*<li role="separator" class="divider"></li>*@
+                            <li><a href="#"><span style="font-size:20px; font-weight:normal;color:#7986CB;" class="glyphicon glyphicon-ban-circle"></span> Cancelar</a></li>
+                            <li class="visible-xs-block">
+                                <a href="@Url.Action("ShowXml", new { id = comprobante.PublicKey.ToString("N") })"><span style="font-size:20px; font-weight:normal;color:#7986CB;" class="glyphicon glyphicon-file"></span> XML</a> 
+                            </li>
+                            <li class="visible-xs-block">
+                                <a href="@Url.Action("ShowHtml", new { id = comprobante.PublicKey.ToString("N") })"><span style="font-size:20px; font-weight:normal;color:#7986CB;" class="glyphicon glyphicon-print"></span> Imprimir</a> 
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
 
-  
-    <ul class="media-list list-inline">
-  @foreach (var comprobante in Model.Comprobantes) {
-    <li class="media">
-      <div class="media-left">
-        <a style="text-decoration: none" href="~/Comprobante/Details/@comprobante.PublicKey.ToString("N")">
-          <div class="circle noselect">
-            <span>@comprobante.Receptor.Nombre.Substring(0, 1)</span>
-          </div>
-        </a>
-      </div>
-      <div class="media-body">
-        <div class="row">
-          <div class="col-md-6">
-            <h4 class="media-heading">@Html.ActionLink(string.Format("{0}{1} - {2}", @comprobante.Serie, @comprobante.Folio, @comprobante.Receptor.Nombre), "Details", "Comprobante", new { Id = @comprobante.PublicKey.ToString("N") }, null)</h4>
-            <h5 class="media-heading">@comprobante.Fecha.ToLongDateString()</h5>
-          </div>
-          <div class="col-md-3">
-            <h4 class="media-heading">
-              <span style="font-weight:600;color:#7986CB;" class="">@comprobante.Total.ToString("C") MXN</span>
-            </h4>
-          </div>
-          <div class="col-md-2">
-            @*<a href="#"><span style="font-size:20px; font-weight:normal;color:#7986CB;" class="glyphicon glyphicon-pencil"></span></a>&nbsp*@
-            <a href="@Url.Action("ShowXml", new { id = comprobante.PublicKey.ToString("N") })"><span style="font-size:20px; font-weight:normal;color:#a0a0a0;" class="glyphicon glyphicon-envelope"></span></a>&nbsp;&nbsp;
-            <a href="@Url.Action("GetTimbre", new { id = comprobante.PublicKey.ToString("N") })"><span style="font-size:20px; font-weight:normal;color:#a0a0a0;" class="glyphicon glyphicon-qrcode"></span></a>&nbsp;&nbsp;
-            <a href="@Url.Action("ShowHtml", new { id = comprobante.PublicKey.ToString("N") })"><span style="font-size:20px; font-weight:normal;color:#a0a0a0;" class="glyphicon glyphicon-print"></span></a>
-            @*<a href="#"><span style="font-size:20px; font-weight:normal;color:#7986CB;" class="glyphicon glyphicon-remove"></span></a>&nbsp;*@            
-          </div>
-          <div class="col-md-1">            
-            <a href="#"><span style="font-size:20px; font-weight:normal;color:#333;" class="glyphicon glyphicon-option-vertical"></span></a>
-          </div>
-        </div>
-      </div>
-    </li>
-  }
-</ul>
 
 
 
