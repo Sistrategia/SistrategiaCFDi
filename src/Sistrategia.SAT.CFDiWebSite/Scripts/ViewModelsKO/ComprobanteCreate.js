@@ -26,10 +26,14 @@ var InitialModel = function (modelId) {
     self.LugarExpedicion = ko.observable("MATRIZ");
     self.NumCtaPago = ko.observable("");
     self.CertificadoId = ko.observable("");
+
+    self.NumeroDeOrden = ko.observable("");
+    self.NumeroDeCliente = ko.observable("");
+
     self.IsRequiredNumCtaPago = ko.observable(false);
 
     self.MetodoDePago.subscribe(function (newValue) {
-        if (newValue == 'Efectivo' || newValue == 'No identificado' || newValue == '')
+        if (newValue == 'EFECTIVO' || newValue == 'NO IDENTIFICADO' || newValue == '')
             self.IsRequiredNumCtaPago(false);
         else
             self.IsRequiredNumCtaPago(true);

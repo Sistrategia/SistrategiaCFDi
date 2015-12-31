@@ -23,10 +23,20 @@
                 <div class="col-md-1">
                     <input class="form-control" type="text" data-bind="value: Folio" />
                 </div>
+
                 @Html.LabelFor(m => m.LugarExpedicion, new { @class = "col-md-2  control-label" })
-                <div class="col-md-6">
+                <div class="col-md-2">
                     <input class="form-control" type="text" data-bind="value: LugarExpedicion" />
-                </div>               
+                </div>  
+
+                <label class="col-md-1  control-label">N° Orden</label>
+                <div class="col-md-1">
+                    <input class="form-control" type="text" data-bind="value: NumeroDeOrden" />
+                </div>
+                <label class="col-md-1  control-label">Cliente</label>
+                <div class="col-md-1">
+                    <input class="form-control" type="text" data-bind="value: NumeroDeCliente" />
+                </div>        
             </div>
         </div>
         <br />
@@ -60,12 +70,12 @@
                 <div class="col-md-4">
                     <select class="form-control" data-bind="value: MetodoDePago">
                         <option value="">Seleccione</option>
-                        <option value="Efectivo">Efectivo</option>
-                        <option value="Cheque">Cheque</option>
-                        <option value="Transferencia interbancaria">Transferencia interbancaria</option>
-                        <option value="No identificado">No identificado</option>
-                        <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
-                        <option value="Tarjeta de Débito">Tarjeta de Débito</option>
+                        <option value="EFECTIVO">EFECTIVO</option>
+                        <option value="CHEQUE">CHEQUE</option>
+                        <option value="TRANSFERENCIA INTERBANCARIA">TRANSFERENCIA INTERBANCARIA</option>
+                        <option value="NO IDENTIFICADO">NO IDENTIFICADO</option>
+                        <option value="TARJETA DE CRÉDITO">TARJETA DE CRÉDITO</option>
+                        <option value="TARJETA DE DÉBITO">TARJETA DE DÉBITO</option>
                     </select>
                 </div>
                 <div data-bind="visible: IsRequiredNumCtaPago()">
@@ -425,8 +435,8 @@
         $("#enviar_datos").on("click", function (e) {
             e.preventDefault();
 
-            if ((initial_model.MetodoDePago() != 'Efectivo'
-                && initial_model.MetodoDePago() != 'No identificado')
+            if ((initial_model.MetodoDePago() != 'EFECTIVO'
+                && initial_model.MetodoDePago() != 'NO IDENTIFICADO')
                 && (initial_model.NumCtaPago().length > 6
                 || initial_model.NumCtaPago().length < 4)) {
                 alert("¡El valor de NumCtaPago debe contener entre 4 hasta 6 caracteres!");
