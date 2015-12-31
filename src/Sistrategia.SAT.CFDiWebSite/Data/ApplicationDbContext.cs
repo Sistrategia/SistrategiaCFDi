@@ -387,11 +387,11 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .IsRequired();
             comprobante.Property(p => p.MetodoDePago)
                 .HasColumnName("metodo_de_pago")
-                .IsRequired() // Requerido
+                .IsOptional() // .IsRequired() // Requerido
                 .HasMaxLength(256);
             comprobante.Property(p => p.LugarExpedicion)
                 .HasColumnName("lugar_expedicion")
-                .IsRequired() // Requerido
+                .IsOptional() // .IsRequired() // Requerido
                 .HasMaxLength(2048);
             comprobante.Property(p => p.NumCtaPago)
                 .HasColumnName("num_cta_pago")
