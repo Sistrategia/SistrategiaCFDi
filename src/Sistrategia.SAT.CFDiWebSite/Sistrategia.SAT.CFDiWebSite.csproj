@@ -200,6 +200,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CommonDlls\MessagingToolkit.QRCode.dll" />
+    <Content Include="Content\cover.css" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
@@ -452,6 +453,7 @@
     <Compile Include="CFDI\TimbreFiscalDigital.cs" />
     <Compile Include="CFDI\Ubicacion.cs" />
     <Compile Include="CFDI\UbicacionFiscal.cs" />
+    <Compile Include="CloudStorage\CloudStorageMananger.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CertificadoController.cs" />

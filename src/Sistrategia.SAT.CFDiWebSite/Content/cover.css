@@ -1,0 +1,122 @@
+﻿ body{
+     font-family:'Open Sans', 'Segoe UI','Helvetica Neue LT Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
+      margin:0;
+      background-color:black;
+    }
+
+    .wrapper {
+      /*position: relative;*/
+      height: 100%;
+      min-height: 100vh;
+    }
+
+    .bg-img {
+      position: relative;
+      min-height:820px;background-image:url('https://sistrategiadrive.blob.core.windows.net/wwwroot/AdobeStock_89755035_1920.jpg');
+      background-repeat:no-repeat;
+      background-position-x:center;
+      background-position-y:top;
+      background-position-y:-90px;
+      background-size:unset;
+      background-size:auto;
+      /*background-position:center;*/      
+    }
+
+    .bg-img2 {
+      position: relative;
+      min-height:740px;background-image:url('https://sistrategiadrive.blob.core.windows.net/wwwroot/AdobeStock_89755035_1920.jpg');
+      background-repeat:no-repeat;
+      background-position-x:center;
+      background-position-y:top;
+      background-size:cover;      
+      background-position:center;
+    }
+
+     .cover-header {
+      position: absolute;
+      top: 0;
+      min-height: 60px;
+      /*padding: 35px 0;*/
+      /*background: rgba(0,0,0,8);*/
+      background-color: rgba(0,0,0,.68);
+      /**/
+      width: 100%;      
+    }
+
+    .panel-cover {
+      position: absolute;
+      bottom: 0;
+      padding: 15px 0;
+      /*background: rgba(0,0,0,.8);*/
+      background-color: rgba(0,0,0,.68);
+      /*background-color: rgba(0,0,0,.68);*/
+      /**/
+      width: 100%;
+      bottom: 0;
+    }
+
+    .panel-middle{
+        /*margin-top:100px;*/
+        padding: 25px 0;
+        background-color: rgba(0,0,0,.68);
+        width: 100%;
+    }
+
+    h1 {
+      color:white;
+      font-family:'Open Sans', 'Segoe UI','Helvetica Neue LT Pro',Helvetica,Arial,sans-serif;
+      font-size:63px;
+      font-weight:100;
+      text-align:center;
+      margin-top: 10px;
+    }
+
+    p {
+      color:white; 
+      margin:20px 100px;     
+      font-size:18px;
+      font-weight:100;
+      text-align:center;
+    }
+
+    .navbar-brand{
+        padding: 24px 15px;
+    }
+
+    .navbar-nav {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .navbar-right > li {
+        margin-left:15px;
+    }
+
+    .navbar-inverse .navbar-nav > li > a {
+        color:#ccc;
+    }
+
+    .navbar-inverse .btn {
+        border-radius:0;
+    }
+
+    .sistrategiaLogo {
+      /*margin-top:30px;*/
+      padding-left:30px;
+    }
+
+@media (min-width: 768px) {
+    .navbar-nav > li > a {
+        padding-top:8px;
+        padding-bottom:8px;        
+    }
+
+    p {       
+        margin: 20px 220px;
+    }
+}
+
+.btn-default {
+    background-color:transparent;
+    border-color:#ccc;
+}
