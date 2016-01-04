@@ -70,6 +70,21 @@
   </div>
 
   <div class="form-group">
+    @Html.LabelFor(m => m.PrivateKeyDER, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.PrivateKeyDER, new { @class = "form-control", type = "file" })
+    </div>
+  </div>
+
+  <div class="form-group">
+    @Html.LabelFor(m => m.PrivateKeyContrasena, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.PasswordFor(m => m.PrivateKeyContrasena, new { @class = "form-control" })
+    </div>
+  </div> 
+  
+
+  <div class="form-group">
     @Html.LabelFor(m => m.Estado, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
       @Html.TextBoxFor(m => m.Estado, new { @class = "form-control" })

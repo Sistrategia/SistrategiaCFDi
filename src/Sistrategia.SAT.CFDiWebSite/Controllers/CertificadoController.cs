@@ -54,11 +54,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         MemoryStream target = new MemoryStream();
                         model.CertificadoArchivo.InputStream.CopyTo(target);
                         Byte[] data = target.ToArray();
+                        certificado.CertificadoDER = data;
                         //certificado.PFXArchivo = data;
                         certificado.CertificadoBase64 = Convert.ToBase64String(data);
 
                         System.Security.Cryptography.SHA1CryptoServiceProvider sha1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
-                        System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(data, certificado.PFXContrasena);
+                        //System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(data, certificado.PFXContrasena);
+                        System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(data);
                         // cert.FriendlyName.ToString();
 
                         certificado.NumSerie = Certificado.GetSerialNumberString(cert);
@@ -118,6 +120,14 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
 
                     //}
+
+                    if (model.PrivateKeyDER != null) {
+                        MemoryStream ms = new MemoryStream();
+                        model.PrivateKeyDER.InputStream.CopyTo(ms);
+                        Byte[] dataDER = ms.ToArray();
+                        certificado.PrivateKeyDER = dataDER;
+                    }
+                    certificado.PrivateKeyContrasena = model.PrivateKeyContrasena;
 
                     this.DBContext.Certificados.Add(certificado);
                     this.DBContext.SaveChanges();

@@ -491,6 +491,7 @@
     <Compile Include="Security\SecurityUserRole.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\CustomRedirectHandler.cs" />
+    <Compile Include="Utils\JavaScience\opensslkey.cs" />
     <Compile Include="Utils\LocalizationRedirectRouteHandler.cs" />
     <Compile Include="Utils\LocalizedRouteHandler.cs" />
     <Compile Include="Utils\RouteCollectionExtensions.cs" />
