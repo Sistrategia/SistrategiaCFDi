@@ -140,7 +140,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                             folio = comprobante.Folio,
                             receptor = comprobante.Receptor.Nombre,
                             fecha = comprobante.Fecha.ToLongDateString(),
-                            total = comprobante.Total.ToString("C")                           
+                            total = comprobante.Total.ToString("C"),
+                            status = comprobante.Status
                         };
                         itemList.Add(dynamicItems);
                     }
