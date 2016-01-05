@@ -60,12 +60,12 @@
                 <div class="col-md-4">
                     <select class="form-control" data-bind="value: MetodoDePago">
                         <option value="">Seleccione</option>
-                        <option value="Efectivo">Efectivo</option>
-                        <option value="Cheque">Cheque</option>
-                        <option value="Transferencia interbancaria">Transferencia interbancaria</option>
-                        <option value="No identificado">No identificado</option>
-                        <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
-                        <option value="Tarjeta de Débito">Tarjeta de Débito</option>
+                        <option value="EFECTIVO">EFECTIVO</option>
+                        <option value="CHEQUE">CHEQUE</option>
+                        <option value="TRANSFERENCIA INTERBANCARIA">TRANSFERENCIA INTERBANCARIA</option>
+                        <option value="NO IDENTIFICADO">NO IDENTIFICADO</option>
+                        <option value="TARJETA DE CRÉDITO">TARJETA DE CRÉDITO</option>
+                        <option value="TARJETA DE DÉBITO">TARJETA DE DÉBITO</option>
                     </select>
                 </div>
                 <div data-bind="visible: IsRequiredNumCtaPago()">
@@ -83,7 +83,7 @@
             <br />
         </div>
         <div class="col-md-1">
-            <input type="text" class="form-control" data-bind="value: Cantidad" placeholder="Cantidad">
+            <input type="number" class="form-control" data-bind="value: Cantidad" placeholder="Cantidad">
         </div>
         <div class="col-md-1">
             <input type="text" class="form-control" data-bind="value: Unidad" placeholder="Unidad">
@@ -95,7 +95,7 @@
             <input type="text" class="form-control" data-bind="value: Descripcion" placeholder="Descripción">
         </div>
         <div class="col-md-2">
-            <input type="text" class="form-control" data-bind="value: ValorUnitario" placeholder="Precio">
+            <input type="number" class="form-control" data-bind="value: ValorUnitario" placeholder="Precio">
         </div>
         <div class="col-md-2">
             <button type="button" class="btn btn-default form-control" data-bind="enable: (Cantidad().length > 0 && Unidad().length > 0 && NoIdentificacion().length > 0 && Descripcion().length > 0 && ValorUnitario().length > 0), click: addItem">Agregar</button>
@@ -154,7 +154,7 @@
               <input type="text" class="form-control" data-bind="value: TrasladosTasa" placeholder="Tasa">
             </div>
             <div class="col-md-3">
-              <input type="text" class="form-control" data-bind="value: TrasladosImporte" placeholder="Importe">
+              <input type="number" class="form-control" data-bind="value: TrasladosImporte" placeholder="Importe">
             </div>
             <div class="col-md-2">
                 <button type="button" class="btn btn-default form-control" data-bind="enable: (TrasladosImpuesto().length > 0 && TrasladosImporte().length > 0 && TrasladosTasa().length > 0), click: addTraslado">Agregar</button>
@@ -198,7 +198,7 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <input type="text" class="form-control" data-bind="value: RetencionesImporte" placeholder="Importe">
+                <input type="number" class="form-control" data-bind="value: RetencionesImporte" placeholder="Importe">
             </div>
             <div class="col-md-2">
                 <button type="button" class="btn btn-default form-control" data-bind="enable: (RetencionesImpuesto().length > 0 && RetencionesImporte().length > 0), click: addRetencion">Agregar</button>
@@ -233,7 +233,7 @@
                 Subtotal:
             </div>
             <div class="col-md-5">
-                <input class="form-control" data-bind="value: SubTotal" type="text" />
+                <input class="form-control" data-bind="value: SubTotal" type="number" />
                 <br />
             </div>
 
@@ -241,7 +241,7 @@
                 Total de impuestos trasladados:
             </div>
             <div class="col-md-5">
-                <input class="form-control" data-bind="value: TotalTraslados" type="text"  />
+                <input class="form-control" data-bind="value: TotalTraslados" type="number" />
                 <br />
             </div>
 
@@ -249,14 +249,14 @@
                 Total de impuestos retenidos:
             </div>
             <div class="col-md-5" style="font-weight:600">
-                <input class="form-control" data-bind="value: TotalRetenciones" type="text"  />
+                <input class="form-control" data-bind="value: TotalRetenciones" type="number" />
                 <br />
             </div>
             <div class="col-md-7" style="font-weight:600">
                 Total:
             </div>
             <div class="col-md-5">
-                <input class="form-control" data-bind="value: Total" type="text" />
+                <input class="form-control" data-bind="value: Total" type="number" />
                 <br />
             </div>
         </div>
@@ -331,7 +331,8 @@
                     type: "POST",
                     data: { emisorId: $("#EmisorId").val() },
                     beforeSend: function () {
-                        $("#CertificadoId").prop( "disabled", true ).empty();
+                        $("#CertificadoId").prop("disabled", true).empty();
+                        $("#CertificadoId").append("<option value=''>Seleccione</option>");
                     },
                     success: function (data) {
                         $.each(data, function (i, item) {
@@ -425,8 +426,11 @@
         $("#enviar_datos").on("click", function (e) {
             e.preventDefault();
 
-            if ((initial_model.MetodoDePago() != 'Efectivo'
-                && initial_model.MetodoDePago() != 'No identificado')
+            if (initial_model.MetodoDePago() == ''){
+                alert("¡Ingrese el método de pago!");
+            }
+            else if ((initial_model.MetodoDePago() != 'EFECTIVO'
+                && initial_model.MetodoDePago() != 'NO IDENTIFICADO')
                 && (initial_model.NumCtaPago().length > 6
                 || initial_model.NumCtaPago().length < 4)) {
                 alert("¡El valor de NumCtaPago debe contener entre 4 hasta 6 caracteres!");
@@ -494,19 +498,20 @@
                     beforeSend: function () {
                         $("#alerta").modal({
                             show: true,
-                            keyboard: false
+                            keyboard: false,
+                            backdrop: 'static'
                         });
                         $("#danger").removeClass("alert alert-danger").empty();
                     },
-                    success: function (data) {
-                        $("#alerta").modal('hide');
+                    success: function (data) {                        
                         if (data.error == false) {
                             window.location.href = "@Url.Action("Details", "Comprobante")/" + data.comprobanteId + "";
                         }
                         else {
                             $("#danger").addClass("alert alert-danger").show().append(data.errorMsg);
                             $("html, body").scrollTop(0);
-                        }
+                            $("#alerta").modal('hide');
+                        }                        
                     }
                 });
             }
