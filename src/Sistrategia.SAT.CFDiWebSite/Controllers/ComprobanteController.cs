@@ -576,5 +576,38 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             
             return View(model);
         }
+
+        public ActionResult GetPDF(string id) {
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            if (comprobante == null)
+                return HttpNotFound();
+
+            string PdfFileName = "";
+
+            if (comprobante.Serie == null) {
+                PdfFileName = "FACTURA_" + comprobante.Folio.ToString();
+            }
+            else {
+                PdfFileName = "FACTURA_" + comprobante.Folio.ToString() + comprobante.Serie.ToString();
+            }
+            PdfFileName = PdfFileName + ".pdf";
+
+            try {
+                Response.ClearContent();
+                Response.ContentType = "application/pdf";
+                Response.ContentEncoding = System.Text.Encoding.UTF8;
+                InvoicePdfModel pdfGenerator = new InvoicePdfModel();
+                return File(pdfGenerator.CreatePDF(comprobante), "application/pdf", PdfFileName);
+            }
+            catch (Exception ex) {
+                TempData["msg2"] = ex.Message.ToString();
+                return RedirectToAction("Index");
+            }
+        }
     }
 }
