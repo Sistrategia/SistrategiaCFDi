@@ -262,13 +262,13 @@ namespace Sistrategia.SAT.CFDiWebSite
             try {
                 QRCodeEncoder encoder = new QRCodeEncoder();
                 encoder.QRCodeErrorCorrect = QRCodeEncoder.ERROR_CORRECTION.Q;
-                encoder.QRCodeScale = 3;
+                encoder.QRCodeScale = 2;
                 encoder.QRCodeVersion = 8;
                 encoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;
 
                 Bitmap img = encoder.Encode(info);
                 System.IO.MemoryStream ms = new System.IO.MemoryStream();
-                img.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                img.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
                 byte[] byteImage = ms.ToArray();
 
                 //path = "C:\\Code\\QRCodeCreator\\QRCodeCreator\\QRCodeCreator\\img" + DateTime.Now.ToString("d_MM_yy_HH_mm_ss") + ".jpg";
