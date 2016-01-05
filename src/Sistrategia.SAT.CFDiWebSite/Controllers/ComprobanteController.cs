@@ -23,44 +23,35 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             return View(model);
         }
 
-        public JsonResult GetIdByEmisores(string value, int pageSize = 10)
-        {
-            try
-            {
-                var emisores = DBContext.Emisores.Where(x => x.Status == "A" && ( x.Nombre.Contains(value) || x.RFC.Contains(value)))
+        public JsonResult GetIdByEmisores(string value, int pageSize = 10) {
+            try {
+                var emisores = DBContext.Emisores.Where(x => x.Status == "A" && (x.Nombre.Contains(value) || x.RFC.Contains(value)))
                                                  .Take(pageSize).ToList();
 
                 List<dynamic> itemList = new List<dynamic>();
-                foreach (var emisor in emisores)
-                {
-                   var dynamicItems = new
-                    {
+                foreach (var emisor in emisores) {
+                    var dynamicItems = new {
                         id = emisor.EmisorId.ToString(),
                         text = emisor.Nombre + " - " + emisor.RFC
                     };
-                   itemList.Add(dynamicItems);
+                    itemList.Add(dynamicItems);
                 }
                 return Json(itemList.ToArray(), JsonRequestBehavior.AllowGet);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 var result = new { resp = false, error = ex.Message };
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
 
-        public JsonResult GetIdByReceptores(string value, int pageSize = 10)
-        {
-            try
-            {
+        public JsonResult GetIdByReceptores(string value, int pageSize = 10) {
+            try {
                 var receptores = DBContext.Receptores.Where(x => x.Status == "A" && (x.Nombre.Contains(value) || x.RFC.Contains(value)))
-                                                 .Take(pageSize).ToList();               
+                                                 .Take(pageSize).ToList();
 
                 List<dynamic> itemList = new List<dynamic>();
-                foreach (var receptor in receptores)
-                {
-                    var dynamicItems = new
-                    {
+                foreach (var receptor in receptores) {
+                    var dynamicItems = new {
                         id = receptor.ReceptorId.ToString(),
                         text = receptor.Nombre + " - " + receptor.RFC
                     };
@@ -68,8 +59,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 }
                 return Json(itemList.ToArray(), JsonRequestBehavior.AllowGet);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 var result = new { resp = false, error = ex.Message };
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
@@ -121,7 +111,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         : DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search) || x.Total.ToString().Contains(search)).Take(((page - 1) * pageSize) + pageSize).OrderByDescending(orderByFunc).Skip(((page - 1) * pageSize)).ToList();
                 else
                     Comprobantes = sortDir == "asc" ? DBContext.Comprobantes.OrderBy(orderByFunc).Take(((page - 1) * pageSize) + pageSize).Skip(((page - 1) * pageSize)).ToList()
-                        : DBContext.Comprobantes.OrderByDescending(orderByFunc).Take(((page - 1) * pageSize) + pageSize).Skip(((page - 1) * pageSize)).ToList();             
+                        : DBContext.Comprobantes.OrderByDescending(orderByFunc).Take(((page - 1) * pageSize) + pageSize).Skip(((page - 1) * pageSize)).ToList();
 
                 Sistrategia.SAT.CFDiWebSite.CloudStorage.CloudStorageMananger cloudStorage = new Sistrategia.SAT.CFDiWebSite.CloudStorage.CloudStorageMananger();
 
@@ -140,7 +130,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                             folio = comprobante.Folio,
                             receptor = comprobante.Receptor.Nombre,
                             fecha = comprobante.Fecha.ToLongDateString(),
-                            total = comprobante.Total.ToString("C")                           
+                            total = comprobante.Total.ToString("C"),
+                            status = comprobante.Status
                         };
                         itemList.Add(dynamicItems);
                     }
@@ -205,115 +196,138 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
         [HttpPost]
         public JsonResult Create(ComprobanteCreateViewModel model) {
-            try
-            {
-                var comprobante = new Comprobante();
+            try {
+                if (String.IsNullOrEmpty(model.LugarExpedicion))
+                    throw new ApplicationException("¡Ingrese el lugar de expedición!");
+                else if (model.EmisorId <= 0)
+                    throw new ApplicationException("¡Ingrese el emisor!");
+                else if (model.ReceptorId <= 0)
+                    throw new ApplicationException("¡Ingrese el receptor!");
+                else if (model.CertificadoId <= 0)
+                    throw new ApplicationException("¡Ingrese el certificado!");
+                else if (String.IsNullOrEmpty(model.FormaDePago))
+                    throw new ApplicationException("¡Ingrese la forma de pago!");
+                else if (String.IsNullOrEmpty(model.MetodoDePago))
+                    throw new ApplicationException("¡Ingrese el método de pago!");
+                else if ((model.MetodoDePago != "EFECTIVO" && model.MetodoDePago != "NO IDENTIFICADO") && (model.NumCtaPago.Count() > 6 || model.NumCtaPago.Count() < 4))
+                    throw new ApplicationException("¡El valor de NumCtaPago debe contener entre 4 hasta 6 caracteres!");
+                else if ((model.Conceptos != null || model.Conceptos.Count > 0)
+                    && model.Conceptos.All(x => x.Cantidad < 0m || x.Unidad == null || x.Descripcion == null || x.ValorUnitario < 0m))
+                    throw new ApplicationException("¡Ingrese al menos un concepto!");
+                else if (model.SubTotal < 0m)
+                    throw new ApplicationException("¡SubTotal no válido!");
+                else if (model.TotalImpuestosTrasladados < 0m)
+                    throw new ApplicationException("¡Total Impuestos Trasladados no válido!");
+                else if (model.TotalImpuestosRetenidos < 0m)
+                    throw new ApplicationException("¡Total Impuestos Retenidos no válido!");
+                else if (model.Total < 0m)
+                    throw new ApplicationException("¡Total no válido!");
+                else {
 
-                comprobante.EmisorId = model.EmisorId;
-                comprobante.Emisor = DBContext.Emisores.Find(model.EmisorId); // .Where(e => e.PublicKey == publicKey).SingleOrDefault();
-                comprobante.ReceptorId = model.ReceptorId;
-                comprobante.Receptor = DBContext.Receptores.Find(model.ReceptorId); // .Where(e => e.PublicKey == publicKey).SingleOrDefault();
-                comprobante.Serie = model.Serie;
-                comprobante.Folio = model.Folio;
-                comprobante.Fecha = DateTime.Now + SATManager.GetCFDIServiceTimeSpan();
-                comprobante.FormaDePago = model.FormaDePago;
-                comprobante.SubTotal = model.SubTotal;
-                comprobante.Total = model.Total;
+                    var comprobante = new Comprobante();
 
-                //comprobante.NoCertificado;
-                //comprobante.Certificado;
-                comprobante.TipoDeComprobante = "ingreso";
+                    comprobante.EmisorId = model.EmisorId;
+                    comprobante.Emisor = DBContext.Emisores.Find(model.EmisorId); // .Where(e => e.PublicKey == publicKey).SingleOrDefault();
+                    comprobante.ReceptorId = model.ReceptorId;
+                    comprobante.Receptor = DBContext.Receptores.Find(model.ReceptorId); // .Where(e => e.PublicKey == publicKey).SingleOrDefault();
+                    comprobante.Serie = model.Serie;
+                    comprobante.Folio = model.Folio;
+                    comprobante.Fecha = DateTime.Now + SATManager.GetCFDIServiceTimeSpan();
+                    comprobante.FormaDePago = model.FormaDePago;
+                    comprobante.SubTotal = model.SubTotal;
+                    comprobante.Total = model.Total;
 
-                comprobante.FormaDePago = model.FormaDePago;
-                comprobante.MetodoDePago = model.MetodoDePago;
-                comprobante.LugarExpedicion = model.LugarExpedicion;
-                comprobante.TipoCambio = model.TipoCambio;
+                    //comprobante.NoCertificado;
+                    //comprobante.Certificado;
+                    comprobante.TipoDeComprobante = "ingreso";
 
-                comprobante.NumCtaPago = model.NumCtaPago;
+                    comprobante.FormaDePago = model.FormaDePago;
+                    comprobante.MetodoDePago = model.MetodoDePago;
+                    comprobante.LugarExpedicion = model.LugarExpedicion;
+                    comprobante.TipoCambio = model.TipoCambio;
 
-                comprobante.Conceptos = new List<Concepto>();
+                    comprobante.NumCtaPago = model.NumCtaPago;
 
-                foreach (var modelConcepto in model.Conceptos)
-                {
-                    if (!string.IsNullOrEmpty(modelConcepto.Descripcion))
-                    {
-                        comprobante.Conceptos.Add(new Concepto
-                        {
-                            Cantidad = modelConcepto.Cantidad,
-                            Unidad = modelConcepto.Unidad,
-                            NoIdentificacion = modelConcepto.NoIdentificacion,
-                            Descripcion = modelConcepto.Descripcion,
-                            ValorUnitario = modelConcepto.ValorUnitario,
-                            Importe = modelConcepto.Importe,
-                            PublicKey = Guid.NewGuid()
-                        });
+                    comprobante.Conceptos = new List<Concepto>();
+
+                    foreach (var modelConcepto in model.Conceptos) {
+                        if (!string.IsNullOrEmpty(modelConcepto.Descripcion)) {
+                            comprobante.Conceptos.Add(new Concepto {
+                                Cantidad = modelConcepto.Cantidad,
+                                Unidad = modelConcepto.Unidad,
+                                NoIdentificacion = modelConcepto.NoIdentificacion,
+                                Descripcion = modelConcepto.Descripcion,
+                                ValorUnitario = modelConcepto.ValorUnitario,
+                                Importe = modelConcepto.Importe,
+                                PublicKey = Guid.NewGuid()
+                            });
+                        }
                     }
+
+                    comprobante.Impuestos = new Impuestos();
+                    comprobante.Impuestos.Traslados = new List<Traslado>();
+
+                    foreach (var modelTraslado in model.Traslados) {
+                        if (modelTraslado.Tasa > 0 && modelTraslado.Importe > 0) {
+                            comprobante.Impuestos.Traslados.Add(new Traslado {
+                                Importe = modelTraslado.Importe,
+                                Impuesto = modelTraslado.Impuesto,
+                                Tasa = modelTraslado.Tasa,
+                            });
+                        }
+                    }
+
+                    comprobante.Impuestos.Retenciones = new List<Retencion>();
+                    foreach (var modelRetencion in model.Retenciones) {
+                        if (modelRetencion.Importe > 0) {
+                            comprobante.Impuestos.Retenciones.Add(new Retencion {
+                                Importe = modelRetencion.Importe,
+                                Impuesto = modelRetencion.Impuesto,
+                            });
+                        }
+                    }
+
+                    if (model.TotalImpuestosRetenidos > 0)
+                        comprobante.Impuestos.TotalImpuestosRetenidos = model.TotalImpuestosRetenidos;
+
+                    if (model.TotalImpuestosTrasladados > 0)
+                        comprobante.Impuestos.TotalImpuestosTrasladados = model.TotalImpuestosTrasladados;
+
+                    comprobante.PublicKey = Guid.NewGuid();
+
+                    Certificado certificado = DBContext.Certificados.Find(model.CertificadoId);
+
+                    if (certificado != null) {
+                        // comprobante.NoCertificado = certificado.NumSerie;
+                        // comprobante.Certificado = certificado.CertificadoBase64;
+                        comprobante.CertificadoId = certificado.CertificadoId;
+                        comprobante.Certificado = certificado;
+                        comprobante.HasNoCertificado = true;
+                        comprobante.HasCertificado = true;
+                    }
+
+                    string cadenaOriginal = comprobante.GetCadenaOriginal();
+                    comprobante.Sello = certificado.GetSello(cadenaOriginal);
+
+                    DBContext.Comprobantes.Add(comprobante);
+                    DBContext.SaveChanges();
+
+                    TempData["success"] = "Se ha creado el comprobante correctamente";
+                    var data = new {
+                        error = false,
+                        errorMsg = "",
+                        comprobanteId = comprobante.PublicKey
+                    };
+                    return Json(data);
                 }
-
-                comprobante.Impuestos = new Impuestos();
-                comprobante.Impuestos.Traslados = new List<Traslado>();
-
-                foreach (var modelTraslado in model.Traslados)
-                {
-                    comprobante.Impuestos.Traslados.Add(new Traslado
-                    {
-                        Importe = modelTraslado.Importe,
-                        Impuesto = modelTraslado.Impuesto,
-                        Tasa = modelTraslado.Tasa,
-                    });
-                }
-
-                comprobante.Impuestos.Retenciones = new List<Retencion>();
-                foreach (var modelRetencion in model.Retenciones)
-                {
-                    comprobante.Impuestos.Retenciones.Add(new Retencion
-                    {
-                        Importe = modelRetencion.Importe,
-                        Impuesto = modelRetencion.Impuesto,
-                    });
-                }
-
-                comprobante.Impuestos.TotalImpuestosRetenidos = model.TotalImpuestosRetenidos;
-                comprobante.Impuestos.TotalImpuestosTrasladados = model.TotalImpuestosTrasladados;
-
-                comprobante.PublicKey = Guid.NewGuid();
-
-                Certificado certificado = DBContext.Certificados.Find(model.CertificadoId);
-
-                if (certificado != null)
-                {
-                    // comprobante.NoCertificado = certificado.NumSerie;
-                    // comprobante.Certificado = certificado.CertificadoBase64;
-                    comprobante.CertificadoId = certificado.CertificadoId;
-                    comprobante.Certificado = certificado;
-                    comprobante.HasNoCertificado = true;
-                    comprobante.HasCertificado = true;
-                }
-
-                string cadenaOriginal = comprobante.GetCadenaOriginal();
-                comprobante.Sello = certificado.GetSello(cadenaOriginal);
-
-                DBContext.Comprobantes.Add(comprobante);
-                DBContext.SaveChanges();
-
-                TempData["success"] = "Se ha creado la dieta correctamente";
-                var data = new
-                {
-                    error = false,
-                    errorMsg = "",
-                    comprobanteId = comprobante.PublicKey
-                };
-                return Json(data);
             }
-            catch (Exception ex)
-            {
-                var data = new
-                {
+            catch (Exception ex) {
+                var data = new {
                     error = true,
                     errorMsg = ex.Message.ToString()
                 };
                 return Json(data);
-            }     
+            }
         }
 
         public ActionResult Details(string id) {
@@ -327,7 +341,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 return HttpNotFound();
 
             var model = new ComprobanteDetailViewModel(comprobante);
-          
+
             return View(model);
         }
 
@@ -338,7 +352,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
 
             var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
-            
+
             if (comprobante == null)
                 return HttpNotFound();
 
@@ -456,7 +470,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             //string xml = comprobante.GetXml();
             string cadenaOriginal = comprobante.GetCadenaOriginal();
 
-            
+
 
             Response.ClearContent();
             Response.ContentType = "plain/text";
@@ -527,7 +541,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
             var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
 
-            
+
 
             var model = new ComprobanteDetailViewModel(comprobante);
             return View(model);
@@ -535,8 +549,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
         [HttpPost]
         public ActionResult GetTimbre(string id, FormCollection formCollection) {
-        //public ActionResult GetTimbre(string id, ComprobanteDetailViewModel model) {
-        //public ActionResult GetTimbre(ComprobanteDetailViewModel model) {
+            //public ActionResult GetTimbre(string id, ComprobanteDetailViewModel model) {
+            //public ActionResult GetTimbre(ComprobanteDetailViewModel model) {
             Guid publicKey;
             if (!Guid.TryParse(id, out publicKey))
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
@@ -556,10 +570,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             string invoiceFileName = DateTime.Now.ToString("yyyyMMddHmmss_" + comprobante.PublicKey.ToString("N"));
             //comprobante.WriteXml(invoicesPath + invoiceFileName + "_send.xml");
 
-            
+
 
             //manager.GetCFDI(user, password, comprobante, certificado);
-            
+
 
             //// Comprimir y enviar al servicio web
             //string pathFile = invoicesPath + invoiceFileName + "_send.xml";
@@ -571,7 +585,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             //string filePath = invoicesPath + invoiceFileName + "_send.zip";
             //string responsePath = invoicesPath + invoiceFileName + "_response.zip";
 
-            
+
 
             try {
 
@@ -582,54 +596,54 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                 //byte[] response = Sistrategia.Server.SAT.SATManager.GetCFDI(user, password, file);
 
-            //    byte[] response = Sistrategia.Server.SAT.SATManager.GetCFDI(user, password, filePath, responsePath);
-            //    Ionic.Zip.ZipFile zipR = Ionic.Zip.ZipFile.Read(invoicesPath + invoiceFileName + "_response.zip");
-            //    zipR.ExtractAll(invoicesPath, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);
-            //    zipR.Dispose();
-            //    //return File(invoicesPath + "SIGN_" + invoiceFileName + "_send.xml", "text/xml");
+                //    byte[] response = Sistrategia.Server.SAT.SATManager.GetCFDI(user, password, filePath, responsePath);
+                //    Ionic.Zip.ZipFile zipR = Ionic.Zip.ZipFile.Read(invoicesPath + invoiceFileName + "_response.zip");
+                //    zipR.ExtractAll(invoicesPath, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);
+                //    zipR.Dispose();
+                //    //return File(invoicesPath + "SIGN_" + invoiceFileName + "_send.xml", "text/xml");
 
-            //    /* Insert Timbre */
-            //    System.Xml.XmlDocument invoice = new System.Xml.XmlDocument();
-            //    invoice.Load(invoicesPath + "SIGN_" + invoiceFileName + "_send.xml");
-            //    System.Xml.XmlNamespaceManager nsmgr = new System.Xml.XmlNamespaceManager(invoice.NameTable);
-            //    nsmgr.AddNamespace("cfdi", "http://www.sat.gob.mx/cfd/3");
-            //    nsmgr.AddNamespace("tfd", "http://www.sat.gob.mx/TimbreFiscalDigital");
-            //    System.Xml.XmlNode timbre = invoice.SelectSingleNode("//tfd:TimbreFiscalDigital", nsmgr);
+                //    /* Insert Timbre */
+                //    System.Xml.XmlDocument invoice = new System.Xml.XmlDocument();
+                //    invoice.Load(invoicesPath + "SIGN_" + invoiceFileName + "_send.xml");
+                //    System.Xml.XmlNamespaceManager nsmgr = new System.Xml.XmlNamespaceManager(invoice.NameTable);
+                //    nsmgr.AddNamespace("cfdi", "http://www.sat.gob.mx/cfd/3");
+                //    nsmgr.AddNamespace("tfd", "http://www.sat.gob.mx/TimbreFiscalDigital");
+                //    System.Xml.XmlNode timbre = invoice.SelectSingleNode("//tfd:TimbreFiscalDigital", nsmgr);
 
-            //    Sistrategia.Server.SAT.CFDI.Comprobante comprobante2 = Sistrategia.Server.SAT.SATManager.GetComprobante(Guid.Parse(post["comprobanteId"]));
-            //    comprobante2.Complemento = new Sistrategia.Server.SAT.CFDI.ComprobanteComplemento();
-            //    comprobante2.Complemento.TimbreFiscalDigitalSpecified = true;
-            //    comprobante2.Complemento.TimbreFiscalDigital = new Sistrategia.Server.SAT.CFDI.ComprobanteTimbre();
-            //    comprobante2.Complemento.TimbreFiscalDigital.SatTimbreId = Guid.NewGuid();
-            //    comprobante2.Complemento.TimbreFiscalDigital.Version = timbre.Attributes.GetNamedItem("version").Value.ToString();
-            //    comprobante2.Complemento.TimbreFiscalDigital.UUID = timbre.Attributes.GetNamedItem("UUID").Value.ToString();
-            //    comprobante2.Complemento.TimbreFiscalDigital.FechaTimbrado = DateTime.Parse(timbre.Attributes.GetNamedItem("FechaTimbrado").Value);
-            //    comprobante2.Complemento.TimbreFiscalDigital.SelloCFD = timbre.Attributes.GetNamedItem("selloCFD").Value.ToString();
-            //    comprobante2.Complemento.TimbreFiscalDigital.NoCertificadoSAT = timbre.Attributes.GetNamedItem("noCertificadoSAT").Value.ToString();
-            //    comprobante2.Complemento.TimbreFiscalDigital.SelloSAT = timbre.Attributes.GetNamedItem("selloSAT").Value.ToString();
+                //    Sistrategia.Server.SAT.CFDI.Comprobante comprobante2 = Sistrategia.Server.SAT.SATManager.GetComprobante(Guid.Parse(post["comprobanteId"]));
+                //    comprobante2.Complemento = new Sistrategia.Server.SAT.CFDI.ComprobanteComplemento();
+                //    comprobante2.Complemento.TimbreFiscalDigitalSpecified = true;
+                //    comprobante2.Complemento.TimbreFiscalDigital = new Sistrategia.Server.SAT.CFDI.ComprobanteTimbre();
+                //    comprobante2.Complemento.TimbreFiscalDigital.SatTimbreId = Guid.NewGuid();
+                //    comprobante2.Complemento.TimbreFiscalDigital.Version = timbre.Attributes.GetNamedItem("version").Value.ToString();
+                //    comprobante2.Complemento.TimbreFiscalDigital.UUID = timbre.Attributes.GetNamedItem("UUID").Value.ToString();
+                //    comprobante2.Complemento.TimbreFiscalDigital.FechaTimbrado = DateTime.Parse(timbre.Attributes.GetNamedItem("FechaTimbrado").Value);
+                //    comprobante2.Complemento.TimbreFiscalDigital.SelloCFD = timbre.Attributes.GetNamedItem("selloCFD").Value.ToString();
+                //    comprobante2.Complemento.TimbreFiscalDigital.NoCertificadoSAT = timbre.Attributes.GetNamedItem("noCertificadoSAT").Value.ToString();
+                //    comprobante2.Complemento.TimbreFiscalDigital.SelloSAT = timbre.Attributes.GetNamedItem("selloSAT").Value.ToString();
 
-            //    string invoiceXml = string.Empty;
-            //    StreamReader streamReader = new StreamReader(invoicesPath + "SIGN_" + invoiceFileName + "_send.xml");
-            //    invoiceXml = streamReader.ReadToEnd();
-            //    streamReader.Close();
+                //    string invoiceXml = string.Empty;
+                //    StreamReader streamReader = new StreamReader(invoicesPath + "SIGN_" + invoiceFileName + "_send.xml");
+                //    invoiceXml = streamReader.ReadToEnd();
+                //    streamReader.Close();
 
-            //    if (Sistrategia.Server.SAT.SATManager.InsertComprobanteTimbre(comprobante2)) {
-            //        string QRCODE = "?re=" + comprobante.Emisor.RFC + "&rr=" + comprobante.Receptor.RFC + "&tt=" + comprobante.Total + "&id=" + comprobante2.Complemento.TimbreFiscalDigital.UUID;
-            //        TempData["msg2"] = "¡Timbrado exitoso!";
-            //    }
-            //    /* Insert Timbre */
+                //    if (Sistrategia.Server.SAT.SATManager.InsertComprobanteTimbre(comprobante2)) {
+                //        string QRCODE = "?re=" + comprobante.Emisor.RFC + "&rr=" + comprobante.Receptor.RFC + "&tt=" + comprobante.Total + "&id=" + comprobante2.Complemento.TimbreFiscalDigital.UUID;
+                //        TempData["msg2"] = "¡Timbrado exitoso!";
+                //    }
+                //    /* Insert Timbre */
 
-            //    return RedirectToAction("View", "Invoice", new { id = comprobante.ComprobanteId.ToString() });
+                //    return RedirectToAction("View", "Invoice", new { id = comprobante.ComprobanteId.ToString() });
             }
             catch (Exception ex) {
                 TempData["msg"] = ex.Message.ToString();
                 return View(model);
-            //    return View();
+                //    return View();
             }
 
 
 
-            
+
             return View(model);
         }
 

@@ -446,6 +446,11 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             comprobante.Property(p => p.ExtendedStringValue3)
                 .HasColumnName("extended_string_value_3");
 
+            comprobante.Property(p => p.GeneratedCadenaOriginal)
+                .HasColumnName("generated_cadena_original")
+                //.HasMaxLength(2048)
+                ;
+
             comprobante.Property(p => p.GeneratedXmlUrl)
                 .HasColumnName("generated_xml_url")
                 .HasMaxLength(1024);
