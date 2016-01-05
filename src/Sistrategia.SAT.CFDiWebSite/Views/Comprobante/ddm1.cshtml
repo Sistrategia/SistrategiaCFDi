@@ -104,11 +104,11 @@
                         <td class="center_item">Transporte</td>
                         <td class="center_item">CLIENTE</td>
                       </tr>
+                      @if (@Model.MetodoDePago != null && (@Model.MetodoDePago.ToString().Equals("Cheque") || @Model.MetodoDePago.ToString().Equals("Tarjeta de Crédito") || @Model.MetodoDePago.ToString().Equals("Tarjeta de Débito"))) {
                       <tr>
                         <td class="center_item">Método de Pago</td>
                         <td class="center_item">@Model.MetodoDePago</td>
-                      </tr>
-                      @if (@Model.MetodoDePago.ToString().Equals("Cheque") || @Model.MetodoDePago.ToString().Equals("Tarjeta de Crédito") || @Model.MetodoDePago.ToString().Equals("Tarjeta de Débito")) {
+                      </tr>                    
                         <tr>
                           <td class="center_item">Número de Cuenta</td>
                           <td class="center_item">@Model.NumCuenta</td>
