@@ -120,7 +120,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             if (!Guid.TryParse(id, out publicKey))
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
 
-            var emisor = DBContext.Emisores.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+            var emisor = DBContext.Emisores.Where(e => e.PublicKey == publicKey && e.Status == "A")
+                .SingleOrDefault();
 
             if (emisor == null)
                 return HttpNotFound();
@@ -131,7 +132,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
         public ActionResult Edit(string id) {
             Guid publicKey = Guid.Parse(id);
-            var emisor = DBContext.Emisores.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+            var emisor = DBContext.Emisores.Where(e => e.PublicKey == publicKey && e.Status == "A")
+                .SingleOrDefault();
             var model = new EmisorEditViewModel(emisor);
             return View(model);
         }
@@ -152,7 +154,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 //}
                 //DBContext.SaveChanges();
                 //return RedirectToAction("Index");
-                var originalEmisor = DBContext.Emisores.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+                var originalEmisor = DBContext.Emisores.Where(e => e.PublicKey == publicKey && e.Status == "A")
+                       .SingleOrDefault();
                 var newEmisor = new Emisor();
 
                 newEmisor.RFC = model.RFC;
