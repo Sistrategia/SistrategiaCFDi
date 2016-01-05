@@ -12,14 +12,17 @@
 
     .bg-img {
       position: relative;
-      min-height:820px;background-image:url('https://sistrategiadrive.blob.core.windows.net/wwwroot/AdobeStock_89755035_1920.jpg');
+      min-height:720px;background-image:url('https://sistrategiadrive.blob.core.windows.net/wwwroot/AdobeStock_89755035_5K2.jpg');
       background-repeat:no-repeat;
       background-position-x:center;
       background-position-y:top;
-      background-position-y:-90px;
-      background-size:unset;
-      background-size:auto;
-      /*background-position:center;*/      
+      /*background-position-y:-90px;*/
+      /*background-size:unset;
+      background-size:auto;*/
+      background-size:cover;        
+      /*background-position:center;*/
+      background-position:right top;
+      background-position-y:80px;
     }
 
     .bg-img2 {
