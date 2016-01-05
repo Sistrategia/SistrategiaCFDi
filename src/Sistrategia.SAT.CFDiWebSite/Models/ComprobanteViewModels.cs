@@ -143,7 +143,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             this.SubTotal = comprobante.SubTotal;
             this.Total = comprobante.Total;
 
-            this.CadenaOriginal = comprobante.GetCadenaOriginal();
+            this.CadenaOriginal = comprobante.GeneratedCadenaOriginal; // comprobante.GetCadenaOriginal();
             //this.Sello = comprobante.Sello;
             this.Sello = comprobante.Sello;
             //this.Sello = comprobante.Sello;
