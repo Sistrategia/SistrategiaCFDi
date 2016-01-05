@@ -43,6 +43,11 @@ namespace Sistrategia.SAT.CFDiWebSite
 
                       ));
 
+            bundles.Add(new StyleBundle("~/Content/cover").Include(
+                "~/Content/bootstrap.css",
+               "~/Content/cover.css"
+               ));   
+
             BundleTable.EnableOptimizations = true;
         }
     }

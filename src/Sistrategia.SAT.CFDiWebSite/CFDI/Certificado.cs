@@ -28,8 +28,12 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
         public string CertificadoBase64 { get; set; }
         public byte[] PFXArchivo { get; set; }
-
         public string PFXContrasena { get; set; }
+
+        public byte[] CertificadoDER { get; set; }
+        public byte[] PrivateKeyDER { get; set; }
+        public string PrivateKeyContrasena { get; set; }
+
         public string Estado { get; set; }
 
         // [XmlIgnore]
@@ -53,6 +57,29 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         }
 
         public string GetSello(string cadenaOriginal) {
+            if (this.PFXArchivo != null && this.PFXArchivo.Length > 0 && !string.IsNullOrEmpty(this.PFXContrasena))
+                return GetSelloFromPFX(cadenaOriginal);
+            else {
+                return GetSelloFromDerKey(cadenaOriginal);
+            }
+        }
+
+        private string GetSelloFromDerKey(string cadenaOriginal) {
+            System.Security.Cryptography.SHA1CryptoServiceProvider sha1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
+            System.Security.SecureString passwordSeguro = new System.Security.SecureString();
+            passwordSeguro.Clear();
+            foreach (char c in this.PrivateKeyContrasena.ToCharArray())
+                passwordSeguro.AppendChar(c);
+            var rsaCryptoIPT = JavaScience.opensslkey.DecodeEncryptedPrivateKeyInfo(this.PrivateKeyDER, passwordSeguro);
+            System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
+            byte[] binData = encoder.GetBytes(cadenaOriginal);
+            byte[] binSignature = rsaCryptoIPT.SignData(binData, sha1);
+            string sello = Convert.ToBase64String(binSignature);
+            return sello;
+        }
+
+
+        private string GetSelloFromPFX(string cadenaOriginal) {
             System.Security.Cryptography.SHA1CryptoServiceProvider sha1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
             System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(this.PFXArchivo,
                  this.PFXContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);

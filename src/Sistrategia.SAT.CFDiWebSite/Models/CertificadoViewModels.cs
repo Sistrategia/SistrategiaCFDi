@@ -47,13 +47,24 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         //[Display(Name = "Archivo PFX")]
         //public byte[] PFXArchivo { get; set; }
-        [Required, DataType(DataType.Upload), Display(Name = "Archivo PFX")]
+        //[Required]
+        [DataType(DataType.Upload), Display(Name = "Archivo PFX")]
         public HttpPostedFileBase PFXArchivo { get; set; }
 
-        [Required]
+        //[Required]
         [DataType(DataType.Password)]
         [Display(Name = "Contraseña del PFX")] // [Display(Name = "Contraseña del Cert")]
         public string PFXContrasena { get; set; }
+
+
+        //[Required]
+        [DataType(DataType.Upload), Display(Name = "PrivateKey (DER Format)")]
+        public HttpPostedFileBase PrivateKeyDER { get; set; }
+
+        //[Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Contraseña del PrivateKey")] // [Display(Name = "Contraseña del Cert")]
+        public string PrivateKeyContrasena { get; set; }
 
         //[Required]
         [Display(Name = "Estado")]

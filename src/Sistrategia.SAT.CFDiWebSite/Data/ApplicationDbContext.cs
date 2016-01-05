@@ -247,7 +247,18 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("pfx_archivo");
             certificado.Property(p => p.PFXContrasena)
                 .HasColumnName("pfx_contrasena")
-                .HasMaxLength(2048);
+                .HasMaxLength(256);
+
+            certificado.Property(p => p.CertificadoDER)
+                .HasColumnName("certificado_der");
+
+            certificado.Property(p => p.PrivateKeyDER)
+                .HasColumnName("private_key_der");
+
+            certificado.Property(p => p.PrivateKeyContrasena)
+                .HasColumnName("private_key_contrasena")
+                .HasMaxLength(256);
+
             certificado.Property(p => p.Estado)
                 .HasColumnName("estado")
                 .IsRequired();

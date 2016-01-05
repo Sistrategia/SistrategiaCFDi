@@ -75,18 +75,14 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             }
         }
 
-        public JsonResult GetIdByCertificados(int emisorId, int pageSize = 10)
-        {
-            try
-            {
+        public JsonResult GetIdByCertificados(int emisorId, int pageSize = 10) {
+            try {
                 var emisor = DBContext.Emisores.Where(x => x.EmisorId == emisorId).First();
                 var certificados = emisor.Certificados.Where(x => x.Estado == "A").Take(pageSize).ToList();
 
                 List<dynamic> itemList = new List<dynamic>();
-                foreach (var certificado in certificados)
-                {
-                    var dynamicItems = new
-                    {
+                foreach (var certificado in certificados) {
+                    var dynamicItems = new {
                         id = certificado.CertificadoId.ToString(),
                         text = certificado.NumSerie
                     };
@@ -94,11 +90,71 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 }
                 return Json(itemList.ToArray(), JsonRequestBehavior.AllowGet);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 var result = new { resp = false, error = ex.Message };
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        [HttpPost]
+        public JsonResult LoadComprobantes(int page, int pageSize, string search = null, string sort = null, string sortDir = null) {
+            sortDir = string.IsNullOrEmpty(sortDir) ? "asc" : sortDir;
+            List<object> itemList = new List<object>();
+            try {
+
+                Func<Comprobante, Object> orderByFunc = null;
+                switch (sort) {
+                    case "ReceptorNombre":
+                        orderByFunc = sl => sl.Receptor.Nombre;
+                        break;
+                    case "Total":
+                        orderByFunc = sl => sl.Total;
+                        break;
+                    default:
+                        orderByFunc = sl => sl.Fecha;
+                        break;
+                }
+
+                List<Comprobante> Comprobantes = new List<Comprobante>();
+                if (search != null)
+                    Comprobantes = sortDir == "asc" ? DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search) || x.Total.ToString().Contains(search)).Take(((page - 1) * pageSize) + pageSize).OrderBy(orderByFunc).Skip(((page - 1) * pageSize)).ToList()
+                        : DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search) || x.Total.ToString().Contains(search)).Take(((page - 1) * pageSize) + pageSize).OrderByDescending(orderByFunc).Skip(((page - 1) * pageSize)).ToList();
+                else
+                    Comprobantes = sortDir == "asc" ? DBContext.Comprobantes.OrderBy(orderByFunc).Take(((page - 1) * pageSize) + pageSize).Skip(((page - 1) * pageSize)).ToList()
+                        : DBContext.Comprobantes.OrderByDescending(orderByFunc).Take(((page - 1) * pageSize) + pageSize).Skip(((page - 1) * pageSize)).ToList();             
+
+                Sistrategia.SAT.CFDiWebSite.CloudStorage.CloudStorageMananger cloudStorage = new Sistrategia.SAT.CFDiWebSite.CloudStorage.CloudStorageMananger();
+
+                if (Comprobantes.Count > 0) {
+                    int ComprobantesTotalRows = DBContext.Comprobantes.Count();
+
+                    foreach (Comprobante comprobante in Comprobantes) {
+                        var dynamicItems = new {
+                            error = false,
+                            total_rows = ComprobantesTotalRows,
+                            returned_rows = Comprobantes.Count,
+                            comprobante_id = comprobante.ComprobanteId,
+                            public_key = comprobante.PublicKey,
+                            receptor_initial_letter = comprobante.Receptor.Nombre.Substring(0, 1),
+                            serie = comprobante.Serie,
+                            folio = comprobante.Folio,
+                            receptor = comprobante.Receptor.Nombre,
+                            fecha = comprobante.Fecha.ToLongDateString(),
+                            total = comprobante.Total.ToString("C")                           
+                        };
+                        itemList.Add(dynamicItems);
+                    }
+                }
+            }
+            catch (Exception ex) {
+                var errorMessage = new {
+                    error = true,
+                    errorMsg = ex.ToString()
+                };
+                itemList.Add(errorMessage);
+            }
+
+            return Json(itemList);
         }
 
         public ActionResult Create() {
@@ -575,6 +631,39 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
             
             return View(model);
+        }
+
+        public ActionResult GetPDF(string id) {
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            if (comprobante == null)
+                return HttpNotFound();
+
+            string PdfFileName = "";
+
+            if (comprobante.Serie == null) {
+                PdfFileName = "FACTURA_" + comprobante.Folio.ToString();
+            }
+            else {
+                PdfFileName = "FACTURA_" + comprobante.Folio.ToString() + comprobante.Serie.ToString();
+            }
+            PdfFileName = PdfFileName + ".pdf";
+
+            try {
+                Response.ClearContent();
+                Response.ContentType = "application/pdf";
+                Response.ContentEncoding = System.Text.Encoding.UTF8;
+                InvoicePdfModel pdfGenerator = new InvoicePdfModel();
+                return File(pdfGenerator.CreatePDF(comprobante), "application/pdf", PdfFileName);
+            }
+            catch (Exception ex) {
+                TempData["msg2"] = ex.Message.ToString();
+                return RedirectToAction("Index");
+            }
         }
     }
 }

@@ -1,7 +1,56 @@
-﻿
-@{
-    ViewBag.Title = "Welcome";
+﻿@{
+  Layout = null;
 }
 
-<h1>Welcome</h1>
+<!DOCTYPE html>
 
+<html>
+<head>
+  <meta name="viewport" content="width=device-width" />
+  <title>SistrategiaCFDi</title>
+
+  @Styles.Render("~/Content/cover")
+  @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+  <div class="wrapper">
+    <div class="bg-img">
+      <div class="cover-header navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand sistrategiaLogo" href="~/"><img src="https://sistrategiadrive.blob.core.windows.net/wwwroot/logo_header_white.png" class="img-responsive"></a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav"></ul>
+            <ul class="nav navbar-nav navbar-right">
+              @*<li>
+                                <p class="navbar-btn">
+                                  @Html.ActionLink("Register", "Register", "Account", new { area = "" }, new { @class = "btn btn-default navbar-btn" })
+                                  </p>
+                </li>*@
+              <li>@Html.ActionLink("Registro", "Register", "Account", new { area = "" }, new { @class = "btn btn-lg btn-default navbar-btn" })</li>
+              <li>@Html.ActionLink("Ingresar", "Login", "Account", new { area = "" }, new { @class = "btn btn-lg btn-default navbar-btn" })</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="panel-cover">
+        <h1>Sistrategia CFDi</h1>
+        <p>Facturación electrónica fácil, en cualquier lugar, desde cualquier dispositivo.</p>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  @Scripts.Render("~/bundles/jquery")
+  @Scripts.Render("~/bundles/bootstrap")
+</body>
+</html>

@@ -50,6 +50,10 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="itextsharp, Version=4.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>CommonDlls\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="MessagingToolkit.QRCode, Version=1.0.3541.23206, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>CommonDlls\MessagingToolkit.QRCode.dll</HintPath>
@@ -199,7 +203,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CommonDlls\itextsharp.dll" />
     <Content Include="CommonDlls\MessagingToolkit.QRCode.dll" />
+    <Content Include="Content\cover.css" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
@@ -306,6 +312,10 @@
     <Content Include="Content\select2.debug.css.map">
       <DependentUpon>select2.debug.css</DependentUpon>
     </Content>
+    <Content Include="Content\fonts\Verdana\verdana.ttf" />
+    <Content Include="Content\fonts\Verdana\verdanab.ttf" />
+    <Content Include="Content\fonts\Verdana\verdanai.ttf" />
+    <Content Include="Content\fonts\Verdana\verdanaz.ttf" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="Scripts\amplify.js" />
@@ -321,6 +331,7 @@
     <Content Include="Scripts\GPL-LICENSE.txt" />
     <Content Include="Scripts\knockout-3.4.0.debug.js" />
     <Content Include="Scripts\knockout-3.4.0.js" />
+    <Content Include="Scripts\knockoutTable\KOTable.js" />
     <Content Include="Scripts\MIT-LICENSE.txt" />
     <Content Include="Scripts\README.txt" />
     <Content Include="Scripts\select2\i18n\az.js" />
@@ -452,6 +463,7 @@
     <Compile Include="CFDI\TimbreFiscalDigital.cs" />
     <Compile Include="CFDI\Ubicacion.cs" />
     <Compile Include="CFDI\UbicacionFiscal.cs" />
+    <Compile Include="CloudStorage\CloudStorageMananger.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CertificadoController.cs" />
@@ -479,6 +491,7 @@
     <Compile Include="Models\CertificadoViewModels.cs" />
     <Compile Include="Models\ComprobanteViewModels.cs" />
     <Compile Include="Models\EmisorViewModels.cs" />
+    <Compile Include="Models\InvoicePdfModel.cs" />
     <Compile Include="Models\ReceptorViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SATManager.cs" />
@@ -491,6 +504,7 @@
     <Compile Include="Security\SecurityUserRole.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\CustomRedirectHandler.cs" />
+    <Compile Include="Utils\JavaScience\opensslkey.cs" />
     <Compile Include="Utils\LocalizationRedirectRouteHandler.cs" />
     <Compile Include="Utils\LocalizedRouteHandler.cs" />
     <Compile Include="Utils\RouteCollectionExtensions.cs" />
