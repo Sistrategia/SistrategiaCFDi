@@ -331,6 +331,7 @@
     <Content Include="Scripts\GPL-LICENSE.txt" />
     <Content Include="Scripts\knockout-3.4.0.debug.js" />
     <Content Include="Scripts\knockout-3.4.0.js" />
+    <Content Include="Scripts\knockoutTable\KOTable.js" />
     <Content Include="Scripts\MIT-LICENSE.txt" />
     <Content Include="Scripts\README.txt" />
     <Content Include="Scripts\select2\i18n\az.js" />
