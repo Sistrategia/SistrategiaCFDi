@@ -97,7 +97,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         }
 
         [HttpPost]
-        public JsonResult LoadComprobantes(int page, int pageSize, string search = null, string sort = null, string sortDir = "asc") {
+        public JsonResult LoadComprobantes(int page, int pageSize, string search = null, string sort = null, string sortDir = null) {
+            sortDir = string.IsNullOrEmpty(sortDir) ? "asc" : sortDir;
             List<object> itemList = new List<object>();
             try {
 
