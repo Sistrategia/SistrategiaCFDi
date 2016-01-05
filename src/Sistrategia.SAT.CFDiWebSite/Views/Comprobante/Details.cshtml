@@ -2,9 +2,50 @@
 @model ComprobanteDetailViewModel
 @{
   ViewBag.Title = Model.Title;
+  Sistrategia.SAT.CFDiWebSite.CloudStorage.CloudStorageMananger cloudStorage = new Sistrategia.SAT.CFDiWebSite.CloudStorage.CloudStorageMananger();
 }
 
 <h1>@ViewBag.Title <br /><small>@Model.Receptor.RFC</small></h1>
+
+<div class="row">
+  <div class="col-md-12">
+    @*<a href="" class="btn btn-primary">Timbrar</a>*@
+
+    <a target="_blank" href="@Url.Action("ShowHtml", new { id = Model.PublicKey.ToString("N") })" class="btn btn-primary">Html</a>
+
+    @if (!string.IsNullOrEmpty(Model.GeneratedXmlUrl)) {
+      <a target="_blank" href="@cloudStorage.GetTempUrl(System.Configuration.ConfigurationManager.AppSettings["AzureAccountName"], System.Configuration.ConfigurationManager.AppSettings["AzureAccountKey"], Model.GeneratedXmlUrl)" class="btn btn-primary">Xml</a>
+    }
+    else {
+      <a target="_blank" href="@Url.Action("ShowXml", new { id = Model.PublicKey.ToString("N") })" class="btn btn-primary">Xml</a>
+    }
+
+
+    @*@if (!string.IsNullOrEmpty(Model.GeneratedXmlUrl)) {
+        <a href="@cloudStorage.GetTempUrl(System.Configuration.ConfigurationManager.AppSettings["AzureAccountName"], System.Configuration.ConfigurationManager.AppSettings["AzureAccountKey"], Model.GeneratedXmlUrl)" class="hidden-xs"><span style="font-size:20px; font-weight:normal;color:#a0a0a0;" class="glyphicon glyphicon-file"></span></a>@Html.Raw("&nbsp; &nbsp;")
+      }
+      else {
+        <a href="@Url.Action("ShowXml", new { id = Model.PublicKey.ToString("N") })" class="hidden-xs"><span style="font-size:20px; font-weight:normal;color:#a0a0a0;" class="glyphicon glyphicon-file"></span></a>@Html.Raw("&nbsp; &nbsp;")
+      }*@
+
+    @if (!string.IsNullOrEmpty(Model.GeneratedPDFUrl)) {
+      <a target="_blank" href="@cloudStorage.GetTempUrl(System.Configuration.ConfigurationManager.AppSettings["AzureAccountName"], System.Configuration.ConfigurationManager.AppSettings["AzureAccountKey"], Model.GeneratedPDFUrl)" class="btn btn-primary">PDF</a>
+    }
+    else {
+      <a target="_blank" href="@Url.Action("ShowPDF", new { id = Model.PublicKey.ToString("N") })" class="btn btn-primary">PDF</a>
+    }
+
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-12">
+    <p style="margin: 24px 2px 0 0;">
+    </p>
+  </div>
+</div>
+
 
 <div class="row">
   <div class="col-md-9">
@@ -134,6 +175,8 @@
     <p><small>@Model.Sello</small></p>
   </div>
 </div>
+
+
 
 <div class="row">
   <div class="col-md-12">

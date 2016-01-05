@@ -67,6 +67,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         emisor_id = c.Int(),
                         receptor_id = c.Int(),
                         impuestos_id = c.Int(),
+                        generated_cadena_original = c.String(),
+                        generated_xml_url = c.String(maxLength: 1024),
+                        generated_pdf_url = c.String(maxLength: 1024),
                         view_template_id = c.Int(),
                         extended_int_value_1 = c.Int(),
                         extended_int_value_2 = c.Int(),
@@ -74,8 +77,6 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         extended_string_value_1 = c.String(),
                         extended_string_value_2 = c.String(),
                         extended_string_value_3 = c.String(),
-                        generated_xml_url = c.String(maxLength: 1024),
-                        generated_pdf_url = c.String(maxLength: 1024),
                         status = c.String(maxLength: 50),
                     })
                 .PrimaryKey(t => t.comprobante_id)

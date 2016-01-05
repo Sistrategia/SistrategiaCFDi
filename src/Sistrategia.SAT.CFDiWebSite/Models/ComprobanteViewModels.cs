@@ -143,10 +143,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             this.SubTotal = comprobante.SubTotal;
             this.Total = comprobante.Total;
 
-            this.CadenaOriginal = comprobante.GetCadenaOriginal();
+            this.CadenaOriginal = comprobante.GeneratedCadenaOriginal; // comprobante.GetCadenaOriginal();
             //this.Sello = comprobante.Sello;
             this.Sello = comprobante.Sello;
             //this.Sello = comprobante.Sello;
+
+            this.GeneratedXmlUrl = comprobante.GeneratedXmlUrl;
+            this.GeneratedPDFUrl = comprobante.GeneratedPDFUrl;
         }
 
         public string Title {
@@ -170,6 +173,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public ReceptorDetailsViewModel Receptor { get; set; }
 
         public List<ConceptoViewModel> Conceptos { get; set; }
+
+        public string GeneratedXmlUrl { get; set; }
+        public string GeneratedPDFUrl { get; set; }
     }
 
     public class ComprobanteHtmlViewModel

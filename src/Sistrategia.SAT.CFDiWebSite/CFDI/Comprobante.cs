@@ -940,7 +940,16 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </summary>
         public virtual List<Complemento> Complementos { get; set; }
 
-        public virtual List<ReceptorCorreoEntrega> CorreosEntrega { get; set; }
+        public virtual List<ReceptorCorreoEntrega> CorreosEntrega { get; set; }        
+
+        [XmlIgnore]
+        public string GeneratedCadenaOriginal { get; set; }
+
+        [XmlIgnore]
+        public string GeneratedXmlUrl { get; set; }
+
+        [XmlIgnore]
+        public string GeneratedPDFUrl { get; set; }
 
         [ForeignKey("ViewTemplate")]
         public int? ViewTemplateId { get; set; }
@@ -953,12 +962,6 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public string ExtendedStringValue1 { get; set; }
         public string ExtendedStringValue2 { get; set; }
         public string ExtendedStringValue3 { get; set; }
-
-        [XmlIgnore]
-        public string GeneratedXmlUrl { get; set; }
-
-        [XmlIgnore]
-        public string GeneratedPDFUrl { get; set; }
 
         [XmlIgnore]
         public string Status { get; set; }
