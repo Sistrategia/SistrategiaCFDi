@@ -29,7 +29,7 @@ var InitialModel = function (modelId) {
     self.IsRequiredNumCtaPago = ko.observable(false);
 
     self.MetodoDePago.subscribe(function (newValue) {
-        if (newValue == 'Efectivo' || newValue == 'No identificado' || newValue == '')
+        if (newValue == 'EFECTIVO' || newValue == 'NO IDENTIFICADO' || newValue == '')
             self.IsRequiredNumCtaPago(false);
         else
             self.IsRequiredNumCtaPago(true);
