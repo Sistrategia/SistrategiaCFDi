@@ -935,6 +935,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                                 else if ("cfdi:Concepto".Equals(xmlReader.Name)) {
                                     Concepto concepto = new Concepto();
+                                    concepto.PublicKey = Guid.NewGuid();
                                     while (xmlReader.MoveToNextAttribute()) {
                                         switch (xmlReader.Name) {
                                             case "cantidad":
