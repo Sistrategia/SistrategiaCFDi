@@ -374,6 +374,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         [Required, DataType(DataType.Upload), Display(Name = "Comprobante")]
         public HttpPostedFileBase ComprobanteArchivo { get; set; }
 
+        [DataType(DataType.Upload), Display(Name = "Comprobante")]
+        public HttpPostedFileBase ComprobantePDFArchivo { get; set; }
+
+        public string NoOrden { get; set; }
+        public string NoCliente { get; set; }
+
         
     }
 }

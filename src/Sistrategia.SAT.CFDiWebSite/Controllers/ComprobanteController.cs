@@ -10,6 +10,7 @@ using System.IO;
 using System.IO.Compression;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Sistrategia.SAT.CFDiWebSite.CloudStorage;
 
 namespace Sistrategia.SAT.CFDiWebSite.Controllers
 {
@@ -696,6 +697,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 try {
 
                     Comprobante comprobante = new Comprobante();
+                    Certificado certificado = new Certificado();
 
                     if (model.ComprobanteArchivo != null) {
                         // MemoryStream target = new MemoryStream();
@@ -726,17 +728,48 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                             case "sello":
                                                 comprobante.Sello = xmlReader.Value;
                                                 break;
-                                            case "tipoDeComprobante":
-                                                comprobante.TipoDeComprobante = xmlReader.Value;
+                                            case "noAprobacion":
+                                                comprobante.NoAprobacion = xmlReader.Value;
                                                 break;
+                                            case "anoAprobacion":
+                                                comprobante.AnoAprobacion = xmlReader.Value;
+                                                break;                                            
                                             case "formaDePago":
                                                 comprobante.FormaDePago = xmlReader.Value;
+                                                break;
+                                            case "noCertificado":
+                                                certificado.NumSerie = xmlReader.Value;
+                                                //comprobante.LugarExpedicion = xmlReader.Value;
+                                                comprobante.HasNoCertificado = true;
+                                                break;
+                                            case "certificado":
+                                                //comprobante.LugarExpedicion = xmlReader.Value;
+                                                certificado.CertificadoBase64 = xmlReader.Value;
+                                                comprobante.HasCertificado = true;
+                                                break;
+                                            case "condicionesDePago":
+                                                comprobante.CondicionesDePago = xmlReader.Value;
                                                 break;
                                             case "subTotal":
                                                 comprobante.SubTotal = decimal.Parse( xmlReader.Value );
                                                 break;
+                                            case "descuento":
+                                                comprobante.Descuento = decimal.Parse(xmlReader.Value);
+                                                break;
+                                            case "motivoDescuento":
+                                                comprobante.MotivoDescuento = xmlReader.Value;
+                                                break;
+                                            case "TipoCambio":
+                                                comprobante.TipoCambio = xmlReader.Value;
+                                                break;
+                                            case "Moneda":
+                                                comprobante.Moneda = xmlReader.Value;
+                                                break;
                                             case "total":
                                                 comprobante.Total = decimal.Parse(xmlReader.Value);
+                                                break;
+                                            case "tipoDeComprobante":
+                                                comprobante.TipoDeComprobante = xmlReader.Value;
                                                 break;
                                             case "metodoDePago":
                                                 comprobante.MetodoDePago = xmlReader.Value;
@@ -744,25 +777,373 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                             case "LugarExpedicion":
                                                 comprobante.LugarExpedicion = xmlReader.Value;
                                                 break;
-                                            case "noCertificado":
-                                                //comprobante.LugarExpedicion = xmlReader.Value;
+                                            case "NumCtaPago":
+                                                comprobante.NumCtaPago = xmlReader.Value;
                                                 break;
-                                            case "certificado":
-                                                //comprobante.LugarExpedicion = xmlReader.Value;
+                                            case "SerieFolioFiscalOrig":
+                                                comprobante.SerieFolioFiscalOrig = xmlReader.Value;
                                                 break;
+                                            case "FechaFolioFiscalOrig":
+                                                comprobante.FechaFolioFiscalOrig = DateTime.Parse(xmlReader.Value);
+                                                break;
+                                            case "MontoFolioFiscalOrig":
+                                                comprobante.MontoFolioFiscalOrig = decimal.Parse(xmlReader.Value);
+                                                break;  
+
+                                            case "xmlns:cfdi":
+                                            case "xmlns:xsi":
+                                            case "xsi:schemaLocation":
+                                                break;
+                                            default:
+                                                throw new Exception(xmlReader.Name + "is not a valid attribute for cfdi:Comprobante.");
+                                        }
+                                    }
+
+
+                                }
+
+                                else if ("cfdi:Emisor".Equals(xmlReader.Name)) {
+                                    comprobante.Emisor = new Emisor();
+                                    while (xmlReader.MoveToNextAttribute()) {
+                                        switch (xmlReader.Name) {
+                                            case "rfc":
+                                                comprobante.Emisor.RFC = xmlReader.Value;
+                                                break;
+                                            case "nombre":
+                                                comprobante.Emisor.Nombre = xmlReader.Value;
+                                                break;
+                                            default:
+                                                throw new Exception(xmlReader.Name + "is not a valid attribute for cfdi:Emisor.");
                                         }
                                     }
                                 }
 
+                                else if ("cfdi:DomicilioFiscal".Equals(xmlReader.Name)) {
+                                    comprobante.Emisor.DomicilioFiscal = new UbicacionFiscal();
+                                    while (xmlReader.MoveToNextAttribute()) {
+                                        switch (xmlReader.Name) {
+                                            case "calle":
+                                                comprobante.Emisor.DomicilioFiscal.Calle = xmlReader.Value;
+                                                break;
+                                            case "noExterior":
+                                                comprobante.Emisor.DomicilioFiscal.NoExterior = xmlReader.Value;
+                                                break;
+                                            case "noInterior":
+                                                comprobante.Emisor.DomicilioFiscal.NoInterior = xmlReader.Value;
+                                                break;
+                                            case "colonia":
+                                                comprobante.Emisor.DomicilioFiscal.Colonia = xmlReader.Value;
+                                                break;
+                                            case "localidad":
+                                                comprobante.Emisor.DomicilioFiscal.Localidad = xmlReader.Value;
+                                                break;
+                                            case "referencia":
+                                                comprobante.Emisor.DomicilioFiscal.Referencia = xmlReader.Value;
+                                                break;
+                                            case "municipio":
+                                                comprobante.Emisor.DomicilioFiscal.Municipio = xmlReader.Value;
+                                                break;
+                                            case "estado":
+                                                comprobante.Emisor.DomicilioFiscal.Estado = xmlReader.Value;
+                                                break;
+                                            case "pais":
+                                                comprobante.Emisor.DomicilioFiscal.Pais = xmlReader.Value;
+                                                break;
+                                            case "codigoPostal":
+                                                comprobante.Emisor.DomicilioFiscal.CodigoPostal = xmlReader.Value;
+                                                break;
+                                            default:
+                                                throw new Exception(xmlReader.Name + "is not a valid attribute for cfdi:DomicilioFiscal.");
+                                        }
+                                    }
+                                }
+
+                                else if ("cfdi:RegimenFiscal".Equals(xmlReader.Name)) {
+                                    if (comprobante.Emisor.RegimenFiscal == null)
+                                        comprobante.Emisor.RegimenFiscal = new List<RegimenFiscal>();
+                                    while (xmlReader.MoveToNextAttribute()) {
+                                        switch (xmlReader.Name) {
+                                            case "Regimen":
+                                                RegimenFiscal regimen = new RegimenFiscal();
+                                                regimen.Regimen = xmlReader.Value;                                                
+                                                break;
+                                            default:
+                                                throw new Exception(xmlReader.Name + "is not a valid attribute for cfdi:RegimenFiscal.");
+                                        }
+                                    }                                    
+                                }
+
+                                else if ("cfdi:Receptor".Equals(xmlReader.Name)) {
+                                    comprobante.Receptor = new Receptor();
+                                    while (xmlReader.MoveToNextAttribute()) {
+                                        switch (xmlReader.Name) {
+                                            case "rfc":
+                                                comprobante.Receptor.RFC = xmlReader.Value;
+                                                break;
+                                            case "nombre":
+                                                comprobante.Receptor.Nombre = xmlReader.Value;
+                                                break;
+                                            default:
+                                                throw new Exception(xmlReader.Name + "is not a valid attribute for cfdi:Receptor.");
+                                        }
+                                    }
+                                }
+
+                                else if ("cfdi:Domicilio".Equals(xmlReader.Name)) {
+                                    comprobante.Receptor.Domicilio = new Ubicacion();
+                                    while (xmlReader.MoveToNextAttribute()) {
+                                        switch (xmlReader.Name) {
+                                            case "calle":
+                                                comprobante.Receptor.Domicilio.Calle = xmlReader.Value;
+                                                break;
+                                            case "noExterior":
+                                                comprobante.Receptor.Domicilio.NoExterior = xmlReader.Value;
+                                                break;
+                                            case "noInterior":
+                                                comprobante.Receptor.Domicilio.NoInterior = xmlReader.Value;
+                                                break;
+                                            case "colonia":
+                                                comprobante.Receptor.Domicilio.Colonia = xmlReader.Value;
+                                                break;
+                                            case "localidad":
+                                                comprobante.Receptor.Domicilio.Localidad = xmlReader.Value;
+                                                break;
+                                            case "referencia":
+                                                comprobante.Receptor.Domicilio.Referencia = xmlReader.Value;
+                                                break;
+                                            case "municipio":
+                                                comprobante.Receptor.Domicilio.Municipio = xmlReader.Value;
+                                                break;
+                                            case "estado":
+                                                comprobante.Receptor.Domicilio.Estado = xmlReader.Value;
+                                                break;
+                                            case "pais":
+                                                comprobante.Receptor.Domicilio.Pais = xmlReader.Value;
+                                                break;
+                                            case "codigoPostal":
+                                                comprobante.Receptor.Domicilio.CodigoPostal = xmlReader.Value;
+                                                break;
+                                            default:
+                                                throw new Exception(xmlReader.Name + "is not a valid attribute for cfdi:Domicilio.");
+                                        }
+                                    }
+                                }
+
+                                else if ("cfdi:Conceptos".Equals(xmlReader.Name)) {
+                                    comprobante.Conceptos = new List<Concepto>();
+                                }
+
+                                else if ("cfdi:Concepto".Equals(xmlReader.Name)) {
+                                    Concepto concepto = new Concepto();
+                                    while (xmlReader.MoveToNextAttribute()) {
+                                        switch (xmlReader.Name) {
+                                            case "cantidad":
+                                                concepto.Cantidad = decimal.Parse(xmlReader.Value);
+                                                break;
+                                            case "unidad":
+                                                concepto.Unidad = xmlReader.Value;
+                                                break;
+                                            case "noIdentificacion":
+                                                concepto.NoIdentificacion = xmlReader.Value;
+                                                break;
+                                            case "descripcion":
+                                                concepto.Descripcion = xmlReader.Value;
+                                                break;
+                                            case "valorUnitario":
+                                                concepto.ValorUnitario = decimal.Parse(xmlReader.Value);
+                                                break;
+                                            case "importe":
+                                                concepto.Importe = decimal.Parse(xmlReader.Value);
+                                                break;
+                                            default:
+                                                throw new Exception(xmlReader.Name + "is not a valid attribute for cfdi:Domicilio.");
+                                        }
+                                    }
+                                    comprobante.Conceptos.Add(concepto);
+                                }
+
+                                else if ("cfdi:Impuestos".Equals(xmlReader.Name)) {
+                                    comprobante.Impuestos = new Impuestos();
+                                    while (xmlReader.MoveToNextAttribute()) {
+                                        switch (xmlReader.Name) {                                            
+                                            case "totalImpuestosRetenidos":
+                                                comprobante.Impuestos.TotalImpuestosRetenidos = decimal.Parse(xmlReader.Value);
+                                                break;
+                                            case "totalImpuestosTrasladados":
+                                                comprobante.Impuestos.TotalImpuestosTrasladados = decimal.Parse(xmlReader.Value);
+                                                break;
+                                            default:
+                                                throw new Exception(xmlReader.Name + "is not a valid attribute for cfdi:Impuestos.");
+                                        }
+                                    }
+                                }
+
+                                else if ("cfdi:Traslados".Equals(xmlReader.Name)) {
+                                    comprobante.Impuestos.Traslados = new List<Traslado>();
+                                }
+
+                                else if ("cfdi:Traslado".Equals(xmlReader.Name)) {
+                                    Traslado traslado = new Traslado();
+                                    while (xmlReader.MoveToNextAttribute()) {
+                                        switch (xmlReader.Name) {
+                                            case "impuesto":
+                                                traslado.Impuesto = xmlReader.Value;
+                                                break;
+                                            case "tasa":
+                                                traslado.Tasa = decimal.Parse(xmlReader.Value);
+                                                break;
+                                            case "importe":
+                                                traslado.Importe = decimal.Parse(xmlReader.Value);
+                                                break;
+                                            default:
+                                                throw new Exception(xmlReader.Name + "is not a valid attribute for cfdi:Impuestos.");
+                                        }
+                                    }
+                                    comprobante.Impuestos.Traslados.Add(traslado);
+                                }
+
+                                else if ("cfdi:Retenciones".Equals(xmlReader.Name)) {
+                                    comprobante.Impuestos.Retenciones = new List<Retencion>();
+                                }
+
+                                else if ("cfdi:Retencion".Equals(xmlReader.Name)) {
+                                    Retencion retencion = new Retencion();                                    
+                                    while (xmlReader.MoveToNextAttribute()) {
+                                        switch (xmlReader.Name) {
+                                            case "impuesto":
+                                                retencion.Impuesto = xmlReader.Value;
+                                                break;                                            
+                                            case "importe":
+                                                retencion.Importe = decimal.Parse(xmlReader.Value);
+                                                break;
+                                            default:
+                                                throw new Exception(xmlReader.Name + "is not a valid attribute for cfdi:Retencion.");
+                                        }
+                                    }
+                                    comprobante.Impuestos.Retenciones.Add(retencion);
+                                }
+
+                                else if ("cfdi:Complemento".Equals(xmlReader.Name)) {
+                                    comprobante.Complementos = new List<Complemento>();
+                                }
+
+                                else if ("tfd:TimbreFiscalDigital".Equals(xmlReader.Name)) {
+                                    TimbreFiscalDigital timbre = new TimbreFiscalDigital();
+                                    while (xmlReader.MoveToNextAttribute()) {
+                                        switch (xmlReader.Name) {
+                                            case "version":
+                                                timbre.Version = xmlReader.Value;
+                                                break;
+                                            case "UUID":
+                                                timbre.UUID = xmlReader.Value;
+                                                break;
+                                            case "FechaTimbrado":
+                                                timbre.FechaTimbrado = DateTime.Parse( xmlReader.Value );
+                                                break;
+                                            case "selloCFD":
+                                                timbre.SelloCFD = xmlReader.Value;
+                                                break;
+                                            case "noCertificadoSAT":
+                                                timbre.NoCertificadoSAT = xmlReader.Value;
+                                                break;
+                                            case "selloSAT":
+                                                timbre.SelloSAT = xmlReader.Value;
+                                                break;
+                                            case "xmlns:tfd":                                            
+                                            case "xsi:schemaLocation":
+                                                break;
+                                            default:
+                                                throw new Exception(xmlReader.Name + " is not a valid attribute for cfdi:TimbreFiscalDigital.");
+                                        }
+                                    }
+                                    comprobante.Complementos.Add(timbre);
+                                }
+
+                                else {
+                                    xmlReader.NodeType.ToString();
+                                    xmlReader.Name.ToString();
+                                }
                                 //xmlReader.NodeType.ToString();
                             }
                         }
 
+                        //xmlReader.Dispose();
+                        //xmlReader.Close();
+
+                        model.ComprobanteArchivo.InputStream.Position = 0;
+                        //model.ComprobanteArchivo.InputStream.Position = 0;
+
                         //model.ComprobanteArchivo.InputStream.CopyTo(target);
                         //Byte[] data = target.ToArray();
 
-                        //comprobante
+                        if (certificado != null) {
+                            if (!string.IsNullOrEmpty(certificado.NumSerie)) {
+                                certificado = DBContext.Certificados.Where(c => c.NumSerie == certificado.NumSerie).SingleOrDefault();
+                                comprobante.Certificado = certificado;
+                            }
+                        } 
 
+                        if (comprobante.Emisor != null) {
+                            Emisor emisor = DBContext.Emisores.Where(e => 
+                                (e.RFC == comprobante.Emisor.RFC)
+                                && (e.Nombre == comprobante.Emisor.Nombre)                                
+                                && (e.Status == "A")
+                                ).SingleOrDefault();
+                            comprobante.Emisor = emisor;
+                            comprobante.EmisorId = emisor.EmisorId;
+                        }
+
+                        if (comprobante.Receptor != null) {
+                            Receptor receptor = DBContext.Receptores.Where(r =>
+                                (r.RFC == comprobante.Receptor.RFC)
+                                && (r.Nombre == comprobante.Receptor.Nombre)
+                                && (r.Status == "A")
+                                ).SingleOrDefault();
+                            comprobante.Receptor = receptor;
+                            comprobante.ReceptorId = receptor.ReceptorId;
+                        }
+
+                        comprobante.GeneratedCadenaOriginal = comprobante.GetCadenaOriginal();
+
+                        comprobante.GeneratedXmlUrl = string.Format(@"https://sistrategiacfdi1.blob.core.windows.net/{0}/{1}.xml", 
+                            comprobante.Emisor.PublicKey.ToString("N"),
+                            comprobante.PublicKey.ToString("N"));
+                        comprobante.GeneratedPDFUrl = string.Format(@"https://sistrategiacfdi1.blob.core.windows.net/{0}/{1}.pdf",
+                            comprobante.Emisor.PublicKey.ToString("N"),
+                            comprobante.PublicKey.ToString("N"));
+                        //comprobante.GeneratedPDFUrl
+                        //comprobante.ExtendedIntValue1 = model.NoOrden;
+                        //comprobante.ExtendedIntValue2 = model.NoCliente;
+
+                        comprobante.ExtendedIntValue1 = DBContext.Comprobantes.Count() + 1;
+                        comprobante.ExtendedIntValue2 = comprobante.ReceptorId;
+
+                        comprobante.ViewTemplate = DBContext.ViewTemplates.Find(2);
+                        comprobante.ViewTemplateId = comprobante.ViewTemplate.ViewTemplateId;
+
+                        comprobante.Status = "A";
+
+                        DBContext.Comprobantes.Add(comprobante);
+                        DBContext.SaveChanges();
+
+                        if (model.ComprobantePDFArchivo != null && model.ComprobantePDFArchivo.ContentLength > 0) {
+                            CloudStorageMananger manager = new CloudStorageMananger();
+                            manager.UploadFromStream(ConfigurationManager.AppSettings["AzureAccountName"],
+                                ConfigurationManager.AppSettings["AzureAccountKey"],
+                                comprobante.Emisor.PublicKey.ToString("N"),
+                                comprobante.PublicKey.ToString("N") + ".xml",
+                                model.ComprobanteArchivo.FileName,
+                                model.ComprobanteArchivo.ContentType,
+                                model.ComprobanteArchivo.InputStream);
+
+                            manager.UploadFromStream(ConfigurationManager.AppSettings["AzureAccountName"],
+                                ConfigurationManager.AppSettings["AzureAccountKey"],
+                                comprobante.Emisor.PublicKey.ToString("N"),
+                                comprobante.PublicKey.ToString("N") + ".pdf",
+                                model.ComprobantePDFArchivo.FileName,
+                                model.ComprobantePDFArchivo.ContentType,
+                                model.ComprobantePDFArchivo.InputStream);
+                        }
                     }
                 }
                 catch (Exception ex) {

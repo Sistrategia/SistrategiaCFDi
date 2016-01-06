@@ -18,6 +18,16 @@
       @Html.TextBoxFor(m => m.ComprobanteArchivo, new { @class = "form-control", type = "file" })
     </div>
   </div>
+
+  <div class="form-group">
+    @Html.LabelFor(m => m.ComprobantePDFArchivo, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(m => m.ComprobantePDFArchivo, new { @class = "form-control", type = "file" })
+    </div>
+  </div>
+
+  
+
   <hr />
   <div class="form-group">
     <div class="col-md-offset-2 col-md-10">
