@@ -679,5 +679,98 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+        public ActionResult Upload() {
+            var model = new ComprobanteUploadViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult Upload(ComprobanteUploadViewModel model) {           
+            if (ModelState.IsValid) {
+                if (model.ComprobanteArchivo == null || model.ComprobanteArchivo.ContentLength == 0) {
+                    return View();
+                }
+                try {
+
+                    Comprobante comprobante = new Comprobante();
+
+                    if (model.ComprobanteArchivo != null) {
+                        // MemoryStream target = new MemoryStream();
+
+                        System.Xml.XmlTextReader xmlReader = new System.Xml.XmlTextReader(model.ComprobanteArchivo.InputStream);
+
+                        while (xmlReader.Read()) {
+                            if (xmlReader.NodeType == System.Xml.XmlNodeType.Element){
+
+                                if ("xml".Equals(xmlReader.Name)) {
+
+                                }
+                                else if ("cfdi:Comprobante".Equals(xmlReader.Name)) {
+                                    while (xmlReader.MoveToNextAttribute()) {
+                                        switch (xmlReader.Name){
+                                            case "version":
+                                                comprobante.Version = xmlReader.Value;
+                                                break;
+                                            case "serie":
+                                                comprobante.Serie = xmlReader.Value;
+                                                break;
+                                            case "folio":
+                                                comprobante.Folio = xmlReader.Value;
+                                                break;
+                                            case "fecha":
+                                                comprobante.Fecha = DateTime.Parse(xmlReader.Value);
+                                                break;
+                                            case "sello":
+                                                comprobante.Sello = xmlReader.Value;
+                                                break;
+                                            case "tipoDeComprobante":
+                                                comprobante.TipoDeComprobante = xmlReader.Value;
+                                                break;
+                                            case "formaDePago":
+                                                comprobante.FormaDePago = xmlReader.Value;
+                                                break;
+                                            case "subTotal":
+                                                comprobante.SubTotal = decimal.Parse( xmlReader.Value );
+                                                break;
+                                            case "total":
+                                                comprobante.Total = decimal.Parse(xmlReader.Value);
+                                                break;
+                                            case "metodoDePago":
+                                                comprobante.MetodoDePago = xmlReader.Value;
+                                                break;
+                                            case "LugarExpedicion":
+                                                comprobante.LugarExpedicion = xmlReader.Value;
+                                                break;
+                                            case "noCertificado":
+                                                //comprobante.LugarExpedicion = xmlReader.Value;
+                                                break;
+                                            case "certificado":
+                                                //comprobante.LugarExpedicion = xmlReader.Value;
+                                                break;
+                                        }
+                                    }
+                                }
+
+                                //xmlReader.NodeType.ToString();
+                            }
+                        }
+
+                        //model.ComprobanteArchivo.InputStream.CopyTo(target);
+                        //Byte[] data = target.ToArray();
+
+                        //comprobante
+
+                    }
+                }
+                catch (Exception ex) {
+                    //log.Error(ex, "Error upload photo blob to storage");
+                    ex.ToString();
+                }
+            }
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
