@@ -424,6 +424,7 @@
     <Content Include="Views\Comprobante\GetTimbre.cshtml" />
     <Content Include="Views\Receptor\Edit.cshtml" />
     <Content Include="Views\Comprobante\Upload.cshtml" />
+    <Content Include="Views\Comprobante\Cancel.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -447,6 +448,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="CFDI\Cancelacion.cs" />
     <Compile Include="CFDI\CantidadEnLetraConverter.cs" />
     <Compile Include="CFDI\Certificado.cs" />
     <Compile Include="CFDI\CFDIServiceInterfaces.cs" />

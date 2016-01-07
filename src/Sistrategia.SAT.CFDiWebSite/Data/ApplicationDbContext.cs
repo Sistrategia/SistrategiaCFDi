@@ -33,6 +33,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
 
         public virtual DbSet<Comprobante> Comprobantes { get; set; }
 
+        public virtual DbSet<Cancelacion> Cancelaciones { get; set; }
+
         public virtual DbSet<ViewTemplate> ViewTemplates { get; set; }
 
         protected override void OnModelCreating(System.Data.Entity.DbModelBuilder modelBuilder) {
@@ -590,6 +592,38 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             timbre.Property(p => p.SelloSAT)
                 .HasColumnName("sello_sat");
 
+
+            var cancelacion = modelBuilder.Entity<Cancelacion>()
+                .ToTable("sat_cancelacion");
+            cancelacion.Property(p => p.CancelacionId)
+                .HasColumnName("cancelacion_id");  
+            cancelacion.Property(p => p.Ack)
+                .HasColumnName("ack");  
+            cancelacion.Property(p => p.Text)
+                .HasColumnName("text");
+            cancelacion.Property(p => p.CancelacionXmlResponseUrl)
+                .HasColumnName("cancelacion_xml_response_url");
+
+            var cancelacionUUIDComprobante = modelBuilder.Entity<CancelacionUUIDComprobante>()
+                .ToTable("sat_cancelacion_uuid_comprobantes");
+            cancelacionUUIDComprobante.Property(p => p.CancelacionUUIDComprobanteId)
+                .HasColumnName("cancelacion_uuid_comprobantes_id");
+            cancelacionUUIDComprobante.Property(p => p.UUID)
+                .HasColumnName("uuid");
+            cancelacionUUIDComprobante.Property(p => p.CancelacionId)
+                .HasColumnName("cancelacion_id");
+            
+            cancelacionUUIDComprobante.Property(p => p.ComprobanteId)
+                .HasColumnName("comprobante_id");
+
+            //cancelacion.HasMany<CancelacionUUIDComprobante>(p => p.UUIDComprobantes)
+            //    .WithOptional()
+            //    .Map(pe => pe.MapKey("cancelacion_id"));
+            //    ;
+
+            cancelacionUUIDComprobante.HasOptional<Comprobante>(p => p.Comprobante)
+                // .WithOptionalPrincipal
+                ;
 
             var viewTemplate = modelBuilder.Entity<ViewTemplate>()
                 .ToTable("ui_view_template");

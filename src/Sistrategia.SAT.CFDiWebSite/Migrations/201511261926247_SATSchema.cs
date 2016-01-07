@@ -8,29 +8,30 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
         public override void Up()
         {
             CreateTable(
-                "dbo.sat_certificado",
+                "dbo.sat_cancelacion",
                 c => new
                     {
-                        certificado_id = c.Int(nullable: false, identity: true),
-                        public_key = c.Guid(nullable: false),
-                        num_serie = c.String(nullable: false, maxLength: 20),
-                        rfc = c.String(nullable: false, maxLength: 13),
-                        inicia = c.DateTime(nullable: false),
-                        finaliza = c.DateTime(nullable: false),
-                        certificado = c.String(nullable: false),
-                        pfx_archivo = c.Binary(),
-                        pfx_contrasena = c.String(maxLength: 256),
-                        certificado_der = c.Binary(),
-                        private_key_der = c.Binary(),
-                        private_key_contrasena = c.String(maxLength: 256),
-                        estado = c.String(nullable: false),
-                        ordinal = c.Int(nullable: false),
-                        emisor_id = c.Int(),
+                        cancelacion_id = c.Int(nullable: false, identity: true),
+                        ack = c.String(),
+                        text = c.String(),
+                        cancelacion_xml_response_url = c.String(),
                     })
-                .PrimaryKey(t => t.certificado_id)
-                .ForeignKey("dbo.sat_emisor", t => t.emisor_id)
-                .Index(t => t.public_key)
-                .Index(t => t.emisor_id);
+                .PrimaryKey(t => t.cancelacion_id);
+            
+            CreateTable(
+                "dbo.sat_cancelacion_uuid_comprobantes",
+                c => new
+                    {
+                        cancelacion_uuid_comprobantes_id = c.Int(nullable: false, identity: true),
+                        cancelacion_id = c.Int(),
+                        uuid = c.String(),
+                        comprobante_id = c.Int(),
+                    })
+                .PrimaryKey(t => t.cancelacion_uuid_comprobantes_id)
+                .ForeignKey("dbo.sat_cancelacion", t => t.cancelacion_id)
+                .ForeignKey("dbo.sat_comprobante", t => t.comprobante_id)
+                .Index(t => t.cancelacion_id)
+                .Index(t => t.comprobante_id);
             
             CreateTable(
                 "dbo.sat_comprobante",
@@ -91,6 +92,31 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 .Index(t => t.receptor_id)
                 .Index(t => t.impuestos_id)
                 .Index(t => t.view_template_id);
+            
+            CreateTable(
+                "dbo.sat_certificado",
+                c => new
+                    {
+                        certificado_id = c.Int(nullable: false, identity: true),
+                        public_key = c.Guid(nullable: false),
+                        num_serie = c.String(nullable: false, maxLength: 20),
+                        rfc = c.String(nullable: false, maxLength: 13),
+                        inicia = c.DateTime(nullable: false),
+                        finaliza = c.DateTime(nullable: false),
+                        certificado = c.String(nullable: false),
+                        pfx_archivo = c.Binary(),
+                        pfx_contrasena = c.String(maxLength: 256),
+                        certificado_der = c.Binary(),
+                        private_key_der = c.Binary(),
+                        private_key_contrasena = c.String(maxLength: 256),
+                        estado = c.String(nullable: false),
+                        ordinal = c.Int(nullable: false),
+                        emisor_id = c.Int(),
+                    })
+                .PrimaryKey(t => t.certificado_id)
+                .ForeignKey("dbo.sat_emisor", t => t.emisor_id)
+                .Index(t => t.public_key)
+                .Index(t => t.emisor_id);
             
             CreateTable(
                 "dbo.sat_complemento",
@@ -283,6 +309,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
         public override void Down()
         {
             DropForeignKey("dbo.sat_timbre_fiscal_digital", "complemento_id", "dbo.sat_complemento");
+            DropForeignKey("dbo.sat_cancelacion_uuid_comprobantes", "comprobante_id", "dbo.sat_comprobante");
             DropForeignKey("dbo.sat_comprobante", "view_template_id", "dbo.ui_view_template");
             DropForeignKey("dbo.sat_comprobante", "receptor_id", "dbo.sat_receptor");
             DropForeignKey("dbo.sat_receptor", "domicilio_id", "dbo.sat_ubicacion");
@@ -299,6 +326,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             DropForeignKey("dbo.sat_concepto", "comprobante_id", "dbo.sat_comprobante");
             DropForeignKey("dbo.sat_complemento", "comprobante_id", "dbo.sat_comprobante");
             DropForeignKey("dbo.sat_comprobante", "certificado_id", "dbo.sat_certificado");
+            DropForeignKey("dbo.sat_cancelacion_uuid_comprobantes", "cancelacion_id", "dbo.sat_cancelacion");
             DropIndex("dbo.sat_timbre_fiscal_digital", new[] { "complemento_id" });
             DropIndex("dbo.sat_receptor", new[] { "domicilio_id" });
             DropIndex("dbo.sat_receptor", new[] { "public_key" });
@@ -314,14 +342,16 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             DropIndex("dbo.sat_concepto", new[] { "comprobante_id" });
             DropIndex("dbo.sat_concepto", new[] { "public_key" });
             DropIndex("dbo.sat_complemento", new[] { "comprobante_id" });
+            DropIndex("dbo.sat_certificado", new[] { "emisor_id" });
+            DropIndex("dbo.sat_certificado", new[] { "public_key" });
             DropIndex("dbo.sat_comprobante", new[] { "view_template_id" });
             DropIndex("dbo.sat_comprobante", new[] { "impuestos_id" });
             DropIndex("dbo.sat_comprobante", new[] { "receptor_id" });
             DropIndex("dbo.sat_comprobante", new[] { "emisor_id" });
             DropIndex("dbo.sat_comprobante", new[] { "certificado_id" });
             DropIndex("dbo.sat_comprobante", new[] { "public_key" });
-            DropIndex("dbo.sat_certificado", new[] { "emisor_id" });
-            DropIndex("dbo.sat_certificado", new[] { "public_key" });
+            DropIndex("dbo.sat_cancelacion_uuid_comprobantes", new[] { "comprobante_id" });
+            DropIndex("dbo.sat_cancelacion_uuid_comprobantes", new[] { "cancelacion_id" });
             DropTable("dbo.sat_timbre_fiscal_digital");
             DropTable("dbo.sat_receptor");
             DropTable("dbo.sat_traslado");
@@ -334,8 +364,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             DropTable("dbo.sat_receptor_correo_entrega");
             DropTable("dbo.sat_concepto");
             DropTable("dbo.sat_complemento");
-            DropTable("dbo.sat_comprobante");
             DropTable("dbo.sat_certificado");
+            DropTable("dbo.sat_comprobante");
+            DropTable("dbo.sat_cancelacion_uuid_comprobantes");
+            DropTable("dbo.sat_cancelacion");
         }
     }
 }

@@ -1273,5 +1273,60 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             }
             return RedirectToAction("Details", "Comprobante", new { id = comprobanteId });
         }
+
+        public ActionResult Cancel(string id) {
+            //Guid publicKey;
+            //if (!Guid.TryParse(id, out publicKey))
+            //    return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+
+           
+
+            //var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            //if (comprobante == null)
+            //    return HttpNotFound();
+
+
+            //var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
+            //string[] UUIDs = new string[1];
+            //UUIDs[0] = ((TimbreFiscalDigital)comprobante.Complementos[0]).UUID;
+
+            //string user = ConfigurationManager.AppSettings["CfdiServiceUser"];
+            //string password = ConfigurationManager.AppSettings["CfdiServicePassword"];
+
+            ////var model = new ComprobanteDetailViewModel(comprobante);
+
+            //string invoiceFileName = DateTime.Now.ToString("cancelado_yyyyMMddHmmss_" + comprobante.PublicKey.ToString("N") + ".txt");
+
+            //try {
+
+            //    SATManager manager = new SATManager();
+
+                
+                
+            //  //  ICancelaResponse response = manager.CancelaCFDI(user, password, comprobante.Emisor.RFC, UUIDs, certificado.PFXArchivo, certificado.PFXContrasena);
+
+                
+                
+            //    // response.Ack.ToString();
+            //    //if (response)
+            //    //    DBContext.SaveChanges();
+
+           
+            //}
+            //catch (Exception ex) {
+            //    TempData["msg"] = ex.Message.ToString();
+            //    return View();
+            //    //return View(model);
+            //    //    return View();
+            //}
+
+
+
+
+            return View();
+
+        }
     }
 }

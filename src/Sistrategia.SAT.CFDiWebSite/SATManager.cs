@@ -213,6 +213,12 @@ namespace Sistrategia.SAT.CFDiWebSite
 
             return true;
         }
+
+
+        public ICancelaResponse CancelaCFDI(string user, string password, string rfc, string[] uuid, byte[] pfx, string pfxPassword) {
+            ICFDIService webService = CFDiServiceFactory.Create();
+            return webService.CancelaCFDI(user, password, rfc, uuid, pfx, pfxPassword);
+        }
         
     }
 
