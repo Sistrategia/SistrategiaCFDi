@@ -524,7 +524,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                         break;
                 }
 
-                if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.Calle))
+                if (!string.IsNullOrEmpty(comprobante.Emisor.RegimenFiscal[0].Regimen))
                     writer.WriteAttributeString("Regimen", comprobante.Emisor.RegimenFiscal[0].Regimen);
 
                 //End RegimenFiscal
@@ -765,7 +765,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
 
                 //if (comprobante.Impuestos.Retenciones.Count > 0 || (comprobante.Impuestos.Retenciones.Count > 0 && comprobante.Impuestos.TotalImpuestosRetenidosSpecified)) {
-                if (comprobante.Impuestos.Retenciones.Count > 0 || (comprobante.Impuestos.Retenciones.Count > 0 && comprobante.Impuestos.TotalImpuestosRetenidos.HasValue)) {
+                if (comprobante.Impuestos.Retenciones!=null && ( comprobante.Impuestos.Retenciones.Count > 0 || (comprobante.Impuestos.Retenciones.Count > 0 && comprobante.Impuestos.TotalImpuestosRetenidos.HasValue))) {
 
                     // retenciones
                     switch (comprobante.Version) {
