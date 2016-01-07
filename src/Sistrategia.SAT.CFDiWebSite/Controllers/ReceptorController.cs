@@ -12,10 +12,77 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
     public class ReceptorController : BaseController
     {
         public ActionResult Index() {
-            var model = new ReceptorIndexViewModel {
-                Receptores = this.DBContext.Receptores.Where(r => r.Status == "A").ToList()
-            };
-            return View(model);
+            //var model = new ReceptorIndexViewModel {
+            //    Receptores = this.DBContext.Receptores.Where(r => r.Status == "A").ToList()
+            //};
+            //return View(model);
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult LoadReceptores(int page, int pageSize, string search = null, string sort = null, string sortDir = null) {
+            sortDir = string.IsNullOrEmpty(sortDir) ? "ASC" : sortDir;
+            List<object> itemList = new List<object>();
+            try {
+
+                Func<Receptor, Object> orderByFunc = null;
+                switch (sort) {
+                    case "Nombre":
+                        orderByFunc = sl => sl.Nombre;
+                        break;
+                    case "RFC":
+                        orderByFunc = sl => sl.RFC;
+                        break;                   
+                    default:
+                        orderByFunc = sl => sl.Nombre;
+                        break;
+                }
+
+                List<Receptor> Receptores = new List<Receptor>();
+                if (search != null)
+                    Receptores = sortDir == "ASC" ? DBContext.Receptores.Where(x => x.Status.Equals("A") && (x.Nombre.Contains(search)
+                        || x.RFC.Contains(search)) 
+                        ).OrderBy(orderByFunc)
+                        .Take(((page - 1) * pageSize) + pageSize)
+                        .Skip(((page - 1) * pageSize)).ToList()
+                        :
+                        DBContext.Receptores.Where(x => x.Status.Equals("A") && (x.Nombre.Contains(search)
+                        || x.RFC.Contains(search)) 
+                        ).OrderByDescending(orderByFunc)
+                        .Take(((page - 1) * pageSize) + pageSize)
+                        .Skip(((page - 1) * pageSize)).ToList();
+                else
+                    Receptores = sortDir == "ASC" ? DBContext.Receptores.Where(x => x.Status.Equals("A")).OrderBy(orderByFunc).Take(((page - 1) * pageSize) + pageSize).Skip(((page - 1) * pageSize)).ToList()
+                        : DBContext.Receptores.Where(x => x.Status.Equals("A")).OrderByDescending(orderByFunc).Take(((page - 1) * pageSize) + pageSize).Skip(((page - 1) * pageSize)).ToList();
+
+                if (Receptores.Count > 0) {
+                    int ReceptoresTotalRows = DBContext.Receptores.Where(x => x.Status.Equals("A") && (x.Nombre.Contains(search) || x.RFC.Contains(search))).Count();
+
+                    foreach (Receptor receptor in Receptores) {
+                        var dynamicItems = new {
+                            error = false,
+                            total_rows = ReceptoresTotalRows,
+                            returned_rows = Receptores.Count,
+                            comprobante_id = receptor.ReceptorId,
+                            public_key = receptor.PublicKey,
+                            receptor = receptor.Nombre,
+                            rfc = receptor.RFC,
+                            receptor_initial_letter = receptor.Nombre.Substring(0, 1),
+
+                        };
+                        itemList.Add(dynamicItems);
+                    }
+                }
+            }
+            catch (Exception ex) {
+                var errorMessage = new {
+                    error = true,
+                    errorMsg = ex.ToString()
+                };
+                itemList.Add(errorMessage);
+            }
+
+            return Json(itemList);
         }
 
         public ActionResult Create() {
