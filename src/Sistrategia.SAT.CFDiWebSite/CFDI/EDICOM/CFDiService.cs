@@ -191,7 +191,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI.EDICOM
     {
         private string ackField;
         private string textField;
-        private string[] uuidsField;
+        //private string[] uuidsField;
+        private List<string> uuidsField;
 
         [XmlElement(IsNullable = true)]
         public string ack {
@@ -207,7 +208,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI.EDICOM
 
         [XmlArray(IsNullable = true)]
         [XmlArrayItem("item", IsNullable = false)]
-        public string[] uuids {
+        public List<string> uuids {
+        //public string[] uuids {
             get { return this.uuidsField; }
             set { this.uuidsField = value; }
         }

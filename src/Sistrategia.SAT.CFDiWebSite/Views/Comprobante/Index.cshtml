@@ -1,80 +1,88 @@
 ﻿@{
   ViewBag.Title = "Lista de Comprobantes";
 }
-<div class="page-header clearfix">
-  <h1 class="pull-left">@ViewBag.Title</h1>
-  <div class="pull-right">
-    <div class="btn-group" style="bottom: 26px;position: relative;top:26px;">
-      @*@Html.ActionLink("Agregar", "Create", new { id = Model.Emisor.PublicKey }, new { @class = "btn btn-primary", @role = "button" })*@
-      @Html.ActionLink("Agregar", "Create", null, new { @class = "btn btn-primary", @role = "button" })
+<div class="col-md-12">
+    <div class="page-header clearfix">
+        <h1 class="pull-left">@ViewBag.Title</h1>
+        <div class="pull-right">
+            <div class="btn-group" style="bottom: 26px;position: relative;top:26px;">
+                @*@Html.ActionLink("Agregar", "Create", new { id = Model.Emisor.PublicKey }, new { @class = "btn btn-primary", @role = "button" })*@
+                @Html.ActionLink("Agregar", "Create", null, new { @class = "btn btn-primary", @role = "button" })
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
-<div>
-    <div class="form-inline" style="margin-bottom:1%;position:relative;height:40px;">
-        <div class="pull-left">
-            <button class="btn btn-link" data-bind="click: PreviousPage, css: IsFirstPage"><span class="glyphicon glyphicon-chevron-left" style="font-size:20px;"></span></button>
-            <span>Página <span data-bind="text: PresentPage"></span> de <span data-bind="text: TotalPage"></span></span>
-            <button class="btn btn-link" data-bind="click: NextPage, css: IsLastPage"><span class="glyphicon glyphicon-chevron-right" style="font-size:20px;"></span></button>
-        </div>
-        <div class="pull-right">
-            <div class="form-group" style="margin-bottom:0px;">
-                <input type="search" placeholder="Buscar..." class="form-control" data-bind="value: SearchText, valueUpdate: 'input', executeOnEnter: EnterSearching" id="Search" autocomplete="off">
-            </div>
-            <button data-bind="click: CleanSearch" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
-        </div>
-
-        <div data-bind="visible: !AjaxSuccess()" style="position:absolute;left:37%;width:20%;top:-20%;">
-            <div class="alert alert-info text-center" role="alert">Cargando...<span class="glyphicon glyphicon-refresh"></span></div>
-        </div>
+<div class="col-md-12">    
+    
+    <div class="col-md-6 pagination-mobile">
+        <button class="btn btn-link" data-bind="click: PreviousPage, css: IsFirstPage"><span class="glyphicon glyphicon-menu-left" style="font-size:20px;"></span></button>
+        <span>Página <span data-bind="text: PresentPage"></span> de <span data-bind="text: TotalPage"></span></span>
+        <button class="btn btn-link" data-bind="click: NextPage, css: IsLastPage"><span class="glyphicon glyphicon-menu-right" style="font-size:20px;"></span></button>
     </div>
-    <br />
-    <table>
-        <tbody data-bind='foreach: DataList' id="lista">
-            <tr>
-                <td>
-                    <a href="#" data-bind="attr: { href: '@Url.Action("Details", "Comprobante")/'+ $data.public_key }">
-                        <div class="circle noselect">
-                            <span data-bind='text: receptor_initial_letter' class="text-center"></span>
-                        </div>
-                    </a>
+    <div class="col-md-12 visible-xs-block">&nbsp;</div>
+    <div class="col-md-6">
+        <div class="input-group">              
+            <input type="search" placeholder="" class="form-control" data-bind="value: SearchText, valueUpdate: 'input', executeOnEnter: EnterSearching" id="Search" autocomplete="off">
+            <span class="input-group-btn">
+                <button data-bind="click: Searching, enable: HasSearchData" class="btn btn-default ">Buscar</button>
+                <button data-bind="click: CleanSearch" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+            </span>
+        </div><!-- /input-group -->           
+    </div>
+    <div class="col-md-12 visible-xs-block"><br /><br /></div>
+    <div class="col-md-12">
+        <table class="table-striped table-hover">
+            <thead class="hidden-xs">
+                <tr>
+                    <!-- ko foreach: Headers -->
+                    <th class="text-left" data-bind="click: function (header, event) { $parent.SortBy(header, event, $index()); }, text: $data.Title, css: { 'sort-true': $data.ServerData() === $root.CurrentSort()[0].ServerData() && $root.CurrentSort()[0].SortOrder() === 'DESC', 'sort-false': $data.ServerData() === $root.CurrentSort()[0].ServerData() && $root.CurrentSort()[0].SortOrder() === 'ASC' }"></th>
+                    <!-- /ko -->
+                </tr>
+            </thead>
+            <tbody data-bind='foreach: DataList' id="lista">
+                <tr>
+                    <td>
+                        <a href="#" data-bind="attr: { href: '@Url.Action("Details", "Comprobante")/'+ $data.public_key }">
+                            <div class="circle noselect">
+                                <span data-bind='text: status' class="text-center"></span>
+                            </div>
+                        </a>
+                    </td>
+                    <td>
+                        <h4 class="media-heading">
+                            <a href="#" data-bind="attr: { href: '@Url.Action("Details", "Comprobante")/'+$data.public_key }, text: serie+ folio + ' - ' +receptor"></a>
+                        </h4>
+                        @*<h5 class="media-heading" data-bind='text: fecha'></h5>*@
+                    </td>
+                    <td>
+                        <h5 class="media-heading" data-bind='text: fecha'></h5>
+                    </td>
+                    <td>
+                        <h4 class="media-heading">
+                            <span style="font-weight:600;color:#7986CB;" data-bind='text: total + " MXN"'></span>
+                        </h4>
+                    </td>
+                    @*<td>
+                            <a href="#"><span style="font-size:20px; font-weight:normal;color:#a0a0a0;" class="glyphicon glyphicon-envelope"></span></a>&nbsp;&nbsp;
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-top:0px;">
+                                    <span style="font-size:20px; font-weight:normal;color:#333;" class="glyphicon glyphicon-option-vertical"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#"><span style="font-size:20px; font-weight:normal;color:#7986CB;" class="glyphicon glyphicon-pencil"></span> Editar</a></li>
+                                </ul>
+                            </div>
+                        </td>*@
+                </tr>
+            </tbody>
+            <tr data-bind="visible: !HasContacts()">
+                <td colspan="7" class="text-center">
+                    <div class="alert alert-danger" role="alert"><b>¡No hay coincidencias!</b></div>
                 </td>
-                <td>                    
-                    <h4 class="media-heading">
-                        <a href="#" data-bind="attr: { href: '@Url.Action("Details", "Comprobante")/'+$data.public_key }, text: serie+ folio + ' - ' +receptor"></a>
-                    </h4>      
-                    <h5 class="media-heading" data-bind='text: fecha'></h5>                  
-                </td>
-                <td>
-                    <h4 class="media-heading">
-                        <span style="font-weight:600;color:#7986CB;" data-bind='text: total + " MXN"'></span>
-                    </h4>
-                </td>   
-                <td>
-                    <h4 class="media-heading">
-                        <span style="font-weight:600;color:#7986CB;" data-bind='text: status'></span>
-                    </h4>
-                </td>              
-                @*<td>
-                    <a href="#"><span style="font-size:20px; font-weight:normal;color:#a0a0a0;" class="glyphicon glyphicon-envelope"></span></a>&nbsp;&nbsp;
-                    <div class="btn-group pull-right">
-                        <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-top:0px;">
-                            <span style="font-size:20px; font-weight:normal;color:#333;" class="glyphicon glyphicon-option-vertical"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#"><span style="font-size:20px; font-weight:normal;color:#7986CB;" class="glyphicon glyphicon-pencil"></span> Editar</a></li>
-                        </ul>
-                    </div>
-                </td>*@
             </tr>
-        </tbody>
-        <tr data-bind="visible: !HasContacts()">
-            <td colspan="7" class="text-center">
-                <div class="alert alert-danger" role="alert"><b>¡No hay coincidencias!</b></div>
-            </td>
-        </tr>
-    </table>
+        </table>
+    </div>
 </div>
 
 
@@ -84,12 +92,13 @@
 <script type="text/javascript">
   $(document).ready(function() {
       var headers = [
-              { cTitle: 'receptor', sData: 'ReceptorNombre', sSortable: true },
-              { cTitle: 'fecha', sData: 'Fecha', sSortable: true },
-              { cTitle: 'total', sData: 'Total', sSortable: true },              
+              { cTitle: 'Status', sData: 'Status', sSortable: true },
+              { cTitle: 'Receptor', sData: 'ReceptorNombre', sSortable: true },
+              { cTitle: 'Fecha', sData: 'Fecha', sSortable: true },
+              { cTitle: 'Total', sData: 'Total', sSortable: true },
       ];
 
-      var table = new KOTable('Recipes', '@Url.Action("LoadComprobantes", "Comprobante")', headers);
+      var table = new KOTable('ComprobantesFullList', '@Url.Action("LoadComprobantes", "Comprobante")', headers);
       ko.applyBindings(table);
   });
 </script>   
