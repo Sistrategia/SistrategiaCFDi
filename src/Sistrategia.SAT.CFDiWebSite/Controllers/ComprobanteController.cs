@@ -689,8 +689,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Upload(ComprobanteUploadViewModel model) {           
+        public ActionResult Upload(ComprobanteUploadViewModel model) {
+            string comprobanteId = "";
             if (ModelState.IsValid) {
+
+              
+
                 if (model.ComprobanteArchivo == null || model.ComprobanteArchivo.ContentLength == 0) {
                     return View();
                 }
@@ -960,6 +964,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                                 throw new Exception(xmlReader.Name + "is not a valid attribute for cfdi:Domicilio.");
                                         }
                                     }
+                                    concepto.Ordinal = comprobante.Conceptos.Count + 1;
                                     comprobante.Conceptos.Add(concepto);
                                 }
 
@@ -1095,35 +1100,88 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         }
 
                         if (comprobante.Receptor != null) {
-                            Receptor receptor = DBContext.Receptores.Where(r =>
+                            //Receptor receptor = DBContext.Receptores.Where(r =>
+                            //    (r.RFC == comprobante.Receptor.RFC)
+                            //    && (r.Nombre == comprobante.Receptor.Nombre)
+                            //    && (r.Status == "A")
+                            //    ).SingleOrDefault();
+
+                            List<Receptor> receptores = DBContext.Receptores.Where(r =>
                                 (r.RFC == comprobante.Receptor.RFC)
                                 && (r.Nombre == comprobante.Receptor.Nombre)
-                                && (r.Status == "A")
-                                ).SingleOrDefault();
-                            comprobante.Receptor = receptor;
-                            comprobante.ReceptorId = receptor.ReceptorId;
+                                ).ToList();
+
+                            if (receptores != null && receptores.Count > 0) {
+                                foreach (Receptor receptor in receptores) {
+
+                                    if ((receptor.Domicilio != null && comprobante.Receptor.Domicilio != null)
+                                        && (receptor.Domicilio.Calle == comprobante.Receptor.Domicilio.Calle)
+                                        && (receptor.Domicilio.NoExterior == comprobante.Receptor.Domicilio.NoExterior)
+                                        && (receptor.Domicilio.NoInterior == comprobante.Receptor.Domicilio.NoInterior)
+                                        && (receptor.Domicilio.Colonia == comprobante.Receptor.Domicilio.Colonia)
+                                        && (receptor.Domicilio.Referencia == comprobante.Receptor.Domicilio.Referencia)
+                                        && (receptor.Domicilio.Localidad == comprobante.Receptor.Domicilio.Localidad)
+                                        && (receptor.Domicilio.Municipio == comprobante.Receptor.Domicilio.Municipio)
+                                        && (receptor.Domicilio.Estado == comprobante.Receptor.Domicilio.Estado)
+                                        && (receptor.Domicilio.CodigoPostal == comprobante.Receptor.Domicilio.CodigoPostal)
+                                        && (receptor.Domicilio.Pais == comprobante.Receptor.Domicilio.Pais)
+                                        ) {
+
+                                        //if (receptor != null) {
+                                        comprobante.Receptor = receptor;
+                                        comprobante.ReceptorId = receptor.ReceptorId;
+                                    }
+                                }
+                                if (comprobante.ReceptorId == null) {
+                                    // The address has changed, create a new one and inactive the oldone
+
+                                    foreach (Receptor receptor in receptores) {
+                                        receptor.Status = "I";
+                                    }
+
+                                    comprobante.Receptor.Status = "A";
+
+                                }
+                            }
+                            else {
+                                comprobante.Receptor.Status = "A";
+                            }
+
+                            //if (receptor != null) {
+                            //    comprobante.Receptor = receptor;
+                            //    comprobante.ReceptorId = receptor.ReceptorId;
+                            //}
+                            //else {
+
+                            //}
                         }
 
                         comprobante.GeneratedCadenaOriginal = comprobante.GetCadenaOriginal();
 
-                        comprobante.GeneratedXmlUrl = string.Format(@"https://sistrategiacfdi1.blob.core.windows.net/{0}/{1}.xml", 
-                            comprobante.Emisor.PublicKey.ToString("N"),
-                            comprobante.PublicKey.ToString("N"));
-                        comprobante.GeneratedPDFUrl = string.Format(@"https://sistrategiacfdi1.blob.core.windows.net/{0}/{1}.pdf",
-                            comprobante.Emisor.PublicKey.ToString("N"),
-                            comprobante.PublicKey.ToString("N"));
-                        //comprobante.GeneratedPDFUrl
-                        //comprobante.ExtendedIntValue1 = model.NoOrden;
-                        //comprobante.ExtendedIntValue2 = model.NoCliente;
+                        if (model.ComprobantePDFArchivo != null && model.ComprobantePDFArchivo.ContentLength > 0) {
+                            comprobante.GeneratedXmlUrl = string.Format(@"https://sistrategiacfdi1.blob.core.windows.net/{0}/{1}.xml",
+                                comprobante.Emisor.PublicKey.ToString("N"),
+                                comprobante.PublicKey.ToString("N"));
+                            comprobante.GeneratedPDFUrl = string.Format(@"https://sistrategiacfdi1.blob.core.windows.net/{0}/{1}.pdf",
+                                comprobante.Emisor.PublicKey.ToString("N"),
+                                comprobante.PublicKey.ToString("N"));
+                            //comprobante.GeneratedPDFUrl
+                            //comprobante.ExtendedIntValue1 = model.NoOrden;
+                            //comprobante.ExtendedIntValue2 = model.NoCliente;
+                        }
 
-                        comprobante.ExtendedIntValue1 = DBContext.Comprobantes.Count() + 1;
-                        comprobante.ExtendedIntValue2 = comprobante.ReceptorId;
+                        comprobante.ExtendedIntValue1 = DBContext.Comprobantes.Max(c => c.ExtendedIntValue1) + 1; // DBContext.Comprobantes.Count() + 1;
+                        if (comprobante.ReceptorId!=null)
+                            comprobante.ExtendedIntValue2 = comprobante.ReceptorId;
+                        else
+                            comprobante.ExtendedIntValue2 = DBContext.Receptores.Count() + 1;
 
                         comprobante.ViewTemplate = DBContext.ViewTemplates.Find(2);
                         comprobante.ViewTemplateId = comprobante.ViewTemplate.ViewTemplateId;
 
                         comprobante.Status = "A";
 
+                        comprobanteId = comprobante.PublicKey.ToString("N");
                         DBContext.Comprobantes.Add(comprobante);
                         DBContext.SaveChanges();
 
@@ -1152,7 +1210,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     ex.ToString();
                 }
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Details", "Comprobante", new { id = comprobanteId });
         }
     }
 }

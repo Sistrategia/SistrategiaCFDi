@@ -133,7 +133,7 @@ table{
     width:100%;
 }
 table tr{
-   height: 56px;
+   /*height: 56px;*/
 }
 table td {
     vertical-align:top;   

@@ -218,6 +218,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             this.TotalLetra = letraConverter.letra();
 
             this.MetodoDePago = comprobante.MetodoDePago;
+            this.NumCuenta = comprobante.NumCtaPago;
 
             this.MainCss = ConfigurationManager.AppSettings["InvoiceMainCss"];
             this.PrintCss = ConfigurationManager.AppSettings["InvoicePrintCss"];
