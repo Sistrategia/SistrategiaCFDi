@@ -289,6 +289,33 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 .Index(t => t.domicilio_id);
             
             CreateTable(
+                "dbo.sat_tipo_impuesto_retencion",
+                c => new
+                    {
+                        tipo_impuesto_retencion_id = c.Int(nullable: false, identity: true),
+                        tipo_impuesto_retencion_value = c.String(),
+                    })
+                .PrimaryKey(t => t.tipo_impuesto_retencion_id);
+            
+            CreateTable(
+                "dbo.sat_tipo_impuesto_traslado",
+                c => new
+                    {
+                        tipo_impuesto_traslado_id = c.Int(nullable: false, identity: true),
+                        tipo_impuesto_traslado_value = c.String(),
+                    })
+                .PrimaryKey(t => t.tipo_impuesto_traslado_id);
+            
+            CreateTable(
+                "dbo.sat_tipo_metodo_de_pago",
+                c => new
+                    {
+                        tipo_metodo_de_pago_id = c.Int(nullable: false, identity: true),
+                        tipo_metodo_de_pago_value = c.String(),
+                    })
+                .PrimaryKey(t => t.tipo_metodo_de_pago_id);
+            
+            CreateTable(
                 "dbo.sat_timbre_fiscal_digital",
                 c => new
                     {
@@ -353,6 +380,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             DropIndex("dbo.sat_cancelacion_uuid_comprobantes", new[] { "comprobante_id" });
             DropIndex("dbo.sat_cancelacion_uuid_comprobantes", new[] { "cancelacion_id" });
             DropTable("dbo.sat_timbre_fiscal_digital");
+            DropTable("dbo.sat_tipo_metodo_de_pago");
+            DropTable("dbo.sat_tipo_impuesto_traslado");
+            DropTable("dbo.sat_tipo_impuesto_retencion");
             DropTable("dbo.sat_receptor");
             DropTable("dbo.sat_traslado");
             DropTable("dbo.sat_retencion");

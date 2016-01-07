@@ -35,6 +35,11 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
 
         public virtual DbSet<Cancelacion> Cancelaciones { get; set; }
 
+
+        public virtual DbSet<TipoMetodoDePago> TiposMetodoDePago { get; set; }
+        public virtual DbSet<TipoImpuestoTraslado> TiposImpuestoTraslado { get; set; }
+        public virtual DbSet<TipoImpuestoRetencion> TiposImpuestoRetencion { get; set; }
+
         public virtual DbSet<ViewTemplate> ViewTemplates { get; set; }
 
         protected override void OnModelCreating(System.Data.Entity.DbModelBuilder modelBuilder) {
@@ -108,6 +113,31 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             userClaim.Property(pr2 => pr2.UserId).HasColumnName("user_id");
             userClaim.Property(pr3 => pr3.ClaimType).HasColumnName("claim_type");
             userClaim.Property(pr4 => pr4.ClaimValue).HasColumnName("claim_value");
+
+        //      public virtual DbSet<TipoMetodoDePago> TiposMetodoDePago { get; set; }
+        //public virtual DbSet<TipoImpuestoTraslado> TiposImpuestoTraslado { get; set; }
+        //public virtual DbSet<TipoImpuestoRetencion> TiposImpuestoRetencion { get; set; }
+
+        var tipoMetodoDePago = modelBuilder.Entity<TipoMetodoDePago>()
+            .ToTable("sat_tipo_metodo_de_pago");
+            tipoMetodoDePago.Property(p => p.TipoMetodoDePagoId)
+                .HasColumnName("tipo_metodo_de_pago_id");
+            tipoMetodoDePago.Property(p => p.TipoMetodoDePagoValue)
+            .HasColumnName("tipo_metodo_de_pago_value");
+
+        var tipoImpuestoRetencion = modelBuilder.Entity<TipoImpuestoRetencion>()
+            .ToTable("sat_tipo_impuesto_retencion");
+            tipoImpuestoRetencion.Property(p => p.TipoImpuestoRetencionId)
+                .HasColumnName("tipo_impuesto_retencion_id");
+            tipoImpuestoRetencion.Property(p => p.TipoImpuestoRetencionValue)
+            .HasColumnName("tipo_impuesto_retencion_value");
+
+        var tipoImpuestoTraslado = modelBuilder.Entity<TipoImpuestoTraslado>()
+            .ToTable("sat_tipo_impuesto_traslado");
+            tipoImpuestoTraslado.Property(p => p.TipoImpuestoTrasladoId)
+                .HasColumnName("tipo_impuesto_traslado_id");
+            tipoImpuestoTraslado.Property(p => p.TipoImpuestoTrasladoValue)
+            .HasColumnName("tipo_impuesto_traslado_value");
 
             var emisor = modelBuilder.Entity<Emisor>()
                 .ToTable("sat_emisor");
