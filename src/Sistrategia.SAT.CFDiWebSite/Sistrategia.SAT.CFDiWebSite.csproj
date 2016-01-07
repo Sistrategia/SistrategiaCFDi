@@ -423,6 +423,7 @@
     <Content Include="Views\Comprobante\ddm2.cshtml" />
     <Content Include="Views\Comprobante\GetTimbre.cshtml" />
     <Content Include="Views\Receptor\Edit.cshtml" />
+    <Content Include="Views\Comprobante\Upload.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

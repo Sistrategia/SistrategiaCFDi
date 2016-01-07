@@ -8,6 +8,7 @@ using Sistrategia.SAT.Resources;
 using Sistrategia.SAT.CFDiWebSite.CFDI;
 using System.Web.Mvc;
 using System.Configuration;
+using System.Web;
 
 namespace Sistrategia.SAT.CFDiWebSite.Models
 {
@@ -217,6 +218,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             this.TotalLetra = letraConverter.letra();
 
             this.MetodoDePago = comprobante.MetodoDePago;
+            this.NumCuenta = comprobante.NumCtaPago;
 
             this.MainCss = ConfigurationManager.AppSettings["InvoiceMainCss"];
             this.PrintCss = ConfigurationManager.AppSettings["InvoicePrintCss"];
@@ -360,5 +362,25 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         public decimal Importe { get; set; }
         public string Impuesto { get; set; }
+    }
+
+
+    public class ComprobanteUploadViewModel
+    {
+        public ComprobanteUploadViewModel() {
+
+        }
+
+         //[Display(Name = "Certificado")]
+        [Required, DataType(DataType.Upload), Display(Name = "Comprobante")]
+        public HttpPostedFileBase ComprobanteArchivo { get; set; }
+
+        [DataType(DataType.Upload), Display(Name = "Comprobante")]
+        public HttpPostedFileBase ComprobantePDFArchivo { get; set; }
+
+        public string NoOrden { get; set; }
+        public string NoCliente { get; set; }
+
+        
     }
 }
