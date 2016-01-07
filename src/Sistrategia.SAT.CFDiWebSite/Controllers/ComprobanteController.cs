@@ -89,7 +89,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
         [HttpPost]
         public JsonResult LoadComprobantes(int page, int pageSize, string search = null, string sort = null, string sortDir = null) {
-            sortDir = string.IsNullOrEmpty(sortDir) ? "asc" : sortDir;
+            sortDir = string.IsNullOrEmpty(sortDir) ? "ASC" : sortDir;
             List<object> itemList = new List<object>();
             try {
 
@@ -98,8 +98,14 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     case "ReceptorNombre":
                         orderByFunc = sl => sl.Receptor.Nombre;
                         break;
+                    case "Fecha":
+                        orderByFunc = sl => sl.Fecha;
+                        break;
                     case "Total":
                         orderByFunc = sl => sl.Total;
+                        break;
+                    case "Status":
+                        orderByFunc = sl => sl.Status;
                         break;
                     default:
                         orderByFunc = sl => sl.Fecha;
@@ -108,16 +114,31 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                 List<Comprobante> Comprobantes = new List<Comprobante>();
                 if (search != null)
-                    Comprobantes = sortDir == "asc" ? DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search) || x.Total.ToString().Contains(search)).Take(((page - 1) * pageSize) + pageSize).OrderBy(orderByFunc).Skip(((page - 1) * pageSize)).ToList()
-                        : DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search) || x.Total.ToString().Contains(search)).Take(((page - 1) * pageSize) + pageSize).OrderByDescending(orderByFunc).Skip(((page - 1) * pageSize)).ToList();
+                    Comprobantes = sortDir == "ASC" ? DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search) 
+                        || x.Total.ToString().Contains(search) 
+                        || x.Status.Contains(search)
+                        || (x.Serie + x.Folio).Contains(search)
+                        ).OrderBy(orderByFunc)
+                        .Take(((page - 1) * pageSize) + pageSize)                       
+                        .Skip(((page - 1) * pageSize)).ToList()
+                        : 
+                        DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search)
+                        || x.Total.ToString().Contains(search)
+                        || x.Status.Contains(search)
+                        || (x.Serie + x.Folio).Contains(search)
+                        ).OrderByDescending(orderByFunc)
+                        .Take(((page - 1) * pageSize) + pageSize)                        
+                        .Skip(((page - 1) * pageSize)).ToList();
                 else
-                    Comprobantes = sortDir == "asc" ? DBContext.Comprobantes.OrderBy(orderByFunc).Take(((page - 1) * pageSize) + pageSize).Skip(((page - 1) * pageSize)).ToList()
+                    Comprobantes = sortDir == "ASC" ? DBContext.Comprobantes.OrderBy(orderByFunc).Take(((page - 1) * pageSize) + pageSize).Skip(((page - 1) * pageSize)).ToList()
                         : DBContext.Comprobantes.OrderByDescending(orderByFunc).Take(((page - 1) * pageSize) + pageSize).Skip(((page - 1) * pageSize)).ToList();
-
-                Sistrategia.SAT.CFDiWebSite.CloudStorage.CloudStorageMananger cloudStorage = new Sistrategia.SAT.CFDiWebSite.CloudStorage.CloudStorageMananger();
-
+               
                 if (Comprobantes.Count > 0) {
-                    int ComprobantesTotalRows = DBContext.Comprobantes.Count();
+                    int ComprobantesTotalRows = DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search) 
+                                                                            || x.Total.ToString().Contains(search) 
+                                                                            || x.Status.Contains(search)
+                                                                            || (x.Serie + x.Folio).Contains(search)
+                                                                            ).Count();
 
                     foreach (Comprobante comprobante in Comprobantes) {
                         var dynamicItems = new {
