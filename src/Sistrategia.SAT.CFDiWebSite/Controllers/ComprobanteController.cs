@@ -693,7 +693,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             string comprobanteId = "";
             if (ModelState.IsValid) {
 
-              
+
 
                 if (model.ComprobanteArchivo == null || model.ComprobanteArchivo.ContentLength == 0) {
                     return View();
@@ -709,14 +709,14 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         System.Xml.XmlTextReader xmlReader = new System.Xml.XmlTextReader(model.ComprobanteArchivo.InputStream);
 
                         while (xmlReader.Read()) {
-                            if (xmlReader.NodeType == System.Xml.XmlNodeType.Element){
+                            if (xmlReader.NodeType == System.Xml.XmlNodeType.Element) {
 
                                 if ("xml".Equals(xmlReader.Name)) {
 
                                 }
                                 else if ("cfdi:Comprobante".Equals(xmlReader.Name)) {
                                     while (xmlReader.MoveToNextAttribute()) {
-                                        switch (xmlReader.Name){
+                                        switch (xmlReader.Name) {
                                             case "version":
                                                 comprobante.Version = xmlReader.Value;
                                                 break;
@@ -737,7 +737,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                                 break;
                                             case "anoAprobacion":
                                                 comprobante.AnoAprobacion = xmlReader.Value;
-                                                break;                                            
+                                                break;
                                             case "formaDePago":
                                                 comprobante.FormaDePago = xmlReader.Value;
                                                 break;
@@ -755,7 +755,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                                 comprobante.CondicionesDePago = xmlReader.Value;
                                                 break;
                                             case "subTotal":
-                                                comprobante.SubTotal = decimal.Parse( xmlReader.Value );
+                                                comprobante.SubTotal = decimal.Parse(xmlReader.Value);
                                                 break;
                                             case "descuento":
                                                 comprobante.Descuento = decimal.Parse(xmlReader.Value);
@@ -792,7 +792,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                                 break;
                                             case "MontoFolioFiscalOrig":
                                                 comprobante.MontoFolioFiscalOrig = decimal.Parse(xmlReader.Value);
-                                                break;  
+                                                break;
 
                                             case "xmlns:cfdi":
                                             case "xmlns:xsi":
@@ -869,12 +869,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                         switch (xmlReader.Name) {
                                             case "Regimen":
                                                 RegimenFiscal regimen = new RegimenFiscal();
-                                                regimen.Regimen = xmlReader.Value;                                                
+                                                regimen.Regimen = xmlReader.Value;
                                                 break;
                                             default:
                                                 throw new Exception(xmlReader.Name + "is not a valid attribute for cfdi:RegimenFiscal.");
                                         }
-                                    }                                    
+                                    }
                                 }
 
                                 else if ("cfdi:Receptor".Equals(xmlReader.Name)) {
@@ -971,7 +971,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                 else if ("cfdi:Impuestos".Equals(xmlReader.Name)) {
                                     comprobante.Impuestos = new Impuestos();
                                     while (xmlReader.MoveToNextAttribute()) {
-                                        switch (xmlReader.Name) {                                            
+                                        switch (xmlReader.Name) {
                                             case "totalImpuestosRetenidos":
                                                 comprobante.Impuestos.TotalImpuestosRetenidos = decimal.Parse(xmlReader.Value);
                                                 break;
@@ -1013,12 +1013,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                 }
 
                                 else if ("cfdi:Retencion".Equals(xmlReader.Name)) {
-                                    Retencion retencion = new Retencion();                                    
+                                    Retencion retencion = new Retencion();
                                     while (xmlReader.MoveToNextAttribute()) {
                                         switch (xmlReader.Name) {
                                             case "impuesto":
                                                 retencion.Impuesto = xmlReader.Value;
-                                                break;                                            
+                                                break;
                                             case "importe":
                                                 retencion.Importe = decimal.Parse(xmlReader.Value);
                                                 break;
@@ -1044,7 +1044,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                                 timbre.UUID = xmlReader.Value;
                                                 break;
                                             case "FechaTimbrado":
-                                                timbre.FechaTimbrado = DateTime.Parse( xmlReader.Value );
+                                                timbre.FechaTimbrado = DateTime.Parse(xmlReader.Value);
                                                 break;
                                             case "selloCFD":
                                                 timbre.SelloCFD = xmlReader.Value;
@@ -1055,7 +1055,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                             case "selloSAT":
                                                 timbre.SelloSAT = xmlReader.Value;
                                                 break;
-                                            case "xmlns:tfd":                                            
+                                            case "xmlns:tfd":
                                             case "xsi:schemaLocation":
                                                 break;
                                             default:
@@ -1087,16 +1087,56 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                 certificado = DBContext.Certificados.Where(c => c.NumSerie == certificado.NumSerie).SingleOrDefault();
                                 comprobante.Certificado = certificado;
                             }
-                        } 
+                        }
 
                         if (comprobante.Emisor != null) {
-                            Emisor emisor = DBContext.Emisores.Where(e => 
+                            //Emisor emisor = DBContext.Emisores.Where(e => 
+                            //    (e.RFC == comprobante.Emisor.RFC)
+                            //    && (e.Nombre == comprobante.Emisor.Nombre)                                
+                            //    && (e.Status == "A")
+                            //    ).SingleOrDefault();
+
+                            List<Emisor> emisores = DBContext.Emisores.Where(e =>
                                 (e.RFC == comprobante.Emisor.RFC)
-                                && (e.Nombre == comprobante.Emisor.Nombre)                                
-                                && (e.Status == "A")
-                                ).SingleOrDefault();
-                            comprobante.Emisor = emisor;
-                            comprobante.EmisorId = emisor.EmisorId;
+                                && (e.Nombre == comprobante.Emisor.Nombre)
+                                ).ToList();
+
+                            if (emisores != null && emisores.Count > 0) {
+                                foreach (Emisor emisor in emisores) {
+
+                                    if ((emisor.DomicilioFiscal != null && comprobante.Emisor.DomicilioFiscal != null)
+                                        && (emisor.DomicilioFiscal.Calle == comprobante.Emisor.DomicilioFiscal.Calle)
+                                        && (emisor.DomicilioFiscal.NoExterior == comprobante.Emisor.DomicilioFiscal.NoExterior)
+                                        && (emisor.DomicilioFiscal.NoInterior == comprobante.Emisor.DomicilioFiscal.NoInterior)
+                                        && (emisor.DomicilioFiscal.Colonia == comprobante.Emisor.DomicilioFiscal.Colonia)
+                                        && (emisor.DomicilioFiscal.Referencia == comprobante.Emisor.DomicilioFiscal.Referencia)
+                                        && (emisor.DomicilioFiscal.Localidad == comprobante.Emisor.DomicilioFiscal.Localidad)
+                                        && (emisor.DomicilioFiscal.Municipio == comprobante.Emisor.DomicilioFiscal.Municipio)
+                                        && (emisor.DomicilioFiscal.Estado == comprobante.Emisor.DomicilioFiscal.Estado)
+                                        && (emisor.DomicilioFiscal.CodigoPostal == comprobante.Emisor.DomicilioFiscal.CodigoPostal)
+                                        && (emisor.DomicilioFiscal.Pais == comprobante.Emisor.DomicilioFiscal.Pais)
+                                        ) {
+
+                                        //if (receptor != null) {
+                                        comprobante.Emisor = emisor;
+                                        comprobante.EmisorId = emisor.EmisorId;
+                                    }
+                                }
+                                if (comprobante.EmisorId == null) {
+                                    // The address has changed, create a new one and inactive the oldone
+
+                                    foreach (Emisor emisor in emisores) {
+                                        emisor.Status = "I";
+                                    }
+
+                                    comprobante.Emisor.Status = "A";
+
+                                }
+
+                            }
+                            else {
+                                comprobante.Emisor.Status = "A";
+                            }
                         }
 
                         if (comprobante.Receptor != null) {
@@ -1171,7 +1211,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         }
 
                         comprobante.ExtendedIntValue1 = DBContext.Comprobantes.Max(c => c.ExtendedIntValue1) + 1; // DBContext.Comprobantes.Count() + 1;
-                        if (comprobante.ReceptorId!=null)
+                        if (comprobante.ReceptorId != null)
                             comprobante.ExtendedIntValue2 = comprobante.ReceptorId;
                         else
                             comprobante.ExtendedIntValue2 = DBContext.Receptores.Count() + 1;
