@@ -1,14 +1,16 @@
 ﻿@{
   ViewBag.Title = "Lista de Comprobantes";
 }
-<div class="page-header clearfix">
-  <h1 class="pull-left">@ViewBag.Title</h1>
-  <div class="pull-right">
-    <div class="btn-group" style="bottom: 26px;position: relative;top:26px;">
-      @*@Html.ActionLink("Agregar", "Create", new { id = Model.Emisor.PublicKey }, new { @class = "btn btn-primary", @role = "button" })*@
-      @Html.ActionLink("Agregar", "Create", null, new { @class = "btn btn-primary", @role = "button" })
+<div class="col-md-12">
+    <div class="page-header clearfix">
+        <h1 class="pull-left">@ViewBag.Title</h1>
+        <div class="pull-right">
+            <div class="btn-group" style="bottom: 26px;position: relative;top:26px;">
+                @*@Html.ActionLink("Agregar", "Create", new { id = Model.Emisor.PublicKey }, new { @class = "btn btn-primary", @role = "button" })*@
+                @Html.ActionLink("Agregar", "Create", null, new { @class = "btn btn-primary", @role = "button" })
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="col-md-12">    
