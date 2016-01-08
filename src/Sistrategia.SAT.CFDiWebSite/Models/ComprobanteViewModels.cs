@@ -67,6 +67,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
                 }
             }
 
+            this.MetodoDePago = comprobante.MetodoDePago;
+
             this.Serie = comprobante.Serie;
             this.Folio = comprobante.Folio;
 
@@ -105,6 +107,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public IEnumerable<SelectListItem> Emisores { get; set; }
         public IEnumerable<SelectListItem> Receptores { get; set; }
         public IEnumerable<SelectListItem> Certificados { get; set; }
+        public IEnumerable<SelectListItem> TipoMetodoDePago { get; set; }
+        public IEnumerable<SelectListItem> TiposImpuestoRetencion { get; set; }
+        public IEnumerable<SelectListItem> TiposImpuestoTraslado { get; set; }        
 
         public List<ConceptoViewModel> Conceptos { get; set; }
         public List<TrasladoViewModel> Traslados { get; set; }
@@ -363,7 +368,6 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public decimal Importe { get; set; }
         public string Impuesto { get; set; }
     }
-
 
     public class ComprobanteUploadViewModel
     {

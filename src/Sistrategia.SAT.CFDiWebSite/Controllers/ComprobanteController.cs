@@ -172,47 +172,38 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
         public ActionResult Create() {
             var model = new ComprobanteCreateViewModel();
-            model.Conceptos.Add(new ConceptoViewModel());
-            model.Conceptos.Add(new ConceptoViewModel());
-            model.Conceptos.Add(new ConceptoViewModel());
-            model.Conceptos.Add(new ConceptoViewModel());
-
-            var emisores = DBContext.Emisores.ToList();
-            var emisoresSelectList = new List<SelectListItem>();
-            foreach (var emisor in emisores) {
-                emisoresSelectList.Add(new SelectListItem {
-                    Value = emisor.EmisorId.ToString(),
-                    Text = emisor.Nombre + " - " + emisor.RFC
-                });
-            }
-            model.Emisores = emisoresSelectList;
-
-            var receptores = DBContext.Receptores.ToList();
-            var receptoresSelectList = new List<SelectListItem>();
-            foreach (var receptor in receptores) {
-                receptoresSelectList.Add(new SelectListItem {
-                    Value = receptor.ReceptorId.ToString(),
-                    Text = receptor.Nombre + " - " + receptor.RFC
-                });
-            }
-            model.Receptores = receptoresSelectList;
-
-            var certificados = DBContext.Certificados.ToList();
-            var certificadosSelectList = new List<SelectListItem>();
-            foreach (var certificado in certificados) {
-                certificadosSelectList.Add(new SelectListItem {
-                    Value = certificado.CertificadoId.ToString(),
-                    Text = certificado.NumSerie // + " - " + certificado.RFC
-                });
-            }
-            model.Certificados = certificadosSelectList;
-
-            model.FormaDePago = "PAGO EN UNA SOLA EXHIBICION";
-            model.MetodoDePago = "NO IDENTIFICADO";
-            model.LugarExpedicion = "MATRIZ";
             model.TipoCambio = "1.00";
 
-            //model.Receptores = 
+            var tipoMetodoDePagoList = DBContext.TiposMetodoDePago.ToList();
+            var tipoMetodoDePagoSelectList = new List<SelectListItem>();
+            foreach (var tipoMetodoDePago in tipoMetodoDePagoList) {
+                tipoMetodoDePagoSelectList.Add(new SelectListItem {
+                    Value = tipoMetodoDePago.TipoMetodoDePagoValue,
+                    Text = tipoMetodoDePago.TipoMetodoDePagoValue
+                });
+            }
+            model.TipoMetodoDePago = tipoMetodoDePagoSelectList;
+
+            var tiposImpuestoRetencionList = DBContext.TiposImpuestoRetencion.ToList();
+            var tiposImpuestoRetencionSelectList = new List<SelectListItem>();
+            foreach (var tiposImpuestoRetencion in tiposImpuestoRetencionList) {
+                tiposImpuestoRetencionSelectList.Add(new SelectListItem {
+                    Value = tiposImpuestoRetencion.TipoImpuestoRetencionValue,
+                    Text = tiposImpuestoRetencion.TipoImpuestoRetencionValue
+                });
+            }
+            model.TiposImpuestoRetencion = tiposImpuestoRetencionSelectList;
+
+            var tiposImpuestoTrasladoList = DBContext.TiposImpuestoTraslado.ToList();
+            var tiposImpuestoTrasladoSelectList = new List<SelectListItem>();
+            foreach (var tiposImpuestoTraslado in tiposImpuestoTrasladoList) {
+                tiposImpuestoTrasladoSelectList.Add(new SelectListItem {
+                    Value = tiposImpuestoTraslado.TipoImpuestoTrasladoValue,
+                    Text = tiposImpuestoTraslado.TipoImpuestoTrasladoValue
+                });
+            }
+            model.TiposImpuestoTraslado = tiposImpuestoTrasladoSelectList;
+
             return View(model);
         }
 
