@@ -16,10 +16,77 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         // GET: Certificado
         public ActionResult Index()
         {
-            var model = new CertificadoIndexViewModel {
-                Certificados = this.DBContext.Certificados.ToList()
-            };
-            return View(model);
+            //var model = new CertificadoIndexViewModel {
+            //    Certificados = this.DBContext.Certificados.ToList()
+            //};
+            //return View(model);
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult LoadCertificados(int page, int pageSize, string search = null, string sort = null, string sortDir = null) {
+            sortDir = string.IsNullOrEmpty(sortDir) ? "ASC" : sortDir;
+            List<object> itemList = new List<object>();
+            try {
+
+                Func<Certificado, Object> orderByFunc = null;
+                switch (sort) {
+                    case "NumSerie":
+                        orderByFunc = sl => sl.NumSerie;
+                        break;
+                    case "RFC":
+                        orderByFunc = sl => sl.RFC;
+                        break;
+                    default:
+                        orderByFunc = sl => sl.NumSerie;
+                        break;
+                }
+
+                List<Certificado> Certificados = new List<Certificado>();
+                if (search != null)
+                    Certificados = sortDir == "ASC" ? DBContext.Certificados.Where(x => x.Estado.Equals("A") && (x.NumSerie.Contains(search)
+                        || x.RFC.Contains(search))
+                        ).OrderBy(orderByFunc)
+                        .Take(((page - 1) * pageSize) + pageSize)
+                        .Skip(((page - 1) * pageSize)).ToList()
+                        :
+                        DBContext.Certificados.Where(x => x.Estado.Equals("A") && (x.NumSerie.Contains(search)
+                        || x.RFC.Contains(search))
+                        ).OrderByDescending(orderByFunc)
+                        .Take(((page - 1) * pageSize) + pageSize)
+                        .Skip(((page - 1) * pageSize)).ToList();
+                else
+                    Certificados = sortDir == "ASC" ? DBContext.Certificados.Where(x => x.Estado.Equals("A")).OrderBy(orderByFunc).Take(((page - 1) * pageSize) + pageSize).Skip(((page - 1) * pageSize)).ToList()
+                        : DBContext.Certificados.Where(x => x.Estado.Equals("A")).OrderByDescending(orderByFunc).Take(((page - 1) * pageSize) + pageSize).Skip(((page - 1) * pageSize)).ToList();
+
+                if (Certificados.Count > 0) {
+                    int CertificadosTotalRows = DBContext.Certificados.Where(x => x.Estado.Equals("A") && (x.NumSerie.Contains(search) || x.RFC.Contains(search))).Count();
+
+                    foreach (Certificado certificado in Certificados) {
+                        var dynamicItems = new {
+                            error = false,
+                            total_rows = CertificadosTotalRows,
+                            returned_rows = Certificados.Count,
+                            certificado_id = certificado.CertificadoId,
+                            public_key = certificado.PublicKey,
+                            num_serie = certificado.NumSerie,
+                            rfc = certificado.RFC,
+                            certificado_initial_letter = certificado.RFC.Substring(0, 1),
+
+                        };
+                        itemList.Add(dynamicItems);
+                    }
+                }
+            }
+            catch (Exception ex) {
+                var errorMessage = new {
+                    error = true,
+                    errorMsg = ex.ToString()
+                };
+                itemList.Add(errorMessage);
+            }
+
+            return Json(itemList);
         }
 
         public ActionResult Create() {

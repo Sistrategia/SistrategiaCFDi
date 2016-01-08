@@ -12,10 +12,77 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
     public class EmisorController : BaseController
     {
         public ActionResult Index() {
-            var model = new EmisorIndexViewModel {
-                Emisores = this.DBContext.Emisores.Where(e=>e.Status == "A").ToList()
-            };
-            return View(model);            
+            //var model = new EmisorIndexViewModel {
+            //    Emisores = this.DBContext.Emisores.Where(e=>e.Status == "A").ToList()
+            //};
+            //return View(model);
+            return View(); 
+        }
+
+        [HttpPost]
+        public JsonResult LoadEmisores(int page, int pageSize, string search = null, string sort = null, string sortDir = null) {
+            sortDir = string.IsNullOrEmpty(sortDir) ? "ASC" : sortDir;
+            List<object> itemList = new List<object>();
+            try {
+
+                Func<Emisor, Object> orderByFunc = null;
+                switch (sort) {
+                    case "EmisorNombre":
+                        orderByFunc = sl => sl.Nombre;
+                        break;
+                    case "RFC":
+                        orderByFunc = sl => sl.RFC;
+                        break;
+                    default:
+                        orderByFunc = sl => sl.Nombre;
+                        break;
+                }
+
+                List<Emisor> Emisores = new List<Emisor>();
+                if (search != null)
+                    Emisores = sortDir == "ASC" ? DBContext.Emisores.Where(x => x.Status.Equals("A") && (x.Nombre.Contains(search)
+                        || x.RFC.Contains(search))
+                        ).OrderBy(orderByFunc)
+                        .Take(((page - 1) * pageSize) + pageSize)
+                        .Skip(((page - 1) * pageSize)).ToList()
+                        :
+                        DBContext.Emisores.Where(x => x.Status.Equals("A") && (x.Nombre.Contains(search)
+                        || x.RFC.Contains(search))
+                        ).OrderByDescending(orderByFunc)
+                        .Take(((page - 1) * pageSize) + pageSize)
+                        .Skip(((page - 1) * pageSize)).ToList();
+                else
+                    Emisores = sortDir == "ASC" ? DBContext.Emisores.Where(x => x.Status.Equals("A")).OrderBy(orderByFunc).Take(((page - 1) * pageSize) + pageSize).Skip(((page - 1) * pageSize)).ToList()
+                        : DBContext.Emisores.Where(x => x.Status.Equals("A")).OrderByDescending(orderByFunc).Take(((page - 1) * pageSize) + pageSize).Skip(((page - 1) * pageSize)).ToList();
+
+                if (Emisores.Count > 0) {
+                    int EmisoresTotalRows = DBContext.Emisores.Where(x => x.Status.Equals("A") && (x.Nombre.Contains(search) || x.RFC.Contains(search))).Count();
+
+                    foreach (Emisor emisor in Emisores) {
+                        var dynamicItems = new {
+                            error = false,
+                            total_rows = EmisoresTotalRows,
+                            returned_rows = Emisores.Count,
+                            emisor_id = emisor.EmisorId,
+                            public_key = emisor.PublicKey,
+                            emisor = emisor.Nombre,
+                            rfc = emisor.RFC,
+                            emisor_initial_letter = emisor.Nombre.Substring(0, 1),
+
+                        };
+                        itemList.Add(dynamicItems);
+                    }
+                }
+            }
+            catch (Exception ex) {
+                var errorMessage = new {
+                    error = true,
+                    errorMsg = ex.ToString()
+                };
+                itemList.Add(errorMessage);
+            }
+
+            return Json(itemList);
         }
 
         public ActionResult Create() {

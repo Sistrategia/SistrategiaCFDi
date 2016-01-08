@@ -58,15 +58,7 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.MetodoDePago, new { @class = "col-md-2  control-label" })
                 <div class="col-md-4">
-                    <select class="form-control" data-bind="value: MetodoDePago">
-                        <option value="">Seleccione</option>
-                        <option value="EFECTIVO">EFECTIVO</option>
-                        <option value="CHEQUE">CHEQUE</option>
-                        <option value="TRANSFERENCIA INTERBANCARIA">TRANSFERENCIA INTERBANCARIA</option>
-                        <option value="NO IDENTIFICADO">NO IDENTIFICADO</option>
-                        <option value="TARJETA DE CRÉDITO">TARJETA DE CRÉDITO</option>
-                        <option value="TARJETA DE DÉBITO">TARJETA DE DÉBITO</option>
-                    </select>
+                    @Html.DropDownListFor(m => m.MetodoDePago, Model.TipoMetodoDePago, "Seleccione", new { @class = "form-control", data_bind = "value: MetodoDePago" })
                 </div>
                 <div data-bind="visible: IsRequiredNumCtaPago()">
                     @Html.LabelFor(m => m.NumCtaPago, new { @class = "col-md-1  control-label" })
@@ -144,11 +136,7 @@
                 <br />
             </div>
             <div class="col-md-3">
-                <select class="form-control" data-bind="value: TrasladosImpuesto">
-                    <option value="">Seleccione</option>
-                    <option value="IVA">IVA</option>
-                    <option value="IEPS">IEPS</option>
-                </select>
+                @Html.DropDownList("TiposImpuestoTraslado", Model.TiposImpuestoTraslado, "Seleccione", new { @class = "form-control", data_bind = "value: TrasladosImpuesto" })
             </div>
             <div class="col-md-3">
               <input type="text" class="form-control" data-bind="value: TrasladosTasa" placeholder="Tasa">
@@ -191,11 +179,7 @@
                 <br />
             </div>
             <div class="col-md-3">
-                <select class="form-control" data-bind="value: RetencionesImpuesto">
-                    <option value="">Seleccione</option>
-                    <option value="IVA">IVA</option>
-                    <option value="ISR">ISR</option>
-                </select>
+                @Html.DropDownList("TiposImpuestoRetencion", Model.TiposImpuestoRetencion, "Seleccione", new { @class = "form-control", data_bind = "value: RetencionesImpuesto" })
             </div>
             <div class="col-md-3">
                 <input type="number" class="form-control" data-bind="value: RetencionesImporte" placeholder="Importe">
@@ -375,6 +359,19 @@
         var conceptos_model = new ConceptosModel('ConceptosModel');
         var impuestos_model = new ImpuestosModel('ImpuestosModel');
 
+        initial_model.FormaDePago("PAGO EN UNA SOLA EXHIBICION");
+        initial_model.LugarExpedicion("MATRIZ");
+        conceptos_model.Unidad("pza");
+        impuestos_model.TrasladosImpuesto("IVA");
+        impuestos_model.TrasladosTasa("16.00");
+
+        initial_model.MetodoDePago.subscribe(function (newValue) {
+            if (newValue == 'EFECTIVO' || newValue == 'NO IDENTIFICADO' || newValue == '')
+                initial_model.IsRequiredNumCtaPago(false);
+            else
+                initial_model.IsRequiredNumCtaPago(true);
+        });
+
         conceptos_model.Items.subscribe(function (newValue) {
             if (newValue.length > 0) {
                 var importeTotalConceptos = 0;
@@ -427,13 +424,15 @@
             e.preventDefault();
 
             if (initial_model.MetodoDePago() == ''){
-                alert("¡Ingrese el método de pago!");
+                $("#danger").removeClass("alert alert-danger").empty();
+                $("#danger").addClass("alert alert-danger").show().append("¡Ingrese el método de pago!");
             }
             else if ((initial_model.MetodoDePago() != 'EFECTIVO'
                 && initial_model.MetodoDePago() != 'NO IDENTIFICADO')
                 && (initial_model.NumCtaPago().length > 6
                 || initial_model.NumCtaPago().length < 4)) {
-                alert("¡El valor de NumCtaPago debe contener entre 4 hasta 6 caracteres!");
+                $("#danger").removeClass("alert alert-danger").empty();
+                $("#danger").addClass("alert alert-danger").show().append("¡El valor de NumCtaPago debe contener entre 4 hasta 6 caracteres!");
             }
             else {
                 var conceptos = new Array();

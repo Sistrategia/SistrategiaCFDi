@@ -4,44 +4,84 @@
     ViewBag.Title = "Lista de Certificados Digitales";
 }
 
-<div class="page-header clearfix">
-  <h1 class="pull-left">@ViewBag.Title</h1>
-  <div class="pull-right">
-    <div class="btn-group" style="bottom: 26px;position: relative;top:26px;">
-      @Html.ActionLink("Agregar", "Create", null, new { @class = "btn btn-primary", @role = "button" })
+<div class="col-md-12">
+    <div class="page-header clearfix">
+        <h1 class="pull-left">@ViewBag.Title</h1>
+        <div class="pull-right">
+            <div class="btn-group" style="bottom: 26px;position: relative;top:26px;">
+                @Html.ActionLink("Agregar", "Create", null, new { @class = "btn btn-primary", @role = "button" })
+            </div>
+        </div>
     </div>
-  </div>
 </div> 
 
 
-<div class="row">
-  <div class="col-md-12">
-    <ul class="media-list list-inline">
-      @foreach (var certificado in Model.Certificados) {
-        <li class="media">
-          <div class="media-left">
-            <a style="text-decoration: none" href="@Url.Action("Details", new { Id = certificado.PublicKey.ToString("N") })" >
-              <div class="circle noselect">
-                @*<img src="@Model.GetQrCode(emisor.RFC, 64)" />*@
-                <span>@certificado.RFC.Substring(0, 1)</span>
-              </div>
-            </a>
-          </div>
-          <div class="media-body">
-            <h4 class="media-heading">@Html.ActionLink(certificado.NumSerie, "Details", "Certificado", new { Id = certificado.PublicKey.ToString("N") }, null)</h4>
-            <h5 class="media-heading">
-              @certificado.RFC
-              @*@if (emisor.RegimenFiscal != null && emisor.RegimenFiscal.Count > 0) {
-                  <br /> @emisor.RegimenFiscal[0].Regimen
-                }*@
-            </h5>
-            @*@Html.ActionLink("Edit", "Edit", new { id = emisor.PublicKey.ToString("N") }) |
-              @Html.ActionLink("Details", "Details", new { id = emisor.PublicKey.ToString("N") }) |
-              @Html.ActionLink("Delete", "Delete", new { id = emisor.PublicKey.ToString("N") })*@
-          </div>
-        </li>
-      }
-    </ul>
+<div class="col-md-12">
 
-  </div>
+    <div class="col-md-6 pagination-mobile">
+        <button class="btn btn-link" data-bind="click: PreviousPage, css: IsFirstPage"><span class="glyphicon glyphicon-menu-left" style="font-size:20px;"></span></button>
+        <span>Página <span data-bind="text: PresentPage"></span> de <span data-bind="text: TotalPage"></span></span>
+        <button class="btn btn-link" data-bind="click: NextPage, css: IsLastPage"><span class="glyphicon glyphicon-menu-right" style="font-size:20px;"></span></button>
+    </div>
+    <div class="col-md-12 visible-xs-block">&nbsp;</div>
+    <div class="col-md-6">
+        <div class="input-group">
+            <input type="search" placeholder="" class="form-control" data-bind="value: SearchText, valueUpdate: 'input', executeOnEnter: EnterSearching" id="Search" autocomplete="off">
+            <span class="input-group-btn">
+                <button data-bind="click: Searching, enable: HasSearchData" class="btn btn-default ">Buscar</button>
+                <button data-bind="click: CleanSearch" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+            </span>
+        </div><!-- /input-group -->
+    </div>
+    <div class="col-md-12 visible-xs-block"><br /><br /></div>
+    <div class="col-md-12">
+        <table class="table-striped table-hover">
+            <thead class="hidden-xs">
+                <tr>
+                    <!-- ko foreach: Headers -->
+                    <th class="text-left" data-bind="click: function (header, event) { $parent.SortBy(header, event, $index()); }, text: $data.Title, css: { 'sort-true': $data.ServerData() === $root.CurrentSort()[0].ServerData() && $root.CurrentSort()[0].SortOrder() === 'DESC', 'sort-false': $data.ServerData() === $root.CurrentSort()[0].ServerData() && $root.CurrentSort()[0].SortOrder() === 'ASC' }"></th>
+                    <!-- /ko -->
+                </tr>
+            </thead>
+            <tbody data-bind='foreach: DataList' id="lista">
+                <tr>
+                    <td>
+                        <a href="#" data-bind="attr: { href: '@Url.Action("Details", "Receptor")/'+ $data.public_key }">
+                            <div class="circle noselect">
+                                <span data-bind='text: certificado_initial_letter' class="text-center"></span>
+                            </div>
+                        </a>
+                    </td>
+                    <td>
+                        <h4 class="media-heading">
+                            <a href="#" data-bind="attr: { href: '@Url.Action("Details", "Receptor")/'+$data.public_key }, text: num_serie"></a>
+                        </h4>
+                        <h5 class="media-heading" data-bind='text: rfc'></h5>
+                    </td>
+                </tr>
+            </tbody>
+            <tr data-bind="visible: !HasContacts()">
+                <td colspan="7" class="text-center">
+                    <div class="alert alert-danger" role="alert"><b>¡No hay coincidencias!</b></div>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
+
+
+@section scripts{
+    @Scripts.Render("~/bundles/KOAmplify")
+    <script type="text/javascript" src="@Url.Content("~/Scripts/knockoutTable/KOTable.js")"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+          var headers = [
+                  { cTitle: '', sData: '', sSortable: false },
+                  { cTitle: 'Número de serie', sData: 'NumSerie', sSortable: true },
+          ];
+
+          var table = new KOTable('CertificadosFullList', '@Url.Action("LoadCertificados", "Certificado")', headers);
+          ko.applyBindings(table);
+      });
+    </script>
+}

@@ -21,19 +21,12 @@ var InitialModel = function (modelId) {
     self.ReceptorId = ko.observable("");
     self.Serie = ko.observable("");
     self.Folio = ko.observable("");
-    self.FormaDePago = ko.observable("PAGO EN UNA SOLA EXHIBICION");
+    self.FormaDePago = ko.observable("");
     self.MetodoDePago = ko.observable("");
-    self.LugarExpedicion = ko.observable("MATRIZ");
+    self.LugarExpedicion = ko.observable("");
     self.NumCtaPago = ko.observable("");
     self.CertificadoId = ko.observable("");
     self.IsRequiredNumCtaPago = ko.observable(false);
-
-    self.MetodoDePago.subscribe(function (newValue) {
-        if (newValue == 'EFECTIVO' || newValue == 'NO IDENTIFICADO' || newValue == '')
-            self.IsRequiredNumCtaPago(false);
-        else
-            self.IsRequiredNumCtaPago(true);
-    });
 }
 
 var Concepto = function () {
@@ -49,7 +42,7 @@ var Concepto = function () {
 var ConceptosModel = function (modelId) {
     var self = this;
     self.Cantidad = ko.observable("");
-    self.Unidad = ko.observable("pza");
+    self.Unidad = ko.observable("");
     self.NoIdentificacion = ko.observable("");
     self.Descripcion = ko.observable("");
     self.ValorUnitario = ko.observable("");
@@ -79,7 +72,6 @@ var ConceptosModel = function (modelId) {
             self.Items.push(concepto);
             
             self.Cantidad("");
-            self.Unidad("pza");
             self.NoIdentificacion("");
             self.Descripcion("");
             self.ValorUnitario("");
@@ -119,9 +111,9 @@ var Retencion = function () {
 
 var ImpuestosModel = function (modelId) {
     var self = this;
-    self.TrasladosImpuesto = ko.observable("IVA");
+    self.TrasladosImpuesto = ko.observable("");
     self.TrasladosImporte = ko.observable("");
-    self.TrasladosTasa = ko.observable("16.00");
+    self.TrasladosTasa = ko.observable("");
 
     self.RetencionesImpuesto = ko.observable("");
     self.RetencionesImporte = ko.observable("");
@@ -149,9 +141,7 @@ var ImpuestosModel = function (modelId) {
             trasladado.TrasladadoOrdinal = ko.observable(self.TrasladosOrdinal());
             self.TrasladosItems.push(trasladado);
 
-            self.TrasladosImpuesto("IVA");
             self.TrasladosImporte("");
-            self.TrasladosTasa("16.00");
         }
     };
 
@@ -179,7 +169,6 @@ var ImpuestosModel = function (modelId) {
             retencion.RetencionOrdinal = ko.observable(self.RetencionesOrdinal());
             self.RetencionesItems.push(retencion);
 
-            self.RetencionesImpuesto("");
             self.RetencionesImporte("");
         }
     };
