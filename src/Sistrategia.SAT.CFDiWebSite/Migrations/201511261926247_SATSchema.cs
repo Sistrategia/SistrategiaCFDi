@@ -303,13 +303,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 .Index(t => t.domicilio_id);
             
             CreateTable(
-                "dbo.TipoFormaDePagoes",
+                "dbo.sat_tipo_forma_de_pago",
                 c => new
                     {
-                        TipoFormaDePagoId = c.Int(nullable: false, identity: true),
-                        TipoFormaDePagoValue = c.String(),
+                        tipo_forma_de_pago_id = c.Int(nullable: false, identity: true),
+                        tipo_forma_de_pago_value = c.String(),
                     })
-                .PrimaryKey(t => t.TipoFormaDePagoId);
+                .PrimaryKey(t => t.tipo_forma_de_pago_id);
             
             CreateTable(
                 "dbo.sat_tipo_impuesto_retencion",
@@ -406,7 +406,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             DropTable("dbo.sat_tipo_metodo_de_pago");
             DropTable("dbo.sat_tipo_impuesto_traslado");
             DropTable("dbo.sat_tipo_impuesto_retencion");
-            DropTable("dbo.TipoFormaDePagoes");
+            DropTable("dbo.sat_tipo_forma_de_pago");
             DropTable("dbo.sat_receptor");
             DropTable("dbo.sat_traslado");
             DropTable("dbo.sat_retencion");

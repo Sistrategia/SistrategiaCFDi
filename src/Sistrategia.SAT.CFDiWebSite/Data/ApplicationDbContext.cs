@@ -142,6 +142,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             tipoImpuestoTraslado.Property(p => p.TipoImpuestoTrasladoValue)
             .HasColumnName("tipo_impuesto_traslado_value");
 
+            var tipoFormaDePago = modelBuilder.Entity<TipoFormaDePago>()
+                .ToTable("sat_tipo_forma_de_pago");
+            tipoFormaDePago.Property(p => p.TipoFormaDePagoId)
+                .HasColumnName("tipo_forma_de_pago_id");
+            tipoFormaDePago.Property(p => p.TipoFormaDePagoValue)
+                .HasColumnName("tipo_forma_de_pago_value");
+
         var banco = modelBuilder.Entity<Banco>()
             .ToTable("sat_banco");
         banco.Property(p => p.BancoId)
