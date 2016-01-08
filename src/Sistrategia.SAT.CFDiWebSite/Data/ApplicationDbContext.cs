@@ -39,6 +39,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
         public virtual DbSet<TipoMetodoDePago> TiposMetodoDePago { get; set; }
         public virtual DbSet<TipoImpuestoTraslado> TiposImpuestoTraslado { get; set; }
         public virtual DbSet<TipoImpuestoRetencion> TiposImpuestoRetencion { get; set; }
+        public virtual DbSet<TipoFormaDePago> TiposFormaDePago { get; set; }
+
+        public virtual DbSet<Banco> Bancos { get; set; }
 
         public virtual DbSet<ViewTemplate> ViewTemplates { get; set; }
 
@@ -139,6 +142,38 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             tipoImpuestoTraslado.Property(p => p.TipoImpuestoTrasladoValue)
             .HasColumnName("tipo_impuesto_traslado_value");
 
+        var banco = modelBuilder.Entity<Banco>()
+            .ToTable("sat_banco");
+        banco.Property(p => p.BancoId)
+            .HasColumnName("banco_id");
+        banco.Property(p => p.PublicKey)
+            .HasColumnName("public_key");
+        banco.Property(p => p.Clave)
+            .HasColumnName("clave");
+        banco.Property(p => p.NombreCorto)
+            .HasColumnName("nombre_corto");
+        banco.Property(p => p.RazonSocial)
+            .HasColumnName("razon_social");
+        banco.Property(p => p.Status)
+            .HasColumnName("status");
+
+
+    //        public class Bank
+    //{
+    //    [Key]
+    //    public int? BankId { get; set; }
+    //    [Required]
+    //    public Guid PublicKey { get; set; }
+    //    [Required]
+    //    public string Clave { get; set; }
+    //    [Required]
+    //    public string NombreCorto { get; set; }
+    //    [Required]
+    //    public string RazonSocial { get; set; }        
+    //    [Required]
+    //    public string Status { get; set; }
+    //}
+
             var emisor = modelBuilder.Entity<Emisor>()
                 .ToTable("sat_emisor");
             emisor.Property(p => p.EmisorId)
@@ -208,6 +243,11 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             ubicacion.Property(p => p.CodigoPostal)
                 .HasColumnName("codigo_postal")
                 .IsOptional();
+
+            ubicacion.Property(p => p.LugarExpedicion)
+                .HasColumnName("lugar_expedicion")
+                .IsOptional() // .IsRequired() // Requerido
+                .HasMaxLength(2048);
 
 
             modelBuilder.Entity<Ubicacion>()

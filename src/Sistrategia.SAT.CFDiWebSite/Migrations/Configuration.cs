@@ -30,14 +30,14 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                  t => t.TipoImpuestoRetencionValue,
                  new TipoImpuestoRetencion { TipoImpuestoRetencionId = 1, TipoImpuestoRetencionValue = "ISR"},
                  new TipoImpuestoRetencion { TipoImpuestoRetencionId = 2, TipoImpuestoRetencionValue = "IVA" }
-                 );
+             );
              context.SaveChanges();
 
              context.TiposImpuestoTraslado.AddOrUpdate(
                   t => t.TipoImpuestoTrasladoValue,
                   new TipoImpuestoTraslado { TipoImpuestoTrasladoId = 1, TipoImpuestoTrasladoValue = "IVA" },
                   new TipoImpuestoTraslado { TipoImpuestoTrasladoId = 2, TipoImpuestoTrasladoValue = "IEPS" }
-                  );
+             );
              context.SaveChanges();
 
              context.TiposMetodoDePago.AddOrUpdate(
@@ -48,8 +48,22 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                  new TipoMetodoDePago { TipoMetodoDePagoId = 4, TipoMetodoDePagoValue = "NO IDENTIFICADO" },
                  new TipoMetodoDePago { TipoMetodoDePagoId = 5, TipoMetodoDePagoValue = "TARJETA DE CRÉDITO" },
                  new TipoMetodoDePago { TipoMetodoDePagoId = 6, TipoMetodoDePagoValue = "TARJETA DE DÉBITO" }
-                 );
-            context.SaveChanges();          
+            );
+            context.SaveChanges();
+
+            context.Bancos.AddOrUpdate(
+                b => b.Clave,
+                new Banco { BancoId = 1, PublicKey = new Guid("82E2C8AC-06AE-4F61-AFA6-364C731EF65D"), Clave = "002", NombreCorto = "BANAMEX", RazonSocial = "Banco Nacional de México, S.A., Institución de Banca Múltiple, Grupo Financiero Banamex", Status = "A" },
+                new Banco { BancoId = 2, PublicKey = new Guid("777AA59F-B61D-47C8-999F-C594670902DE"), Clave = "006", NombreCorto = "BANCOMEXT", RazonSocial = "Banco Nacional de Comercio Exterior, Sociedad Nacional de Crédito, Institución de Banca de Desarrollo", Status = "A" }
+            );
+            context.SaveChanges();
+
+
+            context.TiposFormaDePago.AddOrUpdate(
+                t => t.TipoFormaDePagoValue,
+                new TipoFormaDePago { TipoFormaDePagoId = 1, TipoFormaDePagoValue = "PAGO EN UNA SOLA EXHIBICION" }
+            );
+            context.SaveChanges();
 
              context.ViewTemplates.AddOrUpdate(
                  v => v.CodeName,

@@ -23,6 +23,14 @@ namespace Sistrategia.SAT.CFDiWebSite
         internal static TimeSpan GetCFDIServiceTimeSpan() {
             return new TimeSpan(0, 0, -5, 0);
         }
+    
+        /// <summary>
+        /// Returns a DateTime valid for the CFDI "Timbrado" service. The current date of the Comprobante must be lower than the current time of the service.
+        /// </summary>
+        /// <returns></returns>
+        internal static DateTime GetCurrentServiceDateTime() {
+            return DateTime.Now.Add(SATManager.GetCFDIServiceTimeSpan());
+        }
 
         internal static string GetFormaDePagoDefault() {
             return "PAGO EN UNA SOLA EXHIBICION";
