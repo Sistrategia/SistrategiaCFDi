@@ -63,7 +63,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                             error = false,
                             total_rows = ReceptoresTotalRows,
                             returned_rows = Receptores.Count,
-                            comprobante_id = receptor.ReceptorId,
+                            receptor_id = receptor.ReceptorId,
                             public_key = receptor.PublicKey,
                             receptor = receptor.Nombre,
                             rfc = receptor.RFC,
