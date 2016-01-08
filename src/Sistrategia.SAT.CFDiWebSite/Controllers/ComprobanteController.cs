@@ -11,6 +11,7 @@ using System.IO.Compression;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Sistrategia.SAT.CFDiWebSite.CloudStorage;
+using Newtonsoft.Json;
 
 namespace Sistrategia.SAT.CFDiWebSite.Controllers
 {
@@ -258,7 +259,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     comprobante.MetodoDePago = model.MetodoDePago;
                     comprobante.LugarExpedicion = model.LugarExpedicion;
                     comprobante.TipoCambio = model.TipoCambio;
-
+                    comprobante.Moneda = model.Moneda;
                     comprobante.NumCtaPago = model.NumCtaPago;
 
                     comprobante.Conceptos = new List<Concepto>();
@@ -272,7 +273,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                 Descripcion = modelConcepto.Descripcion,
                                 ValorUnitario = modelConcepto.ValorUnitario,
                                 Importe = modelConcepto.Importe,
-                                PublicKey = Guid.NewGuid()
+                                PublicKey = Guid.NewGuid(),
+                                Ordinal = modelConcepto.Ordinal
                             });
                         }
                     }
@@ -321,7 +323,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                     string cadenaOriginal = comprobante.GetCadenaOriginal();
                     comprobante.Sello = certificado.GetSello(cadenaOriginal);
-
+                    comprobante.Status = "P";
                     DBContext.Comprobantes.Add(comprobante);
                     DBContext.SaveChanges();
 
@@ -341,6 +343,110 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 };
                 return Json(data);
             }
+        }
+
+        public ActionResult Edit(string id) {
+            Guid publicKey = Guid.Parse(id);
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey && e.Status == "P")
+                .SingleOrDefault();
+            var model = new ComprobanteCreateViewModel(comprobante);
+
+            var tipoMetodoDePagoList = DBContext.TiposMetodoDePago.ToList();
+            var tipoMetodoDePagoSelectList = new List<SelectListItem>();
+            foreach (var tipoMetodoDePago in tipoMetodoDePagoList) {
+                tipoMetodoDePagoSelectList.Add(new SelectListItem {
+                    Value = tipoMetodoDePago.TipoMetodoDePagoValue,
+                    Text = tipoMetodoDePago.TipoMetodoDePagoValue
+                });
+            }
+            model.TipoMetodoDePago = tipoMetodoDePagoSelectList;
+
+            var tiposImpuestoRetencionList = DBContext.TiposImpuestoRetencion.ToList();
+            var tiposImpuestoRetencionSelectList = new List<SelectListItem>();
+            foreach (var tiposImpuestoRetencion in tiposImpuestoRetencionList) {
+                tiposImpuestoRetencionSelectList.Add(new SelectListItem {
+                    Value = tiposImpuestoRetencion.TipoImpuestoRetencionValue,
+                    Text = tiposImpuestoRetencion.TipoImpuestoRetencionValue
+                });
+            }
+            model.TiposImpuestoRetencion = tiposImpuestoRetencionSelectList;
+
+            var tiposImpuestoTrasladoList = DBContext.TiposImpuestoTraslado.ToList();
+            var tiposImpuestoTrasladoSelectList = new List<SelectListItem>();
+            foreach (var tiposImpuestoTraslado in tiposImpuestoTrasladoList) {
+                tiposImpuestoTrasladoSelectList.Add(new SelectListItem {
+                    Value = tiposImpuestoTraslado.TipoImpuestoTrasladoValue,
+                    Text = tiposImpuestoTraslado.TipoImpuestoTrasladoValue
+                });
+            }
+            model.TiposImpuestoTraslado = tiposImpuestoTrasladoSelectList;
+
+            List<dynamic> itemList = new List<dynamic>();
+            foreach (ConceptoViewModel concepto in model.Conceptos) {
+                var dynamicItems = new {
+                    ConceptoCantidad = concepto.Cantidad,
+                    ConceptoUnidad = concepto.Unidad,
+                    ConceptoNoIdentificacion = concepto.NoIdentificacion,
+                    ConceptoDescripcion = concepto.Descripcion,
+                    ConceptoValorUnitario = concepto.ValorUnitario,
+                    ConceptoImporte = concepto.Importe,
+                    ConceptoOrdinal = concepto.Ordinal
+                };
+
+                itemList.Add(dynamicItems);
+            }
+
+            ViewBag.JsonConceptos = JsonConvert.SerializeObject(itemList);
+            ViewBag.TotalConceptos = itemList.Count();
+
+            List<dynamic> itemList2 = new List<dynamic>();
+
+            if (model.Traslados != null && model.Traslados.Count > 0) {
+              
+                int ordinal = 0;
+                foreach (TrasladoViewModel traslado in model.Traslados) {
+                    ordinal++;
+                    var dynamicItems2 = new {
+                        TrasladadoImpuesto = traslado.Impuesto,
+                        TrasladadoTasa = traslado.Tasa,
+                        TrasladadoImporte = traslado.Importe,
+                        TrasladadoOrdinal = ordinal
+                    };
+                    itemList2.Add(dynamicItems2);
+                }
+
+                ViewBag.JsonImpuestosTrasladados = JsonConvert.SerializeObject(itemList2);
+                ViewBag.TotalImpuestosTrasladados = model.Traslados.Count();
+            }
+            else {
+                ViewBag.JsonImpuestosTrasladados = JsonConvert.SerializeObject(itemList2);
+                ViewBag.TotalImpuestosTrasladados = 0;
+            }
+
+            List<dynamic> itemList3 = new List<dynamic>();
+
+            if (model.Retenciones != null && model.Retenciones.Count > 0) {
+
+                int ordinal2 = 0;
+                foreach (RetencionViewModel retencion in model.Retenciones) {
+                    ordinal2++;
+                    var dynamicItems3 = new {
+                        RetencionImpuesto = retencion.Impuesto,
+                        RetencionImporte = retencion.Importe,
+                        RetencionOrdinal = ordinal2
+                    };
+                    itemList3.Add(dynamicItems3);
+                }
+
+                ViewBag.JsonImpuestosRetenidos = JsonConvert.SerializeObject(itemList3);
+                ViewBag.TotalImpuestosRetenidos = model.Retenciones.Count();
+            }
+            else {
+                ViewBag.JsonImpuestosRetenidos = JsonConvert.SerializeObject(itemList3);
+                ViewBag.TotalImpuestosRetenidos = 0;
+            }
+
+            return View(model);
         }
 
         public ActionResult Details(string id) {

@@ -1,0 +1,587 @@
+﻿@using Sistrategia.SAT.CFDiWebSite.Models
+@model ComprobanteCreateViewModel
+@{
+    ViewBag.Title = "Editar un comprobante";
+}
+
+<div class="col-md-12">
+    <h1 class="text-center">Editar un comprobante</h1>
+    <br />
+</div>
+<div class="col-md-12">
+    <div class='text-center' id="danger"></div>
+</div>
+<div class="col-md-12">
+    <div id="initial_model_id">
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Serie, new { @class = "col-md-1 control-label" })
+                <div class="col-md-1">
+                    <input class="form-control" type="text" data-bind="value: Serie" />
+                </div>
+                @Html.LabelFor(m => m.Folio, new { @class = "col-md-1  control-label" })
+                <div class="col-md-1">
+                    <input class="form-control" type="text" data-bind="value: Folio" />
+                </div>
+                @Html.LabelFor(m => m.LugarExpedicion, new { @class = "col-md-2  control-label" })
+                <div class="col-md-6">
+                    <input class="form-control" type="text" data-bind="value: LugarExpedicion" />
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Emisor, new { @class = "col-md-1  control-label" })
+                <div class="col-md-5">
+                    <select class="form-control" data-bind="value: EmisorId" id="EmisorId"></select>
+                </div>
+                @Html.LabelFor(m => m.Receptor, new { @class = "col-md-1  control-label" })
+                <div class="col-md-5">
+                    <select class="form-control" data-bind="value: ReceptorId" id="ReceptorId"></select>
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Certificados, new { @class = "col-md-1  control-label" })
+                <div class="col-md-5">
+                    <select class="form-control" data-bind="value: CertificadoId" id="CertificadoId"></select>
+                </div>
+                @Html.LabelFor(m => m.FormaDePago, new { @class = "col-md-1  control-label" })
+                <div class="col-md-5">
+                    <input class="form-control" type="text" data-bind="value: FormaDePago" />
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(m => m.MetodoDePago, new { @class = "col-md-2  control-label" })
+                <div class="col-md-4">
+                    @Html.DropDownListFor(m => m.MetodoDePago, Model.TipoMetodoDePago, "Seleccione", new { @class = "form-control", data_bind = "value: MetodoDePago" })
+                </div>
+                <div data-bind="visible: IsRequiredNumCtaPago()">
+                    @Html.LabelFor(m => m.NumCtaPago, new { @class = "col-md-1  control-label" })
+                    <div class="col-md-5">
+                        <input class="form-control" type="text" data-bind="value: NumCtaPago" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="conceptos_model_id">
+        <div class="col-md-12">
+            <h2 class="text-center">Conceptos</h2>
+            <br />
+        </div>
+        <div class="col-md-1">
+            <input type="number" class="form-control" data-bind="value: Cantidad" placeholder="Cantidad">
+        </div>
+        <div class="col-md-1">
+            <input type="text" class="form-control" data-bind="value: Unidad" placeholder="Unidad">
+        </div>
+        <div class="col-md-1">
+            <input type="text" class="form-control" data-bind="value: NoIdentificacion" placeholder="Identificación">
+        </div>
+        <div class="col-md-5">
+            <input type="text" class="form-control" data-bind="value: Descripcion" placeholder="Descripción">
+        </div>
+        <div class="col-md-2">
+            <input type="number" class="form-control" data-bind="value: ValorUnitario" placeholder="Precio">
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-default form-control" data-bind="enable: (Cantidad().length > 0 && Unidad().length > 0 && NoIdentificacion().length > 0 && Descripcion().length > 0 && ValorUnitario().length > 0), click: addItem">Agregar</button>
+        </div>
+        <div class="col-md-12"><br /></div>
+        <div class="col-md-12" data-bind="visible: HasItems()">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">N°</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Unidad</th>
+                        <th class="text-center">Identificación</th>
+                        <th class="text-center">Descripción</th>
+                        <th class="text-center">Precio</th>
+                        <th class="text-center">Importe</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody data-bind='foreach: Items'>
+                    <tr>
+                        <td data-bind='text: ConceptoOrdinal' class="text-center"></td>
+                        <td data-bind='text: ConceptoCantidad' class="text-center"></td>
+                        <td data-bind='text: ConceptoUnidad' class="text-center"></td>
+                        <td data-bind='text: ConceptoNoIdentificacion' class="text-center"></td>
+                        <td data-bind='text: ConceptoDescripcion' class="text-center"></td>
+                        <td data-bind='text: ConceptoValorUnitario' class="text-center"></td>
+                        <td data-bind='text: ConceptoImporte' class="text-center"></td>
+                        <td class="text-center">
+                            <a href="#" class="btn btn-danger btn-sm" data-bind="click: $root.removeSelected">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div id="impuestos_model_id">
+        <div class="col-md-8">
+            <div class="col-md-12">
+                <h3 class="text-center" style="margin-top: 0;">Impuestos trasladados</h3>
+                <br />
+            </div>
+            <div class="col-md-3">
+                @Html.DropDownList("TiposImpuestoTraslado", Model.TiposImpuestoTraslado, "Seleccione", new { @class = "form-control", data_bind = "value: TrasladosImpuesto" })
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" data-bind="value: TrasladosTasa" placeholder="Tasa">
+            </div>
+            <div class="col-md-3">
+                <input type="number" class="form-control" data-bind="value: TrasladosImporte" placeholder="Importe">
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-default form-control" data-bind="enable: (TrasladosImpuesto().length > 0 && TrasladosImporte().length > 0 && TrasladosTasa().length > 0), click: addTraslado">Agregar</button>
+            </div>
+            <div class="col-md-12"><br /></div>
+            <div class="col-md-12" data-bind="visible: TrasladosHasItems()">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">N°</th>
+                            <th class="text-center">Impuesto</th>
+                            <th class="text-center">Tasa</th>
+                            <th class="text-center">Importe</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: TrasladosItems">
+                        <tr>
+                            <td data-bind='text: TrasladadoOrdinal' class="text-center"></td>
+                            <td data-bind='text: TrasladadoImpuesto' class="text-center"></td>
+                            <td data-bind='text: TrasladadoTasa' class="text-center"></td>
+                            <td data-bind='text: TrasladadoImporte' class="text-center"></td>
+                            <td class="text-center">
+                                <a href="#" class="btn btn-danger btn-sm" data-bind="click: $root.removeTraslado">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <h3 class="text-center" style="margin-top: 0;">Impuestos retenidos</h3>
+                <br />
+            </div>
+            <div class="col-md-3">
+                @Html.DropDownList("TiposImpuestoRetencion", Model.TiposImpuestoRetencion, "Seleccione", new { @class = "form-control", data_bind = "value: RetencionesImpuesto" })
+            </div>
+            <div class="col-md-3">
+                <input type="number" class="form-control" data-bind="value: RetencionesImporte" placeholder="Importe">
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-default form-control" data-bind="enable: (RetencionesImpuesto().length > 0 && RetencionesImporte().length > 0), click: addRetencion">Agregar</button>
+            </div>
+            <div class="col-md-12"><br /></div>
+            <div class="col-md-12" data-bind="visible: RetencionesHasItems()">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Impuesto</th>
+                            <th class="text-center">Importe</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: RetencionesItems">
+                        <tr>
+                            <td data-bind='text: RetencionOrdinal' class="text-center"></td>
+                            <td data-bind='text: RetencionImpuesto' class="text-center"></td>
+                            <td data-bind='text: RetencionImporte' class="text-center"></td>
+                            <td class="text-center">
+                                <a href="#" class="btn btn-danger btn-sm" data-bind="click: $root.removeRetencion">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="col-md-7" style="font-weight:600">
+                Subtotal:
+            </div>
+            <div class="col-md-5">
+                <input class="form-control" data-bind="value: SubTotal" type="number" />
+                <br />
+            </div>
+
+            <div class="col-md-7" style="font-weight:600">
+                Total de impuestos trasladados:
+            </div>
+            <div class="col-md-5">
+                <input class="form-control" data-bind="value: TotalTraslados" type="number" />
+                <br />
+            </div>
+
+            <div class="col-md-7" style="font-weight:600">
+                Total de impuestos retenidos:
+            </div>
+            <div class="col-md-5" style="font-weight:600">
+                <input class="form-control" data-bind="value: TotalRetenciones" type="number" />
+                <br />
+            </div>
+            <div class="col-md-7" style="font-weight:600">
+                Total:
+            </div>
+            <div class="col-md-5">
+                <input class="form-control" data-bind="value: Total" type="number" />
+                <br />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-9 col-md-12">
+            <input type="submit" class="btn btn-lg btn-primary" id="enviar_datos" value="@LocalizedStrings.SaveButton" />
+        </div>
+    </div>
+    <div class="col-md-12">
+        <hr />
+    </div>
+</div>
+
+
+<div id="alerta" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="progress progress-striped active" style="margin-bottom: 0;">
+                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">Procesando...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/select2")
+    @Scripts.Render("~/bundles/KOAmplify")
+    <script src="@Url.Content("~/Scripts/ViewModelsKO/ComprobanteCreate.js")"></script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+        // #region Select2 JS
+        $.fn.select2.defaults.set('language', 'es');
+
+        $("#EmisorId").select2({
+            placeholder: "Seleccione",
+            minimumInputLength: 2,
+            allowClear: true,
+            ajax: {
+                url: "@Url.Action("GetIdByEmisores", "Comprobante")",
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        value: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+        })
+
+        $("#CertificadoId").prop("disabled", true);
+
+        $("#EmisorId").on("change", function (e) {
+            e.preventDefault();
+            if ($("#EmisorId").val() != null && $("#EmisorId").val() != undefined) {
+                $.ajax({
+                    url: "@Url.Action("GetIdByCertificados", "Comprobante")",
+                    type: "POST",
+                    data: { emisorId: $("#EmisorId").val() },
+                    beforeSend: function () {
+                        $("#CertificadoId").prop("disabled", true).empty();
+                        $("#CertificadoId").append("<option value=''>Seleccione</option>");
+                    },
+                    success: function (data) {
+                        $.each(data, function (i, item) {
+                            $("#CertificadoId").prop("disabled", false).append("<option value='" + data[i].id + "'>" + data[i].text + "</option>");
+                        });
+                    }
+                });
+            }
+        });
+
+        $("#ReceptorId").select2({
+            placeholder: "Seleccione",
+            minimumInputLength: 2,
+            allowClear: true,
+            ajax: {
+                url: "@Url.Action("GetIdByReceptores", "Comprobante")",
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        value: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+        });
+
+        // #endregion Select2 JS
+
+        $("#danger").hide();
+
+        var initial_model = new InitialModel('InitialModel');
+        var conceptos_model = new ConceptosModel('ConceptosModel');
+        var impuestos_model = new ImpuestosModel('ImpuestosModel');
+
+        //initial_model.EmisorId(@Model.EmisorId);
+        //initial_model.ReceptorId(@Model.ReceptorId);
+        initial_model.Serie("@Model.Serie");
+        initial_model.Folio("@Model.Folio");
+        initial_model.FormaDePago("@Model.FormaDePago");
+        initial_model.MetodoDePago("@Model.MetodoDePago");
+        initial_model.LugarExpedicion("@Model.LugarExpedicion");
+        initial_model.NumCtaPago("@Model.NumCtaPago");
+        //initial_model.CertificadoId("@Model.CertificadoId");
+
+        conceptos_model.Unidad("pza");
+
+        var tmp_items = ko.toJS(@Html.Raw(ViewBag.JsonConceptos));
+
+        if (tmp_items.length > 0) {
+            for (var i = 0; i < tmp_items.length; i++) {
+                var concepto = new Concepto();
+                concepto.ConceptoCantidad = ko.observable(tmp_items[i].ConceptoCantidad);
+                concepto.ConceptoUnidad = ko.observable(tmp_items[i].ConceptoUnidad);
+                concepto.ConceptoNoIdentificacion = ko.observable(tmp_items[i].ConceptoNoIdentificacion);
+                concepto.ConceptoDescripcion = ko.observable(tmp_items[i].ConceptoDescripcion);
+                concepto.ConceptoValorUnitario = ko.observable(tmp_items[i].ConceptoValorUnitario);
+                concepto.ConceptoImporte = ko.observable(tmp_items[i].ConceptoImporte);
+                concepto.ConceptoOrdinal = ko.observable(tmp_items[i].ConceptoOrdinal);
+                conceptos_model.Items.push(concepto);
+            }
+        }
+
+        conceptos_model.Ordinal(@Html.Raw(ViewBag.TotalConceptos));
+
+        impuestos_model.TrasladosImpuesto("IVA");
+        impuestos_model.TrasladosTasa("16.00");
+
+        var tmp_trasladados = ko.toJS(@Html.Raw(ViewBag.JsonImpuestosTrasladados));
+
+        if (tmp_trasladados.length > 0) {
+            for (var i = 0; i < tmp_trasladados.length; i++) {
+                var trasladado = new Trasladado();
+
+                trasladado.TrasladadoImpuesto = ko.observable(tmp_trasladados[i].TrasladadoImpuesto);
+                trasladado.TrasladadoTasa = ko.observable(tmp_trasladados[i].TrasladadoTasa);
+                trasladado.TrasladadoImporte = ko.observable(tmp_trasladados[i].TrasladadoImporte);
+                trasladado.TrasladadoOrdinal = ko.observable(tmp_trasladados[i].TrasladadoOrdinal);
+
+                impuestos_model.TrasladosItems.push(trasladado);
+            }
+        }
+
+        impuestos_model.TrasladosOrdinal(@Html.Raw(ViewBag.TotalImpuestosTrasladados));
+
+        var tmp_retenidos = ko.toJS(@Html.Raw(ViewBag.JsonImpuestosRetenidos));
+
+        if (tmp_retenidos.length > 0) {
+            for (var i = 0; i < tmp_retenidos.length; i++) {
+                var retencion = new Retencion();
+
+                retencion.RetencionImpuesto = ko.observable(tmp_retenidos[i].RetencionImpuesto);
+                retencion.RetencionImporte = ko.observable(tmp_retenidos[i].RetencionImporte);
+                retencion.RetencionOrdinal = ko.observable(tmp_retenidos[i].RetencionOrdinal);
+
+                impuestos_model.RetencionesItems.push(retencion);
+            }
+        }
+
+        impuestos_model.RetencionesOrdinal(@Html.Raw(ViewBag.TotalImpuestosRetenidos));
+
+        impuestos_model.SubTotal(@Model.SubTotal);
+        impuestos_model.TotalTraslados(@Model.TotalImpuestosTrasladados);
+        impuestos_model.TotalRetenciones(@Model.TotalImpuestosRetenidos);
+        impuestos_model.Total(@Model.Total);
+
+        initial_model.MetodoDePago.subscribe(function (newValue) {
+            if (newValue == 'EFECTIVO' || newValue == 'NO IDENTIFICADO' || newValue == '')
+                initial_model.IsRequiredNumCtaPago(false);
+            else
+                initial_model.IsRequiredNumCtaPago(true);
+        });
+
+        conceptos_model.Items.subscribe(function (newValue) {
+            if (newValue.length > 0) {
+                var importeTotalConceptos = 0;
+                for (var i = 0; i < newValue.length; i++) {
+                    importeTotalConceptos += Math.round(parseFloat(newValue[i].ConceptoImporte()) * 100) / 100;
+                }
+                impuestos_model.SubTotal(Math.round(parseFloat(importeTotalConceptos) * 100) / 100);
+            } else {
+                impuestos_model.SubTotal(0);
+            }
+            var totalidad = Math.round(parseFloat(((impuestos_model.SubTotal() + impuestos_model.TotalTraslados()) - impuestos_model.TotalRetenciones()) * 100)) / 100;
+            impuestos_model.Total(totalidad);
+        });
+
+        impuestos_model.TrasladosItems.subscribe(function (newValue) {
+            if (newValue.length > 0) {
+                var importeTotalTrasladados = null;
+                for (var i = 0; i < newValue.length; i++) {
+                    importeTotalTrasladados += Math.round(parseFloat(newValue[i].TrasladadoImporte()) * 100) / 100;
+                }
+                impuestos_model.TotalTraslados(Math.round(parseFloat(importeTotalTrasladados) * 100) / 100);
+            }
+            else {
+                impuestos_model.TotalTraslados(0);
+            }
+            var totalidad = Math.round(parseFloat(((impuestos_model.SubTotal() + impuestos_model.TotalTraslados()) - impuestos_model.TotalRetenciones()) * 100)) / 100;
+            impuestos_model.Total(totalidad);
+        });
+
+        impuestos_model.RetencionesItems.subscribe(function (newValue) {
+            if (newValue.length > 0) {
+                var importeTotalRetenciones = 0;
+                for (var i = 0; i < newValue.length; i++) {
+                    importeTotalRetenciones += Math.round(parseFloat(newValue[i].RetencionImporte()) * 100) / 100;
+                }
+                impuestos_model.TotalRetenciones(Math.round(parseFloat(importeTotalRetenciones) * 100) / 100);
+            }
+            else {
+                impuestos_model.TotalRetenciones(0);
+            }
+            var totalidad = Math.round(parseFloat(((impuestos_model.SubTotal() + impuestos_model.TotalTraslados()) - impuestos_model.TotalRetenciones()) * 100)) / 100;
+            impuestos_model.Total(totalidad);
+        });
+
+        ko.applyBindings(initial_model, document.getElementById("initial_model_id"));
+        ko.applyBindings(conceptos_model, document.getElementById("conceptos_model_id"));
+        ko.applyBindings(impuestos_model, document.getElementById("impuestos_model_id"));
+
+        $("#enviar_datos").on("click", function (e) {
+            e.preventDefault();
+
+            if (initial_model.MetodoDePago() == ''){
+                $("#danger").removeClass("alert alert-danger").empty();
+                $("#danger").addClass("alert alert-danger").show().append("¡Ingrese el método de pago!");
+            }
+            else if ((initial_model.MetodoDePago() != 'EFECTIVO'
+                && initial_model.MetodoDePago() != 'NO IDENTIFICADO')
+                && (initial_model.NumCtaPago().length > 6
+                || initial_model.NumCtaPago().length < 4)) {
+                $("#danger").removeClass("alert alert-danger").empty();
+                $("#danger").addClass("alert alert-danger").show().append("¡El valor de NumCtaPago debe contener entre 4 hasta 6 caracteres!");
+            }
+            else {
+                var conceptos = new Array();
+                var traslados = new Array();
+                var retenciones = new Array();
+
+                if (conceptos_model.Items().length > 0) {
+                    for (var i = 0; i < conceptos_model.Items().length; i++) {
+                        conceptos.push({
+                            Cantidad: conceptos_model.Items()[i].ConceptoCantidad(),
+                            Unidad: conceptos_model.Items()[i].ConceptoUnidad(),
+                            NoIdentificacion: conceptos_model.Items()[i].ConceptoNoIdentificacion(),
+                            Descripcion: conceptos_model.Items()[i].ConceptoDescripcion(),
+                            ValorUnitario: conceptos_model.Items()[i].ConceptoValorUnitario(),
+                            Importe: conceptos_model.Items()[i].ConceptoImporte(),
+                            Ordinal: conceptos_model.Items()[i].ConceptoOrdinal()
+                        });
+                    }
+                }
+
+                if (impuestos_model.TrasladosItems().length > 0) {
+                    for (var i = 0; i < impuestos_model.TrasladosItems().length; i++) {
+                        traslados.push({
+                            Impuesto: impuestos_model.TrasladosItems()[i].TrasladadoImpuesto(),
+                            Tasa: impuestos_model.TrasladosItems()[i].TrasladadoTasa(),
+                            Importe: impuestos_model.TrasladosItems()[i].TrasladadoImporte(),
+                        });
+                    }
+                }
+
+                if (impuestos_model.RetencionesItems().length > 0) {
+                    for (var i = 0; i < impuestos_model.RetencionesItems().length; i++) {
+                        retenciones.push({
+                            Impuesto: impuestos_model.RetencionesItems()[i].RetencionImpuesto(),
+                            Importe: impuestos_model.RetencionesItems()[i].RetencionImporte(),
+                        });
+                    }
+                }
+
+                var myobject = {
+                    EmisorId: initial_model.EmisorId(),
+                    ReceptorId: initial_model.ReceptorId(),
+                    Serie: initial_model.Serie(),
+                    Folio: initial_model.Folio(),
+                    FormaDePago: initial_model.FormaDePago(),
+                    MetodoDePago: initial_model.MetodoDePago(),
+                    LugarExpedicion: initial_model.LugarExpedicion(),
+                    NumCtaPago: initial_model.NumCtaPago(),
+                    CertificadoId: initial_model.CertificadoId(),
+                    SubTotal: impuestos_model.SubTotal(),
+                    TotalImpuestosTrasladados: impuestos_model.TotalTraslados(),
+                    TotalImpuestosRetenidos: impuestos_model.TotalRetenciones(),
+                    Total: impuestos_model.Total(),
+                    Conceptos: conceptos,
+                    Traslados: traslados,
+                    Retenciones: retenciones
+                }
+
+                $.ajax({
+                    url: "@Url.Action("Create", "Comprobante")",
+                    type: "POST",
+                    data: myobject,
+                    beforeSend: function () {
+                        $("#alerta").modal({
+                            show: true,
+                            keyboard: false,
+                            backdrop: 'static'
+                        });
+                        $("#danger").removeClass("alert alert-danger").empty();
+                    },
+                    success: function (data) {
+                        if (data.error == false) {
+                            window.location.href = "@Url.Action("Details", "Comprobante")/" + data.comprobanteId + "";
+                        }
+                        else {
+                            $("#danger").addClass("alert alert-danger").show().append(data.errorMsg);
+                            $("html, body").scrollTop(0);
+                            $("#alerta").modal('hide');
+                        }
+                    }
+                });
+            }
+        });
+
+    });
+</script>
+}
