@@ -26,6 +26,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         private string estado;
         private string pais;
         private string codigoPostal;
+        private string lugarExpedicion;
         #endregion
 
         [Key]
@@ -286,6 +287,13 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public virtual string CodigoPostal {
             get { return this.codigoPostal; }
             set { this.codigoPostal = SATManager.NormalizeWhiteSpace(value); }
+        }
+
+        [MaxLength(2048)]
+        [XmlIgnore]
+        public virtual string LugarExpedicion {
+            get { return this.lugarExpedicion; }
+            set { this.lugarExpedicion = SATManager.NormalizeWhiteSpace(value); }
         }
     }
 }

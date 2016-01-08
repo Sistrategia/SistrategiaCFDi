@@ -8,6 +8,19 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
         public override void Up()
         {
             CreateTable(
+                "dbo.sat_banco",
+                c => new
+                    {
+                        banco_id = c.Int(nullable: false, identity: true),
+                        public_key = c.Guid(nullable: false),
+                        clave = c.String(nullable: false),
+                        nombre_corto = c.String(nullable: false),
+                        razon_social = c.String(nullable: false),
+                        status = c.String(nullable: false),
+                    })
+                .PrimaryKey(t => t.banco_id);
+            
+            CreateTable(
                 "dbo.sat_cancelacion",
                 c => new
                     {
@@ -204,6 +217,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         estado = c.String(maxLength: 50),
                         pais = c.String(nullable: false, maxLength: 50),
                         codigo_postal = c.String(maxLength: 5),
+                        lugar_expedicion = c.String(maxLength: 2048),
                         ubicacion_type = c.String(nullable: false, maxLength: 128),
                     })
                 .PrimaryKey(t => t.ubicacion_id)
@@ -287,6 +301,15 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 .ForeignKey("dbo.sat_ubicacion", t => t.domicilio_id)
                 .Index(t => t.public_key)
                 .Index(t => t.domicilio_id);
+            
+            CreateTable(
+                "dbo.TipoFormaDePagoes",
+                c => new
+                    {
+                        TipoFormaDePagoId = c.Int(nullable: false, identity: true),
+                        TipoFormaDePagoValue = c.String(),
+                    })
+                .PrimaryKey(t => t.TipoFormaDePagoId);
             
             CreateTable(
                 "dbo.sat_tipo_impuesto_retencion",
@@ -383,6 +406,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             DropTable("dbo.sat_tipo_metodo_de_pago");
             DropTable("dbo.sat_tipo_impuesto_traslado");
             DropTable("dbo.sat_tipo_impuesto_retencion");
+            DropTable("dbo.TipoFormaDePagoes");
             DropTable("dbo.sat_receptor");
             DropTable("dbo.sat_traslado");
             DropTable("dbo.sat_retencion");
@@ -398,6 +422,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             DropTable("dbo.sat_comprobante");
             DropTable("dbo.sat_cancelacion_uuid_comprobantes");
             DropTable("dbo.sat_cancelacion");
+            DropTable("dbo.sat_banco");
         }
     }
 }

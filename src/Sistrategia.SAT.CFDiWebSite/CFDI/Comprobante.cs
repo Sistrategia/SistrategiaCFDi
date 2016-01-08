@@ -70,7 +70,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public Comprobante() {
             this.PublicKey = Guid.NewGuid();
             this.version = "3.2";
-            this.Status = "A";
+            this.Status = "P"; // A
             //this.emisor = new Emisor();
             //this.receptor = new Receptor();
         }

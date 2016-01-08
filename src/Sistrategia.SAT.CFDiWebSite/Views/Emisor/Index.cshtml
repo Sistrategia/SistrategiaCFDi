@@ -43,7 +43,7 @@
             <tbody data-bind='foreach: DataList' id="lista">
                 <tr>
                     <td>
-                        <a href="#" data-bind="attr: { href: '@Url.Action("Details", "Receptor")/'+ $data.public_key }">
+                        <a href="#" data-bind="attr: { href: '@Url.Action("Details", "Emisor")/'+ $data.public_key }">
                             <div class="circle noselect">
                                 <span data-bind='text: emisor_initial_letter' class="text-center"></span>
                             </div>
@@ -51,7 +51,7 @@
                     </td>
                     <td>
                         <h4 class="media-heading">
-                            <a href="#" data-bind="attr: { href: '@Url.Action("Details", "Receptor")/'+$data.public_key }, text: emisor"></a>
+                            <a href="#" data-bind="attr: { href: '@Url.Action("Details", "Emisor")/'+$data.public_key }, text: emisor"></a>
                         </h4>
                         <h5 class="media-heading" data-bind='text: rfc'></h5>
                     </td>

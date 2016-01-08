@@ -29,6 +29,29 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public int? TipoImpuestoRetencionId { get; set; }
         public string TipoImpuestoRetencionValue { get; set; }
     }
+
+    public class TipoFormaDePago
+    {
+        [Key]
+        public int? TipoFormaDePagoId { get; set; }
+        public string TipoFormaDePagoValue { get; set; }
+    }
+
+    public class Banco
+    {
+        [Key]
+        public int? BancoId { get; set; }
+        [Required]
+        public Guid PublicKey { get; set; }
+        [Required]
+        public string Clave { get; set; }
+        [Required]
+        public string NombreCorto { get; set; }
+        [Required]
+        public string RazonSocial { get; set; }        
+        [Required]
+        public string Status { get; set; }
+    }
 }
 
 
