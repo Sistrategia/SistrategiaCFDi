@@ -68,9 +68,16 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             }
 
             this.MetodoDePago = comprobante.MetodoDePago;
+            this.LugarExpedicion = comprobante.LugarExpedicion;
+            this.FormaDePago = comprobante.FormaDePago;
 
             this.Serie = comprobante.Serie;
             this.Folio = comprobante.Folio;
+
+            this.TipoCambio = comprobante.TipoCambio;
+            this.Moneda = comprobante.Moneda;
+
+            this.Banco = comprobante.ExtendedStringValue1;
 
             this.SubTotal = comprobante.SubTotal;
             this.Total = comprobante.Total;
@@ -98,6 +105,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public string NumCtaPago { get; set; }
         public string LugarExpedicion { get; set; }
         public string TipoCambio { get; set; }
+        public string Moneda { get; set; }
+        public string Banco { get; set; }
 
         public EmisorDetailViewModel Emisor { get; set; }
         public ReceptorDetailsViewModel Receptor { get; set; }
@@ -323,6 +332,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             this.Descripcion = concepto.Descripcion;
             this.ValorUnitario = concepto.ValorUnitario;
             this.Importe = concepto.Importe;
+            this.Ordinal = concepto.Ordinal;
         }
 
         public decimal Cantidad { get; set; }
@@ -331,6 +341,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public string Descripcion { get; set; }
         public decimal ValorUnitario { get; set; }
         public decimal Importe { get; set; }
+        public int Ordinal { get; set; }
 
     }
 
