@@ -64,7 +64,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                             total_rows = EmisoresTotalRows,
                             returned_rows = Emisores.Count,
                             emisor_id = emisor.EmisorId,
-                            public_key = emisor.PublicKey,
+                            public_key = emisor.PublicKey.ToString("N"),
                             emisor = emisor.Nombre,
                             rfc = emisor.RFC,
                             emisor_initial_letter = emisor.Nombre.Substring(0, 1),

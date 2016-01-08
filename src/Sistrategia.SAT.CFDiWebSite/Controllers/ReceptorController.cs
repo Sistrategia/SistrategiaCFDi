@@ -64,7 +64,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                             total_rows = ReceptoresTotalRows,
                             returned_rows = Receptores.Count,
                             receptor_id = receptor.ReceptorId,
-                            public_key = receptor.PublicKey,
+                            public_key = receptor.PublicKey.ToString("N"),
                             receptor = receptor.Nombre,
                             rfc = receptor.RFC,
                             receptor_initial_letter = receptor.Nombre.Substring(0, 1),
