@@ -40,6 +40,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
         public virtual DbSet<TipoImpuestoTraslado> TiposImpuestoTraslado { get; set; }
         public virtual DbSet<TipoImpuestoRetencion> TiposImpuestoRetencion { get; set; }
         public virtual DbSet<TipoFormaDePago> TiposFormaDePago { get; set; }
+        public virtual DbSet<TipoMoneda> TiposMoneda { get; set; }
+        
 
         public virtual DbSet<Banco> Bancos { get; set; }
 
@@ -142,12 +144,19 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             tipoImpuestoTraslado.Property(p => p.TipoImpuestoTrasladoValue)
             .HasColumnName("tipo_impuesto_traslado_value");
 
-            var tipoFormaDePago = modelBuilder.Entity<TipoFormaDePago>()
-                .ToTable("sat_tipo_forma_de_pago");
-            tipoFormaDePago.Property(p => p.TipoFormaDePagoId)
-                .HasColumnName("tipo_forma_de_pago_id");
-            tipoFormaDePago.Property(p => p.TipoFormaDePagoValue)
-                .HasColumnName("tipo_forma_de_pago_value");
+        var tipoFormaDePago = modelBuilder.Entity<TipoFormaDePago>()
+            .ToTable("sat_tipo_forma_de_pago");
+        tipoFormaDePago.Property(p => p.TipoFormaDePagoId)
+            .HasColumnName("tipo_forma_de_pago_id");
+        tipoFormaDePago.Property(p => p.TipoFormaDePagoValue)
+            .HasColumnName("tipo_forma_de_pago_value");
+
+        var tipoMoneda = modelBuilder.Entity<TipoMoneda>()
+                .ToTable("sat_tipo_moneda");
+        tipoMoneda.Property(p => p.TipoMonedaId)
+            .HasColumnName("tipo_moneda_id");
+        tipoMoneda.Property(p => p.TipoMonedaValue)
+            .HasColumnName("tipo_moneda_value");
 
         var banco = modelBuilder.Entity<Banco>()
             .ToTable("sat_banco");

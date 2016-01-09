@@ -23,9 +23,13 @@
                 <div class="col-md-1">
                     <input class="form-control" type="text" data-bind="value: Folio" />
                 </div>
-                @Html.LabelFor(m => m.LugarExpedicion, new { @class = "col-md-2  control-label" })
-                <div class="col-md-6">
-                    <input class="form-control" type="text" data-bind="value: LugarExpedicion" />
+                @Html.LabelFor(m => m.Moneda, new { @class = "col-md-2 control-label" })
+                <div class="col-md-2">
+                    @Html.DropDownListFor(m => m.Moneda, Model.TiposMoneda, "Seleccione", new { @class = "form-control", data_bind = "value: Moneda" })
+                </div>
+                @Html.LabelFor(m => m.TipoCambio, new { @class = "col-md-2 control-label" })
+                <div class="col-md-2">
+                    <input class="form-control" type="number" data-bind="value: TipoCambio" />
                 </div>
             </div>
         </div>
@@ -44,28 +48,26 @@
         </div>
         <div class="form-horizontal">
             <div class="form-group">
+                @Html.LabelFor(m => m.LugarExpedicion, new { @class = "col-md-2 control-label" })
+                <div class="col-md-4">
+                    <input class="form-control" type="text" data-bind="value: LugarExpedicion" />
+                </div>
                 @Html.LabelFor(m => m.Certificados, new { @class = "col-md-1  control-label" })
                 <div class="col-md-5">
                     <select class="form-control" data-bind="value: CertificadoId" id="CertificadoId"></select>
-                </div>
-                @Html.LabelFor(m => m.FormaDePago, new { @class = "col-md-1  control-label" })
-                <div class="col-md-5">
-                    <input class="form-control" type="text" data-bind="value: FormaDePago" />
                 </div>
             </div>
         </div>
         <div class="form-horizontal">
             <div class="form-group">
+                @Html.LabelFor(m => m.FormaDePago, new { @class = "col-md-1  control-label" })
+                <div class="col-md-5">
+                    @Html.DropDownListFor(m => m.FormaDePago, Model.TiposFormaDePago, "Seleccione", new { @class = "form-control", data_bind = "value: FormaDePago" })
+                </div>
                 @Html.LabelFor(m => m.MetodoDePago, new { @class = "col-md-2  control-label" })
                 <div class="col-md-4">
                     @Html.DropDownListFor(m => m.MetodoDePago, Model.TipoMetodoDePago, "Seleccione", new { @class = "form-control", data_bind = "value: MetodoDePago" })
-                </div>
-                <div data-bind="visible: IsRequiredNumCtaPago()">
-                    @Html.LabelFor(m => m.NumCtaPago, new { @class = "col-md-1  control-label" })
-                    <div class="col-md-5">
-                        <input class="form-control" type="text" data-bind="value: NumCtaPago" />
-                    </div>
-                </div>
+                </div>      
             </div>
         </div>
     </div>
@@ -281,7 +283,7 @@
         // #region Select2 JS
         $.fn.select2.defaults.set('language', 'es');
 
-        $("#EmisorId").select2({
+        var $itemElement = $("#EmisorId").select2({
             placeholder: "Seleccione",
             minimumInputLength: 2,
             allowClear: true,
@@ -303,9 +305,16 @@
                 cache: true
             },
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-        })
+            templateSelection: function (repo) {
+                return repo.text;
+            },
+        });
 
-        $("#CertificadoId").prop("disabled", true);
+        @{ var fullEmisor = Model.Emisor.Nombre + " - " + Model.Emisor.RFC; }
+
+        var option = new Option("@fullEmisor", '@Model.EmisorId', true, true);
+        $itemElement.append(option);
+        $itemElement.trigger('change');
 
         $("#EmisorId").on("change", function (e) {
             e.preventDefault();
@@ -322,12 +331,13 @@
                         $.each(data, function (i, item) {
                             $("#CertificadoId").prop("disabled", false).append("<option value='" + data[i].id + "'>" + data[i].text + "</option>");
                         });
+                        initial_model.CertificadoId("@Model.CertificadoId");
                     }
                 });
             }
         });
 
-        $("#ReceptorId").select2({
+        var $itemElement2 = $("#ReceptorId").select2({
             placeholder: "Seleccione",
             minimumInputLength: 2,
             allowClear: true,
@@ -351,6 +361,12 @@
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
         });
 
+        @{ var fullReceptor = Model.Receptor.Nombre + " - " + Model.Receptor.RFC; }
+
+        var option = new Option("@fullReceptor", '@Model.ReceptorId', true, true);
+        $itemElement2.append(option);
+        $itemElement2.trigger('change');
+
         // #endregion Select2 JS
 
         $("#danger").hide();
@@ -367,7 +383,8 @@
         initial_model.MetodoDePago("@Model.MetodoDePago");
         initial_model.LugarExpedicion("@Model.LugarExpedicion");
         initial_model.NumCtaPago("@Model.NumCtaPago");
-        //initial_model.CertificadoId("@Model.CertificadoId");
+        initial_model.Moneda("@Model.Moneda");
+        initial_model.TipoCambio("@Model.TipoCambio");
 
         conceptos_model.Unidad("pza");
 
@@ -488,7 +505,7 @@
         $("#enviar_datos").on("click", function (e) {
             e.preventDefault();
 
-            if (initial_model.MetodoDePago() == ''){
+            if (initial_model.MetodoDePago() == '') {
                 $("#danger").removeClass("alert alert-danger").empty();
                 $("#danger").addClass("alert alert-danger").show().append("¡Ingrese el método de pago!");
             }

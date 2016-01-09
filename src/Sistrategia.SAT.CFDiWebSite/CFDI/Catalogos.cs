@@ -37,6 +37,13 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public string TipoFormaDePagoValue { get; set; }
     }
 
+    public class TipoMoneda
+    {
+        [Key]
+        public int? TipoMonedaId { get; set; }
+        public string TipoMonedaValue { get; set; }
+    }
+
     public class Banco
     {
         [Key]
