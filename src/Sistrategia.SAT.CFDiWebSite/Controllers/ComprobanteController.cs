@@ -173,7 +173,6 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
         public ActionResult Create() {
             var model = new ComprobanteCreateViewModel();
-            model.TipoCambio = "1.00";
 
             var tipoMetodoDePagoList = DBContext.TiposMetodoDePago.ToList();
             var tipoMetodoDePagoSelectList = new List<SelectListItem>();
@@ -205,6 +204,36 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             }
             model.TiposImpuestoTraslado = tiposImpuestoTrasladoSelectList;
 
+            var tiposFormaDePagoList = DBContext.TiposFormaDePago.ToList();
+            var tiposFormaDePagoSelectList = new List<SelectListItem>();
+            foreach (var tiposFormaDePago in tiposFormaDePagoList) {
+                tiposFormaDePagoSelectList.Add(new SelectListItem {
+                    Value = tiposFormaDePago.TipoFormaDePagoValue,
+                    Text = tiposFormaDePago.TipoFormaDePagoValue
+                });
+            }
+            model.TiposFormaDePago = tiposFormaDePagoSelectList;
+
+            var bancosList = DBContext.Bancos.ToList();
+            var bancosSelectList = new List<SelectListItem>();
+            foreach (var banco in bancosList) {
+                bancosSelectList.Add(new SelectListItem {
+                    Value = banco.NombreCorto,
+                    Text = banco.NombreCorto
+                });
+            }
+            model.Bancos = bancosSelectList;
+
+            var monedasList = DBContext.TiposMoneda.ToList();
+            var monedasListSelectList = new List<SelectListItem>();
+            foreach (var moneda in monedasList) {
+                monedasListSelectList.Add(new SelectListItem {
+                    Value = moneda.TipoMonedaValue,
+                    Text = moneda.TipoMonedaValue
+                });
+            }
+            model.TiposMoneda = monedasListSelectList;  
+
             return View(model);
         }
 
@@ -223,8 +252,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     throw new ApplicationException("¡Ingrese la forma de pago!");
                 else if (String.IsNullOrEmpty(model.MetodoDePago))
                     throw new ApplicationException("¡Ingrese el método de pago!");
-                else if ((model.MetodoDePago != "EFECTIVO" && model.MetodoDePago != "NO IDENTIFICADO") && (model.NumCtaPago.Count() > 6 || model.NumCtaPago.Count() < 4))
+                else if ((model.MetodoDePago != "EFECTIVO" && model.MetodoDePago != "NO IDENTIFICADO") && (model.NumCtaPago == null || (model.NumCtaPago.Count() > 6 || model.NumCtaPago.Count() < 4)))
                     throw new ApplicationException("¡El valor de NumCtaPago debe contener entre 4 hasta 6 caracteres!");
+                else if ((model.MetodoDePago != "EFECTIVO" && model.MetodoDePago != "NO IDENTIFICADO") && (string.IsNullOrEmpty(model.Banco)))
+                    throw new ApplicationException("¡Ingrese el banco!");
                 else if ((model.Conceptos != null || model.Conceptos.Count > 0)
                     && model.Conceptos.All(x => x.Cantidad < 0m || x.Unidad == null || x.Descripcion == null || x.ValorUnitario < 0m))
                     throw new ApplicationException("¡Ingrese al menos un concepto!");
@@ -261,6 +292,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     comprobante.TipoCambio = model.TipoCambio;
                     comprobante.Moneda = model.Moneda;
                     comprobante.NumCtaPago = model.NumCtaPago;
+                    comprobante.ExtendedStringValue1 = model.Banco;
+                    comprobante.Moneda = model.Moneda;
 
                     comprobante.Conceptos = new List<Concepto>();
 
@@ -361,6 +394,16 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             }
             model.TipoMetodoDePago = tipoMetodoDePagoSelectList;
 
+            var tiposFormaDePagoList = DBContext.TiposFormaDePago.ToList();
+            var tiposFormaDePagoListSelectList = new List<SelectListItem>();
+            foreach (var formaDePago in tiposFormaDePagoList) {
+                tiposFormaDePagoListSelectList.Add(new SelectListItem {
+                    Value = formaDePago.TipoFormaDePagoValue,
+                    Text = formaDePago.TipoFormaDePagoValue
+                });
+            }
+            model.TiposFormaDePago = tiposFormaDePagoListSelectList;
+
             var tiposImpuestoRetencionList = DBContext.TiposImpuestoRetencion.ToList();
             var tiposImpuestoRetencionSelectList = new List<SelectListItem>();
             foreach (var tiposImpuestoRetencion in tiposImpuestoRetencionList) {
@@ -380,6 +423,16 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 });
             }
             model.TiposImpuestoTraslado = tiposImpuestoTrasladoSelectList;
+
+            var tiposMonedaList = DBContext.TiposMoneda.ToList();
+            var tiposMonedaListSelectList = new List<SelectListItem>();
+            foreach (var moneda in tiposMonedaList) {
+                tiposMonedaListSelectList.Add(new SelectListItem {
+                    Value = moneda.TipoMonedaValue,
+                    Text = moneda.TipoMonedaValue
+                });
+            }
+            model.TiposMoneda = tiposMonedaListSelectList;
 
             List<dynamic> itemList = new List<dynamic>();
             foreach (ConceptoViewModel concepto in model.Conceptos) {

@@ -67,6 +67,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
                 }
             }
 
+            this.EmisorId = comprobante.EmisorId;
+            this.CertificadoId = comprobante.CertificadoId;
+            this.ReceptorId = comprobante.ReceptorId;
+
             this.MetodoDePago = comprobante.MetodoDePago;
             this.LugarExpedicion = comprobante.LugarExpedicion;
             this.FormaDePago = comprobante.FormaDePago;
@@ -118,15 +122,18 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public IEnumerable<SelectListItem> Certificados { get; set; }
         public IEnumerable<SelectListItem> TipoMetodoDePago { get; set; }
         public IEnumerable<SelectListItem> TiposImpuestoRetencion { get; set; }
-        public IEnumerable<SelectListItem> TiposImpuestoTraslado { get; set; }        
-
+        public IEnumerable<SelectListItem> TiposImpuestoTraslado { get; set; }
+        public IEnumerable<SelectListItem> TiposFormaDePago { get; set; }
+        public IEnumerable<SelectListItem> TiposMoneda { get; set; }     
+        public IEnumerable<SelectListItem> Bancos { get; set; }
+     
         public List<ConceptoViewModel> Conceptos { get; set; }
         public List<TrasladoViewModel> Traslados { get; set; }
         public List<RetencionViewModel> Retenciones { get; set; }
 
-        public int EmisorId { get; set; }
-        public int ReceptorId { get; set; }
-        public int CertificadoId { get; set; }
+        public int? EmisorId { get; set; }
+        public int? ReceptorId { get; set; }
+        public int? CertificadoId { get; set; }
     }
 
     public class ComprobanteDetailViewModel
