@@ -18,6 +18,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
     [Authorize]
     public class ComprobanteController : BaseController
     {
+
         #region Index
 
         public ActionResult Index() {
@@ -1321,7 +1322,141 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
         #endregion
 
-       
+        #region UploadCancelacion
+
+        public ActionResult UploadCancelacion() {
+            var model = new ComprobanteUploadCancelacionViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult UploadCancelacion(ComprobanteUploadCancelacionViewModel model) {
+            string comprobanteId = "";
+            if (ModelState.IsValid) {
+
+
+
+                if (model.CancelacionArchivo == null || model.CancelacionArchivo.ContentLength == 0) {
+                    return View();
+                }
+                try {
+
+                    //Comprobante comprobante = new Comprobante();
+                    //Certificado certificado = new Certificado();
+
+                    if (model.CancelacionArchivo != null) {
+                        // MemoryStream target = new MemoryStream();
+
+                        //model.CancelacionArchivo.ContentType.ToString();
+                        if (model.CancelacionArchivo.ContentType == "text/plain") {
+                            BinaryReader b = new BinaryReader(model.CancelacionArchivo.InputStream);
+                            byte[] binData = b.ReadBytes(model.CancelacionArchivo.ContentLength);
+
+                            string result = System.Text.Encoding.UTF8.GetString(binData);
+                            const string CANCELACION_DE_UUID = "CANCELACION DE UUID: ";
+                            if (result.StartsWith(CANCELACION_DE_UUID)) {
+                                Guid uuid = new Guid(result.Substring(CANCELACION_DE_UUID.Length, 36));
+
+                                string base64EncodedData =
+                                    result.Substring(result.IndexOf("[ack] => ") + "[ack] => ".Length,
+                                            result.IndexOf("\r\n", result.IndexOf("[ack] => ") + "[ack] => ".Length) - result.IndexOf("[ack] => ") - "[ack] => ".Length);
+
+
+                                var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+                                string uncodedData = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+
+                                //System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
+                                //doc.LoadXml(uncodedData);
+
+                                //var comprobante = DBContext.Comprobantes
+                                //    .Select(c => new {
+                                //        Comprobante = c,
+                                //        Complemento = c.Complementos.OfType<TimbreFiscalDigital>()
+                                //        .Where(t => t.UUID == uuid.ToString()
+                                //        ).Where(t => t.UUID == uuid.ToString())  //.Where(co => co is TimbreFiscalDigital && ((TimbreFiscalDigital)co).UUID == uuid.ToString()).OfType<TimbreFiscalDigital>()
+                                //    }
+                                //    );
+
+                                string q = "SELECT c.comprobante_id FROM sat_comprobante as c INNER JOIN sat_complemento as co on (c.comprobante_id = co.comprobante_id) INNER JOIN sat_timbre_fiscal_digital as t ON (co.complemento_id = t.complemento_id) WHERE t.uuid = @uuid";
+
+
+                                //var comprobante = DBContext.Comprobantes.SqlQuery(q, id).SingleOrDefaultAsync();
+
+                                int ccomprobanteId = DBContext.Database.SqlQuery<int>(q, new System.Data.SqlClient.SqlParameter("@uuid", uuid)).FirstOrDefault(); // .FirstOrDefault<int>();
+
+                                var comprobante = DBContext.Comprobantes.Find(ccomprobanteId); // DBContext.Comprobantes.SqlQuery(q).SingleOrDefault();
+
+                                // var comprobante = DBContext.Comprobantes.SqlQuery(q, new System.Data.SqlClient.SqlParameter("@uuid", uuid)).FirstOrDefault(); // .FirstOrDefault<int>();
+
+                                //var comprobante = DBContext.Comprobantes
+                                //    .Include(c => c.Complementos.Select(t => t.TimbreFiscalDigital))
+                                //    //.Include("Complemento.TimbreFiscalDigital")                         
+                                //    .Select(c => new {
+                                //    Comprobante = c,
+                                //    //Complemento = c.Complementos.Where(co => ((TimbreFiscalDigital)co).UUID == uuid.ToString())
+                                //    TimbreFiscalDigital = c.Complementos.Where(co => ((TimbreFiscalDigital)co).UUID == uuid.ToString()).OfType<TimbreFiscalDigital>()
+                                //});
+                                if (comprobante != null) {
+                                    comprobante.ToString();
+                                }
+
+                                //.Include(c => c.Complementos)
+                                //.Where(c => c.Complementos.Any(co => ((TimbreFiscalDigital)co).UUID == uuid.ToString()));
+
+
+                                //var query = from c in DBContext.Comprobantes
+                                //            from co in c.Complementos
+                                //            where ((TimbreFiscalDigital)co).UUID == uuid.ToString()
+                                //            select c;
+
+
+                            
+
+
+                                //if (model.ComprobantePDFArchivo != null && model.ComprobantePDFArchivo.ContentLength > 0) {
+                                //    CloudStorageMananger manager = new CloudStorageMananger();
+                                //    manager.UploadFromStream(ConfigurationManager.AppSettings["AzureAccountName"],
+                                //        ConfigurationManager.AppSettings["AzureAccountKey"],
+                                //        comprobante.Emisor.PublicKey.ToString("N"),
+                                //        comprobante.PublicKey.ToString("N") + ".xml",
+                                //        model.ComprobanteArchivo.FileName,
+                                //        model.ComprobanteArchivo.ContentType,
+                                //        model.ComprobanteArchivo.InputStream);
+
+                                //    manager.UploadFromStream(ConfigurationManager.AppSettings["AzureAccountName"],
+                                //        ConfigurationManager.AppSettings["AzureAccountKey"],
+                                //        comprobante.Emisor.PublicKey.ToString("N"),
+                                //        comprobante.PublicKey.ToString("N") + ".pdf",
+                                //        model.ComprobantePDFArchivo.FileName,
+                                //        model.ComprobantePDFArchivo.ContentType,
+                                //        model.ComprobantePDFArchivo.InputStream);
+                                //}
+
+
+                            }
+                        }
+
+                        //System.Xml.XmlTextReader xmlReader = new System.Xml.XmlTextReader(model.CancelacionArchivo.InputStream);
+                    }
+                }
+                catch (Exception ex) {
+                    //log.Error(ex, "Error upload photo blob to storage");
+                    ex.ToString();
+                }
+
+                //return RedirectToAction("Details", "Comprobante", new { id = comprobanteId });
+                //return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
+        }
+
+
+
+        #endregion
+
+
 
 
 

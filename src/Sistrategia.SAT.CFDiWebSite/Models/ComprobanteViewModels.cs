@@ -405,4 +405,15 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         
     }
+
+    public class ComprobanteUploadCancelacionViewModel
+    {
+        [Required, DataType(DataType.Upload), Display(Name = "Archivo")]
+        public HttpPostedFileBase CancelacionArchivo { get; set; }
+
+
+        
+
+
+    }
 }

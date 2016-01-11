@@ -426,6 +426,7 @@
     <Content Include="Views\Comprobante\Upload.cshtml" />
     <Content Include="Views\Comprobante\Cancel.cshtml" />
     <Content Include="Views\Comprobante\Edit.cshtml" />
+    <Content Include="Views\Comprobante\UploadCancelacion.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
