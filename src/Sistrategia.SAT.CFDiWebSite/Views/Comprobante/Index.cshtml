@@ -7,7 +7,8 @@
         <div class="pull-right">
             <div class="btn-group" style="bottom: 26px;position: relative;top:26px;">
                 @*@Html.ActionLink("Agregar", "Create", new { id = Model.Emisor.PublicKey }, new { @class = "btn btn-primary", @role = "button" })*@
-                @Html.ActionLink("Agregar", "Create", null, new { @class = "btn btn-primary", @role = "button" })
+              @Html.ActionLink("Cargar", "Upload", null, new { @class = "btn btn-primary", @role = "button" })
+              @Html.ActionLink("Agregar", "Create", null, new { @class = "btn btn-primary", @role = "button" })
             </div>
         </div>
     </div>

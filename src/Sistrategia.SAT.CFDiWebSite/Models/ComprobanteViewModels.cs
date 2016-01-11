@@ -394,10 +394,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         }
 
          //[Display(Name = "Certificado")]
-        [Required, DataType(DataType.Upload), Display(Name = "Comprobante")]
+        [Required, DataType(DataType.Upload), Display(Name = "XML")]
         public HttpPostedFileBase ComprobanteArchivo { get; set; }
 
-        [DataType(DataType.Upload), Display(Name = "Comprobante")]
+        [DataType(DataType.Upload), Display(Name = "PDF")]
         public HttpPostedFileBase ComprobantePDFArchivo { get; set; }
 
         public string NoOrden { get; set; }
