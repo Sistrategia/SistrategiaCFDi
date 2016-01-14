@@ -174,22 +174,6 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             .HasColumnName("status");
 
 
-    //        public class Bank
-    //{
-    //    [Key]
-    //    public int? BankId { get; set; }
-    //    [Required]
-    //    public Guid PublicKey { get; set; }
-    //    [Required]
-    //    public string Clave { get; set; }
-    //    [Required]
-    //    public string NombreCorto { get; set; }
-    //    [Required]
-    //    public string RazonSocial { get; set; }        
-    //    [Required]
-    //    public string Status { get; set; }
-    //}
-
             var emisor = modelBuilder.Entity<Emisor>()
                 .ToTable("sat_emisor");
             emisor.Property(p => p.EmisorId)
@@ -264,6 +248,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("lugar_expedicion")
                 .IsOptional() // .IsRequired() // Requerido
                 .HasMaxLength(2048);
+
+            ubicacion.Property(p => p.Status)
+                .HasColumnName("status")
+                .HasMaxLength(50);
 
 
             modelBuilder.Entity<Ubicacion>()
@@ -366,6 +354,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("regimen");
             regimenFiscal.Property(p => p.Ordinal)
                .HasColumnName("ordinal");
+
+            regimenFiscal.Property(p => p.Status)
+                .HasColumnName("status")
+                .HasMaxLength(50);
 
             emisor.HasMany<Certificado>(p => p.Certificados)
                 .WithOptional()

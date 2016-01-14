@@ -295,5 +295,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             get { return this.lugarExpedicion; }
             set { this.lugarExpedicion = SATManager.NormalizeWhiteSpace(value); }
         }
+
+        [XmlIgnore]
+        public string Status { get; set; }
     }
 }
