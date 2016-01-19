@@ -977,8 +977,11 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
     public class ComprobanteEmisor
     {
+        [Key]
+        public int ComprobanteEmisorId { get; set; }
+
         [ForeignKey("Emisor")]
-        public int? EmisorId { get; set; }
+        public int EmisorId { get; set; }
 
         /// <summary>
         /// Nodo requerido para expresar la información del contribuyente emisor del comprobante.
@@ -1032,8 +1035,11 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
     public class ComprobanteReceptor
     {
+        [Key]
+        public int ComprobanteReceptorId { get; set; }
+
         [ForeignKey("Receptor")]
-        public int? ReceptorId { get; set; }
+        public int ReceptorId { get; set; }
 
         /// <summary>
         /// Nodo requerido para precisar la información del contribuyente receptor del comprobante.
