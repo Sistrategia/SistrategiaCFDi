@@ -975,399 +975,105 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
     //    traslado
     //}
 
-    public class Complemento
+    public class ComprobanteEmisor
     {
         [Key]
-        public int ComplementoId { get; set; }
+        public int ComprobanteEmisorId { get; set; }
 
-        [XmlIgnore]
-        public int? Ordinal { get; set; }
-
-        //[Required]
-        //public Guid PublicKey { get; set; }
-
-        //private System.Xml.XmlElement[] any;
-
-        //[XmlAnyElement]
-        //public virtual List<System.Xml.XmlElement> Any { get; set; }
-        ////public System.Xml.XmlElement[] Any {
-        ////    get { return this.any; }
-        ////    set { this.any = value; }
-        ////}
-
-        //[ForeignKey("TimbreFiscalDigital")]
-        //public int? TimbreFiscalDigitalId { get; set; }
-
-        //public virtual TimbreFiscalDigital TimbreFiscalDigital { get; set; }
-
-        ///// <summary>
-        ///// Nodo opcional para capturar los impuestos retenidos aplicables
-        ///// </summary>
-        //[XmlArrayItem("Retencion", IsNullable = false)]
-        //public virtual List<Retencion> Retenciones { get; set; }
-        ////public Retencion[] Retenciones {
-        ////    get { return this.retenciones; }
-        ////    set { this.retenciones = value; }
-        ////}
-    }
-
-    //public class Complemento // : System.Xml.XmlDocument
-    //{
-    //    public int ComplementoId { get; set; }
-
-    //    public virtual string Complemento { get; set; }
-
-    //    //private System.Xml.XmlElement[] any;
-
-    //    //[XmlAnyElement]
-    //    //public virtual List<System.Xml.XmlElement> Any { get; set; }
-    //    //public System.Xml.XmlElement[] Any {
-    //    //    get { return this.any; }
-    //    //    set { this.any = value; }
-    //    //}
-    //}
-
-    public class Impuestos
-    {
-        #region
-        private decimal? totalImpuestosRetenidos;
-        //private bool totalImpuestosRetenidosSpecified = false;
-        private decimal? totalImpuestosTrasladados;
-        //private bool totalImpuestosTrasladadosSpecified = false;
-        #endregion
-        [Key]
-        public int ImpuestosId { get; set; }
-
-        //[Required]
-        //public Guid PublicKey { get; set; }
+        [ForeignKey("Emisor")]
+        public int EmisorId { get; set; }
 
         /// <summary>
-        /// Nodo opcional para capturar los impuestos retenidos aplicables
+        /// Nodo requerido para expresar la información del contribuyente emisor del comprobante.
         /// </summary>
-        [XmlArrayItem("Retencion", IsNullable = false)]
-        public virtual List<Retencion> Retenciones { get; set; }
-        //public Retencion[] Retenciones {
-        //    get { return this.retenciones; }
-        //    set { this.retenciones = value; }
+        [XmlElement("Emisor", typeof(Emisor))]
+        public virtual Emisor Emisor { get; set; }
+        //public virtual Emisor Emisor {
+        //    get { return this.emisor; }
+        //    set { this.emisor = value; }
         //}
 
-        /// <summary>
-        /// Nodo opcional para asentar o referir los impuestos trasladados aplicables
-        /// </summary>
-        [XmlArrayItem("Traslado", IsNullable = false)]
-        public virtual List<Traslado> Traslados { get; set; }
-        //public Traslado[] Traslados {
-        //    get { return this.traslados; }
-        //    set { this.traslados = value; }
-        //}
+        [ForeignKey("DomicilioFiscal")]
+        public int? DomicilioFiscalId { get; set; }
 
         /// <summary>
-        /// Atributo opcional para expresar el total de los impuestos retenidos que se desprenden 
-        /// de los conceptos expresados en el comprobante fiscal digital a través de Internet.
-        /// </summary>
-        [XmlAttribute("totalImpuestosRetenidos")]
-        public decimal? TotalImpuestosRetenidos {
-            get { return this.totalImpuestosRetenidos; }
-            set { this.totalImpuestosRetenidos = value; }
-        }
-        //<xs:attribute name="totalImpuestosRetenidos" type="cfdi:t_Importe" use="optional">
-        //    <xs:annotation>
-        //    <xs:documentation>Atributo opcional para expresar el total de los impuestos retenidos que se desprenden de los conceptos expresados en el comprobante fiscal digital a través de Internet.</xs:documentation>
-        //    </xs:annotation>
-        //</xs:attribute>
-
-
-        //[XmlIgnore]
-        //public bool TotalImpuestosRetenidosSpecified {
-        //    get { return this.totalImpuestosRetenidosSpecified; }
-        //    set { this.totalImpuestosRetenidosSpecified = value; }
-        //}
-
-        /// <summary>
-        /// Atributo opcional para expresar el total de los impuestos trasladados que se desprenden 
-        /// de los conceptos expresados en el comprobante fiscal digital a través de Internet.
-        /// </summary>
-        [XmlAttribute("totalImpuestosTrasladados")]
-        public decimal? TotalImpuestosTrasladados {
-            get { return this.totalImpuestosTrasladados; }
-            set { this.totalImpuestosTrasladados = value; }
-        }
-        //<xs:attribute name="totalImpuestosTrasladados" type="cfdi:t_Importe" use="optional">
-        //    <xs:annotation>
-        //    <xs:documentation>Atributo opcional para expresar el total de los impuestos trasladados que se desprenden de los conceptos expresados en el comprobante fiscal digital a través de Internet.</xs:documentation>
-        //    </xs:annotation>
-        //</xs:attribute>
-
-        //[XmlIgnore]
-        //public bool TotalImpuestosTrasladadosSpecified {
-        //    get { return this.totalImpuestosTrasladadosSpecified; }
-        //    set { this.totalImpuestosTrasladadosSpecified = value; }
-        //}
-    }
-
-
-    public class Retencion
-    {
-        public Retencion() {
-            //this.PublicKey = Guid.NewGuid();
-        }
-
-        //private RetencionImpuesto impuesto;
-        private string impuesto;
-        private decimal importe;
-
-        [Key]
-        public int RetencionId { get; set; }
-
-        //[Required]
-        //public Guid PublicKey { get; set; }
-
-        /// <summary>
-        /// Atributo requerido para señalar el tipo de impuesto retenido
+        /// Nodo opcional para precisar la información de ubicación del domicilio fiscal del contribuyente emisor.
         /// </summary>
         /// <remarks>
+        /// Antes era requerido
         /// <code>
-        /// <xs:attribute name="impuesto" use="required">
+        /// <xs:element name="DomicilioFiscal" type="cfdi:t_UbicacionFiscal" minOccurs="0">
         ///     <xs:annotation>
-        ///         <xs:documentation>Atributo requerido para señalar el tipo de impuesto retenido</xs:documentation>
+        ///         <xs:documentation>Nodo opcional para precisar la información de ubicación del domicilio fiscal del contribuyente emisor</xs:documentation>
         ///     </xs:annotation>
-        ///     <xs:simpleType>
-        ///         <xs:restriction base="xs:string">
-        ///             <xs:whiteSpace value="collapse"/>
-        ///             <xs:enumeration value="ISR">
-        ///                 <xs:annotation>
-        ///                     <xs:documentation>Impuesto sobre la renta</xs:documentation>
-        ///                 </xs:annotation>
-        ///             </xs:enumeration>
-        ///             <xs:enumeration value="IVA">
-        ///                 <xs:annotation>
-        ///                     <xs:documentation>Impuesto al Valor Agregado</xs:documentation>
-        ///                 </xs:annotation>
-        ///             </xs:enumeration>
-        ///         </xs:restriction>
-        ///     </xs:simpleType>
-        /// </xs:attribute>
+        /// </xs:element>
         /// </code>
         /// </remarks>
-        [XmlAttribute("impuesto")]
-        public string Impuesto {
-        //public RetencionImpuesto Impuesto {
-            get { return this.impuesto; }
-            set { this.impuesto = value; }
-        }
+        //[XmlElement("DomicilioFiscal")]
+        public virtual UbicacionFiscal DomicilioFiscal { get; set; }
+
+
+        [ForeignKey("ExpedidoEn")]
+        public int? ExpedidoEnId { get; set; }
 
         /// <summary>
-        /// Atributo requerido para señalar el importe o monto del impuesto retenido.
+        /// Nodo opcional para precisar la información de ubicación del domicilio en donde es emitido 
+        /// el comprobante fiscal en caso de que sea distinto del domicilio fiscal del contribuyente emisor.
         /// </summary>
         /// <remarks>
         /// <code>
-        /// <xs:attribute name="importe" type="cfdi:t_Importe" use="required">
-        ///   <xs:annotation>
-        ///     <xs:documentation>
-        ///       Atributo requerido para señalar el importe o monto del impuesto retenido.
-        ///     </xs:documentation>
-        ///   </xs:annotation>
-        /// </xs:attribute>
+        /// <xs:element name="ExpedidoEn" type="cfdi:t_Ubicacion" minOccurs="0">
+        ///     <xs:annotation>
+        ///         <xs:documentation>Nodo opcional para precisar la información de ubicación del domicilio en donde es emitido el comprobante fiscal en caso de que sea distinto del domicilio fiscal del contribuyente emisor.</xs:documentation>
+        ///     </xs:annotation>
+        /// </xs:element>
         /// </code>
         /// </remarks>
-        [XmlAttribute("importe")]
-        public decimal Importe {
-            get { return this.importe; }
-            set { this.importe = value; }
-        }
+        //[XmlElement("ExpedidoEn")]
+        public virtual Ubicacion ExpedidoEn { get; set; }
+    }
 
-        ///// <summary>
-        ///// Atributo requerido para señalar el tipo de impuesto retenido.
-        ///// </summary>
-        //[Serializable]
-        //[XmlType(AnonymousType = true, Namespace = "http://www.sat.gob.mx/cfd/3")]
-        //public enum RetencionImpuesto
-        //{
-        //    /// <summary>
-        //    /// Impuesto sobre la renta
-        //    /// </summary>
-        //    ISR,
-        //    /// <summary>
-        //    /// Impuesto al Valor Agregado
-        //    /// </summary>
-        //    IVA,
+    public class ComprobanteReceptor
+    {
+        [Key]
+        public int ComprobanteReceptorId { get; set; }
+
+        [ForeignKey("Receptor")]
+        public int ReceptorId { get; set; }
+
+        /// <summary>
+        /// Nodo requerido para precisar la información del contribuyente receptor del comprobante.
+        /// </summary>
+        [XmlElement("Receptor", typeof(Receptor))]
+        public virtual Receptor Receptor { get; set; }
+        //public virtual Receptor Receptor {
+        //    get { return this.receptor; }
+        //    set { this.receptor = value; }
         //}
-        ////<xs:simpleType>
-        ////    <xs:restriction base="xs:string">
-        ////        <xs:whiteSpace value="collapse"/>
-        ////        <xs:enumeration value="ISR">
-        ////            <xs:annotation>
-        ////                <xs:documentation>Impuesto sobre la renta</xs:documentation>
-        ////            </xs:annotation>
-        ////        </xs:enumeration>
-        ////        <xs:enumeration value="IVA">
-        ////            <xs:annotation>
-        ////                <xs:documentation>Impuesto al Valor Agregado</xs:documentation>
-        ////            </xs:annotation>
-        ////        </xs:enumeration>
-        ////    </xs:restriction>
-        ////</xs:simpleType>
 
-        [XmlIgnore]
-        public int? Ordinal { get; set; }
-
-    }
-
-    public class Traslado
-    {
-        public Traslado() {
-            //this.PublicKey = Guid.NewGuid();
-        }
-
-        //private TrasladoImpuesto impuesto;
-        private string impuesto;
-        private decimal tasa;
-        private decimal importe;
-
-        [Key]
-        public int TrasladoId { get; set; }
-
-        //[Required]
-        //public Guid PublicKey { get; set; }
+        [ForeignKey("Domicilio")]
+        public int? DomicilioId { get; set; }
 
         /// <summary>
-        /// Atributo requerido para señalar el tipo de impuesto trasladado.
+        /// Nodo opcional para la definición de la ubicación donde se da el domicilio del receptor del comprobante fiscal.
         /// </summary>
         /// <remarks>
         /// <code>
-        /// <xs:attribute name="impuesto" use="required">
-        ///   <xs:annotation>
-        ///     <xs:documentation>
-        ///       Atributo requerido para señalar el tipo de impuesto trasladado
-        ///     </xs:documentation>
-        ///   </xs:annotation>
-        ///   <xs:simpleType>
-        ///     <xs:restriction base="xs:string">
-        ///       <xs:whiteSpace value="collapse"/>
-        ///       <xs:enumeration value="IVA">
-        ///       <xs:annotation>
-        ///           <xs:documentation>Impuesto al Valor Agregado</xs:documentation>
-        ///       </xs:annotation>
-        ///       </xs:enumeration>
-        ///       <xs:enumeration value="IEPS">
-        ///          <xs:annotation>
-        ///               <xs:documentation>Impuesto especial sobre productos y servicios</xs:documentation>
-        ///           </xs:annotation>
-        ///       </xs:enumeration>
-        ///     </xs:restriction>
-        ///   </xs:simpleType>
-        /// </xs:attribute>
+        /// <xs:sequence>
+        ///   <xs:element name="Domicilio" type="cfdi:t_Ubicacion" minOccurs="0">
+        ///     <xs:annotation>
+        ///       <xs:documentation>
+        ///         Nodo opcional para la definición de la ubicación donde se da el domicilio del receptor del comprobante fiscal.
+        ///       </xs:documentation>
+        ///     </xs:annotation>
+        ///   </xs:element>
+        /// </xs:sequence>
         /// </code>
         /// </remarks>
-        [XmlAttribute("impuesto")]
-        public string Impuesto {
-        //public TrasladoImpuesto Impuesto {
-            get { return this.impuesto; }
-            set { this.impuesto = value; }
-        }        
-
-        /// <summary>
-        /// Atributo requerido para señalar la tasa del impuesto que se traslada por cada concepto amparado en el comprobante.
-        /// </summary>
-        /// <remarks>
-        /// <code>
-        /// <xs:attribute name="tasa" type="cfdi:t_Importe" use="required">
-        ///   <xs:annotation>
-        ///     <xs:documentation>
-        ///       Atributo requerido para señalar la tasa del impuesto que se traslada por cada concepto amparado en el comprobante.
-        ///     </xs:documentation>
-        ///   </xs:annotation>
-        /// </xs:attribute>
-        /// </code>
-        /// </remarks>
-        [XmlAttribute("tasa")]
-        public decimal Tasa {
-            get { return this.tasa; }
-            set { this.tasa = value; }
-        }        
-
-        /// <summary>
-        /// Atributo requerido para señalar el importe del impuesto trasladado.
-        /// </summary>
-        /// <remarks>
-        /// <code>
-        /// <xs:attribute name="importe" type="cfdi:t_Importe" use="required">
-        ///   <xs:annotation>
-        ///     <xs:documentation>
-        ///       Atributo requerido para señalar el importe del impuesto trasladado.
-        ///     </xs:documentation>
-        ///   </xs:annotation>
-        /// </xs:attribute>
-        /// </code>
-        /// </remarks>
-        [XmlAttribute("importe")]
-        public decimal Importe {
-            get { return this.importe; }
-            set { this.importe = value; }
-        }
-
-        [XmlIgnore]
-        public int? Ordinal { get; set; }
-    }
-
-    //public class Complemento
-    //{
-
-    //}
-
-    ///// <summary>
-    ///// Atributo requerido para señalar el tipo de impuesto trasladado
-    ///// </summary>
-    //[Serializable]
-    //[XmlType(AnonymousType = true, Namespace = "http://www.sat.gob.mx/cfd/3")]
-    //public enum TrasladoImpuesto
-    //{
-    //    /// <summary>
-    //    /// Impuesto al Valor Agregado
-    //    /// </summary>
-    //    IVA,
-    //    /// <summary>
-    //    /// Impuesto especial sobre productos y servicios
-    //    /// </summary>
-    //    IEPS,
-    //}
-    ////<xs:attribute name="impuesto" use="required">
-    ////    <xs:annotation>
-    ////    <xs:documentation>Atributo requerido para señalar el tipo de impuesto trasladado</xs:documentation>
-    ////    </xs:annotation>
-    ////    <xs:simpleType>
-    ////    <xs:restriction base="xs:string">
-    ////        <xs:whiteSpace value="collapse"/>
-    ////        <xs:enumeration value="IVA">
-    ////        <xs:annotation>
-    ////            <xs:documentation>Impuesto al Valor Agregado</xs:documentation>
-    ////        </xs:annotation>
-    ////        </xs:enumeration>
-    ////        <xs:enumeration value="IEPS">
-    ////        <xs:annotation>
-    ////            <xs:documentation>Impuesto especial sobre productos y servicios</xs:documentation>
-    ////        </xs:annotation>
-    ////        </xs:enumeration>
-    ////    </xs:restriction>
-    ////    </xs:simpleType>
-    ////</xs:attribute>
-    //}
-
-    public class ViewTemplate
-    {
-        [Key]
-        public int ViewTemplateId { get; set; }
-        public string DisplayName { get; set; }
-        public string Description { get; set; }
-
-        public string CodeName { get; set; }
-    }
-
-    public class ReceptorCorreoEntrega
-    {
-        [Key]
-        public int ReceptorCorreoEntregaId { get; set; }
-        public string Correo { get; set; }
-        //public string Nombre { get; set; }
+        [XmlElement("Domicilio")]
+        public virtual Ubicacion Domicilio { get; set; }
+        //    get { return this.domicilio; }
+        //    set { this.domicilio = value; }
+        //}
     }
 }

@@ -167,15 +167,4 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //[XmlIgnore]
         public string Status { get; set; }
     }
-
-    public class RegimenFiscal
-    {
-        public RegimenFiscal() { }
-        
-        [Key]
-        public int RegimenFiscalId { get; set; }
-        public string Regimen { get; set; }
-
-        public int Ordinal { get; set; }
-    }
 }
