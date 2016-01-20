@@ -35,7 +35,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
 
         public virtual DbSet<Cancelacion> Cancelaciones { get; set; }
 
-
+        public virtual DbSet<TipoTipoDeComprobante> TiposTipoDeComprobante { get; set; }
         public virtual DbSet<TipoMetodoDePago> TiposMetodoDePago { get; set; }
         public virtual DbSet<TipoImpuestoTraslado> TiposImpuestoTraslado { get; set; }
         public virtual DbSet<TipoImpuestoRetencion> TiposImpuestoRetencion { get; set; }
@@ -123,55 +123,72 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
         //public virtual DbSet<TipoImpuestoTraslado> TiposImpuestoTraslado { get; set; }
         //public virtual DbSet<TipoImpuestoRetencion> TiposImpuestoRetencion { get; set; }
 
-        var tipoMetodoDePago = modelBuilder.Entity<TipoMetodoDePago>()
-            .ToTable("sat_tipo_metodo_de_pago");
-            tipoMetodoDePago.Property(p => p.TipoMetodoDePagoId)
-                .HasColumnName("tipo_metodo_de_pago_id");
-            tipoMetodoDePago.Property(p => p.TipoMetodoDePagoValue)
-            .HasColumnName("tipo_metodo_de_pago_value");
+            var tipoTipoDeComprobante = modelBuilder.Entity<TipoTipoDeComprobante>()
+               .ToTable("sat_tipo_tipo_de_comprobante");
+            tipoTipoDeComprobante.Property(p => p.TipoTipoDeComprobanteId)
+                .HasColumnName("tipo_tipo_de_comprobante_id");
+            tipoTipoDeComprobante.Property(p => p.TipoTipoDeComprobanteValue)
+                .HasColumnName("tipo_tipo_de_comprobante_value")
+                .HasMaxLength(12);
 
-        var tipoImpuestoRetencion = modelBuilder.Entity<TipoImpuestoRetencion>()
-            .ToTable("sat_tipo_impuesto_retencion");
-            tipoImpuestoRetencion.Property(p => p.TipoImpuestoRetencionId)
-                .HasColumnName("tipo_impuesto_retencion_id");
-            tipoImpuestoRetencion.Property(p => p.TipoImpuestoRetencionValue)
-            .HasColumnName("tipo_impuesto_retencion_value");
+            var tipoMetodoDePago = modelBuilder.Entity<TipoMetodoDePago>()
+                .ToTable("sat_tipo_metodo_de_pago");
+                tipoMetodoDePago.Property(p => p.TipoMetodoDePagoId)
+                    .HasColumnName("tipo_metodo_de_pago_id");
+                tipoMetodoDePago.Property(p => p.TipoMetodoDePagoValue)
+                .HasColumnName("tipo_metodo_de_pago_value")
+                .HasMaxLength(50);
 
-        var tipoImpuestoTraslado = modelBuilder.Entity<TipoImpuestoTraslado>()
-            .ToTable("sat_tipo_impuesto_traslado");
-            tipoImpuestoTraslado.Property(p => p.TipoImpuestoTrasladoId)
-                .HasColumnName("tipo_impuesto_traslado_id");
-            tipoImpuestoTraslado.Property(p => p.TipoImpuestoTrasladoValue)
-            .HasColumnName("tipo_impuesto_traslado_value");
+            var tipoImpuestoRetencion = modelBuilder.Entity<TipoImpuestoRetencion>()
+                .ToTable("sat_tipo_impuesto_retencion");
+                tipoImpuestoRetencion.Property(p => p.TipoImpuestoRetencionId)
+                    .HasColumnName("tipo_impuesto_retencion_id");
+                tipoImpuestoRetencion.Property(p => p.TipoImpuestoRetencionValue)
+                .HasColumnName("tipo_impuesto_retencion_value")
+                .HasMaxLength(4);
 
-        var tipoFormaDePago = modelBuilder.Entity<TipoFormaDePago>()
-            .ToTable("sat_tipo_forma_de_pago");
-        tipoFormaDePago.Property(p => p.TipoFormaDePagoId)
-            .HasColumnName("tipo_forma_de_pago_id");
-        tipoFormaDePago.Property(p => p.TipoFormaDePagoValue)
-            .HasColumnName("tipo_forma_de_pago_value");
+            var tipoImpuestoTraslado = modelBuilder.Entity<TipoImpuestoTraslado>()
+                .ToTable("sat_tipo_impuesto_traslado");
+                tipoImpuestoTraslado.Property(p => p.TipoImpuestoTrasladoId)
+                    .HasColumnName("tipo_impuesto_traslado_id");
+                tipoImpuestoTraslado.Property(p => p.TipoImpuestoTrasladoValue)
+                .HasColumnName("tipo_impuesto_traslado_value")
+                .HasMaxLength(4);
 
-        var tipoMoneda = modelBuilder.Entity<TipoMoneda>()
-                .ToTable("sat_tipo_moneda");
-        tipoMoneda.Property(p => p.TipoMonedaId)
-            .HasColumnName("tipo_moneda_id");
-        tipoMoneda.Property(p => p.TipoMonedaValue)
-            .HasColumnName("tipo_moneda_value");
+            var tipoFormaDePago = modelBuilder.Entity<TipoFormaDePago>()
+                .ToTable("sat_tipo_forma_de_pago");
+            tipoFormaDePago.Property(p => p.TipoFormaDePagoId)
+                .HasColumnName("tipo_forma_de_pago_id");
+            tipoFormaDePago.Property(p => p.TipoFormaDePagoValue)
+                .HasColumnName("tipo_forma_de_pago_value")
+                .HasMaxLength(128);
 
-        var banco = modelBuilder.Entity<Banco>()
-            .ToTable("sat_banco");
-        banco.Property(p => p.BancoId)
-            .HasColumnName("banco_id");
-        banco.Property(p => p.PublicKey)
-            .HasColumnName("public_key");
-        banco.Property(p => p.Clave)
-            .HasColumnName("clave");
-        banco.Property(p => p.NombreCorto)
-            .HasColumnName("nombre_corto");
-        banco.Property(p => p.RazonSocial)
-            .HasColumnName("razon_social");
-        banco.Property(p => p.Status)
-            .HasColumnName("status");
+            var tipoMoneda = modelBuilder.Entity<TipoMoneda>()
+                    .ToTable("sat_tipo_moneda");
+            tipoMoneda.Property(p => p.TipoMonedaId)
+                .HasColumnName("tipo_moneda_id");
+            tipoMoneda.Property(p => p.TipoMonedaValue)
+                .HasColumnName("tipo_moneda_value")
+                .HasMaxLength(4);
+
+            var banco = modelBuilder.Entity<Banco>()
+                .ToTable("sat_banco");
+            banco.Property(p => p.BancoId)
+                .HasColumnName("banco_id");
+            banco.Property(p => p.PublicKey)
+                .HasColumnName("public_key");
+            banco.Property(p => p.Clave)
+                .HasColumnName("clave")
+                .HasMaxLength(4);
+            banco.Property(p => p.NombreCorto)
+                .HasColumnName("nombre_corto")
+                .HasMaxLength(50);
+            banco.Property(p => p.RazonSocial)
+                .HasColumnName("razon_social")
+                .HasMaxLength(256);
+            banco.Property(p => p.Status)
+                .HasColumnName("status")
+                .HasMaxLength(50);
 
 
             var emisor = modelBuilder.Entity<Emisor>()
@@ -182,7 +199,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("public_key")
                 .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()));
             emisor.Property(p => p.RFC)
-                .HasColumnName("rfc");
+                .HasColumnName("rfc")
+                .HasMaxLength(25);
             emisor.Property(p => p.Nombre)
                 .HasColumnName("nombre");
 

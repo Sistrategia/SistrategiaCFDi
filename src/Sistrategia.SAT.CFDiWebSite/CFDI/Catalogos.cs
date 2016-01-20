@@ -9,6 +9,13 @@ using System.Text;
 
 namespace Sistrategia.SAT.CFDiWebSite.CFDI
 {
+    public class TipoTipoDeComprobante
+    {
+        [Key]
+        public int? TipoTipoDeComprobanteId { get; set; }
+        public string TipoTipoDeComprobanteValue { get; set; }
+    }
+
     public class TipoMetodoDePago
     {
         [Key]

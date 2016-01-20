@@ -13,10 +13,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                     {
                         banco_id = c.Int(nullable: false, identity: true),
                         public_key = c.Guid(nullable: false),
-                        clave = c.String(nullable: false),
-                        nombre_corto = c.String(nullable: false),
-                        razon_social = c.String(nullable: false),
-                        status = c.String(nullable: false),
+                        clave = c.String(nullable: false, maxLength: 4),
+                        nombre_corto = c.String(nullable: false, maxLength: 50),
+                        razon_social = c.String(nullable: false, maxLength: 256),
+                        status = c.String(nullable: false, maxLength: 50),
                     })
                 .PrimaryKey(t => t.banco_id);
             
@@ -181,7 +181,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                     {
                         emisor_id = c.Int(nullable: false, identity: true),
                         public_key = c.Guid(nullable: false),
-                        rfc = c.String(nullable: false, maxLength: 13),
+                        rfc = c.String(nullable: false, maxLength: 25),
                         nombre = c.String(maxLength: 256),
                         domicilio_fiscal_id = c.Int(),
                         expedido_en_id = c.Int(),
@@ -218,6 +218,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         pais = c.String(nullable: false, maxLength: 50),
                         codigo_postal = c.String(maxLength: 5),
                         lugar_expedicion = c.String(maxLength: 2048),
+                        status = c.String(maxLength: 50),
                         ubicacion_type = c.String(nullable: false, maxLength: 128),
                     })
                 .PrimaryKey(t => t.ubicacion_id)
@@ -230,6 +231,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         regimen_fiscal_id = c.Int(nullable: false, identity: true),
                         regimen = c.String(),
                         ordinal = c.Int(nullable: false),
+                        status = c.String(maxLength: 50),
                         emisor_id = c.Int(),
                     })
                 .PrimaryKey(t => t.regimen_fiscal_id)
@@ -307,7 +309,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 c => new
                     {
                         tipo_forma_de_pago_id = c.Int(nullable: false, identity: true),
-                        tipo_forma_de_pago_value = c.String(),
+                        tipo_forma_de_pago_value = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.tipo_forma_de_pago_id);
             
@@ -316,7 +318,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 c => new
                     {
                         tipo_impuesto_retencion_id = c.Int(nullable: false, identity: true),
-                        tipo_impuesto_retencion_value = c.String(),
+                        tipo_impuesto_retencion_value = c.String(maxLength: 4),
                     })
                 .PrimaryKey(t => t.tipo_impuesto_retencion_id);
             
@@ -325,7 +327,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 c => new
                     {
                         tipo_impuesto_traslado_id = c.Int(nullable: false, identity: true),
-                        tipo_impuesto_traslado_value = c.String(),
+                        tipo_impuesto_traslado_value = c.String(maxLength: 4),
                     })
                 .PrimaryKey(t => t.tipo_impuesto_traslado_id);
             
@@ -334,7 +336,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 c => new
                     {
                         tipo_metodo_de_pago_id = c.Int(nullable: false, identity: true),
-                        tipo_metodo_de_pago_value = c.String(),
+                        tipo_metodo_de_pago_value = c.String(maxLength: 50),
                     })
                 .PrimaryKey(t => t.tipo_metodo_de_pago_id);
             
@@ -343,9 +345,18 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 c => new
                     {
                         tipo_moneda_id = c.Int(nullable: false, identity: true),
-                        tipo_moneda_value = c.String(),
+                        tipo_moneda_value = c.String(maxLength: 4),
                     })
                 .PrimaryKey(t => t.tipo_moneda_id);
+            
+            CreateTable(
+                "dbo.sat_tipo_tipo_de_comprobante",
+                c => new
+                    {
+                        tipo_tipo_de_comprobante_id = c.Int(nullable: false, identity: true),
+                        tipo_tipo_de_comprobante_value = c.String(maxLength: 12),
+                    })
+                .PrimaryKey(t => t.tipo_tipo_de_comprobante_id);
             
             CreateTable(
                 "dbo.sat_timbre_fiscal_digital",
@@ -412,6 +423,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             DropIndex("dbo.sat_cancelacion_uuid_comprobantes", new[] { "comprobante_id" });
             DropIndex("dbo.sat_cancelacion_uuid_comprobantes", new[] { "cancelacion_id" });
             DropTable("dbo.sat_timbre_fiscal_digital");
+            DropTable("dbo.sat_tipo_tipo_de_comprobante");
             DropTable("dbo.sat_tipo_moneda");
             DropTable("dbo.sat_tipo_metodo_de_pago");
             DropTable("dbo.sat_tipo_impuesto_traslado");
