@@ -31,7 +31,11 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
 
         public virtual DbSet<Receptor> Receptores { get; set; }
 
+        public virtual DbSet<ComprobanteReceptor> ComprobantesReceptores { get; set; }
+
         public virtual DbSet<Comprobante> Comprobantes { get; set; }
+
+        public virtual DbSet<ComprobanteEmisor> ComprobantesEmisores { get; set; }
 
         public virtual DbSet<Cancelacion> Cancelaciones { get; set; }
 
@@ -200,14 +204,15 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()));
             emisor.Property(p => p.RFC)
                 .HasColumnName("rfc")
-                .HasMaxLength(25);
+                .HasMaxLength(13);
             emisor.Property(p => p.Nombre)
-                .HasColumnName("nombre");
+                .HasColumnName("nombre")
+                .HasMaxLength(256);
 
             emisor.Property(p => p.DomicilioFiscalId)
                 .HasColumnName("domicilio_fiscal_id");
-            emisor.Property(p => p.ExpedidoEnId)
-                .HasColumnName("expedido_en_id");
+            //emisor.Property(p => p.ExpedidoEnId)
+            //    .HasColumnName("expedido_en_id");
 
             emisor.Property(p => p.Telefono)
                 .HasColumnName("telefono");
@@ -267,6 +272,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .IsOptional() // .IsRequired() // Requerido
                 .HasMaxLength(2048);
 
+            ubicacion.Property(p => p.Ordinal)
+               .HasColumnName("ordinal");
+
             ubicacion.Property(p => p.Status)
                 .HasColumnName("status")
                 .HasMaxLength(50);
@@ -276,6 +284,11 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .Map<Ubicacion>(m => m.Requires("ubicacion_type").HasValue("Ubicacion"))
                 .Map<UbicacionFiscal>(m => m.Requires("ubicacion_type").HasValue("UbicacionFiscal"))
                 .ToTable("sat_ubicacion");
+
+            modelBuilder.Entity<Emisor>()
+                .HasMany<Ubicacion>(p => p.ExpedidoEn)
+                .WithOptional()
+                .Map(p => p.MapKey("emisor_id"));
 
             //modelBuilder.Entity<UbicacionFiscal>().Map(m =>
             //{
@@ -523,10 +536,15 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasPrecision(18, 6)
                 .IsOptional();
             //comprobante.Ignore(p => p.MontoFolioFiscalOrigSpecified);
-            comprobante.Property(p => p.EmisorId)
-                .HasColumnName("emisor_id");
-            comprobante.Property(p => p.ReceptorId)
-                .HasColumnName("receptor_id");
+            //comprobante.Property(p => p.EmisorId)
+            //    .HasColumnName("emisor_id");
+            //comprobante.Property(p => p.ReceptorId)
+            //    .HasColumnName("receptor_id");
+
+            comprobante.Property(p => p.ComprobanteEmisorId)
+                .HasColumnName("comprobante_emisor_id");
+            comprobante.Property(p => p.ComprobanteReceptorId)
+                .HasColumnName("comprobante_receptor_id");
 
             comprobante.Ignore(p => p.DecimalFormat);
 

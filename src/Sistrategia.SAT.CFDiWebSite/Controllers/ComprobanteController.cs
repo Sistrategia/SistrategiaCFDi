@@ -94,7 +94,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
-                
+
         [HttpPost]
         public JsonResult LoadComprobantes(int page, int pageSize, string search = null, string sort = null, string sortDir = null) {
             sortDir = string.IsNullOrEmpty(sortDir) ? "ASC" : sortDir;
@@ -122,28 +122,28 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                 List<Comprobante> Comprobantes = new List<Comprobante>();
                 if (search != null)
-                    Comprobantes = sortDir == "ASC" ? DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search) 
-                        || x.Total.ToString().Contains(search) 
+                    Comprobantes = sortDir == "ASC" ? DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search)
+                        || x.Total.ToString().Contains(search)
                         || x.Status.Contains(search)
                         || (x.Serie + x.Folio).Contains(search)
                         ).OrderBy(orderByFunc)
-                        .Take(((page - 1) * pageSize) + pageSize)                       
+                        .Take(((page - 1) * pageSize) + pageSize)
                         .Skip(((page - 1) * pageSize)).ToList()
-                        : 
+                        :
                         DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search)
                         || x.Total.ToString().Contains(search)
                         || x.Status.Contains(search)
                         || (x.Serie + x.Folio).Contains(search)
                         ).OrderByDescending(orderByFunc)
-                        .Take(((page - 1) * pageSize) + pageSize)                        
+                        .Take(((page - 1) * pageSize) + pageSize)
                         .Skip(((page - 1) * pageSize)).ToList();
                 else
                     Comprobantes = sortDir == "ASC" ? DBContext.Comprobantes.OrderBy(orderByFunc).Take(((page - 1) * pageSize) + pageSize).Skip(((page - 1) * pageSize)).ToList()
                         : DBContext.Comprobantes.OrderByDescending(orderByFunc).Take(((page - 1) * pageSize) + pageSize).Skip(((page - 1) * pageSize)).ToList();
-               
+
                 if (Comprobantes.Count > 0) {
-                    int ComprobantesTotalRows = DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search) 
-                                                                            || x.Total.ToString().Contains(search) 
+                    int ComprobantesTotalRows = DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search)
+                                                                            || x.Total.ToString().Contains(search)
                                                                             || x.Status.Contains(search)
                                                                             || (x.Serie + x.Folio).Contains(search)
                                                                             ).Count();
@@ -243,7 +243,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     Text = moneda.TipoMonedaValue
                 });
             }
-            model.TiposMoneda = monedasListSelectList;  
+            model.TiposMoneda = monedasListSelectList;
 
             return View(model);
         }
@@ -282,10 +282,60 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                     var comprobante = new Comprobante();
 
-                    comprobante.EmisorId = model.EmisorId;
-                    comprobante.Emisor = DBContext.Emisores.Find(model.EmisorId); // .Where(e => e.PublicKey == publicKey).SingleOrDefault();
-                    comprobante.ReceptorId = model.ReceptorId;
-                    comprobante.Receptor = DBContext.Receptores.Find(model.ReceptorId); // .Where(e => e.PublicKey == publicKey).SingleOrDefault();
+                    Emisor emisor = DBContext.Emisores.Find(model.EmisorId);
+
+                    ComprobanteEmisor comprobanteEmisor = null;
+
+                    if (model.ExpedidoEn != null && model.ExpedidoEn.UbicacionId != null) {
+                        comprobanteEmisor = DBContext.ComprobantesEmisores.Where(e => e.EmisorId == emisor.EmisorId && e.DomicilioFiscalId == emisor.DomicilioFiscalId && e.ExpedidoEnId == model.ExpedidoEn.UbicacionId).SingleOrDefault();
+                    }
+                    else {
+                        // crear o seleccionar la ubicación y agregarla
+                        //comprobanteEmisor = DBContext.ComprobantesEmisores.Where(e => e.EmisorId == model.EmisorId && e.DomicilioFiscalId == model.DomicilioFiscalId && e.ExpedidoEnId == model.ExpedidoEnId);
+                    }
+
+                    // Crear uno nuevo
+                    if (comprobanteEmisor == null) {
+                        comprobanteEmisor = new ComprobanteEmisor {
+                            Emisor = emisor,
+                            //EmisorId = emisor.EmisorId,
+                            DomicilioFiscal = emisor.DomicilioFiscal
+                            //,DomicilioId = receptor.DomicilioId
+                            // TODO:
+                            //RegimenFiscal = emisor.RegimenFiscal
+                        };
+
+                    }
+
+                    comprobante.Emisor = comprobanteEmisor;
+
+                    //comprobante.EmisorId = model.EmisorId;
+                    //comprobante.Emisor = DBContext.Emisores.Find(model.EmisorId); // .Where(e => e.PublicKey == publicKey).SingleOrDefault();
+                    //if (model.Emisor. .ExpedidoEnId != null) {
+                    //    comprobante.Emisor = DBContext.ComprobantesEmisores.Where(e => e.EmisorId == model.EmisorId && e.DomicilioFiscalId == model.DomicilioFiscalId && e.ExpedidoEnId == model.ExpedidoEnId);
+                    //}
+                    //else {
+                    //    comprobante.Emisor = DBContext.ComprobantesEmisores.Where(e => e.EmisorId == model.EmisorId && e.DomicilioFiscalId == model.DomicilioFiscalId && e.ExpedidoEnId == model.ExpedidoEnId);
+                    //}
+
+                    Receptor receptor = DBContext.Receptores.Find(model.ReceptorId);
+
+                    ComprobanteReceptor comprobanteReceptor = DBContext.ComprobantesReceptores.Where(r => r.ReceptorId == receptor.ReceptorId && r.DomicilioId == receptor.DomicilioId).SingleOrDefault();
+
+                    // Crear uno nuevo
+                    if (comprobanteReceptor == null) {
+                        comprobanteReceptor = new ComprobanteReceptor {
+                            Receptor = receptor,
+                            //ReceptorId = receptor.ReceptorId,
+                            Domicilio = receptor.Domicilio
+                            //,DomicilioId = receptor.DomicilioId
+                        };
+                    }
+
+
+                    //comprobante.ReceptorId = model.ReceptorId;
+                    //comprobante.Receptor = DBContext.Receptores.Find(model.ReceptorId); // .Where(e => e.PublicKey == publicKey).SingleOrDefault();
+                    comprobante.Receptor = comprobanteReceptor;
                     comprobante.Serie = model.Serie;
                     comprobante.Folio = model.Folio;
                     comprobante.Fecha = DateTime.Now + SATManager.GetCFDIServiceTimeSpan();
@@ -413,6 +463,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 try {
 
                     Comprobante comprobante = new Comprobante();
+                    Emisor comprobanteEmisor = null;// new Emisor();
+                    Receptor comprobanteReceptor = null; // new Receptor();
                     Certificado certificado = new Certificado();
 
                     if (model.ComprobanteArchivo != null) {
@@ -519,14 +571,17 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                 }
 
                                 else if ("cfdi:Emisor".Equals(xmlReader.Name)) {
-                                    comprobante.Emisor = new Emisor();
+                                    //comprobante.Emisor = new Emisor();
+                                    comprobanteEmisor = new Emisor();
                                     while (xmlReader.MoveToNextAttribute()) {
                                         switch (xmlReader.Name) {
                                             case "rfc":
-                                                comprobante.Emisor.RFC = xmlReader.Value;
+                                                //comprobante.Emisor.RFC = xmlReader.Value;
+                                                comprobanteEmisor.RFC = xmlReader.Value;
                                                 break;
                                             case "nombre":
-                                                comprobante.Emisor.Nombre = xmlReader.Value;
+                                                //comprobante.Emisor.Nombre = xmlReader.Value;
+                                                comprobanteEmisor.Nombre = xmlReader.Value;
                                                 break;
                                             default:
                                                 throw new Exception(xmlReader.Name + "is not a valid attribute for cfdi:Emisor.");
@@ -535,38 +590,38 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                 }
 
                                 else if ("cfdi:DomicilioFiscal".Equals(xmlReader.Name)) {
-                                    comprobante.Emisor.DomicilioFiscal = new UbicacionFiscal();
+                                    comprobanteEmisor.DomicilioFiscal = new UbicacionFiscal();
                                     while (xmlReader.MoveToNextAttribute()) {
                                         switch (xmlReader.Name) {
                                             case "calle":
-                                                comprobante.Emisor.DomicilioFiscal.Calle = xmlReader.Value;
+                                                comprobanteEmisor.DomicilioFiscal.Calle = xmlReader.Value;
                                                 break;
                                             case "noExterior":
-                                                comprobante.Emisor.DomicilioFiscal.NoExterior = xmlReader.Value;
+                                                comprobanteEmisor.DomicilioFiscal.NoExterior = xmlReader.Value;
                                                 break;
                                             case "noInterior":
-                                                comprobante.Emisor.DomicilioFiscal.NoInterior = xmlReader.Value;
+                                                comprobanteEmisor.DomicilioFiscal.NoInterior = xmlReader.Value;
                                                 break;
                                             case "colonia":
-                                                comprobante.Emisor.DomicilioFiscal.Colonia = xmlReader.Value;
+                                                comprobanteEmisor.DomicilioFiscal.Colonia = xmlReader.Value;
                                                 break;
                                             case "localidad":
-                                                comprobante.Emisor.DomicilioFiscal.Localidad = xmlReader.Value;
+                                                comprobanteEmisor.DomicilioFiscal.Localidad = xmlReader.Value;
                                                 break;
                                             case "referencia":
-                                                comprobante.Emisor.DomicilioFiscal.Referencia = xmlReader.Value;
+                                                comprobanteEmisor.DomicilioFiscal.Referencia = xmlReader.Value;
                                                 break;
                                             case "municipio":
-                                                comprobante.Emisor.DomicilioFiscal.Municipio = xmlReader.Value;
+                                                comprobanteEmisor.DomicilioFiscal.Municipio = xmlReader.Value;
                                                 break;
                                             case "estado":
-                                                comprobante.Emisor.DomicilioFiscal.Estado = xmlReader.Value;
+                                                comprobanteEmisor.DomicilioFiscal.Estado = xmlReader.Value;
                                                 break;
                                             case "pais":
-                                                comprobante.Emisor.DomicilioFiscal.Pais = xmlReader.Value;
+                                                comprobanteEmisor.DomicilioFiscal.Pais = xmlReader.Value;
                                                 break;
                                             case "codigoPostal":
-                                                comprobante.Emisor.DomicilioFiscal.CodigoPostal = xmlReader.Value;
+                                                comprobanteEmisor.DomicilioFiscal.CodigoPostal = xmlReader.Value;
                                                 break;
                                             default:
                                                 throw new Exception(xmlReader.Name + "is not a valid attribute for cfdi:DomicilioFiscal.");
@@ -575,13 +630,14 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                 }
 
                                 else if ("cfdi:RegimenFiscal".Equals(xmlReader.Name)) {
-                                    if (comprobante.Emisor.RegimenFiscal == null)
-                                        comprobante.Emisor.RegimenFiscal = new List<RegimenFiscal>();
+                                    if (comprobanteEmisor.RegimenFiscal == null)
+                                        comprobanteEmisor.RegimenFiscal = new List<RegimenFiscal>();
                                     while (xmlReader.MoveToNextAttribute()) {
                                         switch (xmlReader.Name) {
                                             case "Regimen":
                                                 RegimenFiscal regimen = new RegimenFiscal();
                                                 regimen.Regimen = xmlReader.Value;
+                                                comprobanteEmisor.RegimenFiscal.Add(regimen);
                                                 break;
                                             default:
                                                 throw new Exception(xmlReader.Name + "is not a valid attribute for cfdi:RegimenFiscal.");
@@ -590,14 +646,17 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                 }
 
                                 else if ("cfdi:Receptor".Equals(xmlReader.Name)) {
-                                    comprobante.Receptor = new Receptor();
+                                    //comprobante.Receptor = new Receptor();
+                                    comprobanteReceptor = new Receptor();
                                     while (xmlReader.MoveToNextAttribute()) {
                                         switch (xmlReader.Name) {
                                             case "rfc":
-                                                comprobante.Receptor.RFC = xmlReader.Value;
+                                                //comprobante.Receptor.RFC = xmlReader.Value;
+                                                comprobanteReceptor.RFC = xmlReader.Value;
                                                 break;
                                             case "nombre":
-                                                comprobante.Receptor.Nombre = xmlReader.Value;
+                                                //comprobante.Receptor.Nombre = xmlReader.Value;
+                                                comprobanteReceptor.Nombre = xmlReader.Value;
                                                 break;
                                             default:
                                                 throw new Exception(xmlReader.Name + "is not a valid attribute for cfdi:Receptor.");
@@ -606,38 +665,39 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                 }
 
                                 else if ("cfdi:Domicilio".Equals(xmlReader.Name)) {
-                                    comprobante.Receptor.Domicilio = new Ubicacion();
+                                    //comprobante.Receptor.Domicilio = new Ubicacion();
+                                    comprobanteReceptor.Domicilio = new Ubicacion();
                                     while (xmlReader.MoveToNextAttribute()) {
                                         switch (xmlReader.Name) {
                                             case "calle":
-                                                comprobante.Receptor.Domicilio.Calle = xmlReader.Value;
+                                                comprobanteReceptor.Domicilio.Calle = xmlReader.Value;
                                                 break;
                                             case "noExterior":
-                                                comprobante.Receptor.Domicilio.NoExterior = xmlReader.Value;
+                                                comprobanteReceptor.Domicilio.NoExterior = xmlReader.Value;
                                                 break;
                                             case "noInterior":
-                                                comprobante.Receptor.Domicilio.NoInterior = xmlReader.Value;
+                                                comprobanteReceptor.Domicilio.NoInterior = xmlReader.Value;
                                                 break;
                                             case "colonia":
-                                                comprobante.Receptor.Domicilio.Colonia = xmlReader.Value;
+                                                comprobanteReceptor.Domicilio.Colonia = xmlReader.Value;
                                                 break;
                                             case "localidad":
-                                                comprobante.Receptor.Domicilio.Localidad = xmlReader.Value;
+                                                comprobanteReceptor.Domicilio.Localidad = xmlReader.Value;
                                                 break;
                                             case "referencia":
-                                                comprobante.Receptor.Domicilio.Referencia = xmlReader.Value;
+                                                comprobanteReceptor.Domicilio.Referencia = xmlReader.Value;
                                                 break;
                                             case "municipio":
-                                                comprobante.Receptor.Domicilio.Municipio = xmlReader.Value;
+                                                comprobanteReceptor.Domicilio.Municipio = xmlReader.Value;
                                                 break;
                                             case "estado":
-                                                comprobante.Receptor.Domicilio.Estado = xmlReader.Value;
+                                                comprobanteReceptor.Domicilio.Estado = xmlReader.Value;
                                                 break;
                                             case "pais":
-                                                comprobante.Receptor.Domicilio.Pais = xmlReader.Value;
+                                                comprobanteReceptor.Domicilio.Pais = xmlReader.Value;
                                                 break;
                                             case "codigoPostal":
-                                                comprobante.Receptor.Domicilio.CodigoPostal = xmlReader.Value;
+                                                comprobanteReceptor.Domicilio.CodigoPostal = xmlReader.Value;
                                                 break;
                                             default:
                                                 throw new Exception(xmlReader.Name + "is not a valid attribute for cfdi:Domicilio.");
@@ -801,7 +861,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                             }
                         }
 
-                        if (comprobante.Emisor != null) {
+                        if (comprobanteEmisor != null) {
                             //Emisor emisor = DBContext.Emisores.Where(e => 
                             //    (e.RFC == comprobante.Emisor.RFC)
                             //    && (e.Nombre == comprobante.Emisor.Nombre)                                
@@ -809,49 +869,77 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                             //    ).SingleOrDefault();
 
                             List<Emisor> emisores = DBContext.Emisores.Where(e =>
-                                (e.RFC == comprobante.Emisor.RFC)
-                                && (e.Nombre == comprobante.Emisor.Nombre)
+                                (e.RFC == comprobanteEmisor.RFC)
+                                && (e.Nombre == comprobanteEmisor.Nombre)
                                 ).ToList();
 
                             if (emisores != null && emisores.Count > 0) {
                                 foreach (Emisor emisor in emisores) {
 
-                                    if ((emisor.DomicilioFiscal != null && comprobante.Emisor.DomicilioFiscal != null)
-                                        && (emisor.DomicilioFiscal.Calle == comprobante.Emisor.DomicilioFiscal.Calle)
-                                        && (emisor.DomicilioFiscal.NoExterior == comprobante.Emisor.DomicilioFiscal.NoExterior)
-                                        && (emisor.DomicilioFiscal.NoInterior == comprobante.Emisor.DomicilioFiscal.NoInterior)
-                                        && (emisor.DomicilioFiscal.Colonia == comprobante.Emisor.DomicilioFiscal.Colonia)
-                                        && (emisor.DomicilioFiscal.Referencia == comprobante.Emisor.DomicilioFiscal.Referencia)
-                                        && (emisor.DomicilioFiscal.Localidad == comprobante.Emisor.DomicilioFiscal.Localidad)
-                                        && (emisor.DomicilioFiscal.Municipio == comprobante.Emisor.DomicilioFiscal.Municipio)
-                                        && (emisor.DomicilioFiscal.Estado == comprobante.Emisor.DomicilioFiscal.Estado)
-                                        && (emisor.DomicilioFiscal.CodigoPostal == comprobante.Emisor.DomicilioFiscal.CodigoPostal)
-                                        && (emisor.DomicilioFiscal.Pais == comprobante.Emisor.DomicilioFiscal.Pais)
+                                    if ((emisor.DomicilioFiscal != null && comprobanteEmisor.DomicilioFiscal != null)
+                                        && (emisor.DomicilioFiscal.Calle == comprobanteEmisor.DomicilioFiscal.Calle)
+                                        && (emisor.DomicilioFiscal.NoExterior == comprobanteEmisor.DomicilioFiscal.NoExterior)
+                                        && (emisor.DomicilioFiscal.NoInterior == comprobanteEmisor.DomicilioFiscal.NoInterior)
+                                        && (emisor.DomicilioFiscal.Colonia == comprobanteEmisor.DomicilioFiscal.Colonia)
+                                        && (emisor.DomicilioFiscal.Referencia == comprobanteEmisor.DomicilioFiscal.Referencia)
+                                        && (emisor.DomicilioFiscal.Localidad == comprobanteEmisor.DomicilioFiscal.Localidad)
+                                        && (emisor.DomicilioFiscal.Municipio == comprobanteEmisor.DomicilioFiscal.Municipio)
+                                        && (emisor.DomicilioFiscal.Estado == comprobanteEmisor.DomicilioFiscal.Estado)
+                                        && (emisor.DomicilioFiscal.CodigoPostal == comprobanteEmisor.DomicilioFiscal.CodigoPostal)
+                                        && (emisor.DomicilioFiscal.Pais == comprobanteEmisor.DomicilioFiscal.Pais)
                                         ) {
 
                                         //if (receptor != null) {
-                                        comprobante.Emisor = emisor;
-                                        comprobante.EmisorId = emisor.EmisorId;
+                                        comprobanteEmisor = emisor;
+                                        comprobanteEmisor.EmisorId = emisor.EmisorId;
+                                        comprobanteEmisor.DomicilioFiscal = emisor.DomicilioFiscal;
+                                        comprobanteEmisor.DomicilioFiscalId = emisor.DomicilioFiscalId;
                                     }
                                 }
-                                if (comprobante.EmisorId == null) {
+                                //if (comprobanteEmisor.DomicilioFiscalId == null) {
+                                //    // The address has changed, create a new one and inactive the oldone
+                                //    foreach (Emisor emisor in emisores) {
+                                //        emisor.Status = "I";
+                                //    }
+                                //    comprobante.Emisor.Status = "A";
+
+                                //}
+                                if (comprobanteEmisor.EmisorId == null) {
                                     // The address has changed, create a new one and inactive the oldone
 
                                     foreach (Emisor emisor in emisores) {
                                         emisor.Status = "I";
                                     }
 
-                                    comprobante.Emisor.Status = "A";
+                                    comprobanteEmisor.Status = "A";
+
+                                    comprobante.Emisor = new ComprobanteEmisor {
+                                        Emisor = comprobanteEmisor,
+                                        //EmisorId = emisor.EmisorId,
+                                        DomicilioFiscal = comprobanteEmisor.DomicilioFiscal
+                                        //,DomicilioId = receptor.DomicilioId
+                                        // TODO:
+                                        //RegimenFiscal = emisor.RegimenFiscal
+                                    };
 
                                 }
+                                
 
                             }
                             else {
-                                comprobante.Emisor.Status = "A";
+                                comprobante.Emisor = new ComprobanteEmisor {
+                                    Emisor = comprobanteEmisor,
+                                    //EmisorId = emisor.EmisorId,
+                                    DomicilioFiscal = comprobanteEmisor.DomicilioFiscal
+                                    //,DomicilioId = receptor.DomicilioId
+                                    // TODO:
+                                    //RegimenFiscal = emisor.RegimenFiscal
+                                };
+                                comprobanteEmisor.Status = "A";
                             }
                         }
 
-                        if (comprobante.Receptor != null) {
+                        if (comprobanteReceptor != null) {
                             //Receptor receptor = DBContext.Receptores.Where(r =>
                             //    (r.RFC == comprobante.Receptor.RFC)
                             //    && (r.Nombre == comprobante.Receptor.Nombre)
@@ -859,44 +947,59 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                             //    ).SingleOrDefault();
 
                             List<Receptor> receptores = DBContext.Receptores.Where(r =>
-                                (r.RFC == comprobante.Receptor.RFC)
-                                && (r.Nombre == comprobante.Receptor.Nombre)
+                                (r.RFC == comprobanteReceptor.RFC)
+                                && (r.Nombre == comprobanteReceptor.Nombre)
                                 ).ToList();
 
                             if (receptores != null && receptores.Count > 0) {
                                 foreach (Receptor receptor in receptores) {
 
-                                    if ((receptor.Domicilio != null && comprobante.Receptor.Domicilio != null)
-                                        && (receptor.Domicilio.Calle == comprobante.Receptor.Domicilio.Calle)
-                                        && (receptor.Domicilio.NoExterior == comprobante.Receptor.Domicilio.NoExterior)
-                                        && (receptor.Domicilio.NoInterior == comprobante.Receptor.Domicilio.NoInterior)
-                                        && (receptor.Domicilio.Colonia == comprobante.Receptor.Domicilio.Colonia)
-                                        && (receptor.Domicilio.Referencia == comprobante.Receptor.Domicilio.Referencia)
-                                        && (receptor.Domicilio.Localidad == comprobante.Receptor.Domicilio.Localidad)
-                                        && (receptor.Domicilio.Municipio == comprobante.Receptor.Domicilio.Municipio)
-                                        && (receptor.Domicilio.Estado == comprobante.Receptor.Domicilio.Estado)
-                                        && (receptor.Domicilio.CodigoPostal == comprobante.Receptor.Domicilio.CodigoPostal)
-                                        && (receptor.Domicilio.Pais == comprobante.Receptor.Domicilio.Pais)
+                                    if ((receptor.Domicilio != null && comprobanteReceptor.Domicilio != null)
+                                        && (receptor.Domicilio.Calle == comprobanteReceptor.Domicilio.Calle)
+                                        && (receptor.Domicilio.NoExterior == comprobanteReceptor.Domicilio.NoExterior)
+                                        && (receptor.Domicilio.NoInterior == comprobanteReceptor.Domicilio.NoInterior)
+                                        && (receptor.Domicilio.Colonia == comprobanteReceptor.Domicilio.Colonia)
+                                        && (receptor.Domicilio.Referencia == comprobanteReceptor.Domicilio.Referencia)
+                                        && (receptor.Domicilio.Localidad == comprobanteReceptor.Domicilio.Localidad)
+                                        && (receptor.Domicilio.Municipio == comprobanteReceptor.Domicilio.Municipio)
+                                        && (receptor.Domicilio.Estado == comprobanteReceptor.Domicilio.Estado)
+                                        && (receptor.Domicilio.CodigoPostal == comprobanteReceptor.Domicilio.CodigoPostal)
+                                        && (receptor.Domicilio.Pais == comprobanteReceptor.Domicilio.Pais)
                                         ) {
 
                                         //if (receptor != null) {
-                                        comprobante.Receptor = receptor;
-                                        comprobante.ReceptorId = receptor.ReceptorId;
+                                        comprobanteReceptor = receptor;
+                                        comprobanteReceptor.ReceptorId = receptor.ReceptorId;
+                                        comprobanteReceptor.Domicilio = receptor.Domicilio;
+                                        comprobanteReceptor.DomicilioId = receptor.DomicilioId;
                                     }
                                 }
-                                if (comprobante.ReceptorId == null) {
+                                if (comprobanteReceptor.ReceptorId == null) {
                                     // The address has changed, create a new one and inactive the oldone
 
                                     foreach (Receptor receptor in receptores) {
                                         receptor.Status = "I";
                                     }
 
-                                    comprobante.Receptor.Status = "A";
+                                    comprobanteReceptor.Status = "A";
+
+                                    comprobante.Receptor = new ComprobanteReceptor {
+                                        Receptor = comprobanteReceptor,
+                                        //ReceptorId = comprobanteReceptor.ReceptorId,
+                                        Domicilio = comprobanteReceptor.Domicilio
+                                        //,DomicilioId = comprobanteReceptor.DomicilioId
+                                    };
 
                                 }
                             }
                             else {
-                                comprobante.Receptor.Status = "A";
+                                comprobanteReceptor.Status = "A";
+                                comprobante.Receptor = new ComprobanteReceptor {
+                                    Receptor = comprobanteReceptor,
+                                    //ReceptorId = comprobanteReceptor.ReceptorId,
+                                    Domicilio = comprobanteReceptor.Domicilio
+                                    //,DomicilioId = comprobanteReceptor.DomicilioId
+                                };
                             }
 
                             //if (receptor != null) {
@@ -923,8 +1026,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         }
 
                         comprobante.ExtendedIntValue1 = DBContext.Comprobantes.Max(c => c.ExtendedIntValue1) + 1; // DBContext.Comprobantes.Count() + 1;
-                        if (comprobante.ReceptorId != null)
-                            comprobante.ExtendedIntValue2 = comprobante.ReceptorId;
+                        if (comprobante.Receptor.ReceptorId != null)
+                            comprobante.ExtendedIntValue2 = comprobante.Receptor.ReceptorId;
                         else
                             comprobante.ExtendedIntValue2 = DBContext.Receptores.Count() + 1;
 
@@ -973,7 +1076,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             Guid publicKey = Guid.Parse(id);
             var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey && e.Status == "P")
                 .SingleOrDefault();
-            var model = new ComprobanteCreateViewModel(comprobante);
+            var model = new ComprobanteEditViewModel(comprobante);
 
             var tipoMetodoDePagoList = DBContext.TiposMetodoDePago.ToList();
             var tipoMetodoDePagoSelectList = new List<SelectListItem>();
@@ -1046,7 +1149,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             List<dynamic> itemList2 = new List<dynamic>();
 
             if (model.Traslados != null && model.Traslados.Count > 0) {
-              
+
                 int ordinal = 0;
                 foreach (TrasladoViewModel traslado in model.Traslados) {
                     ordinal++;
@@ -1412,7 +1515,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                 //            select c;
 
 
-                            
+
 
 
                                 //if (model.ComprobantePDFArchivo != null && model.ComprobantePDFArchivo.ContentLength > 0) {
@@ -1620,7 +1723,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(certificado.GetSello(cadenaOriginal));
             return Content(System.Convert.ToBase64String(plainTextBytes), "text/plain"); // cadenaOriginal; // File(ms, "text/xml");
         }
-        
+
         public ActionResult GetPDF(string id) {
             Guid publicKey;
             if (!Guid.TryParse(id, out publicKey))

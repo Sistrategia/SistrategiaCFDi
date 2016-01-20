@@ -45,6 +45,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         }
 
         public ReceptorDetailsViewModel(Receptor receptor) {
+        //public ReceptorDetailsViewModel(ComprobanteReceptor receptor) {
             if (receptor == null)
                 throw new ArgumentNullException("receptor");
 
