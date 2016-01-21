@@ -417,6 +417,26 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                .HasColumnName("status")
                .HasMaxLength(50);
 
+            var comprobanteEmisor = modelBuilder.Entity<ComprobanteEmisor>()
+                .ToTable("sat_comprobante_emisor");
+            comprobanteEmisor.Property(p => p.ComprobanteEmisorId)
+                .HasColumnName("comprobante_emisor_id");
+            comprobanteEmisor.Property(p => p.EmisorId)
+                .HasColumnName("emisor_id");
+            comprobanteEmisor.Property(p => p.DomicilioFiscalId)
+                .HasColumnName("domicilio_fiscal_id");
+            comprobanteEmisor.Property(p => p.ExpedidoEnId)
+                .HasColumnName("expedido_en_id");
+
+            var comprobanteReceptor = modelBuilder.Entity<ComprobanteReceptor>()
+                .ToTable("sat_comprobante_receptor");
+            comprobanteReceptor.Property(p => p.ComprobanteReceptorId)
+                .HasColumnName("comprobante_receptor_id");
+            comprobanteReceptor.Property(p => p.ReceptorId)
+                .HasColumnName("receptor_id");
+            comprobanteReceptor.Property(p => p.DomicilioId)
+                .HasColumnName("domicilio_id");            
+
             var comprobante = modelBuilder.Entity<Comprobante>()
                 .ToTable("sat_comprobante");
             comprobante.Property(p => p.ComprobanteId)

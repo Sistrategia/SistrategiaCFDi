@@ -104,7 +104,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 Func<Comprobante, Object> orderByFunc = null;
                 switch (sort) {
                     case "ReceptorNombre":
-                        orderByFunc = sl => sl.Receptor.Nombre;
+                        //orderByFunc = sl => sl.Receptor.Nombre;
+                        orderByFunc = sl => sl.Receptor.Receptor.Nombre;
                         break;
                     case "Fecha":
                         orderByFunc = sl => sl.Fecha;
@@ -122,7 +123,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                 List<Comprobante> Comprobantes = new List<Comprobante>();
                 if (search != null)
-                    Comprobantes = sortDir == "ASC" ? DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search)
+                    //Comprobantes = sortDir == "ASC" ? DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search)
+                    Comprobantes = sortDir == "ASC" ? DBContext.Comprobantes.Where(x => x.Receptor.Receptor.Nombre.Contains(search)
                         || x.Total.ToString().Contains(search)
                         || x.Status.Contains(search)
                         || (x.Serie + x.Folio).Contains(search)
@@ -130,7 +132,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         .Take(((page - 1) * pageSize) + pageSize)
                         .Skip(((page - 1) * pageSize)).ToList()
                         :
-                        DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search)
+                        //DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search)
+                        DBContext.Comprobantes.Where(x => x.Receptor.Receptor.Nombre.Contains(search)
                         || x.Total.ToString().Contains(search)
                         || x.Status.Contains(search)
                         || (x.Serie + x.Folio).Contains(search)
@@ -142,7 +145,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         : DBContext.Comprobantes.OrderByDescending(orderByFunc).Take(((page - 1) * pageSize) + pageSize).Skip(((page - 1) * pageSize)).ToList();
 
                 if (Comprobantes.Count > 0) {
-                    int ComprobantesTotalRows = DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search)
+                    //int ComprobantesTotalRows = DBContext.Comprobantes.Where(x => x.Receptor.Nombre.Contains(search)
+                    int ComprobantesTotalRows = DBContext.Comprobantes.Where(x => x.Receptor.Receptor.Nombre.Contains(search)
                                                                             || x.Total.ToString().Contains(search)
                                                                             || x.Status.Contains(search)
                                                                             || (x.Serie + x.Folio).Contains(search)
