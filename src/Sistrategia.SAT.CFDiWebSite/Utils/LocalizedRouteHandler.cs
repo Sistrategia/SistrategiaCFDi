@@ -57,8 +57,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Utils
         private static IHttpHandler GetDefaultLocaleRedirectHandler(RequestContext requestContext) {
             var uiCulture = CultureInfo.CurrentUICulture;
             var routeValues = requestContext.RouteData.Values;
-            if (uiCulture.Name.StartsWith("es-"))
+            if (requestContext.HttpContext.Request.Headers["Accept-Language"].StartsWith("es,")) {
+                //if (uiCulture.Name.StartsWith("es-"))
                 routeValues["culture"] = "es-MX"; // intercept default es-ES for "es".
+            } 
             else
                 routeValues["culture"] = uiCulture.Name;
             return new CustomRedirectHandler(new UrlHelper(requestContext).RouteUrl(routeValues));

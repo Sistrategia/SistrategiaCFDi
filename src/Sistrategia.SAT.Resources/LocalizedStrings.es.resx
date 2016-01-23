@@ -357,4 +357,7 @@
   <data name="PhoneField" xml:space="preserve">
     <value>Teléfono</value>
   </data>
+  <data name="AddButton" xml:space="preserve">
+    <value>Agregar</value>
+  </data>
 </root>

@@ -46,11 +46,11 @@
             <tbody data-bind='foreach: DataList' id="lista">
                 <tr>
                     <td>
-                        <a href="#" data-bind="attr: { href: '@Url.Action("Details", "Certificado")/'+ $data.public_key }">
-                            <div class="circle noselect">
-                                <span data-bind='text: certificado_initial_letter' class="text-center"></span>
-                            </div>
-                        </a>
+                      <a href="#" style="text-decoration: none" data-bind="attr: { href: '@Url.Action("Details", "Certificado")/'+ $data.public_key }">
+                        <div class="circle noselect">
+                          <span data-bind='text: certificado_initial_letter' class="text-center"></span>
+                        </div>
+                      </a>
                     </td>
                     <td>
                         <h4 class="media-heading">
