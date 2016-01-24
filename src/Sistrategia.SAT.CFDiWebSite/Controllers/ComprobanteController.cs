@@ -898,6 +898,19 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                         comprobanteEmisor.EmisorId = emisor.EmisorId;
                                         comprobanteEmisor.DomicilioFiscal = emisor.DomicilioFiscal;
                                         comprobanteEmisor.DomicilioFiscalId = emisor.DomicilioFiscalId;
+                                        //comprobante.Emisor = DBContext.ComprobantesEmisores.Where( e => e.EmisorId == emisor.EmisorId && e.DomicilioFiscalId = emisor.DomicilioFiscalId && e.ExpedidoEnId)
+                                        comprobante.Emisor = DBContext.ComprobantesEmisores.Where(e => e.EmisorId == emisor.EmisorId && e.DomicilioFiscalId == emisor.DomicilioFiscalId).SingleOrDefault();
+
+                                        if (comprobante.Emisor == null) {
+                                            comprobante.Emisor = new ComprobanteEmisor {
+                                                Emisor = comprobanteEmisor,
+                                                //EmisorId = emisor.EmisorId,
+                                                DomicilioFiscal = comprobanteEmisor.DomicilioFiscal
+                                                //,DomicilioId = receptor.DomicilioId
+                                                // TODO:
+                                                //RegimenFiscal = emisor.RegimenFiscal
+                                            };
+                                        }
                                     }
                                 }
                                 //if (comprobanteEmisor.DomicilioFiscalId == null) {
@@ -976,6 +989,17 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                                         comprobanteReceptor.ReceptorId = receptor.ReceptorId;
                                         comprobanteReceptor.Domicilio = receptor.Domicilio;
                                         comprobanteReceptor.DomicilioId = receptor.DomicilioId;
+
+                                        comprobante.Receptor = DBContext.ComprobantesReceptores.Where(r => r.ReceptorId == receptor.ReceptorId && r.DomicilioId == receptor.DomicilioId).SingleOrDefault();
+
+                                        if (comprobante.Receptor == null) {
+                                            comprobante.Receptor = new ComprobanteReceptor {
+                                                Receptor = comprobanteReceptor,
+                                                //ReceptorId = comprobanteReceptor.ReceptorId,
+                                                Domicilio = comprobanteReceptor.Domicilio
+                                                //,DomicilioId = comprobanteReceptor.DomicilioId
+                                            };
+                                        }
                                     }
                                 }
                                 if (comprobanteReceptor.ReceptorId == null) {
