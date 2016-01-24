@@ -364,4 +364,7 @@
   <data name="AddButton" xml:space="preserve">
     <value>Add</value>
   </data>
+  <data name="OrdinalField" xml:space="preserve">
+    <value>Orden</value>
+  </data>
 </root>

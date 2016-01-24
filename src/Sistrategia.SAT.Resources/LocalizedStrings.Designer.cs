@@ -700,6 +700,15 @@ namespace Sistrategia.SAT.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Orden.
+        /// </summary>
+        public static string OrdinalField {
+            get {
+                return ResourceManager.GetString("OrdinalField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string Password {
