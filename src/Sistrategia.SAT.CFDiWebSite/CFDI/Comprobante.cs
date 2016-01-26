@@ -1073,8 +1073,10 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //[XmlElement("ExpedidoEn")]
         public virtual Ubicacion ExpedidoEn { get; set; }
 
-        [NotMapped]
-        public virtual List<RegimenFiscal> RegimenFiscal { get { return this.Emisor.RegimenFiscal; } }
+        //[NotMapped]
+        //public virtual List<RegimenFiscal> RegimenFiscal { get { return this.Emisor.RegimenFiscal; } }
+
+        public virtual List<ComprobanteEmisorRegimenFiscal> RegimenFiscal { get; set; }
 
         [NotMapped]
         public string Telefono { get { return this.Emisor.Telefono; } }
@@ -1088,6 +1090,36 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public int? ViewTemplateId { get { return this.Emisor.ViewTemplateId; } }
         [NotMapped]
         public ViewTemplate ViewTemplate { get { return this.Emisor.ViewTemplate; } }
+    }
+
+    //public class ComprobanteEmisorRegimenFiscal
+    //{
+    //    [Key]
+    //    public int ComprobanteEmisorId { get; set; }
+
+    //    public virtual List<ComprobanteEmisorRegimenFiscalItem> RegimenFiscal { get; set; }
+    //}
+
+    public class ComprobanteEmisorRegimenFiscal // Item
+    {
+        [Key]
+        public int ComprobanteEmisorRegimenFiscalId { get; set; }
+        //public int ComprobanteEmisorRegimenFiscalItemId { get; set; }
+
+        [ForeignKey("ComprobanteEmisor")]
+        public int ComprobanteEmisorId { get; set; }
+
+        public virtual ComprobanteEmisor ComprobanteEmisor { get; set; }
+
+        [NotMapped]
+        public string Regimen { get { return this.RegimenFiscal.Regimen; } }
+
+        [ForeignKey("RegimenFiscal")]
+        public int RegimenFiscalId { get; set; }
+
+        public virtual RegimenFiscal RegimenFiscal { get; set; }
+
+        public int Ordinal { get; set; }
     }
 
     public class ComprobanteReceptor
@@ -1147,4 +1179,6 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //    set { this.domicilio = value; }
         //}
     }
+
+    
 }

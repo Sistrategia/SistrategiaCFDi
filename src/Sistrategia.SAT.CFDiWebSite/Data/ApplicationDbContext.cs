@@ -37,6 +37,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
 
         public virtual DbSet<ComprobanteEmisor> ComprobantesEmisores { get; set; }
 
+        public virtual DbSet<ComprobanteEmisorRegimenFiscal> ComprobanteEmisorRegimenesFiscales { get; set; }
+
         public virtual DbSet<Cancelacion> Cancelaciones { get; set; }
 
         public virtual DbSet<TipoTipoDeComprobante> TiposTipoDeComprobante { get; set; }
@@ -427,6 +429,22 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("domicilio_fiscal_id");
             comprobanteEmisor.Property(p => p.ExpedidoEnId)
                 .HasColumnName("expedido_en_id");
+
+            var comprobanteEmisorRegimenFiscal = modelBuilder.Entity<ComprobanteEmisorRegimenFiscal>()
+                .ToTable("sat_comprobante_emisor_regimen_fiscal");
+            comprobanteEmisorRegimenFiscal.Property(p => p.ComprobanteEmisorRegimenFiscalId)
+                .HasColumnName("comprobante_emisor_regimen_fiscal_id");
+            comprobanteEmisorRegimenFiscal.Property(p => p.ComprobanteEmisorId)
+                .HasColumnName("comprobante_emisor_id");
+            comprobanteEmisorRegimenFiscal.Property(p => p.RegimenFiscalId)
+                .HasColumnName("regimen_fiscal_id");
+            comprobanteEmisorRegimenFiscal.Property(p => p.Ordinal)
+               .HasColumnName("ordinal");
+
+            //comprobanteEmisor.HasMany<ComprobanteEmisorRegimenFiscal>(p => p.RegimenFiscal)
+            //    .WithOptional()
+            //    .Map(pe => pe.MapKey("comprobante_emisor_id"));
+            
 
             var comprobanteReceptor = modelBuilder.Entity<ComprobanteReceptor>()
                 .ToTable("sat_comprobante_receptor");
