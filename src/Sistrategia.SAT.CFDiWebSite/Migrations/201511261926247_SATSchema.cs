@@ -181,6 +181,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                     {
                         comprobante_emisor_id = c.Int(nullable: false, identity: true),
                         emisor_id = c.Int(nullable: false),
+                        rfc = c.String(nullable: false, maxLength: 13),
+                        nombre = c.String(maxLength: 256),
                         domicilio_fiscal_id = c.Int(),
                         expedido_en_id = c.Int(),
                     })
@@ -210,7 +212,6 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         codigo_postal = c.String(maxLength: 5),
                         lugar_expedicion = c.String(maxLength: 2048),
                         ordinal = c.Int(nullable: false),
-                        status = c.String(maxLength: 50),
                         emisor_id = c.Int(),
                         ubicacion_type = c.String(nullable: false, maxLength: 128),
                     })

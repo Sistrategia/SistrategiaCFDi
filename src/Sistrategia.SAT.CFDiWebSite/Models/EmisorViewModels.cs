@@ -56,7 +56,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
                 this.CodigoPostal = ubicacion.CodigoPostal;
                 this.Referencia = ubicacion.Referencia;
                 this.Ordinal = ubicacion.Ordinal;
-                this.Status = ubicacion.Status;
+                //this.Status = ubicacion.Status;
             }
         }
 
@@ -96,8 +96,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         [Display(ResourceType = typeof(LocalizedStrings), Name = "OrdinalField")]
         public int Ordinal { get; set; }
 
-        [Display(ResourceType = typeof(LocalizedStrings), Name = "StatusField")]
-        public string Status { get; set; }
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "StatusField")]
+        //public string Status { get; set; }
 
         public string ToHtml() {
             string result = "";
@@ -154,7 +154,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
                 this.CodigoPostal = ubicacion.CodigoPostal;
                 this.Referencia = ubicacion.Referencia;
                 this.Ordinal = ubicacion.Ordinal;
-                this.Status = ubicacion.Status;
+                //this.Status = ubicacion.Status;
             }
         }
 
@@ -194,8 +194,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         [Display(ResourceType = typeof(LocalizedStrings), Name = "OrdinalField")]
         public int Ordinal { get; set; }
 
-        [Display(ResourceType = typeof(LocalizedStrings), Name = "StatusField")]
-        public string Status { get; set; }
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "StatusField")]
+        //public string Status { get; set; }
     }
 
     public class EmisorCreateViewModel

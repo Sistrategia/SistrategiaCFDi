@@ -114,7 +114,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         Estado = string.IsNullOrEmpty(model.DomicilioFiscal.Estado) ? null : model.DomicilioFiscal.Estado,
                         CodigoPostal = string.IsNullOrEmpty(model.DomicilioFiscal.CodigoPostal) ? null : model.DomicilioFiscal.CodigoPostal,
                         Referencia = string.IsNullOrEmpty(model.DomicilioFiscal.Referencia) ? null : model.DomicilioFiscal.Referencia,
-                        Status = string.IsNullOrEmpty(model.DomicilioFiscal.Status) ? null : model.DomicilioFiscal.Status
+                        //Status = string.IsNullOrEmpty(model.DomicilioFiscal.Status) ? null : model.DomicilioFiscal.Status
                     };
                 }
             }

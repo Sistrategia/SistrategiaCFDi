@@ -13,7 +13,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public Ubicacion()
             : base() {
             this.PublicKey = Guid.NewGuid();
-            this.Status = "A";
+            //this.Status = "A";
         }
 
         #region Private fields
@@ -303,7 +303,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //    set { this.ordinal = value; }
         //}
 
-        [XmlIgnore]
-        public string Status { get; set; }
+        //[XmlIgnore]
+        //public string Status { get; set; }
     }
 }

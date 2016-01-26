@@ -277,9 +277,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             ubicacion.Property(p => p.Ordinal)
                .HasColumnName("ordinal");
 
-            ubicacion.Property(p => p.Status)
-                .HasColumnName("status")
-                .HasMaxLength(50);
+            //ubicacion.Property(p => p.Status)
+            //    .HasColumnName("status")
+            //    .HasMaxLength(50);
 
 
             modelBuilder.Entity<Ubicacion>()
@@ -423,6 +423,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .ToTable("sat_comprobante_emisor");
             comprobanteEmisor.Property(p => p.ComprobanteEmisorId)
                 .HasColumnName("comprobante_emisor_id");
+            comprobanteEmisor.Property(p => p.RFC)
+                .HasColumnName("rfc")
+                .HasMaxLength(13);
+            comprobanteEmisor.Property(p => p.Nombre)
+                .HasColumnName("nombre")
+                .HasMaxLength(256);
             comprobanteEmisor.Property(p => p.EmisorId)
                 .HasColumnName("emisor_id");
             comprobanteEmisor.Property(p => p.DomicilioFiscalId)
