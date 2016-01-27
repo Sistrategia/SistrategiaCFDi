@@ -282,7 +282,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             //    .HasMaxLength(50);
 
 
-            modelBuilder.Entity<Ubicacion>()
+            modelBuilder.Entity<UbicacionBase>()
                 .Map<Ubicacion>(m => m.Requires("ubicacion_type").HasValue("Ubicacion"))
                 .Map<UbicacionFiscal>(m => m.Requires("ubicacion_type").HasValue("UbicacionFiscal"))
                 .ToTable("sat_ubicacion");

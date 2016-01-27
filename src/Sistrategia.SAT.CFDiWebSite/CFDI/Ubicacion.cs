@@ -8,34 +8,33 @@ using System.Xml.Serialization;
 
 namespace Sistrategia.SAT.CFDiWebSite.CFDI
 {
-    public class Ubicacion
+    public abstract class UbicacionBase
     {
-        public Ubicacion()
+        #region Private fields
+        protected string calle;
+        protected string noExterior;
+        protected string noInterior;
+        protected string colonia;
+        protected string localidad;
+        protected string referencia;
+        protected string municipio;
+        protected string estado;
+        protected string pais;
+        protected string codigoPostal;
+        protected string lugarExpedicion;
+        #endregion
+
+        protected UbicacionBase()
             : base() {
             this.PublicKey = Guid.NewGuid();
             //this.Status = "A";
         }
-
-        #region Private fields
-        private string calle;
-        private string noExterior;
-        private string noInterior;
-        private string colonia;
-        private string localidad;
-        private string referencia;
-        private string municipio;
-        private string estado;
-        private string pais;
-        private string codigoPostal;
-        private string lugarExpedicion;
-        #endregion
 
         [Key]
         public int UbicacionId { get; set; }
 
         [Required]
         public Guid PublicKey { get; set; }
-
 
         /// <summary>
         /// Este atributo opcional sirve para precisar la avenida, calle, camino o carretera donde se da la ubicación.
@@ -302,8 +301,55 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //    get { return this.ordinal; }
         //    set { this.ordinal = value; }
         //}
+    }
+
+    public class Ubicacion : UbicacionBase
+    {
+        public Ubicacion()
+            : base() {
+            //this.PublicKey = Guid.NewGuid();
+            //this.Status = "A";
+        }
+
+        /// <summary>
+        /// Atributo requerido que sirve para precisar el país donde se da la ubicación.
+        /// </summary>
+        /// <remarks>
+        /// <code>
+        /// <xs:attribute name="pais" use="required">
+        ///     <xs:annotation>
+        ///         <xs:documentation>Atributo requerido que sirve para precisar el país donde se da la ubicación.</xs:documentation>
+        ///     </xs:annotation>
+        ///     <xs:simpleType>
+        ///         <xs:restriction base="xs:string">
+        ///             <xs:minLength value="1"/>
+        ///             <xs:whiteSpace value="collapse"/>
+        ///         </xs:restriction>
+        ///     </xs:simpleType>
+        /// </xs:attribute>
+        /// </code>
+        /// </remarks>        
+        [MaxLength(50)]
+        [XmlAttribute("pais")]
+        public virtual string Pais {
+            get { return this.pais; }
+            set { this.pais = SATManager.NormalizeWhiteSpace(value); }
+        }        
+
+        //[MaxLength(2048)]
+        //[XmlIgnore]
+        //public virtual string LugarExpedicion {
+        //    get { return this.lugarExpedicion; }
+        //    set { this.lugarExpedicion = SATManager.NormalizeWhiteSpace(value); }
+        //}
 
         //[XmlIgnore]
-        //public string Status { get; set; }
+        //public int Ordinal { get; set; }
+        ////    get { return this.ordinal; }
+        ////    set { this.ordinal = value; }
+        ////}
+
+        ////[XmlIgnore]
+        ////public string Status { get; set; }
     }
 }

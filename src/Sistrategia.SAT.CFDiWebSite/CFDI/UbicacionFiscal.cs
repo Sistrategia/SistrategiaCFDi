@@ -8,24 +8,24 @@ using System.Xml.Serialization;
 
 namespace Sistrategia.SAT.CFDiWebSite.CFDI
 {
-    public class UbicacionFiscal : Ubicacion
+    public class UbicacionFiscal : UbicacionBase
     {
         public UbicacionFiscal()
             : base() {
-            this.PublicKey = Guid.NewGuid();
+            //this.PublicKey = Guid.NewGuid();
         }
 
         #region Private fields
-        private string calle;
-        //private string noExterior;
-        //private string noInterior;
-        //private string colonia;
-        //private string localidad;
-        //private string referencia;
-        private string municipio;
-        private string estado;
-        //private string pais;
-        private string codigoPostal;
+        //private string calle;
+        ////private string noExterior;
+        ////private string noInterior;
+        ////private string colonia;
+        ////private string localidad;
+        ////private string referencia;
+        //private string municipio;
+        //private string estado;
+        ////private string pais;
+        //private string codigoPostal;
         #endregion
 
         //[Key]
@@ -239,31 +239,31 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             set { this.estado = SATManager.NormalizeWhiteSpace(value); }
         }
 
-        ///// <summary>
-        ///// Atributo requerido que sirve para precisar el país donde se da la ubicación.
-        ///// </summary>
-        ///// <remarks>
-        ///// <code>
-        ///// <xs:attribute name="pais" use="required">
-        /////     <xs:annotation>
-        /////         <xs:documentation>Atributo requerido que sirve para precisar el país donde se da la ubicación.</xs:documentation>
-        /////     </xs:annotation>
-        /////     <xs:simpleType>
-        /////         <xs:restriction base="xs:string">
-        /////             <xs:minLength value="1"/>
-        /////             <xs:whiteSpace value="collapse"/>
-        /////         </xs:restriction>
-        /////     </xs:simpleType>
-        ///// </xs:attribute>
-        ///// </code>
-        ///// </remarks>
-        //[Required]
-        //[MaxLength(50)]
-        //[XmlAttribute("pais")]
-        //public override string Pais {
-        //    get { return this.pais; }
-        //    set { this.pais = SATManager.NormalizeWhiteSpace(value); }
-        //}
+        /// <summary>
+        /// Atributo requerido que sirve para precisar el país donde se da la ubicación.
+        /// </summary>
+        /// <remarks>
+        /// <code>
+        /// <xs:attribute name="pais" use="required">
+        ///     <xs:annotation>
+        ///         <xs:documentation>Atributo requerido que sirve para precisar el país donde se da la ubicación.</xs:documentation>
+        ///     </xs:annotation>
+        ///     <xs:simpleType>
+        ///         <xs:restriction base="xs:string">
+        ///             <xs:minLength value="1"/>
+        ///             <xs:whiteSpace value="collapse"/>
+        ///         </xs:restriction>
+        ///     </xs:simpleType>
+        /// </xs:attribute>
+        /// </code>
+        /// </remarks>   
+        [Required]
+        [MaxLength(50)]
+        [XmlAttribute("pais")]
+        public virtual string Pais {
+            get { return this.pais; }
+            set { this.pais = SATManager.NormalizeWhiteSpace(value); }
+        }
 
         /// <summary>
         /// Atributo requerido que sirve para asentar el código postal en donde se da la ubicación.
