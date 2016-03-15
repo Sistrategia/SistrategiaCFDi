@@ -421,7 +421,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                     string cadenaOriginal = comprobante.GetCadenaOriginal();
                     comprobante.Sello = certificado.GetSello(cadenaOriginal);
-                    comprobante.Status = "P";
+                    //comprobante.Status = "P";
                     DBContext.Comprobantes.Add(comprobante);
                     DBContext.SaveChanges();
 
@@ -434,11 +434,49 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     return Json(data);
                 }
             }
-            catch (Exception ex) {
+            catch (System.Data.Entity.Validation.DbEntityValidationException dex) {
+                string errorTxt = dex.Message.ToString();
+
+                foreach (var valError in dex.EntityValidationErrors)
+                {
+                    foreach (var error in valError.ValidationErrors)
+                    {
+                        errorTxt = errorTxt + Environment.NewLine + error.ErrorMessage;
+                    }
+                }
+
                 var data = new {
                     error = true,
-                    errorMsg = ex.Message.ToString()
+                    errorMsg = errorTxt
+
                 };
+
+                
+
+                return Json(data);
+            }
+            catch (Exception ex) {
+
+                string errorTxt = ex.Message.ToString();
+
+                foreach (ModelState modelState in ViewData.ModelState.Values)
+                {
+                    foreach (ModelError error in modelState.Errors)
+                    {
+                        errorTxt = errorTxt + Environment.NewLine + error.ErrorMessage;
+                    }
+                }
+
+            
+
+                var data = new {
+                    error = true,
+                    errorMsg = errorTxt
+
+                };
+
+                
+
                 return Json(data);
             }
         }
