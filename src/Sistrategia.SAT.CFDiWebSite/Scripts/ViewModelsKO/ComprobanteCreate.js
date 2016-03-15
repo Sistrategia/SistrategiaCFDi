@@ -26,11 +26,17 @@ var InitialModel = function (modelId) {
     self.LugarExpedicion = ko.observable("");
     self.NumCtaPago = ko.observable("");
     self.CertificadoId = ko.observable("");
+    self.TipoDeComprobante = ko.observable("");
 
     self.Fecha = ko.observable("");
     self.TipoCambio = ko.observable("");
     self.Moneda = ko.observable("");
     self.Banco = ko.observable("");
+
+    self.Nota = ko.observable("");
+    self.CteNumero = ko.observable("");
+    self.OrdenNumero = ko.observable("");
+    self.TemplateId = ko.observable("");
 
     self.IsRequiredNumCtaPago = ko.observable(false);
 }

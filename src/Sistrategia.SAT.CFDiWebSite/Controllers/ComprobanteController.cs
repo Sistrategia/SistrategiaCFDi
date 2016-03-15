@@ -249,6 +249,31 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             }
             model.TiposMoneda = monedasListSelectList;
 
+
+            var tiposDeComprobanteList = DBContext.TiposTipoDeComprobante.ToList();
+            var tiposDeComprobanteListSelectList = new List<SelectListItem>();
+            foreach (var tipoDeComprobante in tiposDeComprobanteList)
+            {
+                tiposDeComprobanteListSelectList.Add(new SelectListItem
+                {
+                    Value = tipoDeComprobante.TipoTipoDeComprobanteValue,
+                    Text = tipoDeComprobante.TipoTipoDeComprobanteValue
+                });
+            }
+            model.TiposDeComprobante = tiposDeComprobanteListSelectList;
+
+            var viewTemplatesList = DBContext.ViewTemplates.ToList();
+            var viewTemplatesListSelectList = new List<SelectListItem>();
+            foreach (var vTemplate in viewTemplatesList)
+            {
+                viewTemplatesListSelectList.Add(new SelectListItem
+                {
+                    Value = vTemplate.ViewTemplateId.ToString(),
+                    Text = vTemplate.DisplayName
+                });
+            }
+            model.ViewTemplates = viewTemplatesListSelectList;
+
             return View(model);
         }
 
@@ -257,6 +282,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             try {
                 if (String.IsNullOrEmpty(model.LugarExpedicion))
                     throw new ApplicationException("¡Ingrese el lugar de expedición!");
+                else if (string.IsNullOrEmpty(model.TipoDeComprobante))
+                    throw new ApplicationException("¡Ingrese el tipo de comprobante!");
                 else if (model.EmisorId <= 0)
                     throw new ApplicationException("¡Ingrese el emisor!");
                 else if (model.ReceptorId <= 0)
@@ -349,7 +376,14 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                     //comprobante.NoCertificado;
                     //comprobante.Certificado;
-                    comprobante.TipoDeComprobante = "ingreso";
+                    comprobante.TipoDeComprobante = model.TipoDeComprobante;
+
+                    comprobante.ExtendedIntValue1 = model.OrdenNumero;
+                    comprobante.ExtendedIntValue2 = model.CteNumero;
+                    comprobante.ExtendedStringValue2 = model.Notas;
+
+
+                    comprobante.ViewTemplateId = model.TemplateId;
 
                     comprobante.FormaDePago = model.FormaDePago;
                     comprobante.MetodoDePago = model.MetodoDePago;

@@ -13,6 +13,26 @@
 </div>
 <div class="col-md-12">
     <div id="initial_model_id">
+
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(m => m.TipoDeComprobante, new { @class = "col-md-2 control-label" })
+                <div class="col-md-2">
+                    @Html.DropDownListFor(m => m.TipoDeComprobante, Model.TiposDeComprobante, "Seleccione", new { @class = "form-control", data_bind = "value: TipoDeComprobante" })
+                </div>
+
+                @Html.LabelFor(m => m.CteNumero, new { @class = "col-md-2 control-label" })
+                <div class="col-md-2">
+                    <input class="form-control" type="number" data-bind="value: CteNumero" />
+                </div>
+
+                @Html.LabelFor(m => m.OrdenNumero, new { @class = "col-md-2 control-label" })
+                <div class="col-md-2">
+                    <input class="form-control" type="number" data-bind="value: OrdenNumero" />
+                </div>
+
+            </div>
+        </div>
         <div class="form-horizontal">
             <div class="form-group">
                 @Html.LabelFor(m => m.Serie, new { @class = "col-md-1 control-label" })
@@ -22,7 +42,7 @@
                 @Html.LabelFor(m => m.Folio, new { @class = "col-md-1  control-label" })
                 <div class="col-md-1">
                     <input class="form-control" type="text" data-bind="value: Folio" />
-                </div>                                
+                </div>
                 @Html.LabelFor(m => m.Moneda, new { @class = "col-md-2 control-label" })
                 <div class="col-md-2">
                     @Html.DropDownListFor(m => m.Moneda, Model.TiposMoneda, "Seleccione", new { @class = "form-control", data_bind = "value: Moneda" })
@@ -30,7 +50,7 @@
                 @Html.LabelFor(m => m.TipoCambio, new { @class = "col-md-2 control-label" })
                 <div class="col-md-2">
                     <input class="form-control" type="number" data-bind="value: TipoCambio" />
-                </div>                   
+                </div>
             </div>
         </div>
         <br />
@@ -51,7 +71,7 @@
                 @Html.LabelFor(m => m.LugarExpedicion, new { @class = "col-md-2 control-label" })
                 <div class="col-md-4">
                     <input class="form-control" type="text" data-bind="value: LugarExpedicion" />
-                </div>   
+                </div>
                 @Html.LabelFor(m => m.Certificados, new { @class = "col-md-1  control-label" })
                 <div class="col-md-5">
                     <select class="form-control" data-bind="value: CertificadoId" id="CertificadoId"></select>
@@ -67,18 +87,30 @@
                 @Html.LabelFor(m => m.MetodoDePago, new { @class = "col-md-2  control-label" })
                 <div class="col-md-4">
                     @Html.DropDownListFor(m => m.MetodoDePago, Model.TipoMetodoDePago, "Seleccione", new { @class = "form-control", data_bind = "value: MetodoDePago" })
-                </div>                
+                </div>
             </div>
         </div>
         <div class="form-horizontal" data-bind="visible: IsRequiredNumCtaPago()">
-            <div class="form-group">         
+            <div class="form-group">
                 @Html.LabelFor(m => m.NumCtaPago, new { @class = "col-md-1  control-label" })
                 <div class="col-md-5">
                     <input class="form-control" type="text" data-bind="value: NumCtaPago" />
-                </div>       
+                </div>
                 @Html.LabelFor(m => m.Banco, new { @class = "col-md-1  control-label" })
                 <div class="col-md-5">
                     @Html.DropDownListFor(m => m.Banco, Model.Bancos, "Seleccione", new { @class = "form-control", data_bind = "value: Banco" })
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Notas, new { @class = "col-md-1  control-label" })
+                <div class="col-md-7">
+                    <textarea class="form-control" data-bind="value: Nota"></textarea>
+                </div>
+                @Html.LabelFor(m => m.TemplateId, new { @class = "col-md-2  control-label" })
+                <div class="col-md-2">
+                    @Html.DropDownListFor(m => m.TemplateId, Model.ViewTemplates, "Seleccione", new { @class = "form-control", data_bind = "value: TemplateId" })
                 </div>
             </div>
         </div>
@@ -376,9 +408,17 @@
         initial_model.FormaDePago("PAGO EN UNA SOLA EXHIBICION");
         initial_model.LugarExpedicion("MATRIZ");
         initial_model.Moneda("MXN");
+        initial_model.TipoCambio(1);
+        initial_model.TipoDeComprobante("ingreso");
+        initial_model.TemplateId(2);
+        initial_model.MetodoDePago("NO IDENTIFICADO");
+
         conceptos_model.Unidad("pza");
         impuestos_model.TrasladosImpuesto("IVA");
         impuestos_model.TrasladosTasa("16.00");
+
+       
+        
 
         initial_model.MetodoDePago.subscribe(function (newValue) {
             if (newValue == 'EFECTIVO' || newValue == 'NO IDENTIFICADO' || newValue == '')
@@ -494,7 +534,12 @@
                 Total: impuestos_model.Total(),
                 Conceptos: conceptos,
                 Traslados: traslados,
-                Retenciones: retenciones
+                Retenciones: retenciones,
+                TipoDeComprobante: initial_model.TipoDeComprobante(),
+                CteNumero: initial_model.CteNumero(),
+                OrdenNumero: initial_model.OrdenNumero(),
+                Notas: initial_model.Nota(),
+                TemplateId: initial_model.TemplateId()
             }
 
             $.ajax({

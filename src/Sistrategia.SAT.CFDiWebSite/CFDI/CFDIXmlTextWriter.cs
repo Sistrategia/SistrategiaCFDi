@@ -906,7 +906,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                          writer.WriteStartElement("tfd", "TimbreFiscalDigital", "http://www.sat.gob.mx/TimbreFiscalDigital");                           
                          writer.WriteAttributeString("xmlns", "tfd", null, "http://www.sat.gob.mx/TimbreFiscalDigital");
                          //writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
-                         writer.WriteAttributeString("xsi", "schemaLocation", "http://www.w3.org/2001/XMLSchema-instance", "http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/TimbreFiscalDigital/TimbreFiscalDigital.xsd");
+                         writer.WriteAttributeString("xsi", "schemaLocation", "http://www.w3.org/2001/XMLSchema-instance", "http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/TimbreFiscalDigital/TimbreFiscalDigital.xsd");
                     
                          writer.WriteAttributeString("version", timbre.Version);
                          writer.WriteAttributeString("UUID", timbre.UUID);
