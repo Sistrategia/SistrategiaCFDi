@@ -104,24 +104,25 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //[XmlElement("DomicilioFiscal")]
         public virtual UbicacionFiscal DomicilioFiscal { get; set; }
 
-        [ForeignKey("ExpedidoEn")]
-        public int? ExpedidoEnId { get; set; }
+        //[ForeignKey("ExpedidoEn")]
+        //public int? ExpedidoEnId { get; set; }
 
-        /// <summary>
-        /// Nodo opcional para precisar la información de ubicación del domicilio en donde es emitido 
-        /// el comprobante fiscal en caso de que sea distinto del domicilio fiscal del contribuyente emisor.
-        /// </summary>
-        /// <remarks>
-        /// <code>
-        /// <xs:element name="ExpedidoEn" type="cfdi:t_Ubicacion" minOccurs="0">
-        ///     <xs:annotation>
-        ///         <xs:documentation>Nodo opcional para precisar la información de ubicación del domicilio en donde es emitido el comprobante fiscal en caso de que sea distinto del domicilio fiscal del contribuyente emisor.</xs:documentation>
-        ///     </xs:annotation>
-        /// </xs:element>
-        /// </code>
-        /// </remarks>
-        //[XmlElement("ExpedidoEn")]
-        public virtual Ubicacion ExpedidoEn { get; set; }
+        ///// <summary>
+        ///// Nodo opcional para precisar la información de ubicación del domicilio en donde es emitido 
+        ///// el comprobante fiscal en caso de que sea distinto del domicilio fiscal del contribuyente emisor.
+        ///// </summary>
+        ///// <remarks>
+        ///// <code>
+        ///// <xs:element name="ExpedidoEn" type="cfdi:t_Ubicacion" minOccurs="0">
+        /////     <xs:annotation>
+        /////         <xs:documentation>Nodo opcional para precisar la información de ubicación del domicilio en donde es emitido el comprobante fiscal en caso de que sea distinto del domicilio fiscal del contribuyente emisor.</xs:documentation>
+        /////     </xs:annotation>
+        ///// </xs:element>
+        ///// </code>
+        ///// </remarks>
+        ////[XmlElement("ExpedidoEn")]
+        ////public virtual Ubicacion ExpedidoEn { get; set; }
+        public virtual List<Ubicacion> ExpedidoEn { get; set; }
 
         /// <summary>
         /// Nodo requerido para incorporar los regímenes en los que tributa el contribuyente emisor. Puede contener más de un régimen.

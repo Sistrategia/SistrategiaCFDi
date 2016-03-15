@@ -20,11 +20,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Utils
                 return new CustomRedirectHandler(new UrlHelper(requestContext).RouteUrl(routeValues));
             }
 
-            var uiCulture = CultureInfo.CurrentUICulture;
-            //if (uiCulture.Name.StartsWith("es-"))
-            //    routeValues["culture"] = "es-MX"; // intercept default es-ES for "es".
-            //else
-            routeValues["culture"] = uiCulture.Name;
+            if (requestContext.HttpContext.Request.Headers["Accept-Language"].StartsWith("es,")) {
+                routeValues["culture"] = "es-MX";
+            }
+            else {                
+                routeValues["culture"] = CultureInfo.CurrentUICulture.Name;
+            }            
+            
             return new CustomRedirectHandler(new UrlHelper(requestContext).RouteUrl(routeValues));
         }
     }

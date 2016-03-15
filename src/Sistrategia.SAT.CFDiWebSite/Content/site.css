@@ -139,7 +139,8 @@ table td {
     vertical-align:middle;   
 }
 table th{
-    text-align:center !important;
+    /*text-align:center !important;*/
+    text-align:center;
     cursor:pointer;
 }
 
@@ -161,8 +162,7 @@ table th{
     }
 
     table tbody tr {
-        float:left;
-        width:100%;
+        float:left;        
         margin-bottom: 15px;
         min-height: 80px;
         height:100%;

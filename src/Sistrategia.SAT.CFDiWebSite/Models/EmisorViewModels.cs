@@ -43,6 +43,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         public UbicacionViewModel(Ubicacion ubicacion) {
             if (ubicacion != null) {
+                this.UbicacionId = ubicacion.UbicacionId;
+                this.PublicKey = ubicacion.PublicKey;
                 this.Calle = ubicacion.Calle;
                 this.NoExterior = ubicacion.NoExterior;
                 this.NoInterior = ubicacion.NoInterior;
@@ -53,8 +55,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
                 this.Pais = ubicacion.Pais;
                 this.CodigoPostal = ubicacion.CodigoPostal;
                 this.Referencia = ubicacion.Referencia;
+                this.Ordinal = ubicacion.Ordinal;
+                //this.Status = ubicacion.Status;
             }
         }
+
+        public int? UbicacionId { get; set; }
+        public Guid? PublicKey { get; set; }
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressStreetField")]
         public string Calle { get; set; }
@@ -85,6 +92,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressReferenceField")]
         public string Referencia { get; set; }
+
+        [Display(ResourceType = typeof(LocalizedStrings), Name = "OrdinalField")]
+        public int Ordinal { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "StatusField")]
+        //public string Status { get; set; }
 
         public string ToHtml() {
             string result = "";
@@ -128,6 +141,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         public UbicacionFiscalViewModel(UbicacionFiscal ubicacion) {
             if (ubicacion != null) {
+                this.UbicacionId = ubicacion.UbicacionId;
+                this.PublicKey = ubicacion.PublicKey;
                 this.Calle = ubicacion.Calle;
                 this.NoExterior = ubicacion.NoExterior;
                 this.NoInterior = ubicacion.NoInterior;
@@ -138,8 +153,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
                 this.Pais = ubicacion.Pais;
                 this.CodigoPostal = ubicacion.CodigoPostal;
                 this.Referencia = ubicacion.Referencia;
+                this.Ordinal = ubicacion.Ordinal;
+                //this.Status = ubicacion.Status;
             }
         }
+
+        public int? UbicacionId { get; set; }
+        public Guid? PublicKey { get; set; }
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressStreetField")]
         public string Calle { get; set; }
@@ -170,11 +190,18 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         [Display(ResourceType = typeof(LocalizedStrings), Name = "AddressReferenceField")]
         public string Referencia { get; set; }
+
+        [Display(ResourceType = typeof(LocalizedStrings), Name = "OrdinalField")]
+        public int Ordinal { get; set; }
+
+        //[Display(ResourceType = typeof(LocalizedStrings), Name = "StatusField")]
+        //public string Status { get; set; }
     }
 
     public class EmisorCreateViewModel
     {
         public EmisorCreateViewModel() {
+            this.Status = "A";
             this.ViewTemplateId = 2;
         }
 
@@ -193,12 +220,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public UbicacionViewModel ExpedidoEn { get; set; }
 
         [Required]
-        [Display(Name = "Correo")]
+        [Display(ResourceType = typeof(LocalizedStrings), Name = "Email")]
         [EmailAddress]
         public string Correo { get; set; }
 
         [Required]
-        [Display(Name = "Telefono")]
+        [Display(ResourceType = typeof(LocalizedStrings), Name = "PhoneField")]
         public string Telefono { get; set; }
 
         [Required]
@@ -210,6 +237,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public string LogoUrl { get; set; }
 
         public int? ViewTemplateId { get; set; }
+
+        [Display(Name = "LogoUrl")]
+        public string Status { get; set; }
 
         //[Required]
         //[Display(ResourceType = typeof(LocalizedStrings), Name = "AddressStreetField")]
@@ -288,6 +318,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         }
 
         public EmisorDetailViewModel(Emisor emisor) {
+        //public EmisorDetailViewModel(ComprobanteEmisor emisor) {
             if (emisor == null)
                 throw new ArgumentNullException("emisor");
 
@@ -334,12 +365,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public string Nombre { get; set; }
 
         [Required]
-        [Display(Name = "Correo")]
+        [Display(ResourceType = typeof(LocalizedStrings), Name = "Email")] //[Display(Name = "Correo")]
         [EmailAddress]
         public string Correo { get; set; }
 
         [Required]
-        [Display(Name = "Telefono")]
+        [Display(ResourceType = typeof(LocalizedStrings), Name = "PhoneField")]
         public string Telefono { get; set; }
 
         [Required]

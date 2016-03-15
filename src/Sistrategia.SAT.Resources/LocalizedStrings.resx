@@ -358,4 +358,13 @@
   <data name="Receptor_DetailsTitle" xml:space="preserve">
     <value>Details</value>
   </data>
+  <data name="PhoneField" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="AddButton" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="OrdinalField" xml:space="preserve">
+    <value>Orden</value>
+  </data>
 </root>

@@ -8,7 +8,7 @@
         <h1 class="pull-left">@ViewBag.Title</h1>
         <div class="pull-right">
             <div class="btn-group" style="bottom: 26px;position: relative;top:26px;">
-                @Html.ActionLink("Agregar", "Create", null, new { @class = "btn btn-primary", @role = "button" })
+                @Html.ActionLink(@LocalizedStrings.AddButton, "Create", null, new { @class = "btn btn-primary", @role = "button" })
             </div>
         </div>
     </div>
@@ -44,11 +44,11 @@
             <tbody data-bind='foreach: DataList' id="lista">
                 <tr>
                     <td>
-                        <a href="#" data-bind="attr: { href: '@Url.Action("Details", "Receptor")/'+ $data.public_key }">
-                            <div class="circle noselect">
-                                <span data-bind='text: receptor_initial_letter' class="text-center"></span>
-                            </div>
-                        </a>
+                      <a href="#" style="text-decoration: none" data-bind="attr: { href: '@Url.Action("Details", "Receptor")/'+ $data.public_key }">
+                        <div class="circle noselect">
+                          <span data-bind='text: receptor_initial_letter' class="text-center"></span>
+                        </div>
+                      </a>
                     </td>
                     <td>
                         <h4 class="media-heading">

@@ -354,4 +354,10 @@
   <data name="Receptor_DetailsTitle" xml:space="preserve">
     <value>Detalles</value>
   </data>
+  <data name="PhoneField" xml:space="preserve">
+    <value>Teléfono</value>
+  </data>
+  <data name="AddButton" xml:space="preserve">
+    <value>Agregar</value>
+  </data>
 </root>

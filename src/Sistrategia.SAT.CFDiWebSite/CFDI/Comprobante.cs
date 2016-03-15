@@ -861,27 +861,54 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //    set { this.montoFolioFiscalOrigFieldSpecified = value; }
         //}
 
+        //[ForeignKey("Emisor")]
+        //public int? EmisorId { get; set; }
+
+        ///// <summary>
+        ///// Nodo requerido para expresar la información del contribuyente emisor del comprobante.
+        ///// </summary>
+        //[XmlElement("Emisor", typeof(Emisor))]
+        //public virtual Emisor Emisor { get; set; }
+        ////public virtual Emisor Emisor {
+        ////    get { return this.emisor; }
+        ////    set { this.emisor = value; }
+        ////}
+
         [ForeignKey("Emisor")]
-        public int? EmisorId { get; set; }
+        public int? ComprobanteEmisorId { get; set; }
 
         /// <summary>
         /// Nodo requerido para expresar la información del contribuyente emisor del comprobante.
         /// </summary>
-        [XmlElement("Emisor", typeof(Emisor))]
-        public virtual Emisor Emisor { get; set; }
+        [XmlElement("Emisor", typeof(ComprobanteEmisor))]
+        public virtual ComprobanteEmisor Emisor { get; set; }
         //public virtual Emisor Emisor {
         //    get { return this.emisor; }
         //    set { this.emisor = value; }
         //}
+        
+
+        //[ForeignKey("Receptor")]
+        //public int? ReceptorId { get; set; }
+
+        ///// <summary>
+        ///// Nodo requerido para precisar la información del contribuyente receptor del comprobante.
+        ///// </summary>
+        //[XmlElement("Receptor", typeof(Receptor))]
+        //public virtual Receptor Receptor { get; set; }
+        ////public virtual Receptor Receptor {
+        ////    get { return this.receptor; }
+        ////    set { this.receptor = value; }
+        ////}
 
         [ForeignKey("Receptor")]
-        public int? ReceptorId { get; set; }
+        public int? ComprobanteReceptorId { get; set; }
 
         /// <summary>
         /// Nodo requerido para precisar la información del contribuyente receptor del comprobante.
         /// </summary>
-        [XmlElement("Receptor", typeof(Receptor))]
-        public virtual Receptor Receptor { get; set; }
+        [XmlElement("Receptor", typeof(ComprobanteReceptor))]
+        public virtual ComprobanteReceptor Receptor { get; set; }
         //public virtual Receptor Receptor {
         //    get { return this.receptor; }
         //    set { this.receptor = value; }
@@ -977,11 +1004,78 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
     public class ComprobanteEmisor
     {
+        private string rfc;
+        private string nombre;
+
         [Key]
         public int ComprobanteEmisorId { get; set; }
 
         [ForeignKey("Emisor")]
         public int EmisorId { get; set; }
+
+        [Required]
+        [NotMapped]
+        public Guid PublicKey { get { return this.Emisor.PublicKey; } }        
+
+        /// <summary>
+        /// Atributo requerido para la Clave del Registro Federal de Contribuyentes correspondiente al contribuyente emisor del comprobante sin guiones o espacios.
+        /// </summary>
+        /// <remarks>
+        /// <code>
+        /// <xs:attribute name="rfc" type="cfdi:t_RFC" use="required">
+        ///     <xs:annotation>
+        ///         <xs:documentation>Atributo requerido para la Clave del Registro Federal de Contribuyentes correspondiente al contribuyente emisor del comprobante sin guiones o espacios.</xs:documentation>
+        ///     </xs:annotation>
+        /// </xs:attribute>
+        /// </code>
+        /// <code>
+        /// <xs:simpleType name="t_RFC">
+        ///     <xs:annotation>
+        ///         <xs:documentation>Tipo definido para expresar claves del Registro Federal de Contribuyentes</xs:documentation>
+        ///     </xs:annotation>
+        ///     <xs:restriction base="xs:string">
+        ///         <xs:minLength value="12"/>
+        ///         <xs:maxLength value="13"/>
+        ///         <xs:whiteSpace value="collapse"/>
+        ///         <xs:pattern value="[A-Z,Ñ,&]{3,4}[0-9]{2}[0-1][0-9][0-3][0-9][A-Z,0-9]?[A-Z,0-9]?[0-9,A-Z]?"/>
+        ///     </xs:restriction>
+        /// </xs:simpleType>
+        /// </code>
+        /// </remarks>
+        [Required]
+        [MaxLength(13)]
+        public string RFC { get; set; }
+        //[NotMapped]
+        //public string RFC { get { return this.Emisor.RFC; } }
+        ////public string RFC { get; set; }
+
+        /// <summary>
+        /// Atributo opcional para el nombre, denominación o razón social del contribuyente emisor del comprobante.
+        /// </summary>
+        /// <remarks>
+        /// <code>
+        /// <xs:attribute name="nombre">
+        ///     <xs:annotation>
+        ///         <xs:documentation>Atributo opcional para el nombre, denominación o razón social del contribuyente emisor del comprobante.</xs:documentation>
+        ///     </xs:annotation>
+        ///     <xs:simpleType>
+        ///         <xs:restriction base="xs:string">
+        ///             <xs:minLength value="1"/>
+        ///             <xs:whiteSpace value="collapse"/>
+        ///         </xs:restriction>
+        ///     </xs:simpleType>
+        /// </xs:attribute>
+        /// </code>
+        /// <xs:minLength value="1"/>
+        /// <xs:whiteSpace value="collapse"/>
+        /// </remarks>
+        [MaxLength(256)]
+        public string Nombre {
+            get { return this.nombre; }
+            set { this.nombre = SATManager.NormalizeWhiteSpace(value); }
+        }
+        //[NotMapped]
+        //public string Nombre { get { return this.Emisor.Nombre; } }
 
         /// <summary>
         /// Nodo requerido para expresar la información del contribuyente emisor del comprobante.
@@ -1031,6 +1125,54 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </remarks>
         //[XmlElement("ExpedidoEn")]
         public virtual Ubicacion ExpedidoEn { get; set; }
+
+        //[NotMapped]
+        //public virtual List<RegimenFiscal> RegimenFiscal { get { return this.Emisor.RegimenFiscal; } }
+
+        public virtual List<ComprobanteEmisorRegimenFiscal> RegimenFiscal { get; set; }
+
+        [NotMapped]
+        public string Telefono { get { return this.Emisor.Telefono; } }
+        [NotMapped]
+        public string Correo { get { return this.Emisor.Correo; } }
+        [NotMapped]
+        public string CifUrl { get { return this.Emisor.CifUrl; } }
+        [NotMapped]
+        public string LogoUrl { get { return this.Emisor.LogoUrl; } }
+        [NotMapped]
+        public int? ViewTemplateId { get { return this.Emisor.ViewTemplateId; } }
+        [NotMapped]
+        public ViewTemplate ViewTemplate { get { return this.Emisor.ViewTemplate; } }
+    }
+
+    //public class ComprobanteEmisorRegimenFiscal
+    //{
+    //    [Key]
+    //    public int ComprobanteEmisorId { get; set; }
+
+    //    public virtual List<ComprobanteEmisorRegimenFiscalItem> RegimenFiscal { get; set; }
+    //}
+
+    public class ComprobanteEmisorRegimenFiscal // Item
+    {
+        [Key]
+        public int ComprobanteEmisorRegimenFiscalId { get; set; }
+        //public int ComprobanteEmisorRegimenFiscalItemId { get; set; }
+
+        [ForeignKey("ComprobanteEmisor")]
+        public int ComprobanteEmisorId { get; set; }
+
+        public virtual ComprobanteEmisor ComprobanteEmisor { get; set; }
+
+        [NotMapped]
+        public string Regimen { get { return this.RegimenFiscal.Regimen; } }
+
+        [ForeignKey("RegimenFiscal")]
+        public int RegimenFiscalId { get; set; }
+
+        public virtual RegimenFiscal RegimenFiscal { get; set; }
+
+        public int Ordinal { get; set; }
     }
 
     public class ComprobanteReceptor
@@ -1040,6 +1182,20 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
         [ForeignKey("Receptor")]
         public int ReceptorId { get; set; }
+
+        [Required]
+        [NotMapped]
+        public Guid PublicKey { get { return this.Receptor.PublicKey; } }
+
+        [Required]
+        [MaxLength(13)]
+        [NotMapped]
+        public string RFC { get { return this.Receptor.RFC; } }
+        //public string RFC { get; set; }
+
+        [MaxLength(256)]
+        [NotMapped]
+        public string Nombre { get { return this.Receptor.Nombre; } }
 
         /// <summary>
         /// Nodo requerido para precisar la información del contribuyente receptor del comprobante.
@@ -1076,4 +1232,6 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //    set { this.domicilio = value; }
         //}
     }
+
+    
 }

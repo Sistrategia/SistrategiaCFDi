@@ -95,6 +95,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             //var model = new EmisorCreateViewModel();
             var emisor = new Emisor();
 
+            emisor.Status = model.Status;
             emisor.RFC = model.RFC;
 
             if (!string.IsNullOrEmpty(model.Nombre))
@@ -112,14 +113,17 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         Municipio = string.IsNullOrEmpty(model.DomicilioFiscal.Municipio) ? null : model.DomicilioFiscal.Municipio,
                         Estado = string.IsNullOrEmpty(model.DomicilioFiscal.Estado) ? null : model.DomicilioFiscal.Estado,
                         CodigoPostal = string.IsNullOrEmpty(model.DomicilioFiscal.CodigoPostal) ? null : model.DomicilioFiscal.CodigoPostal,
-                        Referencia = string.IsNullOrEmpty(model.DomicilioFiscal.Referencia) ? null : model.DomicilioFiscal.Referencia
+                        Referencia = string.IsNullOrEmpty(model.DomicilioFiscal.Referencia) ? null : model.DomicilioFiscal.Referencia,
+                        //Status = string.IsNullOrEmpty(model.DomicilioFiscal.Status) ? null : model.DomicilioFiscal.Status
                     };
                 }
             }
 
             if (model.ExpedidoEn != null) {
                 if (!string.IsNullOrEmpty(model.ExpedidoEn.Pais)) {
-                    emisor.ExpedidoEn = new Ubicacion {
+                    //emisor.ExpedidoEn = new Ubicacion {
+                    emisor.ExpedidoEn = new List<Ubicacion>();
+                    emisor.ExpedidoEn.Add(new Ubicacion {
                         Pais = model.ExpedidoEn.Pais,
                         Calle = string.IsNullOrEmpty(model.ExpedidoEn.Calle) ? null : model.ExpedidoEn.Calle,
                         NoExterior = string.IsNullOrEmpty(model.ExpedidoEn.NoExterior) ? null : model.ExpedidoEn.NoExterior,
@@ -130,7 +134,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         Estado = string.IsNullOrEmpty(model.ExpedidoEn.Estado) ? null : model.ExpedidoEn.Estado,
                         CodigoPostal = string.IsNullOrEmpty(model.ExpedidoEn.CodigoPostal) ? null : model.ExpedidoEn.CodigoPostal,
                         Referencia = string.IsNullOrEmpty(model.ExpedidoEn.Referencia) ? null : model.ExpedidoEn.Referencia
-                    };
+                    });
                 }
             }            
 
@@ -249,7 +253,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                 //if (model.ExpedidoEn != null) {
                     if (!string.IsNullOrEmpty(model.ExpedidoEnPais)) {
-                        newEmisor.ExpedidoEn = new Ubicacion {
+                        //emisor.ExpedidoEn = new Ubicacion {
+                        newEmisor.ExpedidoEn = new List<Ubicacion>();
+                        newEmisor.ExpedidoEn.Add(new Ubicacion {
                             Pais = model.ExpedidoEnPais,
                             Calle = string.IsNullOrEmpty(model.ExpedidoEnCalle) ? null : model.ExpedidoEnCalle,
                             NoExterior = string.IsNullOrEmpty(model.ExpedidoEnNoExterior) ? null : model.ExpedidoEnNoExterior,
@@ -260,7 +266,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                             Estado = string.IsNullOrEmpty(model.ExpedidoEnEstado) ? null : model.ExpedidoEnEstado,
                             CodigoPostal = string.IsNullOrEmpty(model.ExpedidoEnCodigoPostal) ? null : model.ExpedidoEnCodigoPostal,
                             Referencia = string.IsNullOrEmpty(model.ExpedidoEnReferencia) ? null : model.ExpedidoEnReferencia
-                        };
+                        });
                     }
                 //}
 

@@ -78,8 +78,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         serie_folio_fiscal_orig = c.String(maxLength: 256),
                         fecha_folio_fiscal_orig = c.DateTime(),
                         monto_folio_fiscal_orig = c.Decimal(precision: 18, scale: 6),
-                        emisor_id = c.Int(),
-                        receptor_id = c.Int(),
+                        comprobante_emisor_id = c.Int(),
+                        comprobante_receptor_id = c.Int(),
                         impuestos_id = c.Int(),
                         generated_cadena_original = c.String(),
                         generated_xml_url = c.String(maxLength: 1024),
@@ -95,14 +95,14 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                     })
                 .PrimaryKey(t => t.comprobante_id)
                 .ForeignKey("dbo.sat_certificado", t => t.certificado_id)
-                .ForeignKey("dbo.sat_emisor", t => t.emisor_id)
+                .ForeignKey("dbo.sat_comprobante_emisor", t => t.comprobante_emisor_id)
                 .ForeignKey("dbo.sat_impuestos", t => t.impuestos_id)
-                .ForeignKey("dbo.sat_receptor", t => t.receptor_id)
+                .ForeignKey("dbo.sat_comprobante_receptor", t => t.comprobante_receptor_id)
                 .ForeignKey("dbo.ui_view_template", t => t.view_template_id)
                 .Index(t => t.public_key)
                 .Index(t => t.certificado_id)
-                .Index(t => t.emisor_id)
-                .Index(t => t.receptor_id)
+                .Index(t => t.comprobante_emisor_id)
+                .Index(t => t.comprobante_receptor_id)
                 .Index(t => t.impuestos_id)
                 .Index(t => t.view_template_id);
             
@@ -176,30 +176,23 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 .Index(t => t.comprobante_id);
             
             CreateTable(
-                "dbo.sat_emisor",
+                "dbo.sat_comprobante_emisor",
                 c => new
                     {
-                        emisor_id = c.Int(nullable: false, identity: true),
-                        public_key = c.Guid(nullable: false),
-                        rfc = c.String(nullable: false, maxLength: 25),
+                        comprobante_emisor_id = c.Int(nullable: false, identity: true),
+                        emisor_id = c.Int(nullable: false),
+                        rfc = c.String(nullable: false, maxLength: 13),
                         nombre = c.String(maxLength: 256),
                         domicilio_fiscal_id = c.Int(),
                         expedido_en_id = c.Int(),
-                        telefono = c.String(),
-                        correo = c.String(),
-                        cif_url = c.String(),
-                        logo_url = c.String(),
-                        view_template_id = c.Int(),
-                        status = c.String(maxLength: 50),
                     })
-                .PrimaryKey(t => t.emisor_id)
+                .PrimaryKey(t => t.comprobante_emisor_id)
                 .ForeignKey("dbo.sat_ubicacion", t => t.domicilio_fiscal_id)
+                .ForeignKey("dbo.sat_emisor", t => t.emisor_id, cascadeDelete: true)
                 .ForeignKey("dbo.sat_ubicacion", t => t.expedido_en_id)
-                .ForeignKey("dbo.ui_view_template", t => t.view_template_id)
-                .Index(t => t.public_key)
+                .Index(t => t.emisor_id)
                 .Index(t => t.domicilio_fiscal_id)
-                .Index(t => t.expedido_en_id)
-                .Index(t => t.view_template_id);
+                .Index(t => t.expedido_en_id);
             
             CreateTable(
                 "dbo.sat_ubicacion",
@@ -218,11 +211,37 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         pais = c.String(nullable: false, maxLength: 50),
                         codigo_postal = c.String(maxLength: 5),
                         lugar_expedicion = c.String(maxLength: 2048),
-                        status = c.String(maxLength: 50),
+                        ordinal = c.Int(nullable: false),
+                        emisor_id = c.Int(),
                         ubicacion_type = c.String(nullable: false, maxLength: 128),
                     })
                 .PrimaryKey(t => t.ubicacion_id)
-                .Index(t => t.public_key);
+                .ForeignKey("dbo.sat_emisor", t => t.emisor_id)
+                .Index(t => t.public_key)
+                .Index(t => t.emisor_id);
+            
+            CreateTable(
+                "dbo.sat_emisor",
+                c => new
+                    {
+                        emisor_id = c.Int(nullable: false, identity: true),
+                        public_key = c.Guid(nullable: false),
+                        rfc = c.String(nullable: false, maxLength: 13),
+                        nombre = c.String(maxLength: 256),
+                        domicilio_fiscal_id = c.Int(),
+                        telefono = c.String(),
+                        correo = c.String(),
+                        cif_url = c.String(),
+                        logo_url = c.String(),
+                        view_template_id = c.Int(),
+                        status = c.String(maxLength: 50),
+                    })
+                .PrimaryKey(t => t.emisor_id)
+                .ForeignKey("dbo.sat_ubicacion", t => t.domicilio_fiscal_id)
+                .ForeignKey("dbo.ui_view_template", t => t.view_template_id)
+                .Index(t => t.public_key)
+                .Index(t => t.domicilio_fiscal_id)
+                .Index(t => t.view_template_id);
             
             CreateTable(
                 "dbo.sat_regimen_fiscal",
@@ -248,6 +267,21 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                         code_name = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.view_template_id);
+            
+            CreateTable(
+                "dbo.sat_comprobante_emisor_regimen_fiscal",
+                c => new
+                    {
+                        comprobante_emisor_regimen_fiscal_id = c.Int(nullable: false, identity: true),
+                        comprobante_emisor_id = c.Int(nullable: false),
+                        regimen_fiscal_id = c.Int(nullable: false),
+                        ordinal = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.comprobante_emisor_regimen_fiscal_id)
+                .ForeignKey("dbo.sat_comprobante_emisor", t => t.comprobante_emisor_id, cascadeDelete: true)
+                .ForeignKey("dbo.sat_regimen_fiscal", t => t.regimen_fiscal_id, cascadeDelete: true)
+                .Index(t => t.comprobante_emisor_id)
+                .Index(t => t.regimen_fiscal_id);
             
             CreateTable(
                 "dbo.sat_impuestos",
@@ -287,6 +321,20 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 .PrimaryKey(t => t.traslado_id)
                 .ForeignKey("dbo.sat_impuestos", t => t.impuesto_id)
                 .Index(t => t.impuesto_id);
+            
+            CreateTable(
+                "dbo.sat_comprobante_receptor",
+                c => new
+                    {
+                        comprobante_receptor_id = c.Int(nullable: false, identity: true),
+                        receptor_id = c.Int(nullable: false),
+                        domicilio_id = c.Int(),
+                    })
+                .PrimaryKey(t => t.comprobante_receptor_id)
+                .ForeignKey("dbo.sat_ubicacion", t => t.domicilio_id)
+                .ForeignKey("dbo.sat_receptor", t => t.receptor_id, cascadeDelete: true)
+                .Index(t => t.receptor_id)
+                .Index(t => t.domicilio_id);
             
             CreateTable(
                 "dbo.sat_receptor",
@@ -381,17 +429,24 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             DropForeignKey("dbo.sat_timbre_fiscal_digital", "complemento_id", "dbo.sat_complemento");
             DropForeignKey("dbo.sat_cancelacion_uuid_comprobantes", "comprobante_id", "dbo.sat_comprobante");
             DropForeignKey("dbo.sat_comprobante", "view_template_id", "dbo.ui_view_template");
-            DropForeignKey("dbo.sat_comprobante", "receptor_id", "dbo.sat_receptor");
+            DropForeignKey("dbo.sat_comprobante", "comprobante_receptor_id", "dbo.sat_comprobante_receptor");
+            DropForeignKey("dbo.sat_comprobante_receptor", "receptor_id", "dbo.sat_receptor");
             DropForeignKey("dbo.sat_receptor", "domicilio_id", "dbo.sat_ubicacion");
+            DropForeignKey("dbo.sat_comprobante_receptor", "domicilio_id", "dbo.sat_ubicacion");
             DropForeignKey("dbo.sat_comprobante", "impuestos_id", "dbo.sat_impuestos");
             DropForeignKey("dbo.sat_traslado", "impuesto_id", "dbo.sat_impuestos");
             DropForeignKey("dbo.sat_retencion", "impuesto_id", "dbo.sat_impuestos");
-            DropForeignKey("dbo.sat_comprobante", "emisor_id", "dbo.sat_emisor");
+            DropForeignKey("dbo.sat_comprobante", "comprobante_emisor_id", "dbo.sat_comprobante_emisor");
+            DropForeignKey("dbo.sat_comprobante_emisor_regimen_fiscal", "regimen_fiscal_id", "dbo.sat_regimen_fiscal");
+            DropForeignKey("dbo.sat_comprobante_emisor_regimen_fiscal", "comprobante_emisor_id", "dbo.sat_comprobante_emisor");
+            DropForeignKey("dbo.sat_comprobante_emisor", "expedido_en_id", "dbo.sat_ubicacion");
+            DropForeignKey("dbo.sat_comprobante_emisor", "emisor_id", "dbo.sat_emisor");
             DropForeignKey("dbo.sat_emisor", "view_template_id", "dbo.ui_view_template");
             DropForeignKey("dbo.sat_regimen_fiscal", "emisor_id", "dbo.sat_emisor");
-            DropForeignKey("dbo.sat_emisor", "expedido_en_id", "dbo.sat_ubicacion");
+            DropForeignKey("dbo.sat_ubicacion", "emisor_id", "dbo.sat_emisor");
             DropForeignKey("dbo.sat_emisor", "domicilio_fiscal_id", "dbo.sat_ubicacion");
             DropForeignKey("dbo.sat_certificado", "emisor_id", "dbo.sat_emisor");
+            DropForeignKey("dbo.sat_comprobante_emisor", "domicilio_fiscal_id", "dbo.sat_ubicacion");
             DropForeignKey("dbo.sat_receptor_correo_entrega", "comprobante_id", "dbo.sat_comprobante");
             DropForeignKey("dbo.sat_concepto", "comprobante_id", "dbo.sat_comprobante");
             DropForeignKey("dbo.sat_complemento", "comprobante_id", "dbo.sat_comprobante");
@@ -400,14 +455,21 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             DropIndex("dbo.sat_timbre_fiscal_digital", new[] { "complemento_id" });
             DropIndex("dbo.sat_receptor", new[] { "domicilio_id" });
             DropIndex("dbo.sat_receptor", new[] { "public_key" });
+            DropIndex("dbo.sat_comprobante_receptor", new[] { "domicilio_id" });
+            DropIndex("dbo.sat_comprobante_receptor", new[] { "receptor_id" });
             DropIndex("dbo.sat_traslado", new[] { "impuesto_id" });
             DropIndex("dbo.sat_retencion", new[] { "impuesto_id" });
+            DropIndex("dbo.sat_comprobante_emisor_regimen_fiscal", new[] { "regimen_fiscal_id" });
+            DropIndex("dbo.sat_comprobante_emisor_regimen_fiscal", new[] { "comprobante_emisor_id" });
             DropIndex("dbo.sat_regimen_fiscal", new[] { "emisor_id" });
-            DropIndex("dbo.sat_ubicacion", new[] { "public_key" });
             DropIndex("dbo.sat_emisor", new[] { "view_template_id" });
-            DropIndex("dbo.sat_emisor", new[] { "expedido_en_id" });
             DropIndex("dbo.sat_emisor", new[] { "domicilio_fiscal_id" });
             DropIndex("dbo.sat_emisor", new[] { "public_key" });
+            DropIndex("dbo.sat_ubicacion", new[] { "emisor_id" });
+            DropIndex("dbo.sat_ubicacion", new[] { "public_key" });
+            DropIndex("dbo.sat_comprobante_emisor", new[] { "expedido_en_id" });
+            DropIndex("dbo.sat_comprobante_emisor", new[] { "domicilio_fiscal_id" });
+            DropIndex("dbo.sat_comprobante_emisor", new[] { "emisor_id" });
             DropIndex("dbo.sat_receptor_correo_entrega", new[] { "comprobante_id" });
             DropIndex("dbo.sat_concepto", new[] { "comprobante_id" });
             DropIndex("dbo.sat_concepto", new[] { "public_key" });
@@ -416,8 +478,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             DropIndex("dbo.sat_certificado", new[] { "public_key" });
             DropIndex("dbo.sat_comprobante", new[] { "view_template_id" });
             DropIndex("dbo.sat_comprobante", new[] { "impuestos_id" });
-            DropIndex("dbo.sat_comprobante", new[] { "receptor_id" });
-            DropIndex("dbo.sat_comprobante", new[] { "emisor_id" });
+            DropIndex("dbo.sat_comprobante", new[] { "comprobante_receptor_id" });
+            DropIndex("dbo.sat_comprobante", new[] { "comprobante_emisor_id" });
             DropIndex("dbo.sat_comprobante", new[] { "certificado_id" });
             DropIndex("dbo.sat_comprobante", new[] { "public_key" });
             DropIndex("dbo.sat_cancelacion_uuid_comprobantes", new[] { "comprobante_id" });
@@ -430,13 +492,16 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             DropTable("dbo.sat_tipo_impuesto_retencion");
             DropTable("dbo.sat_tipo_forma_de_pago");
             DropTable("dbo.sat_receptor");
+            DropTable("dbo.sat_comprobante_receptor");
             DropTable("dbo.sat_traslado");
             DropTable("dbo.sat_retencion");
             DropTable("dbo.sat_impuestos");
+            DropTable("dbo.sat_comprobante_emisor_regimen_fiscal");
             DropTable("dbo.ui_view_template");
             DropTable("dbo.sat_regimen_fiscal");
-            DropTable("dbo.sat_ubicacion");
             DropTable("dbo.sat_emisor");
+            DropTable("dbo.sat_ubicacion");
+            DropTable("dbo.sat_comprobante_emisor");
             DropTable("dbo.sat_receptor_correo_entrega");
             DropTable("dbo.sat_concepto");
             DropTable("dbo.sat_complemento");
