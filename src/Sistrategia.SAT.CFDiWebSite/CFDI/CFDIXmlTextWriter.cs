@@ -132,6 +132,24 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
             switch (comprobante.Version) {
                 case "1.0":
+                    break;
+                case "2.0":                    
+                    writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());
+                    break;
+                case "2.2": 
+                    writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());                    
+                    break;
+                case "3.0":                    
+                    writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());
+                    break;
+                case "3.2":
+                default:                    
+                    writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());                    
+                    break;
+            }
+
+            switch (comprobante.Version) {
+                case "1.0":
                     if (!string.IsNullOrEmpty(comprobante.FormaDePago))
                         writer.WriteAttributeString("formaDePago", comprobante.FormaDePago);
                     break;
@@ -145,28 +163,29 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     writer.WriteAttributeString("formaDePago", comprobante.FormaDePago);
                     break;
             }
-
-            switch (comprobante.Version) {
-                case "1.0":
-                    if (!string.IsNullOrEmpty(comprobante.NoCertificado))
-                        writer.WriteAttributeString("noCertificado", comprobante.NoCertificado);
-                    if (!string.IsNullOrEmpty(comprobante.CertificadoBase64))
-                        writer.WriteAttributeString("certificado", comprobante.CertificadoBase64);
-                    break;
-                case "2.0":
-                case "2.2":
-                    writer.WriteAttributeString("noCertificado", comprobante.NoCertificado); // requerido en el esquema
-                    if (!string.IsNullOrEmpty(comprobante.CertificadoBase64))
-                        writer.WriteAttributeString("certificado", comprobante.CertificadoBase64);
-                    break;
-                case "3.0":
-                case "3.2":
-                default:
-                    // REQUERIDOS
-                    writer.WriteAttributeString("noCertificado", comprobante.NoCertificado); // requerido en el esquema
-                    writer.WriteAttributeString("certificado", comprobante.CertificadoBase64); // requerido en el esquema
-                    break;
-            }
+            
+            // ESTE VA AQUI Temporalmente lo pongo más abajo por Figueroa
+            //switch (comprobante.Version) {
+            //    case "1.0":
+            //        if (!string.IsNullOrEmpty(comprobante.NoCertificado))
+            //            writer.WriteAttributeString("noCertificado", comprobante.NoCertificado);
+            //        if (!string.IsNullOrEmpty(comprobante.CertificadoBase64))
+            //            writer.WriteAttributeString("certificado", comprobante.CertificadoBase64);
+            //        break;
+            //    case "2.0":
+            //    case "2.2":
+            //        writer.WriteAttributeString("noCertificado", comprobante.NoCertificado); // requerido en el esquema
+            //        if (!string.IsNullOrEmpty(comprobante.CertificadoBase64))
+            //            writer.WriteAttributeString("certificado", comprobante.CertificadoBase64);
+            //        break;
+            //    case "3.0":
+            //    case "3.2":
+            //    default:
+            //        // REQUERIDOS
+            //        writer.WriteAttributeString("noCertificado", comprobante.NoCertificado); // requerido en el esquema
+            //        writer.WriteAttributeString("certificado", comprobante.CertificadoBase64); // requerido en el esquema
+            //        break;
+            //}
 
             switch (comprobante.Version) {
                 case "1.0":
@@ -237,39 +256,58 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
 
 
+            // ARREGLAR PORQUE ESTA ERA LA CORRECTA!!!!!!!
+            //switch (comprobante.Version) {
+            //    case "1.0":
+            //        break;
+            //    case "2.0":
+            //        if (!string.IsNullOrEmpty(comprobante.MetodoDePago))
+            //            writer.WriteAttributeString("metodoDePago", comprobante.MetodoDePago);
+            //        //if (!string.IsNullOrEmpty(comprobante.TipoDeComprobante))
+            //        writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());
+            //        break;
+            //    case "2.2": // SE INVIERTEN ORDEN
+            //        //if (!string.IsNullOrEmpty(comprobante.TipoDeComprobante))
+            //        writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());
+            //        if (!string.IsNullOrEmpty(comprobante.MetodoDePago))
+            //            writer.WriteAttributeString("metodoDePago", comprobante.MetodoDePago);
+            //        break;
+            //    case "3.0":
+            //        if (!string.IsNullOrEmpty(comprobante.MetodoDePago))
+            //            writer.WriteAttributeString("metodoDePago", comprobante.MetodoDePago);
+            //        //if (!string.IsNullOrEmpty(comprobante.TipoDeComprobante))
+            //        writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());
+            //        break;
+            //    case "3.2":
+            //    default:
+            //        //if (!string.IsNullOrEmpty(comprobante.TipoDeComprobante))
+            //        writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());
+            //        //if (!string.IsNullOrEmpty(comprobante.MetodoDePago))
+            //        writer.WriteAttributeString("metodoDePago", comprobante.MetodoDePago);
+            //        break;
+            //}
+
 
             switch (comprobante.Version) {
                 case "1.0":
                     break;
                 case "2.0":
                     if (!string.IsNullOrEmpty(comprobante.MetodoDePago))
-                        writer.WriteAttributeString("metodoDePago", comprobante.MetodoDePago);
-                    //if (!string.IsNullOrEmpty(comprobante.TipoDeComprobante))
-                    writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());
+                        writer.WriteAttributeString("metodoDePago", comprobante.MetodoDePago);                    
                     break;
-                case "2.2": // SE INVIERTEN ORDEN
-                    //if (!string.IsNullOrEmpty(comprobante.TipoDeComprobante))
-                    writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());
+                case "2.2": // SE INVIERTEN ORDEN                   
                     if (!string.IsNullOrEmpty(comprobante.MetodoDePago))
                         writer.WriteAttributeString("metodoDePago", comprobante.MetodoDePago);
                     break;
                 case "3.0":
                     if (!string.IsNullOrEmpty(comprobante.MetodoDePago))
-                        writer.WriteAttributeString("metodoDePago", comprobante.MetodoDePago);
-                    //if (!string.IsNullOrEmpty(comprobante.TipoDeComprobante))
-                    writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());
+                        writer.WriteAttributeString("metodoDePago", comprobante.MetodoDePago);                   
                     break;
                 case "3.2":
-                default:
-                    //if (!string.IsNullOrEmpty(comprobante.TipoDeComprobante))
-                    writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());
-                    //if (!string.IsNullOrEmpty(comprobante.MetodoDePago))
+                default:                   
                     writer.WriteAttributeString("metodoDePago", comprobante.MetodoDePago);
                     break;
             }
-
-
-
 
             switch (comprobante.Version) {
                 case "1.0":
@@ -315,6 +353,28 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     //if (comprobante.MontoFolioFiscalOrigSpecified && comprobante.MontoFolioFiscalOrig.HasValue) // if (!string.IsNullOrEmpty(comprobante.MontoFolioFiscalOrig))
                     if (comprobante.MontoFolioFiscalOrig.HasValue) 
                         writer.WriteAttributeString("MontoFolioFiscalOrig", comprobante.MontoFolioFiscalOrig.Value.ToString(comprobante.DecimalFormat));
+                    break;
+            }
+
+            switch (comprobante.Version) {
+                case "1.0":
+                    if (!string.IsNullOrEmpty(comprobante.NoCertificado))
+                        writer.WriteAttributeString("noCertificado", comprobante.NoCertificado);
+                    if (!string.IsNullOrEmpty(comprobante.CertificadoBase64))
+                        writer.WriteAttributeString("certificado", comprobante.CertificadoBase64);
+                    break;
+                case "2.0":
+                case "2.2":
+                    writer.WriteAttributeString("noCertificado", comprobante.NoCertificado); // requerido en el esquema
+                    if (!string.IsNullOrEmpty(comprobante.CertificadoBase64))
+                        writer.WriteAttributeString("certificado", comprobante.CertificadoBase64);
+                    break;
+                case "3.0":
+                case "3.2":
+                default:
+                    // REQUERIDOS
+                    writer.WriteAttributeString("noCertificado", comprobante.NoCertificado); // requerido en el esquema
+                    writer.WriteAttributeString("certificado", comprobante.CertificadoBase64); // requerido en el esquema
                     break;
             }
 
