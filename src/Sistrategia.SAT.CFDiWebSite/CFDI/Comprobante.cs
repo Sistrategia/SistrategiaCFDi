@@ -1006,6 +1006,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
     {
         private string rfc;
         private string nombre;
+        private Emisor emisor;
 
         [Key]
         public int ComprobanteEmisorId { get; set; }
@@ -1044,7 +1045,11 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </remarks>
         [Required]
         [MaxLength(13)]
-        public string RFC { get; set; }
+        public string RFC
+        {
+            get { return this.rfc; }
+            set { this.rfc = SATManager.NormalizeWhiteSpace(value); }
+        }
         //[NotMapped]
         //public string RFC { get { return this.Emisor.RFC; } }
         ////public string RFC { get; set; }
@@ -1081,7 +1086,15 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// Nodo requerido para expresar la información del contribuyente emisor del comprobante.
         /// </summary>
         [XmlElement("Emisor", typeof(Emisor))]
-        public virtual Emisor Emisor { get; set; }
+        public virtual Emisor Emisor { 
+            get { return this.emisor; }
+            set
+            {
+                this.emisor = value;
+                this.rfc = value.RFC;
+                this.nombre = value.Nombre; // Validate?
+            } 
+        }
         //public virtual Emisor Emisor {
         //    get { return this.emisor; }
         //    set { this.emisor = value; }
