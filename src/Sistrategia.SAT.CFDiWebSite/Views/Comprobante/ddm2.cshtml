@@ -153,8 +153,8 @@
                       </tr>
                       <tr>
                         <td class="center_item">Calle</td>
-                        <td class="center_item">@Model.Receptor.Domicilio.Calle # @Model.Receptor.Domicilio.NoExterior</td>
-                      </tr>
+                        @*<td class="center_item">@Model.Receptor.Domicilio.Calle # @Model.Receptor.Domicilio.NoExterior</td>*@
+                        <td class="center_item">@Model.Receptor.Domicilio.Calle # @Model.Receptor.Domicilio.NoExterior @Html.Raw( string.IsNullOrEmpty(Model.Receptor.Domicilio.NoInterior) ? ""  : " - " + Model.Receptor.Domicilio.NoInterior)</td></tr>
                       <tr>
                         <td class="center_item">Colonia</td>
                         <td class="center_item">@Model.Receptor.Domicilio.Colonia</td>
@@ -194,7 +194,9 @@
                       </tr>
                       <tr>
                         <td class="center_item">Calle</td>
-                        <td class="center_item">@Model.Receptor.Domicilio.Calle # @Model.Receptor.Domicilio.NoExterior</td>
+                        @*<td class="center_item">@Model.Receptor.Domicilio.Calle # @Model.Receptor.Domicilio.NoExterior</td>*@
+                        <td class="center_item">@Model.Receptor.Domicilio.Calle # @Model.Receptor.Domicilio.NoExterior @Html.Raw(string.IsNullOrEmpty(Model.Receptor.Domicilio.NoInterior) ? "" : " - " + Model.Receptor.Domicilio.NoInterior)</td>
+
                       </tr>
                       <tr>
                         <td class="center_item">Colonia</td>

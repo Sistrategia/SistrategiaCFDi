@@ -520,7 +520,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
             this.PublicKey = comprobante.PublicKey;
 
-            this.Fecha = comprobante.Fecha.ToString("dd/MM/yyyy hh:mm:ss");
+            this.Fecha = comprobante.Fecha.ToString("dd/MM/yyyy HH:mm:ss");
             this.Serie = comprobante.Serie;
             this.Folio = comprobante.Folio;
 
@@ -559,7 +559,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
                 if (complemento is TimbreFiscalDigital) {
                     TimbreFiscalDigital timbre = complemento as TimbreFiscalDigital;
                     this.SelloSAT = timbre.SelloSAT;
-                    this.FechaTimbre = timbre.FechaTimbrado.ToString("dd/MM/yyyy hh:mm:ss");
+                    this.FechaTimbre = timbre.FechaTimbrado.ToString("dd/MM/yyyy HH:mm:ss");
                     this.FolioFiscal = timbre.UUID;
                     this.NumSerieSAT = timbre.NoCertificadoSAT;
                     this.CadenaSAT = comprobante.GetCadenaSAT();
