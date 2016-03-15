@@ -67,7 +67,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public IEnumerable<SelectListItem> TiposImpuestoTraslado { get; set; }
         public IEnumerable<SelectListItem> TiposFormaDePago { get; set; }
         public IEnumerable<SelectListItem> TiposMoneda { get; set; }
+        public IEnumerable<SelectListItem> TiposDeComprobante { get; set; }
         public IEnumerable<SelectListItem> Bancos { get; set; }
+
+        public IEnumerable<SelectListItem> ViewTemplates { get; set; }
 
         public List<ConceptoViewModel> Conceptos { get; set; }
         public List<TrasladoViewModel> Traslados { get; set; }
@@ -76,6 +79,14 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public int? EmisorId { get; set; }
         public int? ReceptorId { get; set; }
         public int? CertificadoId { get; set; }
+
+        public string TipoDeComprobante { get; set; }
+
+        public int? CteNumero { get; set; }
+        public int? OrdenNumero { get; set; }
+        public int? TemplateId { get; set; }
+
+        public string Notas { get; set; }
     }
 
 
