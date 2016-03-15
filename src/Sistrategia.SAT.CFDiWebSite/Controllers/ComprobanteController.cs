@@ -1054,7 +1054,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         }
 
                         comprobante.ExtendedIntValue1 = DBContext.Comprobantes.Max(c => c.ExtendedIntValue1) + 1; // DBContext.Comprobantes.Count() + 1;
-                        if (comprobante.Receptor.ReceptorId != null)
+                        if (comprobante.Receptor.ReceptorId != null && comprobante.Receptor.ReceptorId > 0)
                             comprobante.ExtendedIntValue2 = comprobante.Receptor.ReceptorId;
                         else
                             comprobante.ExtendedIntValue2 = DBContext.Receptores.Count() + 1;
