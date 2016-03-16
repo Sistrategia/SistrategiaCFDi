@@ -426,11 +426,10 @@
         initial_model.TemplateId(2);
         initial_model.MetodoDePago("NO IDENTIFICADO");
 
-        initial_model.Folio("@Html.Raw(Model.Folio)");
-        initial_model.CteNumero("@Html.Raw(Model.CteNumero)");
+        initial_model.Folio("@Html.Raw(Model.Folio)");     
         initial_model.OrdenNumero("@Html.Raw(Model.OrdenNumero)");
         initial_model.Serie("A");
-        
+
         $("#CertificadoId").prop("disabled", true);
 
         $("#EmisorId").on("change", function (e) {
@@ -439,19 +438,38 @@
                 $.ajax({
                     url: "@Url.Action("GetIdByCertificados", "Comprobante")",
                     type: "POST",
-                data: { emisorId: $("#EmisorId").val() },
-                beforeSend: function () {
-                    $("#CertificadoId").prop("disabled", true).empty();
-                    $("#CertificadoId").append("<option value=''>Seleccione</option>");
-                },
-                success: function (data) {
-                    $.each(data, function (i, item) {
-                        $("#CertificadoId").prop("disabled", false).append("<option value='" + data[i].id + "'>" + data[i].text + "</option>");
-                    });
-                    initial_model.CertificadoId("@Html.Raw(Model.CertificadoId)");
+                    data: { emisorId: $("#EmisorId").val() },
+                    beforeSend: function () {
+                        $("#CertificadoId").prop("disabled", true).empty();
+                        $("#CertificadoId").append("<option value=''>Seleccione</option>");
+                    },
+                    success: function (data) {
+                        $.each(data, function (i, item) {
+                            $("#CertificadoId").prop("disabled", false).append("<option value='" + data[i].id + "'>" + data[i].text + "</option>");
+                        });
+                        initial_model.CertificadoId("@Html.Raw(Model.CertificadoId)");
                 }
             });
         }
+        });
+
+
+        $("#ReceptorId").on("change", function (e) {
+            e.preventDefault();
+            if ($("#ReceptorId").val() != null && $("#ReceptorId").val() != undefined) {
+                $.ajax({
+                    url: "@Url.Action("GetCteNumeroByReceptor", "Comprobante")",
+                    type: "POST",
+                    data: { receptorId: $("#ReceptorId").val() },
+                    success: function (data) {
+                        if (data.resp == true) {
+                            initial_model.CteNumero(data.CteNumero);
+                        } else {
+                            alert(data.error);
+                        }
+                    }
+                });
+            }
         });
 
 
@@ -586,29 +604,29 @@
 
             $.ajax({
                 url: "@Url.Action("Create", "Comprobante")",
-                type: "POST",
-                data: myobject,
-                beforeSend: function () {
-                    $("#alerta").modal({
-                        show: true,
-                        keyboard: false,
-                        backdrop: 'static'
-                    });
-                    $("#danger").removeClass("alert alert-danger").empty();
-                },
-                success: function (data) {
-                    if (data.error == false) {
-                        window.location.href = "@Url.Action("Details", "Comprobante")/" + data.comprobanteId + "";
-                    }
-                    else {
-                        $("#danger").addClass("alert alert-danger").show().append(data.errorMsg);
-                        $("html, body").scrollTop(0);
-                        $("#alerta").modal('hide');
-                    }
+            type: "POST",
+            data: myobject,
+            beforeSend: function () {
+                $("#alerta").modal({
+                    show: true,
+                    keyboard: false,
+                    backdrop: 'static'
+                });
+                $("#danger").removeClass("alert alert-danger").empty();
+            },
+            success: function (data) {
+                if (data.error == false) {
+                    window.location.href = "@Url.Action("Details", "Comprobante")/" + data.comprobanteId + "";
                 }
-            });
-
+                else {
+                    $("#danger").addClass("alert alert-danger").show().append(data.errorMsg);
+                    $("html, body").scrollTop(0);
+                    $("#alerta").modal('hide');
+                }
+            }
         });
+
+    });
 
     });
   </script>

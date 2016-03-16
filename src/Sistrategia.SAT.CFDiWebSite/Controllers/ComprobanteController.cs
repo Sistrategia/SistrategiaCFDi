@@ -95,6 +95,30 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             }
         }
 
+        public JsonResult GetCteNumeroByReceptor(int receptorId)
+        {
+            try
+            {
+
+                var CteNumero = this.DBContext.Database.SqlQuery<int?>(string.Format("SELECT TOP(1) [extended_int_value_2] FROM [sat_comprobante] WHERE [comprobante_receptor_id] = '{0}'", receptorId)).SingleOrDefault();
+
+                if (CteNumero == null)
+                {
+                    CteNumero = this.DBContext.Database.SqlQuery<int>("SELECT MAX([extended_int_value_2])+1 FROM [sat_comprobante] WHERE [serie] = 'A'").FirstOrDefault();
+                }
+
+                var result = new { resp = true, CteNumero = CteNumero };
+                return Json(result, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+                var result = new { resp = false, error = ex.Message };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
         [HttpPost]
         public JsonResult LoadComprobantes(int page, int pageSize, string search = null, string sort = null, string sortDir = null) {
             sortDir = string.IsNullOrEmpty(sortDir) ? "ASC" : sortDir;
@@ -286,7 +310,6 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             model.CertificadoId = emisor.Certificados.FirstOrDefault(x => x.Estado == "A").CertificadoId;
 
             model.Folio = this.DBContext.Database.SqlQuery<string>("SELECT CONVERT(NVARCHAR,MAX(CONVERT(INT,[folio]))+1) FROM [sat_comprobante] WHERE [serie] = 'A'").FirstOrDefault();
-            model.CteNumero = this.DBContext.Database.SqlQuery<int>("SELECT MAX([extended_int_value_2])+1 FROM [sat_comprobante] WHERE [serie] = 'A'").FirstOrDefault();
             model.OrdenNumero = this.DBContext.Database.SqlQuery<int>("SELECT MAX([extended_int_value_1])+1 FROM [sat_comprobante] WHERE [serie] = 'A'").FirstOrDefault();
 
             return View(model);
