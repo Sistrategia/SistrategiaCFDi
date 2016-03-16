@@ -239,6 +239,8 @@ namespace Sistrategia.SAT.CFDiWebSite
                 blob2.Properties.ContentType = "text/plain";
                 blob2.SetMetadata();
                 blob2.SetProperties();
+
+                throw;
             }
 
             return true;
