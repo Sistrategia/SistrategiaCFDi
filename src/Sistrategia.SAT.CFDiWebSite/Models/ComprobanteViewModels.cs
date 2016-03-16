@@ -304,10 +304,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             this.GeneratedXmlUrl = comprobante.GeneratedXmlUrl;
             this.GeneratedPDFUrl = comprobante.GeneratedPDFUrl;
 
-            if (comprobante.Complementos == null && comprobante.Complementos.Count > 0) {
+            this.TimbreFiscalDigital = null;
+
+            if (comprobante.Complementos != null && comprobante.Complementos.Count > 0) {
                 foreach (var complemento in comprobante.Complementos) {
                     if (complemento is TimbreFiscalDigital) {
-                        this.TimbreFiscalDigital = TimbreFiscalDigital;
+                        this.TimbreFiscalDigital = complemento as TimbreFiscalDigital;
                     }
                 }
             }
@@ -570,6 +572,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             this.NoOrden = comprobante.ExtendedIntValue1.ToString();
             this.NoCliente = comprobante.ExtendedIntValue2.ToString();
 
+            this.Notas = comprobante.ExtendedStringValue2;
+
             //this.FechaTimbre
             //this.CadenaSAT = comprobante.GetCadenaSAT();
             //this.CBB
@@ -618,6 +622,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         public string NoOrden { get; set; }
         public string NoCliente { get; set; }
+        public string Notas { get; set; }
 
         public string MetodoDePago { get; set; }
         public string NumCuenta { get; set; }

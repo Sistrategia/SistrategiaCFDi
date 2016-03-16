@@ -35,7 +35,7 @@
       <a target="_blank" href="@Url.Action("ShowPDF", new { id = Model.PublicKey.ToString("N") })" class="btn btn-primary">PDF</a>
     }
 
-    @if (Model.TimbreFiscalDigital!=null && !string.IsNullOrEmpty(Model.TimbreFiscalDigital.SelloSAT)) {
+    @if (Model.TimbreFiscalDigital==null) { //&& !string.IsNullOrEmpty(Model.TimbreFiscalDigital.SelloSAT)) {
       <a target="_blank" href="@Url.Action("GetTimbre", new { id = Model.PublicKey.ToString("N") })" class="btn btn-primary">Timbrar</a>
     }
 
