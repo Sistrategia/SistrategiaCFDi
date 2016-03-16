@@ -303,6 +303,14 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
             this.GeneratedXmlUrl = comprobante.GeneratedXmlUrl;
             this.GeneratedPDFUrl = comprobante.GeneratedPDFUrl;
+
+            if (comprobante.Complementos == null && comprobante.Complementos.Count > 0) {
+                foreach (var complemento in comprobante.Complementos) {
+                    if (complemento is TimbreFiscalDigital) {
+                        this.TimbreFiscalDigital = TimbreFiscalDigital;
+                    }
+                }
+            }
         }
 
         public string Title {
@@ -329,6 +337,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         public string GeneratedXmlUrl { get; set; }
         public string GeneratedPDFUrl { get; set; }
+
+        public TimbreFiscalDigital TimbreFiscalDigital { get; set; }
     }
 
     public class ComprobanteEmisorDetailViewModel
