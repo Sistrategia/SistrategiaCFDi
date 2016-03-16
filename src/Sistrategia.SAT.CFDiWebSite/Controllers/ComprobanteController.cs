@@ -1466,10 +1466,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 //    }
                 //    /* Insert Timbre */
 
-                //    return RedirectToAction("View", "Invoice", new { id = comprobante.ComprobanteId.ToString() });
+                return RedirectToAction("Details", "Comprobante", new { id = comprobante.PublicKey.ToString() });
             }
             catch (Exception ex) {
-                TempData["msg"] = ex.Message.ToString();
+                TempData["error"] = ex.Message.ToString();
                 return View(model);
                 //    return View();
             }

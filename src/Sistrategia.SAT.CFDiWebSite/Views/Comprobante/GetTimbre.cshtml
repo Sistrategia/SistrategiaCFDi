@@ -6,6 +6,15 @@
 
 <h1>@ViewBag.Title <br /><small>@Model.Receptor.RFC</small></h1>
 
+@if (TempData["success"] != null)
+{
+    @Html.Raw("<div class='alert alert-success text-center'>" + TempData["success"] + "</div>")
+}
+else if (TempData["error"] != null)
+{
+    @Html.Raw("<div class='alert alert-danger text-center'><span class='glyphicon glyphicon-warning-sign'></span> " + TempData["error"] + "</div>")
+}
+
 @using (Html.BeginForm("GetTimbre", "Comprobante", new { id = @Model.PublicKey }, FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
   @Html.AntiForgeryToken()
   <h4>@LocalizedStrings.Account_RegisterSubtitle</h4>
