@@ -1,0 +1,15 @@
+﻿@using Sistrategia.SAT.CFDiWebSite.Models
+@model GetTimbradoLogViewModel
+@{
+    ViewBag.Title = "GetTimbradoLog";
+    var manager = new Sistrategia.SAT.CFDiWebSite.CloudStorage.CloudStorageMananger();
+}
+
+<h2>GetTimbradoLog</h2>
+
+<ul>
+  @foreach (var item in Model.CloudStorageItems) { 
+  <li><a href="@item.Url">@item.Name</a></li>
+  }
+</ul>
+
