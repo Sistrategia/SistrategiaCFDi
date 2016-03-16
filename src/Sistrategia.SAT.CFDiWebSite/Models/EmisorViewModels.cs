@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
@@ -326,8 +327,15 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
             this.RFC = emisor.RFC;
             this.Nombre = emisor.Nombre;
+            //if (emisor.RegimenFiscal != null && emisor.RegimenFiscal.Count > 0)
+            //    this.RegimenFiscal = emisor.RegimenFiscal[0].Regimen;
             if (emisor.RegimenFiscal != null && emisor.RegimenFiscal.Count > 0)
-                this.RegimenFiscal = emisor.RegimenFiscal[0].Regimen;
+                foreach (var regimen in emisor.RegimenFiscal.OrderByDescending(x => x.RegimenFiscalId)) {
+                    if ("A".Equals(regimen.Status, StringComparison.InvariantCultureIgnoreCase)) {
+                        this.RegimenFiscal = regimen.Regimen;
+                        break;
+                    }
+                }
 
             if (emisor.DomicilioFiscal != null) {
                 this.Calle = emisor.DomicilioFiscal.Calle;
