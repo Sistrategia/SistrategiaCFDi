@@ -12,6 +12,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Sistrategia.SAT.CFDiWebSite.CloudStorage;
 using Newtonsoft.Json;
+using System.Data.SqlClient;
 
 namespace Sistrategia.SAT.CFDiWebSite.Controllers
 {
@@ -100,7 +101,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             try
             {
 
-                var CteNumero = this.DBContext.Database.SqlQuery<int?>(string.Format("SELECT TOP(1) [extended_int_value_2] FROM [sat_comprobante] WHERE [comprobante_receptor_id] = '{0}'", receptorId)).SingleOrDefault();
+                var CteNumero = this.DBContext.Database.SqlQuery<int?>(@"SELECT TOP(1) [extended_int_value_2] FROM [sat_comprobante] WHERE [comprobante_receptor_id] = @receptorId", new SqlParameter("@receptorId", receptorId)).SingleOrDefault();
 
                 if (CteNumero == null)
                 {
