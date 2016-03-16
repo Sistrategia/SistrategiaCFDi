@@ -199,6 +199,28 @@ namespace Sistrategia.SAT.CFDiWebSite
                                 //           //    comprobante2.Complemento.TimbreFiscalDigital.NoCertificadoSAT = timbre.Attributes.GetNamedItem("noCertificadoSAT").Value.ToString();
                                 //           //    comprobante2.Complemento.TimbreFiscalDigital.SelloSAT = timbre.Attributes.GetNamedItem("selloSAT").Value.ToString();
 
+                                // entryStream.Position = 0;
+                              //  entryStream.Position
+
+                                  
+
+                                // SAVE final xml:
+                                 Sistrategia.SAT.CFDiWebSite.CloudStorage.CloudStorageMananger manager = 
+                                     new Sistrategia.SAT.CFDiWebSite.CloudStorage.CloudStorageMananger();
+                            //manager.UploadFromStream(ConfigurationManager.AppSettings["AzureAccountName"],
+                                manager.UploadFromString(ConfigurationManager.AppSettings["AzureAccountName"],
+                                ConfigurationManager.AppSettings["AzureAccountKey"],
+                                comprobante.Emisor.PublicKey.ToString("N"),
+                                comprobante.PublicKey.ToString("N") + ".xml",
+                                comprobante.Serie + comprobante.Folio + ".xml", //model.ComprobanteArchivo.FileName,
+                                "text/xml", //model.ComprobanteArchivo.ContentType,
+                                output); // model.ComprobanteArchivo.InputStream);
+
+                                comprobante.GeneratedCadenaOriginal = comprobante.GetCadenaOriginal();
+                                comprobante.GeneratedXmlUrl = string.Format(@"https://sistrategiacfdi1.blob.core.windows.net/{0}/{1}.xml",
+                                comprobante.Emisor.PublicKey.ToString("N"),
+                                comprobante.PublicKey.ToString("N"));
+                                comprobante.Status = "A";
                             }
                         }
                         //using (var fileToCompressStream = new MemoryStream(fileBytes)) {

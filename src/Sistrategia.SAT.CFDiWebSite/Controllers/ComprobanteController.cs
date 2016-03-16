@@ -281,6 +281,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             model.EmisorId = emisor.EmisorId;
             model.Emisor.Nombre = emisor.Nombre;
             model.Emisor.RFC = emisor.RFC;
+            // model.ExpedidoEn = emisor.ExpedidoEn select one?
+            model.ExpedidoEn.UbicacionId = null; // default null (same as domicilioFiscal)
             model.CertificadoId = emisor.Certificados.FirstOrDefault(x => x.Estado == "A").CertificadoId;
 
             model.Folio = this.DBContext.Database.SqlQuery<string>("SELECT CONVERT(NVARCHAR,MAX(CONVERT(INT,[folio]))+1) FROM [sat_comprobante] WHERE [serie] = 'A'").FirstOrDefault();
@@ -333,9 +335,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     if (model.ExpedidoEn != null && model.ExpedidoEn.UbicacionId != null) {
                         comprobanteEmisor = DBContext.ComprobantesEmisores.Where(e => e.EmisorId == emisor.EmisorId && e.DomicilioFiscalId == emisor.DomicilioFiscalId && e.ExpedidoEnId == model.ExpedidoEn.UbicacionId).SingleOrDefault();
                     }
+                    //else if () {
+                    //}
                     else {
                         // crear o seleccionar la ubicación y agregarla
                         //comprobanteEmisor = DBContext.ComprobantesEmisores.Where(e => e.EmisorId == model.EmisorId && e.DomicilioFiscalId == model.DomicilioFiscalId && e.ExpedidoEnId == model.ExpedidoEnId);
+                        comprobanteEmisor = DBContext.ComprobantesEmisores.Where(e => e.EmisorId == emisor.EmisorId && e.DomicilioFiscalId == emisor.DomicilioFiscalId && e.ExpedidoEnId == model.ExpedidoEn.UbicacionId).SingleOrDefault();
                     }
 
                     // Crear uno nuevo
