@@ -98,7 +98,7 @@ namespace Sistrategia.SAT.CFDiWebSite
         public bool GetCFDI(string user, string password, CFDI.Comprobante comprobante) {
             //throw new NotImplementedException();
 
-            string invoiceFileName = DateTime.Now.ToString("yyyyMMddHmmss_" + comprobante.PublicKey.ToString("N"));
+            string invoiceFileName = DateTime.Now.ToString("yyyyMMddHHmmss_" + comprobante.PublicKey.ToString("N"));
             byte[] sendFileBytes;
             byte[] responseFileBytes;
 
@@ -470,7 +470,7 @@ namespace Sistrategia.SAT.CFDiWebSite
 //            try
 //            {
 //                string invoicesPath = Server.MapPath(Url.Content("~/FileInvoices/"));
-//                string invoiceFileName = DateTime.Now.ToString("yyyyMMddHmmss_comprobante");
+//                string invoiceFileName = DateTime.Now.ToString("yyyyMMddHHmmss_comprobante");
 
 //                // Guardar el comprobante con cadena y sello
 //                string xmlFullPath = invoicesPath + invoiceFileName + "_send.xml";

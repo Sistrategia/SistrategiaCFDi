@@ -38,7 +38,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 SharedAccessExpiryTime = DateTime.UtcNow + TimeSpan.FromMinutes(10)
             };
 
-            foreach (var blob in list.OfType<Microsoft.WindowsAzure.Storage.Blob.CloudBlockBlob>()) {
+            foreach (var blob in list.OfType<Microsoft.WindowsAzure.Storage.Blob.CloudBlockBlob>().OrderByDescending(x => x.Name)) {
                 blob.FetchAttributes();
                 var item = new CloudStorageItem {
                     Name = blob.Name,

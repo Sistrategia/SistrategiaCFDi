@@ -1400,7 +1400,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
             var model = new ComprobanteDetailViewModel(comprobante);
 
-            string invoiceFileName = DateTime.Now.ToString("yyyyMMddHmmss_" + comprobante.PublicKey.ToString("N"));
+            string invoiceFileName = DateTime.Now.ToString("yyyyMMddHHmmss_" + comprobante.PublicKey.ToString("N"));
             //comprobante.WriteXml(invoicesPath + invoiceFileName + "_send.xml");
 
 
@@ -1533,7 +1533,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
             ////var model = new ComprobanteDetailViewModel(comprobante);
 
-            //string invoiceFileName = DateTime.Now.ToString("cancelado_yyyyMMddHmmss_" + comprobante.PublicKey.ToString("N") + ".txt");
+            //string invoiceFileName = DateTime.Now.ToString("cancelado_yyyyMMddHHmmss_" + comprobante.PublicKey.ToString("N") + ".txt");
 
             //try {
 
