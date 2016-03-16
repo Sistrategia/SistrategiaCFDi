@@ -274,6 +274,19 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             }
             model.ViewTemplates = viewTemplatesListSelectList;
 
+
+            Emisor emisor = DBContext.Emisores.SingleOrDefault(x => x.EmisorId == 1);
+
+
+            model.EmisorId = emisor.EmisorId;
+            model.Emisor.Nombre = emisor.Nombre;
+            model.Emisor.RFC = emisor.RFC;
+            model.CertificadoId = emisor.Certificados.FirstOrDefault(x => x.Estado == "A").CertificadoId;
+
+            model.Folio = this.DBContext.Database.SqlQuery<string>("SELECT CONVERT(NVARCHAR,MAX(CONVERT(INT,[folio]))+1) FROM [sat_comprobante] WHERE [serie] = 'A'").FirstOrDefault();
+            model.CteNumero = this.DBContext.Database.SqlQuery<int>("SELECT MAX([extended_int_value_2])+1 FROM [sat_comprobante] WHERE [serie] = 'A'").FirstOrDefault();
+            model.OrdenNumero = this.DBContext.Database.SqlQuery<int>("SELECT MAX([extended_int_value_1])+1 FROM [sat_comprobante] WHERE [serie] = 'A'").FirstOrDefault();
+
             return View(model);
         }
 

@@ -327,7 +327,7 @@
         // #region Select2 JS
         $.fn.select2.defaults.set('language', 'es');
 
-        $("#EmisorId").select2({
+        @*$("#EmisorId").select2({
             placeholder: "Seleccione",
             minimumInputLength: 2,
             allowClear: true,
@@ -349,29 +349,42 @@
                 cache: true
             },
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-        })
+        })*@
 
-        $("#CertificadoId").prop("disabled", true);
 
-        $("#EmisorId").on("change", function (e) {
-            e.preventDefault();
-            if ($("#EmisorId").val() != null && $("#EmisorId").val() != undefined) {
-                $.ajax({
-                    url: "@Url.Action("GetIdByCertificados", "Comprobante")",
-                    type: "POST",
-                    data: { emisorId: $("#EmisorId").val() },
-                    beforeSend: function () {
-                        $("#CertificadoId").prop("disabled", true).empty();
-                        $("#CertificadoId").append("<option value=''>Seleccione</option>");
-                    },
-                    success: function (data) {
-                        $.each(data, function (i, item) {
-                            $("#CertificadoId").prop("disabled", false).append("<option value='" + data[i].id + "'>" + data[i].text + "</option>");
-                        });
-                    }
-                });
-            }
+        var $itemElement = $("#EmisorId").select2({
+            placeholder: "Seleccione",
+            minimumInputLength: 2,
+            allowClear: true,
+            ajax: {
+                url: "@Url.Action("GetIdByEmisores", "Comprobante")",
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        value: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            templateSelection: function (repo) {
+                return repo.text;
+            },
         });
+
+        @{ var fullEmisor = Model.Emisor.Nombre + " - " + Model.Emisor.RFC; }
+
+        var option = new Option("@fullEmisor", '@Model.EmisorId', true, true);
+        $itemElement.append(option);
+        $itemElement.trigger('change');
+
 
         $("#ReceptorId").select2({
             placeholder: "Seleccione",
@@ -413,12 +426,41 @@
         initial_model.TemplateId(2);
         initial_model.MetodoDePago("NO IDENTIFICADO");
 
+        initial_model.Folio("@Html.Raw(Model.Folio)");
+        initial_model.CteNumero("@Html.Raw(Model.CteNumero)");
+        initial_model.OrdenNumero("@Html.Raw(Model.OrdenNumero)");
+        initial_model.Serie("A");
+        
+        $("#CertificadoId").prop("disabled", true);
+
+        $("#EmisorId").on("change", function (e) {
+            e.preventDefault();
+            if ($("#EmisorId").val() != null && $("#EmisorId").val() != undefined) {
+                $.ajax({
+                    url: "@Url.Action("GetIdByCertificados", "Comprobante")",
+                    type: "POST",
+                data: { emisorId: $("#EmisorId").val() },
+                beforeSend: function () {
+                    $("#CertificadoId").prop("disabled", true).empty();
+                    $("#CertificadoId").append("<option value=''>Seleccione</option>");
+                },
+                success: function (data) {
+                    $.each(data, function (i, item) {
+                        $("#CertificadoId").prop("disabled", false).append("<option value='" + data[i].id + "'>" + data[i].text + "</option>");
+                    });
+                    initial_model.CertificadoId("@Html.Raw(Model.CertificadoId)");
+                }
+            });
+        }
+        });
+
+
         conceptos_model.Unidad("pza");
         impuestos_model.TrasladosImpuesto("IVA");
         impuestos_model.TrasladosTasa("16.00");
 
-       
-        
+
+
 
         initial_model.MetodoDePago.subscribe(function (newValue) {
             if (newValue == 'EFECTIVO' || newValue == 'NO IDENTIFICADO' || newValue == '')
@@ -433,7 +475,7 @@
                 for (var i = 0; i < newValue.length; i++) {
                     importeTotalConceptos += Math.round(parseFloat(newValue[i].ConceptoImporte()) * 100) / 100;
                 }
-                impuestos_model.SubTotal(Math.round(parseFloat(importeTotalConceptos) * 100) / 100);                                
+                impuestos_model.SubTotal(Math.round(parseFloat(importeTotalConceptos) * 100) / 100);
             } else {
                 impuestos_model.SubTotal(0);
             }
@@ -442,7 +484,7 @@
         });
 
         impuestos_model.TrasladosItems.subscribe(function (newValue) {
-            if (newValue.length > 0) {              
+            if (newValue.length > 0) {
               var importeTotalTrasladados = null;
               for (var i = 0; i < newValue.length; i++) {
                   importeTotalTrasladados += Math.round(parseFloat(newValue[i].TrasladadoImporte()) * 100) / 100;
@@ -477,7 +519,7 @@
 
         $("#enviar_datos").on("click", function (e) {
             e.preventDefault();
-            
+
             var conceptos = new Array();
             var traslados = new Array();
             var retenciones = new Array();
@@ -554,7 +596,7 @@
                     });
                     $("#danger").removeClass("alert alert-danger").empty();
                 },
-                success: function (data) {                        
+                success: function (data) {
                     if (data.error == false) {
                         window.location.href = "@Url.Action("Details", "Comprobante")/" + data.comprobanteId + "";
                     }
@@ -562,10 +604,10 @@
                         $("#danger").addClass("alert alert-danger").show().append(data.errorMsg);
                         $("html, body").scrollTop(0);
                         $("#alerta").modal('hide');
-                    }                        
+                    }
                 }
             });
-            
+
         });
 
     });
