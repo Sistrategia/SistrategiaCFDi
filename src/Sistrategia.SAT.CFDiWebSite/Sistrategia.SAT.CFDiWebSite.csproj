@@ -428,6 +428,7 @@
     <Content Include="Views\Comprobante\Edit.cshtml" />
     <Content Include="Views\Comprobante\UploadCancelacion.cshtml" />
     <Content Include="Views\Comprobante\cemer.cshtml" />
+    <Content Include="Views\Dev\GetTimbradoLog.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -476,6 +477,7 @@
     <Compile Include="CFDI\Traslado.cs" />
     <Compile Include="CFDI\Ubicacion.cs" />
     <Compile Include="CFDI\UbicacionFiscal.cs" />
+    <Compile Include="CloudStorage\CloudStorageItem.cs" />
     <Compile Include="CloudStorage\CloudStorageMananger.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -503,6 +505,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CertificadoViewModels.cs" />
     <Compile Include="Models\ComprobanteViewModels.cs" />
+    <Compile Include="Models\DevViewModels.cs" />
     <Compile Include="Models\EmisorViewModels.cs" />
     <Compile Include="Models\InvoicePdfModel.cs" />
     <Compile Include="Models\ReceptorViewModels.cs" />
