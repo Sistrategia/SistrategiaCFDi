@@ -429,6 +429,7 @@
     <Content Include="Views\Comprobante\UploadCancelacion.cshtml" />
     <Content Include="Views\Comprobante\cemer.cshtml" />
     <Content Include="Views\Dev\GetTimbradoLog.cshtml" />
+    <Content Include="Views\Comprobante\EditOLD.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -9,6 +9,7 @@ using Sistrategia.SAT.CFDiWebSite.CFDI;
 using System.Web.Mvc;
 using System.Configuration;
 using System.Web;
+using System.Linq;
 
 namespace Sistrategia.SAT.CFDiWebSite.Models
 {
@@ -138,6 +139,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
                 }
             }
 
+            this.ComprobanteId = comprobante.ComprobanteId;
             this.EmisorId = comprobante.ComprobanteEmisorId;
             //this.DomicilioFiscalId = comprobante.Emisor.DomicilioFiscalId;
             //this.ExpedidoEnId = comprobante.Emisor.DomicilioFiscalId;
@@ -150,6 +152,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
             this.Serie = comprobante.Serie;
             this.Folio = comprobante.Folio;
+            this.Fecha = comprobante.Fecha.ToString("yyyy-MM-ddTHH:mm:ss");
 
             this.TipoCambio = comprobante.TipoCambio;
             this.Moneda = comprobante.Moneda;
@@ -161,10 +164,21 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
             this.TotalImpuestosRetenidos = comprobante.Impuestos.TotalImpuestosRetenidos;
             this.TotalImpuestosTrasladados = comprobante.Impuestos.TotalImpuestosTrasladados;
+
+            this.Notas = comprobante.ExtendedStringValue2;
+
+            this.CadenaOriginal = comprobante.GetCadenaOriginal();
+            this.Sello = comprobante.Sello;
+            Sistrategia.SAT.CFDiWebSite.Data.ApplicationDbContext DBContext = new Sistrategia.SAT.CFDiWebSite.Data.ApplicationDbContext();
+            var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
+            this.GetSello = certificado.GetSello(this.CadenaOriginal);
         }
 
+        public int? ComprobanteId { get; set; }
         public string Serie { get; set; }
         public string Folio { get; set; }
+        //public DateTime Fecha { get; set; }
+        public string Fecha { get; set; }
 
         public decimal SubTotal { get; set; }
 
@@ -176,6 +190,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public decimal? TotalImpuestosTrasladados { get; set; }
 
         public decimal Total { get; set; }
+
+        public string CadenaOriginal { get; set; }
+        public string Sello { get; set; }
+        public string GetSello { get; set; }
 
         public string FormaDePago { get; set; }
         public string MetodoDePago { get; set; }
@@ -208,6 +226,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public int? EmisorId { get; set; }
         public int? ReceptorId { get; set; }
         public int? CertificadoId { get; set; }
+
+
+
+        public string Notas { get; set; }
     }
 
     public class ConceptoViewModel
