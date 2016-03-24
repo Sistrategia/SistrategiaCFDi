@@ -313,6 +313,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             model.Folio = this.DBContext.Database.SqlQuery<string>("SELECT CONVERT(NVARCHAR,MAX(CONVERT(INT,[folio]))+1) FROM [sat_comprobante] WHERE [serie] = 'A'").FirstOrDefault();
             model.OrdenNumero = this.DBContext.Database.SqlQuery<int>("SELECT MAX([extended_int_value_1])+1 FROM [sat_comprobante] WHERE [serie] = 'A'").FirstOrDefault();
 
+
+            var SampleConceptsList = this.DBContext.Database.SqlQuery<SelectListItem>("SELECT [no_identificacion] as Value, [no_identificacion] + ' - ' + [descripcion] as Text FROM [sat_concepto] GROUP BY [no_identificacion], [descripcion] order by [no_identificacion] DESC");
+            ViewBag.SampleConcepts = SampleConceptsList;
+
             return View(model);
         }
 
