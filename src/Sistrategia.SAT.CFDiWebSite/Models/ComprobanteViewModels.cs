@@ -328,6 +328,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
             this.TimbreFiscalDigital = null;
 
+            this.Status = comprobante.Status;
+
             if (comprobante.Complementos != null && comprobante.Complementos.Count > 0) {
                 foreach (var complemento in comprobante.Complementos) {
                     if (complemento is TimbreFiscalDigital) {
@@ -363,6 +365,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public string GeneratedPDFUrl { get; set; }
 
         public TimbreFiscalDigital TimbreFiscalDigital { get; set; }
+
+        public string Status { get; set; }
     }
 
     public class ComprobanteEmisorDetailViewModel

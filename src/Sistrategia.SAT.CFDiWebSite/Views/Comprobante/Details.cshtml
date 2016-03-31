@@ -40,7 +40,7 @@
       <a target="_blank" href="@Url.Action("GetTimbre", new { id = Model.PublicKey.ToString("N") })" class="btn btn-primary">Timbrar</a>
     }
     
-    @if (Model.TimbreFiscalDigital != null) { //&& !string.IsNullOrEmpty(Model.TimbreFiscalDigital.SelloSAT)) {    
+    @if (Model.TimbreFiscalDigital != null && Model.Status.Equals("A", StringComparison.InvariantCultureIgnoreCase)) { //&& !string.IsNullOrEmpty(Model.TimbreFiscalDigital.SelloSAT)) {    
       <a target="_blank" href="@Url.Action("Cancel", new { id = Model.PublicKey.ToString("N") })" class="btn btn-primary">Cancelar</a>
     }
 

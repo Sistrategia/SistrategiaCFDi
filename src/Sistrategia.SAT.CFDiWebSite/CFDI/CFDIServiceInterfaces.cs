@@ -11,7 +11,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
     public interface ICancelaResponse
     {
-        Guid ComprobanteId { get; set; }
+        //Guid ComprobanteId { get; set; }
         string Ack { get; set; }
         string Text { get; set; }
         string[] UUIDs { get; set; }
@@ -20,17 +20,17 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
     public class CancelaResponseBase : ICancelaResponse
     {
-        private Guid comprobanteCanceladoId;
+        //private Guid comprobanteCanceladoId;
         private string ack;
         private string text;
         private string[] uuids;
-        private Guid comprobanteId;
+        //private Guid comprobanteId;
         private string xmlResponse;
 
-        public Guid ComprobanteCanceladoId {
-            get { return this.comprobanteCanceladoId; }
-            set { this.comprobanteCanceladoId = value; }
-        }
+        //public Guid ComprobanteCanceladoId {
+        //    get { return this.comprobanteCanceladoId; }
+        //    set { this.comprobanteCanceladoId = value; }
+        //}
 
         public string Ack {
             get { return this.ack; }
@@ -47,10 +47,10 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             set { this.uuids = value; }
         }
 
-        public Guid ComprobanteId {
-            get { return this.comprobanteId; }
-            set { this.comprobanteId = value; }
-        }
+        //public Guid ComprobanteId {
+        //    get { return this.comprobanteId; }
+        //    set { this.comprobanteId = value; }
+        //}
 
         public string XmlResponse {
             get { return this.xmlResponse; }

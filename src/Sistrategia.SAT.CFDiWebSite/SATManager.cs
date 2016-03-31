@@ -249,7 +249,7 @@ namespace Sistrategia.SAT.CFDiWebSite
 
         public ICancelaResponse CancelaCFDI(Comprobante comprobante, string user, string password, string rfc, string[] uuid, byte[] pfx, string pfxPassword) {
 
-            string invoiceFileName = DateTime.Now.ToString("yyyyMMddHHmmss_" + comprobante.PublicKey.ToString("N"));
+            string invoiceFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + comprobante.PublicKey.ToString("N");
             //byte[] sendFileBytes;
             byte[] responseFileBytes;
 
@@ -258,15 +258,28 @@ namespace Sistrategia.SAT.CFDiWebSite
             CloudBlobClient client = account.CreateCloudBlobClient();
             CloudBlobContainer container = client.GetContainerReference(ConfigurationManager.AppSettings["AzureDefaultStorage"]);
 
-            ICFDIService webService = CFDiServiceFactory.Create();
-            ICancelaResponse response = webService.CancelaCFDI(user, password, rfc, uuid, pfx, pfxPassword);
-            // response.XmlResponse
+            try {
 
-            CloudBlockBlob blob = container.GetBlockBlobReference(invoiceFileName + "_cancelado.txt");
-            blob.UploadText(response.XmlResponse, System.Text.Encoding.UTF8);
-            
+                ICFDIService webService = CFDiServiceFactory.Create();
+                ICancelaResponse response = webService.CancelaCFDI(user, password, rfc, uuid, pfx, pfxPassword);
+                // response.XmlResponse
 
-            return response;
+                CloudBlockBlob blob = container.GetBlockBlobReference(invoiceFileName + "_cancelado.txt");
+                blob.UploadText(response.XmlResponse, System.Text.Encoding.UTF8);
+
+
+                return response;
+            }
+            catch (Exception ex) {
+                CloudBlockBlob blob2 = container.GetBlockBlobReference(invoiceFileName + "_exception.txt");
+                //zipMs.Position = 0;
+                blob2.UploadText(ex.ToString());
+                blob2.Properties.ContentType = "text/plain";
+                blob2.SetMetadata();
+                blob2.SetProperties();
+
+                throw;
+            }
         }
         
     }

@@ -1578,7 +1578,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             string password = ConfigurationManager.AppSettings["CfdiServicePassword"];
 
             var model = new ComprobanteDetailViewModel(comprobante);
-            string invoiceFileName = DateTime.Now.ToString("yyyyMMddHHmmss_" + comprobante.PublicKey.ToString("N") + "_cancelado");
+            string invoiceFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + comprobante.PublicKey.ToString("N") + "_cancelado";
 
             //string invoiceFileName = DateTime.Now.ToString("cancelado_yyyyMMddHHmmss_" + comprobante.PublicKey.ToString("N") + ".txt");
 
@@ -1586,10 +1586,22 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                 SATManager manager = new SATManager();
                 ICancelaResponse response = manager.CancelaCFDI(comprobante, user, password, comprobante.Emisor.RFC, UUIDs, certificado.PFXArchivo, certificado.PFXContrasena);
-                 // response.Ack.ToString();
-                if (response!=null)
+                // // response.Ack.ToString();
+                if (response != null) {
+                    Cancelacion cancelacion = new Cancelacion {
+                        Ack = response.Ack,
+                        Text = response.Text,
+                        CancelacionXmlResponseUrl = response.XmlResponse                        
+                    };
+                    cancelacion.UUIDComprobantes = new List<CancelacionUUIDComprobante>();
+                    cancelacion.UUIDComprobantes.Add(new CancelacionUUIDComprobante {
+                        Comprobante = comprobante,
+                        UUID = ((TimbreFiscalDigital)comprobante.Complementos[0]).UUID
+                    });
+                    comprobante.Status = "C";
+                    DBContext.Cancelaciones.Add(cancelacion);
                     DBContext.SaveChanges();
-
+                }
             }
             catch (Exception ex) {
                 //TempData["msg"] = ex.Message.ToString();
@@ -1599,7 +1611,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 //    return View();
             }
 
-            return View();
+            return View(model);
 
         }
 
