@@ -1544,57 +1544,78 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         #region Cancel
 
         public ActionResult Cancel(string id) {
-            //Guid publicKey;
-            //if (!Guid.TryParse(id, out publicKey))
-            //    return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            if (comprobante == null)
+                return HttpNotFound();
+
+            var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
 
 
 
+            var model = new ComprobanteDetailViewModel(comprobante);
+            return View(model);
+        }
 
-            //var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+        [HttpPost]
+        public ActionResult Cancel(string id, FormCollection formCollection) {        
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
 
-            //if (comprobante == null)
-            //    return HttpNotFound();
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
 
+            if (comprobante == null)
+                return HttpNotFound();
 
-            //var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
-            //string[] UUIDs = new string[1];
-            //UUIDs[0] = ((TimbreFiscalDigital)comprobante.Complementos[0]).UUID;
+            var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
+            
+            string[] UUIDs = new string[1];
+            UUIDs[0] = ((TimbreFiscalDigital)comprobante.Complementos[0]).UUID;
 
-            //string user = ConfigurationManager.AppSettings["CfdiServiceUser"];
-            //string password = ConfigurationManager.AppSettings["CfdiServicePassword"];
+            string user = ConfigurationManager.AppSettings["CfdiServiceUser"];
+            string password = ConfigurationManager.AppSettings["CfdiServicePassword"];
 
-            ////var model = new ComprobanteDetailViewModel(comprobante);
+            var model = new ComprobanteDetailViewModel(comprobante);
+            string invoiceFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + comprobante.PublicKey.ToString("N") + "_cancelado";
 
             //string invoiceFileName = DateTime.Now.ToString("cancelado_yyyyMMddHHmmss_" + comprobante.PublicKey.ToString("N") + ".txt");
 
-            //try {
+            try {
 
-            //    SATManager manager = new SATManager();
+                SATManager manager = new SATManager();
+                ICancelaResponse response = manager.CancelaCFDI(comprobante, user, password, comprobante.Emisor.RFC, UUIDs, certificado.PFXArchivo, certificado.PFXContrasena);
+                // // response.Ack.ToString();
+                if (response != null) {
+                    Cancelacion cancelacion = new Cancelacion {
+                        Ack = response.Ack,
+                        Text = response.Text,
+                        CancelacionXmlResponseUrl = response.XmlResponse                        
+                    };
+                    cancelacion.UUIDComprobantes = new List<CancelacionUUIDComprobante>();
+                    cancelacion.UUIDComprobantes.Add(new CancelacionUUIDComprobante {
+                        Comprobante = comprobante,
+                        UUID = ((TimbreFiscalDigital)comprobante.Complementos[0]).UUID
+                    });
+                    comprobante.Status = "C";
+                    DBContext.Cancelaciones.Add(cancelacion);
+                    DBContext.SaveChanges();
+                }
+            }
+            catch (Exception ex) {
+                //TempData["msg"] = ex.Message.ToString();
+                TempData["error"] = ex.Message.ToString();
+                return View(model);
+                //return View(model);
+                //    return View();
+            }
 
-
-
-            //  //  ICancelaResponse response = manager.CancelaCFDI(user, password, comprobante.Emisor.RFC, UUIDs, certificado.PFXArchivo, certificado.PFXContrasena);
-
-
-
-            //    // response.Ack.ToString();
-            //    //if (response)
-            //    //    DBContext.SaveChanges();
-
-
-            //}
-            //catch (Exception ex) {
-            //    TempData["msg"] = ex.Message.ToString();
-            //    return View();
-            //    //return View(model);
-            //    //    return View();
-            //}
-
-
-
-
-            return View();
+            return View(model);
 
         }
 

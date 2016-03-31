@@ -247,9 +247,39 @@ namespace Sistrategia.SAT.CFDiWebSite
         }
 
 
-        public ICancelaResponse CancelaCFDI(string user, string password, string rfc, string[] uuid, byte[] pfx, string pfxPassword) {
-            ICFDIService webService = CFDiServiceFactory.Create();
-            return webService.CancelaCFDI(user, password, rfc, uuid, pfx, pfxPassword);
+        public ICancelaResponse CancelaCFDI(Comprobante comprobante, string user, string password, string rfc, string[] uuid, byte[] pfx, string pfxPassword) {
+
+            string invoiceFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + comprobante.PublicKey.ToString("N");
+            //byte[] sendFileBytes;
+            byte[] responseFileBytes;
+
+
+            CloudStorageAccount account = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["AzureDefaultStorageConnectionString"]);
+            CloudBlobClient client = account.CreateCloudBlobClient();
+            CloudBlobContainer container = client.GetContainerReference(ConfigurationManager.AppSettings["AzureDefaultStorage"]);
+
+            try {
+
+                ICFDIService webService = CFDiServiceFactory.Create();
+                ICancelaResponse response = webService.CancelaCFDI(user, password, rfc, uuid, pfx, pfxPassword);
+                // response.XmlResponse
+
+                CloudBlockBlob blob = container.GetBlockBlobReference(invoiceFileName + "_cancelado.txt");
+                blob.UploadText(response.XmlResponse, System.Text.Encoding.UTF8);
+
+
+                return response;
+            }
+            catch (Exception ex) {
+                CloudBlockBlob blob2 = container.GetBlockBlobReference(invoiceFileName + "_exception.txt");
+                //zipMs.Position = 0;
+                blob2.UploadText(ex.ToString());
+                blob2.Properties.ContentType = "text/plain";
+                blob2.SetMetadata();
+                blob2.SetProperties();
+
+                throw;
+            }
         }
         
     }

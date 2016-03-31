@@ -1,7 +1,25 @@
-﻿
+﻿@using Sistrategia.SAT.CFDiWebSite.Models
+@model ComprobanteDetailViewModel
 @{
-    ViewBag.Title = "Cancel";
+  ViewBag.Title = "Cancelar "; // Model.Title; // "Get Timbre";
 }
 
-<h2>Cancel</h2>
+<h1>@ViewBag.Title <br /><small>@Model.Serie-@Model.Folio -  @Model.Receptor.RFC</small></h1>
 
+@if (TempData["success"] != null) {
+  @Html.Raw("<div class='alert alert-success text-center'>" + TempData["success"] + "</div>")
+}
+else if (TempData["error"] != null) {
+  @Html.Raw("<div class='alert alert-danger text-center'><span class='glyphicon glyphicon-warning-sign'></span> " + TempData["error"] + "</div>")
+}
+
+@using (Html.BeginForm("Cancel", "Comprobante", new { id = @Model.PublicKey }, FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
+  @Html.AntiForgeryToken()
+  @*<h4>@LocalizedStrings.Account_RegisterSubtitle</h4>*@
+  <h4>@Model.Receptor.Nombre</h4>
+  <hr />
+  @Html.ValidationSummary("", new { @class = "text-danger" })
+
+  <input type="submit" class="btn btn-primary" value="Cancelar" /> @*@LocalizedStrings.SaveButton*@
+
+}

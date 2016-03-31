@@ -91,7 +91,39 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI.EDICOM.TestCFDI
         #endregion
 
         ICancelaResponse ICFDIService.CancelaCFDI(string user, string password, string rfc, string[] uuid, byte[] pfx, string pfxPassword) {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
+
+            var response = new CancelaResponse {
+                ack = "CANCELADO_PRUEBA_NO_VALIDO",
+                text = "~CANCELADO_PRUEBA_NO_VALIDO",
+                uuids = uuid.ToList()
+            };
+
+             //CancelaResponse response = this.cancelaCFDi(user, password, rfc, uuid, pfx, pfxPassword);
+
+            CancelaResponseBase responseBase = new CancelaResponseBase();
+            responseBase.Ack = response.ack;
+            responseBase.Text = response.text;
+
+            System.Collections.Generic.List<string> uuidsList = new System.Collections.Generic.List<string>();
+
+            foreach (string uuidItem in response.uuids) {
+                uuidsList.Add(uuidItem);
+            }
+            responseBase.UUIDs = uuidsList.ToArray();
+
+            System.Xml.Serialization.XmlSerializer x = new System.Xml.Serialization.XmlSerializer(response.GetType());
+            MemoryStream ms = new MemoryStream();
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Encoding = new UTF8Encoding();
+            XmlWriter xmlWriter = XmlWriter.Create(ms, settings);
+            x.Serialize(xmlWriter, response);
+            string xmlContent = Encoding.UTF8.GetString(ms.GetBuffer());
+
+            responseBase.XmlResponse = xmlContent;
+
+            return responseBase;
+
         }
 
         #region Utilities
