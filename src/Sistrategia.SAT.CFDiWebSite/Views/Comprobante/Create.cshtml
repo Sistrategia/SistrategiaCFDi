@@ -143,22 +143,22 @@
             </div>
         </div>
         <div class="col-md-1">
-            <input type="number" class="form-control" data-bind="value: Cantidad" placeholder="Cantidad">
+            <input type="number" class="form-control" data-bind="textInput: Cantidad" placeholder="Cantidad">
         </div>
         <div class="col-md-1">
-            <input type="text" class="form-control" data-bind="value: Unidad" placeholder="Unidad">
+            <input type="text" class="form-control" data-bind="textInput: Unidad" placeholder="Unidad">
         </div>
         <div class="col-md-1">
-            <input type="text" class="form-control" data-bind="value: NoIdentificacion" placeholder="Identificación">
+            <input type="text" class="form-control" data-bind="textInput: NoIdentificacion" placeholder="Identificación">
         </div>
         <div class="col-md-5">
-            <input type="text" class="form-control" data-bind="value: Descripcion" placeholder="Descripción">
+            <input type="text" class="form-control" data-bind="textInput: Descripcion" placeholder="Descripción">
         </div>
         <div class="col-md-2">
-            <input type="number" class="form-control" data-bind="value: ValorUnitario" placeholder="Precio">
+            <input type="number" class="form-control" data-bind="textInput: ValorUnitario" placeholder="Precio">
         </div>
         <div class="col-md-2">
-            <button type="button" class="btn btn-default form-control" data-bind="enable: (Cantidad().length > 0 && Unidad().length > 0 && NoIdentificacion().length > 0 && Descripcion().length > 0 && ValorUnitario().length > 0), click: addItem">Agregar</button>
+            <button type="button" class="btn btn-default form-control" data-bind="enable: (Cantidad() > 0 && Unidad().length > 0 && NoIdentificacion().length > 0 && Descripcion().length > 0 && ValorUnitario().length > 0), click: addItem">Agregar</button>
         </div>
         <div class="col-md-12"><br /></div>
         <div class="col-md-12" data-bind="visible: HasItems()">
@@ -207,10 +207,10 @@
                 @Html.DropDownList("TiposImpuestoTraslado", Model.TiposImpuestoTraslado, "Seleccione", new { @class = "form-control", data_bind = "value: TrasladosImpuesto" })
             </div>
             <div class="col-md-3">
-              <input type="text" class="form-control" data-bind="value: TrasladosTasa" placeholder="Tasa">
+                <input type="text" class="form-control" data-bind="textInput: TrasladosTasa" placeholder="Tasa">
             </div>
             <div class="col-md-3">
-              <input type="number" class="form-control" data-bind="value: TrasladosImporte" placeholder="Importe">
+                <input type="number" class="form-control" data-bind="textInput: TrasladosImporte" placeholder="Importe">
             </div>
             <div class="col-md-2">
                 <button type="button" class="btn btn-default form-control" data-bind="enable: (TrasladosImpuesto().length > 0 && TrasladosImporte().length > 0 && TrasladosTasa().length > 0), click: addTraslado">Agregar</button>
@@ -250,7 +250,7 @@
                 @Html.DropDownList("TiposImpuestoRetencion", Model.TiposImpuestoRetencion, "Seleccione", new { @class = "form-control", data_bind = "value: RetencionesImpuesto" })
             </div>
             <div class="col-md-3">
-                <input type="number" class="form-control" data-bind="value: RetencionesImporte" placeholder="Importe">
+                <input type="number" class="form-control" data-bind="textInput: RetencionesImporte" placeholder="Importe">
             </div>
             <div class="col-md-2">
                 <button type="button" class="btn btn-default form-control" data-bind="enable: (RetencionesImpuesto().length > 0 && RetencionesImporte().length > 0), click: addRetencion">Agregar</button>
@@ -285,7 +285,7 @@
                 Subtotal:
             </div>
             <div class="col-md-5">
-                <input class="form-control" data-bind="value: SubTotal" type="number" />
+                <input class="form-control" data-bind="textInput: SubTotal" type="number" />
                 <br />
             </div>
 
@@ -293,7 +293,7 @@
                 Total de impuestos trasladados:
             </div>
             <div class="col-md-5">
-                <input class="form-control" data-bind="value: TotalTraslados" type="number" />
+                <input class="form-control" data-bind="textInput: TotalTraslados" type="number" />
                 <br />
             </div>
 
@@ -301,14 +301,14 @@
                 Total de impuestos retenidos:
             </div>
             <div class="col-md-5" style="font-weight:600">
-                <input class="form-control" data-bind="value: TotalRetenciones" type="number" />
+                <input class="form-control" data-bind="textInput: TotalRetenciones" type="number" />
                 <br />
             </div>
             <div class="col-md-7" style="font-weight:600">
                 Total:
             </div>
             <div class="col-md-5">
-                <input class="form-control" data-bind="value: Total" type="number" />
+                <input class="form-control" data-bind="textInput: Total" type="number" />
                 <br />
             </div>
         </div>

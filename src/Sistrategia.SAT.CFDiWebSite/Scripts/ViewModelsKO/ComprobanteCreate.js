@@ -83,7 +83,7 @@ var ConceptosModel = function (modelId) {
 
             self.Items.push(concepto);
             
-            self.Cantidad("");
+            //self.Cantidad("");
             self.NoIdentificacion("");
             self.Descripcion("");
             self.ValorUnitario("");
