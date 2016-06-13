@@ -194,7 +194,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                             (cnumero.Substring(pos - 2, 3) != "000")) { // miles
                 if (cnumero.Substring(pos, 1) == "1") {
                     if (unidad_texto.Length >= 2)
-                        unidad_texto = unidad_texto.Substring(0, unidad_texto.Length - 2) + " ";  // REVISAR BIEN ESTE CASO
+                        unidad_texto = unidad_texto.Substring(0, unidad_texto.Length - 1) + " ";  // REVISAR BIEN ESTE CASO ANTES ERA - 2 PARECE QUE ASUMIENDO QUE "UNO" ESTA EN EL ARRAY 5
                     unidad_texto += this.aTexto[5][0];
                 }
                 else {

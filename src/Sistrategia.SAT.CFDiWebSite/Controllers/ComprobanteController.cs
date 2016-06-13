@@ -1756,7 +1756,31 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         #endregion
 
 
+        public ActionResult ConvertToLetra(string number) {
+            if (string.IsNullOrEmpty(number))
+                return Content("Add parameter ?number=", "text/plain");
 
+            try {
+                if ( 0 > number.IndexOf('.') )
+                    number += ".0";
+                decimal numero = decimal.Parse(number);
+
+                CantidadEnLetraConverter converter = new CantidadEnLetraConverter();
+                converter.Numero = numero;
+
+                Response.ClearContent();
+                Response.ContentType = "plain/text";
+                Response.ContentEncoding = System.Text.Encoding.UTF8;
+
+                string letra = converter.letra();
+
+                return Content(letra, "text/plain");
+            }
+            catch {
+                return Content("número no reconocido", "text/plain");
+            }
+            
+        }
 
 
         public ActionResult ShowXml(string id) {
