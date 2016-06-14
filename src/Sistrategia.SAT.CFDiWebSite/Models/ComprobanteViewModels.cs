@@ -568,10 +568,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             }
 
             this.PublicKey = comprobante.PublicKey;
-
+            this.TipoDeComprobante = comprobante.TipoDeComprobante;
             this.Fecha = comprobante.Fecha.ToString("dd/MM/yyyy HH:mm:ss");
             this.Serie = comprobante.Serie;
             this.Folio = comprobante.Folio;
+
+            
 
             //this.FolioFiscal = comprobante.
 
@@ -619,6 +621,17 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             }
         }
 
+        public string DocumentName {
+            get {
+                if ("ingreso".Equals(this.TipoDeComprobante, StringComparison.InvariantCultureIgnoreCase))
+                    return "Factura";
+                if ("egreso".Equals(this.TipoDeComprobante, StringComparison.InvariantCultureIgnoreCase)) // verificar en que caso sería nómina (complemento)
+                    return "Nota de Crédito";
+
+                return "Factura";
+            }
+        }
+
         public string EmisorTelefono { get; set; }
         public string EmisorCorreo { get; set; }
 
@@ -633,6 +646,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public Guid PublicKey { get; set; }
 
         public string Status { get { return "A"; } }
+
+        public string TipoDeComprobante { get; set; }
 
         //public string Title {
         //    get {
