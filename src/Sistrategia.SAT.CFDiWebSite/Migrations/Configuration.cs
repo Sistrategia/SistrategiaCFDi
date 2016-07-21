@@ -48,12 +48,23 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
 
             context.TiposMetodoDePago.AddOrUpdate(
                 t => t.TipoMetodoDePagoValue,
-                new TipoMetodoDePago { TipoMetodoDePagoId = 1, TipoMetodoDePagoValue = "EFECTIVO" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 2, TipoMetodoDePagoValue = "CHEQUE" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 3, TipoMetodoDePagoValue = "TRANSFERENCIA INTERBANCARIA" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 4, TipoMetodoDePagoValue = "NO IDENTIFICADO" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 5, TipoMetodoDePagoValue = "TARJETA DE CRÉDITO" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 6, TipoMetodoDePagoValue = "TARJETA DE DÉBITO" }
+                new TipoMetodoDePago { TipoMetodoDePagoId = 1, TipoMetodoDePagoValue = "EFECTIVO", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = null, Status = "I" },
+                new TipoMetodoDePago { TipoMetodoDePagoId = 2, TipoMetodoDePagoValue = "CHEQUE", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = null, Status = "I" },
+                new TipoMetodoDePago { TipoMetodoDePagoId = 3, TipoMetodoDePagoValue = "TRANSFERENCIA INTERBANCARIA", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = null, Status = "I" },
+                new TipoMetodoDePago { TipoMetodoDePagoId = 4, TipoMetodoDePagoValue = "NO IDENTIFICADO", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = null, Status = "I" },
+                new TipoMetodoDePago { TipoMetodoDePagoId = 5, TipoMetodoDePagoValue = "TARJETA DE CRÉDITO", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = null, Status = "I" },
+                new TipoMetodoDePago { TipoMetodoDePagoId = 6, TipoMetodoDePagoValue = "TARJETA DE DÉBITO", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = null, Status = "I" },
+
+                new TipoMetodoDePago { TipoMetodoDePagoId = 7, TipoMetodoDePagoValue = "EFECTIVO", TipoMetodoDePagoCode = "01", TipoMetodoDePagoDescription = "01-EFECTIVO", Status = "A" },
+                new TipoMetodoDePago { TipoMetodoDePagoId = 8, TipoMetodoDePagoValue = "CHEQUE NOMINATIVO", TipoMetodoDePagoCode = "02", TipoMetodoDePagoDescription = "02-CHEQUE NOMINATIVO", Status = "A" },
+                new TipoMetodoDePago { TipoMetodoDePagoId = 9, TipoMetodoDePagoValue = "TRANSFERENCIA ELECTRÓNICA DE FONDOS", TipoMetodoDePagoCode = "03", TipoMetodoDePagoDescription = "03-TRANSFERENCIA ELECTRÓNICA DE FONDOS", Status = "A" },
+                new TipoMetodoDePago { TipoMetodoDePagoId = 10, TipoMetodoDePagoValue = "TARJETA DE CRÉDITO", TipoMetodoDePagoCode = "04", TipoMetodoDePagoDescription = "04-TARJETA DE CRÉDITO", Status = "A" },
+                new TipoMetodoDePago { TipoMetodoDePagoId = 11, TipoMetodoDePagoValue = "MONEDERO ELECTRÓNICO", TipoMetodoDePagoCode = "05", TipoMetodoDePagoDescription = "05-MONEDERO ELECTRÓNICO", Status = "A" },
+                new TipoMetodoDePago { TipoMetodoDePagoId = 12, TipoMetodoDePagoValue = "DINERO ELECTRÓNICO", TipoMetodoDePagoCode = "06", TipoMetodoDePagoDescription = "06-DINERO ELECTRÓNICO", Status = "A" },
+                new TipoMetodoDePago { TipoMetodoDePagoId = 13, TipoMetodoDePagoValue = "VALES DE DESPENSA", TipoMetodoDePagoCode = "08", TipoMetodoDePagoDescription = "08-VALES DE DESPENSA", Status = "A" },
+                new TipoMetodoDePago { TipoMetodoDePagoId = 14, TipoMetodoDePagoValue = "TARJETA DE DÉBITO", TipoMetodoDePagoCode = "28", TipoMetodoDePagoDescription = "28-TARJETA DE DÉBITO", Status = "A" },
+                new TipoMetodoDePago { TipoMetodoDePagoId = 15, TipoMetodoDePagoValue = "TARJETA DE SERVICIO", TipoMetodoDePagoCode = "29", TipoMetodoDePagoDescription = "29-TARJETA DE SERVICIO", Status = "A" },
+                new TipoMetodoDePago { TipoMetodoDePagoId = 16, TipoMetodoDePagoValue = "OTROS", TipoMetodoDePagoCode = "99", TipoMetodoDePagoDescription = "99-OTROS", Status = "A" }
            );
             context.SaveChanges();
 

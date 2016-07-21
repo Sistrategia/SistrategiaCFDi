@@ -666,6 +666,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public string Notas { get; set; }
 
         public string MetodoDePago { get; set; }
+        public string MetodoDePagoDisplayName { get; set; }
         public string NumCuenta { get; set; }
         //public string NoOrden { get; set; }
 

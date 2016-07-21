@@ -10,6 +10,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.html.simpleparser;
 using Sistrategia.SAT.CFDiWebSite.CFDI;
+using Sistrategia.SAT.CFDiWebSite.Data;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -17,7 +18,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 {
     public class InvoicePdfModel
     {
-        public MemoryStream CreatePDF(Comprobante comprobante) {
+        public MemoryStream CreatePDF(ApplicationDbContext DBContext, Comprobante comprobante) {
             try {
                 MemoryStream outputStream = new MemoryStream();
                 Document document = new Document(PageSize.LETTER, 53.858267717f, 51.023622047f, 45.354330709f, 45.354330709f);
@@ -215,12 +216,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
                 TextMetodoPago.Border = 0;
                 ControlDataInvoice.AddCell(TextMetodoPago);
 
-                PdfPCell MetodoPago = new PdfPCell(new Phrase(comprobante.MetodoDePago, Verdana9));
+                TipoMetodoDePago tipoMetodoDePago = DBContext.TiposMetodoDePago.Where(m => m.TipoMetodoDePagoCode == comprobante.MetodoDePago).SingleOrDefault();
+                PdfPCell MetodoPago = new PdfPCell(new Phrase(tipoMetodoDePago.TipoMetodoDePagoDescription, Verdana9));
                 MetodoPago.HorizontalAlignment = Rectangle.ALIGN_CENTER;
                 MetodoPago.Border = 0;
                 ControlDataInvoice.AddCell(MetodoPago);
 
-                if (comprobante.MetodoDePago != null && (  comprobante.MetodoDePago.ToString().Equals("Cheque") || comprobante.MetodoDePago.ToString().Equals("Tarjeta de Crédito") || comprobante.MetodoDePago.ToString().Equals("Tarjeta de Débito"))) {
+                if (comprobante.MetodoDePago != null && (  comprobante.MetodoDePago.ToString().Equals("02") || comprobante.MetodoDePago.ToString().Equals("04") || comprobante.MetodoDePago.ToString().Equals("28"))) {
 
                     PdfPCell TextNoCuenta = new PdfPCell(new Phrase("Número de Cuenta", Verdana9));
                     TextNoCuenta.HorizontalAlignment = Rectangle.ALIGN_CENTER;

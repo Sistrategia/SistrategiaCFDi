@@ -214,13 +214,14 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         public ActionResult Create() {
             var model = new ComprobanteCreateViewModel();
 
-            var tipoMetodoDePagoList = DBContext.TiposMetodoDePago.ToList();
+            var tipoMetodoDePagoList = DBContext.TiposMetodoDePago.Where(m => m.Status == "A").ToList();
             var tipoMetodoDePagoSelectList = new List<SelectListItem>();
+
             foreach (var tipoMetodoDePago in tipoMetodoDePagoList) {
                 tipoMetodoDePagoSelectList.Add(new SelectListItem {
-                    Value = tipoMetodoDePago.TipoMetodoDePagoValue,
+                    Value = tipoMetodoDePago.TipoMetodoDePagoCode, //TipoMetodoDePagoValue,
                     Text = tipoMetodoDePago.TipoMetodoDePagoValue
-                });
+                });                
             }
             model.TipoMetodoDePago = tipoMetodoDePagoSelectList;
 
@@ -337,9 +338,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     throw new ApplicationException("¡Ingrese la forma de pago!");
                 else if (String.IsNullOrEmpty(model.MetodoDePago))
                     throw new ApplicationException("¡Ingrese el método de pago!");
-                else if ((model.MetodoDePago != "EFECTIVO" && model.MetodoDePago != "NO IDENTIFICADO") && (model.NumCtaPago == null || (model.NumCtaPago.Count() > 6 || model.NumCtaPago.Count() < 4)))
+                else if ((model.MetodoDePago == "02" || model.MetodoDePago == "03" || model.MetodoDePago == "04" || model.MetodoDePago == "28") && (model.NumCtaPago == null || (model.NumCtaPago.Count() > 6 || model.NumCtaPago.Count() < 4)))
                     throw new ApplicationException("¡El valor de NumCtaPago debe contener entre 4 hasta 6 caracteres!");
-                else if ((model.MetodoDePago != "EFECTIVO" && model.MetodoDePago != "NO IDENTIFICADO") && (string.IsNullOrEmpty(model.Banco)))
+                else if ((model.MetodoDePago == "02" || model.MetodoDePago == "03" || model.MetodoDePago == "04" || model.MetodoDePago == "28") && (string.IsNullOrEmpty(model.Banco)))
                     throw new ApplicationException("¡Ingrese el banco!");
                 else if ((model.Conceptos != null || model.Conceptos.Count > 0)
                     && model.Conceptos.All(x => x.Cantidad < 0m || x.Unidad == null || x.Descripcion == null || x.ValorUnitario < 0m))
@@ -1523,11 +1524,16 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
 
             var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+            TipoMetodoDePago tipoMetodoDePago = new TipoMetodoDePago();
+            
+            if (comprobante.Fecha > DateTime.Parse(ConfigurationManager.AppSettings["paymentMethodModificationDate"]))
+                tipoMetodoDePago = DBContext.TiposMetodoDePago.Where(m => m.TipoMetodoDePagoCode == comprobante.MetodoDePago).SingleOrDefault();
 
             if (comprobante == null)
                 return HttpNotFound();
 
             var model = new ComprobanteHtmlViewModel(comprobante);
+            model.MetodoDePagoDisplayName = tipoMetodoDePago.TipoMetodoDePagoDescription;
 
             if (comprobante.ViewTemplate != null) {
                 return View(comprobante.ViewTemplate.CodeName, model);
@@ -1969,7 +1975,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 Response.ContentType = "application/pdf";
                 Response.ContentEncoding = System.Text.Encoding.UTF8;
                 InvoicePdfModel pdfGenerator = new InvoicePdfModel();
-                return File(pdfGenerator.CreatePDF(comprobante), "application/pdf", PdfFileName);
+                return File(pdfGenerator.CreatePDF(DBContext, comprobante), "application/pdf", PdfFileName);
             }
             catch (Exception ex) {
                 TempData["msg2"] = ex.Message.ToString();

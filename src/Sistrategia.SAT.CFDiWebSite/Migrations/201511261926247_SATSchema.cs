@@ -385,6 +385,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                     {
                         tipo_metodo_de_pago_id = c.Int(nullable: false, identity: true),
                         tipo_metodo_de_pago_value = c.String(maxLength: 50),
+                        tipo_metodo_de_pago_code = c.String(maxLength: 6),
+                        tipo_metodo_de_pago_description = c.String(maxLength: 100),
+                        status = c.String(nullable: false, maxLength: 50),
                     })
                 .PrimaryKey(t => t.tipo_metodo_de_pago_id);
             

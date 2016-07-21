@@ -462,7 +462,7 @@
         //initial_model.TipoCambio(1);
         initial_model.TipoDeComprobante("ingreso");
         initial_model.TemplateId(2);
-        initial_model.MetodoDePago("NO IDENTIFICADO");
+        initial_model.MetodoDePago("99");
 
         initial_model.Folio("@Html.Raw(Model.Folio)");     
         initial_model.OrdenNumero("@Html.Raw(Model.OrdenNumero)");
@@ -520,10 +520,10 @@
 
 
         initial_model.MetodoDePago.subscribe(function (newValue) {
-            if (newValue == 'EFECTIVO' || newValue == 'NO IDENTIFICADO' || newValue == '')
-                initial_model.IsRequiredNumCtaPago(false);
-            else
+            if (newValue == '02' || newValue == '03' || newValue == '04' || newValue == '28' || newValue == '')
                 initial_model.IsRequiredNumCtaPago(true);
+            else
+                initial_model.IsRequiredNumCtaPago(false);
         });
 
         conceptos_model.Items.subscribe(function (newValue) {
