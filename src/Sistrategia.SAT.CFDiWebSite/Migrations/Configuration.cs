@@ -14,6 +14,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             ContextKey = "Sistrategia.SAT.CFDiWebSite.Data.ApplicationDbContext";
         }
 
+        public void ReSeed(Sistrategia.SAT.CFDiWebSite.Data.ApplicationDbContext context) {
+            this.Seed(context);
+        }
+
         protected override void Seed(Sistrategia.SAT.CFDiWebSite.Data.ApplicationDbContext context) {
             context.Roles.AddOrUpdate(
                r => r.Name,
@@ -48,23 +52,36 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
 
             context.TiposMetodoDePago.AddOrUpdate(
                 t => t.TipoMetodoDePagoValue,
-                new TipoMetodoDePago { TipoMetodoDePagoId = 1, TipoMetodoDePagoValue = "EFECTIVO", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = null, Status = "I" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 2, TipoMetodoDePagoValue = "CHEQUE", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = null, Status = "I" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 3, TipoMetodoDePagoValue = "TRANSFERENCIA INTERBANCARIA", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = null, Status = "I" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 4, TipoMetodoDePagoValue = "NO IDENTIFICADO", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = null, Status = "I" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 5, TipoMetodoDePagoValue = "TARJETA DE CRÉDITO", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = null, Status = "I" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 6, TipoMetodoDePagoValue = "TARJETA DE DÉBITO", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = null, Status = "I" },
+                //Migration:SATSchema
+                //new TipoMetodoDePago { TipoMetodoDePagoId = 1, TipoMetodoDePagoValue = "EFECTIVO" },
+                //new TipoMetodoDePago { TipoMetodoDePagoId = 2, TipoMetodoDePagoValue = "CHEQUE" },
+                //new TipoMetodoDePago { TipoMetodoDePagoId = 3, TipoMetodoDePagoValue = "TRANSFERENCIA INTERBANCARIA" },
+                //new TipoMetodoDePago { TipoMetodoDePagoId = 4, TipoMetodoDePagoValue = "NO IDENTIFICADO" },
+                //new TipoMetodoDePago { TipoMetodoDePagoId = 5, TipoMetodoDePagoValue = "TARJETA DE CRÉDITO" },
+                //new TipoMetodoDePago { TipoMetodoDePagoId = 6, TipoMetodoDePagoValue = "TARJETA DE DÉBITO" }
 
-                new TipoMetodoDePago { TipoMetodoDePagoId = 7, TipoMetodoDePagoValue = "EFECTIVO", TipoMetodoDePagoCode = "01", TipoMetodoDePagoDescription = "01-EFECTIVO", Status = "A" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 8, TipoMetodoDePagoValue = "CHEQUE NOMINATIVO", TipoMetodoDePagoCode = "02", TipoMetodoDePagoDescription = "02-CHEQUE NOMINATIVO", Status = "A" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 9, TipoMetodoDePagoValue = "TRANSFERENCIA ELECTRÓNICA DE FONDOS", TipoMetodoDePagoCode = "03", TipoMetodoDePagoDescription = "03-TRANSFERENCIA ELECTRÓNICA DE FONDOS", Status = "A" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 10, TipoMetodoDePagoValue = "TARJETA DE CRÉDITO", TipoMetodoDePagoCode = "04", TipoMetodoDePagoDescription = "04-TARJETA DE CRÉDITO", Status = "A" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 11, TipoMetodoDePagoValue = "MONEDERO ELECTRÓNICO", TipoMetodoDePagoCode = "05", TipoMetodoDePagoDescription = "05-MONEDERO ELECTRÓNICO", Status = "A" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 12, TipoMetodoDePagoValue = "DINERO ELECTRÓNICO", TipoMetodoDePagoCode = "06", TipoMetodoDePagoDescription = "06-DINERO ELECTRÓNICO", Status = "A" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 13, TipoMetodoDePagoValue = "VALES DE DESPENSA", TipoMetodoDePagoCode = "08", TipoMetodoDePagoDescription = "08-VALES DE DESPENSA", Status = "A" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 14, TipoMetodoDePagoValue = "TARJETA DE DÉBITO", TipoMetodoDePagoCode = "28", TipoMetodoDePagoDescription = "28-TARJETA DE DÉBITO", Status = "A" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 15, TipoMetodoDePagoValue = "TARJETA DE SERVICIO", TipoMetodoDePagoCode = "29", TipoMetodoDePagoDescription = "29-TARJETA DE SERVICIO", Status = "A" },
-                new TipoMetodoDePago { TipoMetodoDePagoId = 16, TipoMetodoDePagoValue = "OTROS", TipoMetodoDePagoCode = "99", TipoMetodoDePagoDescription = "99-OTROS", Status = "A" }
+                //Migration:MetodoDePago2016
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 1, TipoMetodoDePagoValue = "EFECTIVO", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = "EFECTIVO", Status = "I" },
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 2, TipoMetodoDePagoValue = "CHEQUE", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = "CHEQUE", Status = "I" },
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 3, TipoMetodoDePagoValue = "TRANSFERENCIA INTERBANCARIA", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = "TRANSFERENCIA INTERBANCARIA", Status = "I" },
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 4, TipoMetodoDePagoValue = "NO IDENTIFICADO", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = "NO IDENTIFICADO", Status = "I" },
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 5, TipoMetodoDePagoValue = "TARJETA DE CRÉDITO", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = "TARJETA DE CRÉDITO", Status = "I" },
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 6, TipoMetodoDePagoValue = "TARJETA DE DÉBITO", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = "TARJETA DE DÉBITO", Status = "I" },
+
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 7, TipoMetodoDePagoValue = "DEPOSITO BANCARIO", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = "DEPOSITO BANCARIO", Status = "I" },
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 8, TipoMetodoDePagoValue = "TRANSFERENCIA", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = "TRANSFERENCIA", Status = "I" },
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 9, TipoMetodoDePagoValue = "No Identificado", TipoMetodoDePagoCode = null, TipoMetodoDePagoDescription = "No Identificado", Status = "I" },
+
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 10, TipoMetodoDePagoValue = "01", TipoMetodoDePagoCode = "01", TipoMetodoDePagoDescription = "EFECTIVO", Status = "A" },
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 11, TipoMetodoDePagoValue = "02", TipoMetodoDePagoCode = "02", TipoMetodoDePagoDescription = "CHEQUE NOMINATIVO", Status = "A" },
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 12, TipoMetodoDePagoValue = "03", TipoMetodoDePagoCode = "03", TipoMetodoDePagoDescription = "TRANSFERENCIA ELECTRÓNICA DE FONDOS", Status = "A" },
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 13, TipoMetodoDePagoValue = "04", TipoMetodoDePagoCode = "04", TipoMetodoDePagoDescription = "TARJETA DE CRÉDITO", Status = "A" },
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 14, TipoMetodoDePagoValue = "05", TipoMetodoDePagoCode = "05", TipoMetodoDePagoDescription = "MONEDERO ELECTRÓNICO", Status = "A" },
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 15, TipoMetodoDePagoValue = "06", TipoMetodoDePagoCode = "06", TipoMetodoDePagoDescription = "DINERO ELECTRÓNICO", Status = "A" },
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 16, TipoMetodoDePagoValue = "08", TipoMetodoDePagoCode = "08", TipoMetodoDePagoDescription = "VALES DE DESPENSA", Status = "A" },
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 17, TipoMetodoDePagoValue = "28", TipoMetodoDePagoCode = "28", TipoMetodoDePagoDescription = "TARJETA DE DÉBITO", Status = "A" },
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 18, TipoMetodoDePagoValue = "29", TipoMetodoDePagoCode = "29", TipoMetodoDePagoDescription = "TARJETA DE SERVICIO", Status = "A" },
+                 new TipoMetodoDePago { TipoMetodoDePagoId = 19, TipoMetodoDePagoValue = "99", TipoMetodoDePagoCode = "99", TipoMetodoDePagoDescription = "OTROS", Status = "A" }
            );
             context.SaveChanges();
 

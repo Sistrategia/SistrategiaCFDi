@@ -50,10 +50,9 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //private bool montoFolioFiscalOrigFieldSpecified = false;
 
        
-
         private string decimalFormat;
         private int? decimalPlaces = null;
-
+                
         //private Emisor emisor;
         //private Receptor receptor;
 
@@ -697,6 +696,12 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             get { return this.metodoDePago; }
             set { this.metodoDePago = value; }
         }
+
+        [ForeignKey("TipoMetodoDePago")]
+        public int? TipoMetodoDePagoId { get; set; }
+        
+        public virtual TipoMetodoDePago TipoMetodoDePago { get; set; }
+
 
         /// <summary>
         /// Atributo requerido para incorporar el lugar de expedición del comprobante.

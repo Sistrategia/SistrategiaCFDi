@@ -98,9 +98,9 @@
             <div class="form-horizontal">
                 <div class="form-group">
 
-                    @Html.LabelFor(m => m.MetodoDePago, new { @class = "col-md-2  control-label" })
+                    @Html.LabelFor(m => m.MetodoDePagoId, new { @class = "col-md-2  control-label" })
                     <div class="col-md-4">
-                        @Html.DropDownListFor(m => m.MetodoDePago, Model.TipoMetodoDePago, "Seleccione", new { @class = "form-control", data_bind = "value: MetodoDePago" })
+                        @Html.DropDownListFor(m => m.MetodoDePagoId, Model.TipoMetodoDePago, "Seleccione", new { @class = "form-control", data_bind = "value: MetodoDePagoId" })
                     </div>
                 </div>
             </div>
@@ -462,7 +462,7 @@
         //initial_model.TipoCambio(1);
         initial_model.TipoDeComprobante("ingreso");
         initial_model.TemplateId(2);
-        initial_model.MetodoDePago("99");
+        initial_model.MetodoDePagoId("19"); //[tipo_metodo_de_pago_id] "OTROS"
 
         initial_model.Folio("@Html.Raw(Model.Folio)");     
         initial_model.OrdenNumero("@Html.Raw(Model.OrdenNumero)");
@@ -519,8 +519,8 @@
 
 
 
-        initial_model.MetodoDePago.subscribe(function (newValue) {
-            if (newValue == '02' || newValue == '03' || newValue == '04' || newValue == '28' || newValue == '')
+        initial_model.MetodoDePagoId.subscribe(function (newValue) {
+            if (newValue == '11' || newValue == '12' || newValue == '13' || newValue == '17' || newValue == '') //[tipo_metodo_de_pago_id]
                 initial_model.IsRequiredNumCtaPago(true);
             else
                 initial_model.IsRequiredNumCtaPago(false);
@@ -622,7 +622,7 @@
                 Moneda: initial_model.Moneda(),
                 TipoCambio: initial_model.TipoCambio(),
                 FormaDePago: initial_model.FormaDePago(),
-                MetodoDePago: initial_model.MetodoDePago(),
+                MetodoDePagoId: initial_model.MetodoDePagoId(),
                 LugarExpedicion: initial_model.LugarExpedicion(),
                 NumCtaPago: initial_model.NumCtaPago(),
                 Banco: initial_model.Banco(),
