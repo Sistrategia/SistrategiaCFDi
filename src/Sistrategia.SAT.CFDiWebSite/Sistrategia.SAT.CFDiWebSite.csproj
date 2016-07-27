@@ -502,6 +502,10 @@
     <Compile Include="Migrations\201511261926247_SATSchema.Designer.cs">
       <DependentUpon>201511261926247_SATSchema.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201607262127030_MetodoDePago2016.cs" />
+    <Compile Include="Migrations\201607262127030_MetodoDePago2016.Designer.cs">
+      <DependentUpon>201607262127030_MetodoDePago2016.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CertificadoViewModels.cs" />
@@ -542,6 +546,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201511261926247_SATSchema.resx">
       <DependentUpon>201511261926247_SATSchema.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607262127030_MetodoDePago2016.resx">
+      <DependentUpon>201607262127030_MetodoDePago2016.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

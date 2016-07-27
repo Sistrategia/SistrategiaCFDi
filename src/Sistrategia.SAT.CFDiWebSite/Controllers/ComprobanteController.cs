@@ -214,13 +214,14 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         public ActionResult Create() {
             var model = new ComprobanteCreateViewModel();
 
-            var tipoMetodoDePagoList = DBContext.TiposMetodoDePago.ToList();
+            var tipoMetodoDePagoList = DBContext.TiposMetodoDePago.Where(m => m.Status == "A").ToList();
             var tipoMetodoDePagoSelectList = new List<SelectListItem>();
+
             foreach (var tipoMetodoDePago in tipoMetodoDePagoList) {
                 tipoMetodoDePagoSelectList.Add(new SelectListItem {
-                    Value = tipoMetodoDePago.TipoMetodoDePagoValue,
-                    Text = tipoMetodoDePago.TipoMetodoDePagoValue
-                });
+                    Value = tipoMetodoDePago.TipoMetodoDePagoId.ToString(), //TipoMetodoDePagoValue,
+                    Text = tipoMetodoDePago.TipoMetodoDePagoCode + " - " + tipoMetodoDePago.TipoMetodoDePagoDescription
+                });                
             }
             model.TipoMetodoDePago = tipoMetodoDePagoSelectList;
 
@@ -335,11 +336,11 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     throw new ApplicationException("¡Ingrese el certificado!");
                 else if (String.IsNullOrEmpty(model.FormaDePago))
                     throw new ApplicationException("¡Ingrese la forma de pago!");
-                else if (String.IsNullOrEmpty(model.MetodoDePago))
+                else if (model.MetodoDePagoId <= 0)
                     throw new ApplicationException("¡Ingrese el método de pago!");
-                else if ((model.MetodoDePago != "EFECTIVO" && model.MetodoDePago != "NO IDENTIFICADO") && (model.NumCtaPago == null || (model.NumCtaPago.Count() > 6 || model.NumCtaPago.Count() < 4)))
+                else if ((model.MetodoDePagoId == 11 || model.MetodoDePagoId == 12 || model.MetodoDePagoId == 13 || model.MetodoDePagoId == 17) && (model.NumCtaPago == null || (model.NumCtaPago.Count() > 6 || model.NumCtaPago.Count() < 4)))
                     throw new ApplicationException("¡El valor de NumCtaPago debe contener entre 4 hasta 6 caracteres!");
-                else if ((model.MetodoDePago != "EFECTIVO" && model.MetodoDePago != "NO IDENTIFICADO") && (string.IsNullOrEmpty(model.Banco)))
+                else if ((model.MetodoDePagoId == 11 || model.MetodoDePagoId == 12 || model.MetodoDePagoId == 13 || model.MetodoDePagoId == 17) && (string.IsNullOrEmpty(model.Banco)))
                     throw new ApplicationException("¡Ingrese el banco!");
                 else if ((model.Conceptos != null || model.Conceptos.Count > 0)
                     && model.Conceptos.All(x => x.Cantidad < 0m || x.Unidad == null || x.Descripcion == null || x.ValorUnitario < 0m))
@@ -432,7 +433,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     comprobante.ViewTemplateId = model.TemplateId;
 
                     comprobante.FormaDePago = model.FormaDePago;
-                    comprobante.MetodoDePago = model.MetodoDePago;
+
+                    TipoMetodoDePago tipoMetodoDePago = DBContext.TiposMetodoDePago.Find(model.MetodoDePagoId);
+                    comprobante.MetodoDePago = tipoMetodoDePago.TipoMetodoDePagoValue;
+                    comprobante.TipoMetodoDePagoId = tipoMetodoDePago.TipoMetodoDePagoId;
+                    comprobante.TipoMetodoDePago = tipoMetodoDePago;
+                    
                     comprobante.LugarExpedicion = model.LugarExpedicion;
                     comprobante.TipoCambio = model.TipoCambio;
                     comprobante.Moneda = model.Moneda;
@@ -1523,11 +1529,20 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
 
             var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
-
+            
             if (comprobante == null)
                 return HttpNotFound();
-
+            
             var model = new ComprobanteHtmlViewModel(comprobante);
+            TipoMetodoDePago tipoMetodoDePago = new TipoMetodoDePago();
+
+            if (comprobante.Fecha > DateTime.Parse("2016-07-15 00:00:00.000"))
+                tipoMetodoDePago = DBContext.TiposMetodoDePago.Where(m => m.TipoMetodoDePagoCode == comprobante.MetodoDePago).SingleOrDefault();
+
+            if (tipoMetodoDePago != null) {
+                model.MetodoDePagoCode = tipoMetodoDePago.TipoMetodoDePagoCode;
+                model.MetodoDePagoDescription = tipoMetodoDePago.TipoMetodoDePagoDescription;
+            }
 
             if (comprobante.ViewTemplate != null) {
                 return View(comprobante.ViewTemplate.CodeName, model);
@@ -1755,7 +1770,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
         #endregion
 
-
+        #region ConvertToLetra
         public ActionResult ConvertToLetra(string number) {
             if (string.IsNullOrEmpty(number))
                 return Content("Add parameter ?number=", "text/plain");
@@ -1781,8 +1796,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             }
             
         }
+        #endregion
 
-
+        #region ShowXml
         public ActionResult ShowXml(string id) {
 
             Guid publicKey;
@@ -1822,7 +1838,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
             return File(ms, "text/xml");
         }
+        #endregion
 
+        #region ShowCadenaOriginal
         public ActionResult ShowCadenaOriginal(string id) {
 
             Guid publicKey;
@@ -1862,7 +1880,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
             return Content(cadenaOriginal, "text/plain"); // cadenaOriginal; // File(ms, "text/xml");
         }
+        #endregion
 
+        #region ShowCadenaOriginal64
         public ActionResult ShowCadenaOriginal64(string id) {
 
             Guid publicKey;
@@ -1881,7 +1901,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(cadenaOriginal);
             return Content(System.Convert.ToBase64String(plainTextBytes), "text/plain"); // cadenaOriginal; // File(ms, "text/xml");
         }
+        #endregion
 
+        #region ShowSello
         public ActionResult ShowSello(string id) {
 
             Guid publicKey;
@@ -1923,7 +1945,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
             return Content(certificado.GetSello(cadenaOriginal), "text/plain"); // cadenaOriginal; // File(ms, "text/xml");
         }
+        #endregion
 
+        #region ShowSello64
         public ActionResult ShowSello64(string id) {
 
             Guid publicKey;
@@ -1943,7 +1967,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(certificado.GetSello(cadenaOriginal));
             return Content(System.Convert.ToBase64String(plainTextBytes), "text/plain"); // cadenaOriginal; // File(ms, "text/xml");
         }
+        #endregion
 
+        #region GetPDF
         public ActionResult GetPDF(string id) {
             Guid publicKey;
             if (!Guid.TryParse(id, out publicKey))
@@ -1969,16 +1995,27 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 Response.ContentType = "application/pdf";
                 Response.ContentEncoding = System.Text.Encoding.UTF8;
                 InvoicePdfModel pdfGenerator = new InvoicePdfModel();
-                return File(pdfGenerator.CreatePDF(comprobante), "application/pdf", PdfFileName);
+                //return File(pdfGenerator.CreatePDF(comprobante), "application/pdf", PdfFileName);
+
+                ComprobanteHtmlViewModel model = new ComprobanteHtmlViewModel(comprobante);
+                TipoMetodoDePago tipoMetodoDePago = new TipoMetodoDePago();
+
+                if (comprobante.Fecha > DateTime.Parse("2016-07-15 00:00:00.000"))
+                    tipoMetodoDePago = DBContext.TiposMetodoDePago.Where(m => m.TipoMetodoDePagoCode == comprobante.MetodoDePago).SingleOrDefault();
+
+                if (tipoMetodoDePago != null) {
+                    model.MetodoDePagoCode = tipoMetodoDePago.TipoMetodoDePagoCode;
+                    model.MetodoDePagoDescription = tipoMetodoDePago.TipoMetodoDePagoDescription;
+                }
+                
+                return File(pdfGenerator.CreatePDF(model), "application/pdf", PdfFileName);
             }
             catch (Exception ex) {
                 TempData["msg2"] = ex.Message.ToString();
                 return RedirectToAction("Index");
             }
         }
+        #endregion
 
-      
-
-        
     }
 }

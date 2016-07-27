@@ -13,6 +13,8 @@ using System.Linq;
 
 namespace Sistrategia.SAT.CFDiWebSite.Models
 {
+
+    #region ComprobanteIndexViewModel
     public class ComprobanteIndexViewModel
     {
         public ComprobanteIndexViewModel() {
@@ -20,7 +22,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         }
         public List<Comprobante> Comprobantes { get; set; }
     }
+    #endregion
 
+    #region ComprobanteCreateViewModel
     public class ComprobanteCreateViewModel
     {
         public ComprobanteCreateViewModel() {
@@ -47,7 +51,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public decimal Total { get; set; }
 
         public string FormaDePago { get; set; }
-        public string MetodoDePago { get; set; }
+        //public string MetodoDePago { get; set; }
         public string NumCtaPago { get; set; }
         public string LugarExpedicion { get; set; }
         public string TipoCambio { get; set; }
@@ -80,6 +84,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public int? EmisorId { get; set; }
         public int? ReceptorId { get; set; }
         public int? CertificadoId { get; set; }
+        public int? MetodoDePagoId { get; set; }
 
         public string TipoDeComprobante { get; set; }
 
@@ -89,8 +94,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         public string Notas { get; set; }
     }
+    #endregion
 
-
+    #region ComprobanteEditViewModel
     public class ComprobanteEditViewModel
     {
         public ComprobanteEditViewModel() {
@@ -231,7 +237,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         public string Notas { get; set; }
     }
+    #endregion
 
+    #region ConceptoViewModel
     public class ConceptoViewModel
     {
         public ConceptoViewModel() {
@@ -257,7 +265,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public int Ordinal { get; set; }
 
     }
+    #endregion
 
+    #region TrasladoViewModel
     public class TrasladoViewModel
     {
 
@@ -274,7 +284,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public string Impuesto { get; set; }
         public decimal Tasa { get; set; }
     }
+    #endregion
 
+    #region RetencionViewModel
     public class RetencionViewModel
     {
         public RetencionViewModel() {
@@ -288,7 +300,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public decimal Importe { get; set; }
         public string Impuesto { get; set; }
     }
+    #endregion
 
+    #region ComprobanteDetailViewModel
     public class ComprobanteDetailViewModel
     {
         public ComprobanteDetailViewModel(Comprobante comprobante) {
@@ -368,7 +382,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         public string Status { get; set; }
     }
+    #endregion
 
+    #region ComprobanteEmisorDetailViewModel
     public class ComprobanteEmisorDetailViewModel
     {
         public ComprobanteEmisorDetailViewModel() {
@@ -507,7 +523,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         public int? ViewTemplateId { get; set; }
     }
+    #endregion
 
+    #region ComprobanteReceptorDetailsViewModel
     public class ComprobanteReceptorDetailsViewModel
     {
         public ComprobanteReceptorDetailsViewModel() {
@@ -545,7 +563,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         public Guid PublicKey { get; set; }
     }
+    #endregion
 
+    #region ComprobanteHtmlViewModel
     public class ComprobanteHtmlViewModel
     {
         public ComprobanteHtmlViewModel(Comprobante comprobante) {
@@ -666,6 +686,20 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public string Notas { get; set; }
 
         public string MetodoDePago { get; set; }
+        public string MetodoDePagoCode { get; set; }
+        public string MetodoDePagoDescription { get; set; }
+        public string MetodoDePagoDisplayName { 
+            get {
+                if (this.MetodoDePagoCode != null && this.MetodoDePagoDescription != null)
+                    return this.MetodoDePagoCode + "-" + this.MetodoDePagoDescription;
+                else if (this.MetodoDePagoCode != null)
+                    return this.MetodoDePagoCode;
+                else if (this.MetodoDePagoDescription != null)
+                    return this.MetodoDePagoDescription;
+                else
+                    return this.MetodoDePago;
+            } 
+        }
         public string NumCuenta { get; set; }
         //public string NoOrden { get; set; }
 
@@ -689,9 +723,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         public List<ConceptoViewModel> Conceptos { get; set; }
     }
+    #endregion
 
-
-
+    #region ComprobanteUploadViewModel
     public class ComprobanteUploadViewModel
     {
         public ComprobanteUploadViewModel() {
@@ -710,15 +744,15 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
 
     }
+    #endregion
 
+    #region ComprobanteUploadCancelacionViewModel
     public class ComprobanteUploadCancelacionViewModel
     {
         [Required, DataType(DataType.Upload), Display(Name = "Archivo")]
         public HttpPostedFileBase CancelacionArchivo { get; set; }
-
-
-
-
-
+        
     }
+    #endregion
+
 }

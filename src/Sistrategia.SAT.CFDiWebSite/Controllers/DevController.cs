@@ -54,5 +54,11 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
             return View(model);
         }
+
+        public ActionResult DatabaseSeed() {
+            var config = new Migrations.Configuration();
+            config.ReSeed(this.DBContext);
+            return RedirectToAction("Index");
+        }
     }
 }

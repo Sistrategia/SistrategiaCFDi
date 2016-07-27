@@ -21,6 +21,10 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         [Key]
         public int? TipoMetodoDePagoId { get; set; }
         public string TipoMetodoDePagoValue { get; set; }
+        public string TipoMetodoDePagoCode { get; set; }
+        public string TipoMetodoDePagoDescription { get; set; }
+        [Required]
+        public string Status { get; set; }
     }
 
     public class TipoImpuestoTraslado

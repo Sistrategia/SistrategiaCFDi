@@ -17,6 +17,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
     {
         public ApplicationDbContext()
             : base("DefaultDatabase") {
+                Database.SetInitializer<ApplicationDbContext>(null);
         }
 
         public static ApplicationDbContext Create() {
@@ -142,8 +143,17 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 tipoMetodoDePago.Property(p => p.TipoMetodoDePagoId)
                     .HasColumnName("tipo_metodo_de_pago_id");
                 tipoMetodoDePago.Property(p => p.TipoMetodoDePagoValue)
-                .HasColumnName("tipo_metodo_de_pago_value")
-                .HasMaxLength(50);
+                    .HasColumnName("tipo_metodo_de_pago_value")
+                    .HasMaxLength(50);
+                tipoMetodoDePago.Property(p => p.TipoMetodoDePagoCode)
+                     .HasColumnName("tipo_metodo_de_pago_code")
+                     .HasMaxLength(6);
+                tipoMetodoDePago.Property(p => p.TipoMetodoDePagoDescription)
+                     .HasColumnName("tipo_metodo_de_pago_description")
+                     .HasMaxLength(50);    
+                tipoMetodoDePago.Property(p => p.Status)
+                    .HasColumnName("status")
+                    .HasMaxLength(50);
 
             var tipoImpuestoRetencion = modelBuilder.Entity<TipoImpuestoRetencion>()
                 .ToTable("sat_tipo_impuesto_retencion");
@@ -555,6 +565,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("metodo_de_pago")
                 .IsOptional() // .IsRequired() // Requerido
                 .HasMaxLength(256);
+            comprobante.Property(p => p.TipoMetodoDePagoId)
+                .HasColumnName("tipo_metodo_de_pago_id")
+                .IsOptional();
             comprobante.Property(p => p.LugarExpedicion)
                 .HasColumnName("lugar_expedicion")
                 .IsOptional() // .IsRequired() // Requerido
