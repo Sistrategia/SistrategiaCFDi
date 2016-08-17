@@ -92,12 +92,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 );
             context.SaveChanges();
 
-            context.Bancos.AddOrUpdate(
-                b => b.Clave,
-                new Banco { BancoId = 1, PublicKey = new Guid("82E2C8AC-06AE-4F61-AFA6-364C731EF65D"), Clave = "002", NombreCorto = "BANAMEX", RazonSocial = "Banco Nacional de México, S.A., Institución de Banca Múltiple, Grupo Financiero Banamex", Status = "A" },
-                new Banco { BancoId = 2, PublicKey = new Guid("777AA59F-B61D-47C8-999F-C594670902DE"), Clave = "006", NombreCorto = "BANCOMEXT", RazonSocial = "Banco Nacional de Comercio Exterior, Sociedad Nacional de Crédito, Institución de Banca de Desarrollo", Status = "A" }
-            );
-            context.SaveChanges();
+            //context.Bancos.AddOrUpdate(
+            //    b => b.Clave,
+            //    new Banco { BancoId = 1, PublicKey = new Guid("82E2C8AC-06AE-4F61-AFA6-364C731EF65D"), Clave = "002", NombreCorto = "BANAMEX", RazonSocial = "Banco Nacional de México, S.A., Institución de Banca Múltiple, Grupo Financiero Banamex", Status = "A" },
+            //    new Banco { BancoId = 2, PublicKey = new Guid("777AA59F-B61D-47C8-999F-C594670902DE"), Clave = "006", NombreCorto = "BANCOMEXT", RazonSocial = "Banco Nacional de Comercio Exterior, Sociedad Nacional de Crédito, Institución de Banca de Desarrollo", Status = "A" }
+            //);
+            //context.SaveChanges();
 
 
             context.TiposFormaDePago.AddOrUpdate(
