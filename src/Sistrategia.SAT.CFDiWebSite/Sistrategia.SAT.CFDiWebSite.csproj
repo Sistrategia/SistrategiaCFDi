@@ -506,6 +506,10 @@
     <Compile Include="Migrations\201607262127030_MetodoDePago2016.Designer.cs">
       <DependentUpon>201607262127030_MetodoDePago2016.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608152234450_Banco2016.cs" />
+    <Compile Include="Migrations\201608152234450_Banco2016.Designer.cs">
+      <DependentUpon>201608152234450_Banco2016.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CertificadoViewModels.cs" />
@@ -549,6 +553,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201607262127030_MetodoDePago2016.resx">
       <DependentUpon>201607262127030_MetodoDePago2016.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608152234450_Banco2016.resx">
+      <DependentUpon>201608152234450_Banco2016.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

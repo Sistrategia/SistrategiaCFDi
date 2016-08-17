@@ -64,8 +64,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         [Required]
         public string Clave { get; set; }
         [Required]
-        public string NombreCorto { get; set; }
-        [Required]
+        public string NombreCorto { get; set; }        
         public string RazonSocial { get; set; }        
         [Required]
         public string Status { get; set; }
