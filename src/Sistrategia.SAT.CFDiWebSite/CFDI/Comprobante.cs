@@ -40,13 +40,13 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //private ComprobanteTipoDeComprobante tipoDeComprobante;
         private string tipoDeComprobante;
         private string metodoDePago;
-        private string lugarExpedicionField;
-        private string numCtaPagoField;
-        private string folioFiscalOrigField;
+        private string lugarExpedicion;
+        private string numCtaPago;
+        private string folioFiscalOrig;
         //private bool fechaFolioFiscalOrigFieldSpecified = false;
-        private string serieFolioFiscalOrigField;
-        private DateTime? fechaFolioFiscalOrigField;
-        private decimal? montoFolioFiscalOrigField;
+        private string serieFolioFiscalOrig;
+        private DateTime? fechaFolioFiscalOrig;
+        private decimal? montoFolioFiscalOrig;
         //private bool montoFolioFiscalOrigFieldSpecified = false;
 
        
@@ -246,7 +246,12 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         [XmlAttribute("serie")]
         public string Serie {
             get { return this.serie; }
-            set { this.serie = value; }
+            set {
+                if (!string.IsNullOrEmpty(value) && value.Length > 25) {
+                    throw new ArgumentException("El largo del atributo serie debe estar entre 1 y 25 caracteres");
+                }
+                this.serie = value;
+            }
         }
 
         /// <summary>
@@ -260,7 +265,12 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         [XmlAttribute("folio")]
         public string Folio {
             get { return this.folio; }
-            set { this.folio = value; }
+            set {
+                if (!string.IsNullOrEmpty(value) && value.Length > 20) {
+                    throw new ArgumentException("El largo del atributo folio debe estar entre 1 y 20 caracteres");
+                }
+                this.folio = value;
+            }
         }
 
         /// <summary>
@@ -275,7 +285,6 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public DateTime Fecha {
             get { return this.fecha; }
             set {
-                // this.fecha = value; 
                 string fechaString = Convert.ToDateTime(value).ToString("dd/MM/yyyy HH:mm:ss");
                 IFormatProvider culture = new System.Globalization.CultureInfo("es-MX", true);
                 value = DateTime.ParseExact(fechaString, "dd/MM/yyyy HH:mm:ss", culture);
@@ -303,7 +312,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// <remarks>
         /// Este atributo no está presente en la versión 3.0 y 3.2 (Exclusivo de CFD)
         /// </remarks>
-        [XmlAttribute("noAprobacion", DataType = "integer")]
+        [XmlIgnore]
+        //[XmlAttribute("noAprobacion", DataType = "integer")]
         //[XmlAttributeAttribute("noAprobacion", typeof(System.Decimal))]
         public string NoAprobacion {
             get { return this.noAprobacion; }
@@ -320,7 +330,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// Este atributo empezó en la versión 2.0 hasta la versión 2.2 (no se encuentra en la versión 1.0)
         /// Este atributo no está presente en la versión 3.0 y 3.2 (Exclusivo de CFD)
         /// </remarks>
-        [XmlAttribute("anoAprobacion", DataType = "integer")]
+        [XmlIgnore]
+        // [XmlAttribute("anoAprobacion", DataType = "integer")]
         public string AnoAprobacion {
             get { return this.anoAprobacion; }
             set { this.anoAprobacion = value; }
@@ -354,7 +365,6 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             get { return this.formaDePago; }
             set { this.formaDePago = value; }
         }
-
 
         /// <summary>
         /// Atributo requerido para expresar el número de serie del certificado de sello digital que ampara al comprobante, de acuerdo al acuse correspondiente a 20 posiciones otorgado por el sistema del SAT.
@@ -485,7 +495,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </xs:attribute>
         /// </code>
         /// </remarks>
-        [XmlAttribute("subTotal")]        
+        [XmlAttribute("subTotal")]
         public decimal SubTotal {
             get { return this.subTotal; }
             set { this.subTotal = value; }
@@ -506,18 +516,11 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </xs:attribute>
         /// </code>
         /// </remarks>
-        [XmlAttribute("descuento")]
-        //public decimal Descuento {
+        [XmlAttribute("descuento")]        
         public decimal? Descuento {
             get { return this.descuento; }
             set { this.descuento = value; }
         }
-
-        //[XmlIgnore]
-        //public bool DescuentoSpecified {
-        //    get { return this.descuentoSpecified; }
-        //    set { this.descuentoSpecified = value; }
-        //}
 
         /// <summary>
         /// Atributo opcional para expresar el motivo del descuento aplicable.
@@ -725,8 +728,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </remarks>
         [XmlAttribute("LugarExpedicion")]
         public string LugarExpedicion {
-            get { return this.lugarExpedicionField; }
-            set { this.lugarExpedicionField = value; }
+            get { return this.lugarExpedicion; }
+            set { this.lugarExpedicion = value; }
         }
 
         /// <summary>
@@ -751,8 +754,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </remarks>
         [XmlAttribute("NumCtaPago")]
         public string NumCtaPago {
-            get { return this.numCtaPagoField; }
-            set { this.numCtaPagoField = value; }
+            get { return this.numCtaPago; }
+            set { this.numCtaPago = value; }
         }
 
         /// <summary>
@@ -776,8 +779,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </remarks>
         [XmlAttribute("FolioFiscalOrig")]
         public string FolioFiscalOrig {
-            get { return this.folioFiscalOrigField; }
-            set { this.folioFiscalOrigField = value; }
+            get { return this.folioFiscalOrig; }
+            set { this.folioFiscalOrig = value; }
         }
 
         /// <summary>
@@ -801,8 +804,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </remarks>
         [XmlAttribute("SerieFolioFiscalOrig")]
         public string SerieFolioFiscalOrig {
-            get { return this.serieFolioFiscalOrigField; }
-            set { this.serieFolioFiscalOrigField = value; }
+            get { return this.serieFolioFiscalOrig; }
+            set { this.serieFolioFiscalOrig = value; }
         }
 
         /// <summary>
@@ -827,16 +830,9 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         [XmlAttribute("FechaFolioFiscalOrig")]
         public System.DateTime? FechaFolioFiscalOrig {
         //public System.DateTime FechaFolioFiscalOrig {
-            get { return this.fechaFolioFiscalOrigField; }
-            set { this.fechaFolioFiscalOrigField = value; }
+            get { return this.fechaFolioFiscalOrig; }
+            set { this.fechaFolioFiscalOrig = value; }
         }
-
-
-        //[XmlIgnoreAttribute()]
-        //public bool FechaFolioFiscalOrigSpecified {
-        //    get { return this.fechaFolioFiscalOrigFieldSpecified; }
-        //    set { this.fechaFolioFiscalOrigFieldSpecified = value; }
-        //}
 
         /// <summary>
         /// Atributo opcional para señalar el total del comprobante que se hubiese expedido por el valor total de la operación, tratándose del pago en parcialidades
@@ -853,19 +849,11 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </code>
         /// </remarks>
         [XmlAttribute("MontoFolioFiscalOrig")]
-        public decimal? MontoFolioFiscalOrig {
-        //public decimal MontoFolioFiscalOrig {
-            get { return this.montoFolioFiscalOrigField; }
-            set { this.montoFolioFiscalOrigField = value; }
+        public decimal? MontoFolioFiscalOrig {        
+            get { return this.montoFolioFiscalOrig; }
+            set { this.montoFolioFiscalOrig = value; }
         }
-
-
-        //[XmlIgnoreAttribute()]
-        //public bool MontoFolioFiscalOrigSpecified {
-        //    get { return this.montoFolioFiscalOrigFieldSpecified; }
-        //    set { this.montoFolioFiscalOrigFieldSpecified = value; }
-        //}
-
+        
         //[ForeignKey("Emisor")]
         //public int? EmisorId { get; set; }
 
