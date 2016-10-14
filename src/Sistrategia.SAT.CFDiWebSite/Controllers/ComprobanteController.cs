@@ -467,7 +467,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     comprobante.Impuestos.Traslados = new List<Traslado>();
 
                     foreach (var modelTraslado in model.Traslados) {
-                        if (modelTraslado.Tasa > 0 && modelTraslado.Importe > 0) {
+                        if (modelTraslado.Tasa >= 0 && modelTraslado.Importe >= 0) {
                             comprobante.Impuestos.Traslados.Add(new Traslado {
                                 Importe = modelTraslado.Importe,
                                 Impuesto = modelTraslado.Impuesto,
