@@ -152,8 +152,8 @@ var ImpuestosModel = function (modelId) {
             trasladado.TrasladadoImporte = ko.observable(self.TrasladosImporte());
             trasladado.TrasladadoOrdinal = ko.observable(self.TrasladosOrdinal());
             self.TrasladosItems.push(trasladado);
-
-            self.TrasladosImporte("");
+            
+            (self.TrasladosTasa() == 0) ? self.TrasladosImporte("0.00") : self.TrasladosImporte("");
         }
     };
 
@@ -198,6 +198,13 @@ var ImpuestosModel = function (modelId) {
 
     self.RetencionesItems.subscribe(function (newValue) {
         self.RetencionesHasItems(newValue && newValue.length ? true : false);
+    });
+
+    self.TrasladosTasa.subscribe(function () {
+        if (self.TrasladosTasa() == 0)
+            self.TrasladosImporte("0.00");
+        else
+            self.TrasladosImporte("");
     });
 }
 

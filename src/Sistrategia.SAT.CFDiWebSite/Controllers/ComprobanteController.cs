@@ -467,12 +467,15 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     comprobante.Impuestos.Traslados = new List<Traslado>();
 
                     foreach (var modelTraslado in model.Traslados) {
-                        if (modelTraslado.Tasa > 0 && modelTraslado.Importe > 0) {
+                        if ((modelTraslado.Tasa == 0 && modelTraslado.Importe == 0) || (modelTraslado.Tasa > 0 && modelTraslado.Importe >= 0)) {
                             comprobante.Impuestos.Traslados.Add(new Traslado {
                                 Importe = modelTraslado.Importe,
                                 Impuesto = modelTraslado.Impuesto,
                                 Tasa = modelTraslado.Tasa,
                             });
+                        }
+                        else {
+                            throw new ApplicationException(String.Format("Los valores del impuesto {0} trasladado tasa {1} e importe {2} son inválidos", modelTraslado.Impuesto, modelTraslado.Tasa, modelTraslado.Importe));
                         }
                     }
 
@@ -489,7 +492,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     if (model.TotalImpuestosRetenidos > 0)
                         comprobante.Impuestos.TotalImpuestosRetenidos = model.TotalImpuestosRetenidos;
 
-                    if (model.TotalImpuestosTrasladados > 0)
+                    if (model.TotalImpuestosTrasladados >= 0)
                         comprobante.Impuestos.TotalImpuestosTrasladados = model.TotalImpuestosTrasladados;
 
                     comprobante.PublicKey = Guid.NewGuid();

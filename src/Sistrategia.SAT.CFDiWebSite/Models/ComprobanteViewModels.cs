@@ -127,20 +127,16 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
                 }
             }
 
-            if (comprobante.Impuestos.Traslados != null && comprobante.Impuestos.Traslados.Count > 0)
-            {
+            if (comprobante.Impuestos.Traslados != null && comprobante.Impuestos.Traslados.Count > 0) {
                 this.Traslados = new List<TrasladoViewModel>();
-                foreach (Traslado traslado in comprobante.Impuestos.Traslados)
-                {
+                foreach (Traslado traslado in comprobante.Impuestos.Traslados) {
                     this.Traslados.Add(new TrasladoViewModel(traslado));
                 }
             }
 
-            if (comprobante.Impuestos.Retenciones != null && comprobante.Impuestos.Retenciones.Count > 0)
-            {
+            if (comprobante.Impuestos.Retenciones != null && comprobante.Impuestos.Retenciones.Count > 0) {
                 this.Retenciones = new List<RetencionViewModel>();
-                foreach (Retencion retencion in comprobante.Impuestos.Retenciones)
-                {
+                foreach (Retencion retencion in comprobante.Impuestos.Retenciones) {
                     this.Retenciones.Add(new RetencionViewModel(retencion));
                 }
             }
@@ -391,7 +387,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         }
 
-        public ComprobanteEmisorDetailViewModel(ComprobanteEmisor emisor) {        
+        public ComprobanteEmisorDetailViewModel(ComprobanteEmisor emisor) {
             if (emisor == null)
                 throw new ArgumentNullException("emisor");
 
@@ -532,7 +528,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             this.Domicilio = new UbicacionViewModel();
         }
 
-        public ComprobanteReceptorDetailsViewModel(ComprobanteReceptor receptor) {        
+        public ComprobanteReceptorDetailsViewModel(ComprobanteReceptor receptor) {
             if (receptor == null)
                 throw new ArgumentNullException("receptor");
 
@@ -569,6 +565,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
     public class ComprobanteHtmlViewModel
     {
         public ComprobanteHtmlViewModel(Comprobante comprobante) {
+
+            this.Traslados = new List<ComprobanteImpuestoTrasladoTotalPorTipoViewModel>();
+
             if (comprobante == null)
                 throw new ArgumentNullException("comprobante");
 
@@ -587,13 +586,26 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
                 }
             }
 
+            if (comprobante.Impuestos.Traslados != null && comprobante.Impuestos.Traslados.Count > 0) {
+                this.Traslados = comprobante.Impuestos.Traslados
+                    .GroupBy(traslado => new { traslado.Impuesto, traslado.Tasa })
+                    .OrderByDescending(traslado => traslado.First().Impuesto)
+                    .ThenBy(traslado => traslado.First().Tasa)
+                    .Select(trasladoGrouped =>
+                        new ComprobanteImpuestoTrasladoTotalPorTipoViewModel() {
+                            Tasa = String.Format("{0}% {1}", (int)trasladoGrouped.First().Tasa, trasladoGrouped.First().Impuesto),
+                            Importe = String.Format("{0:C2}", trasladoGrouped.Sum(t => t.Importe))
+                        }
+                    ).ToList();
+            }
+
             this.PublicKey = comprobante.PublicKey;
             this.TipoDeComprobante = comprobante.TipoDeComprobante;
             this.Fecha = comprobante.Fecha.ToString("dd/MM/yyyy HH:mm:ss");
             this.Serie = comprobante.Serie;
             this.Folio = comprobante.Folio;
 
-            
+
 
             //this.FolioFiscal = comprobante.
 
@@ -688,7 +700,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public string MetodoDePago { get; set; }
         public string MetodoDePagoCode { get; set; }
         public string MetodoDePagoDescription { get; set; }
-        public string MetodoDePagoDisplayName { 
+        public string MetodoDePagoDisplayName {
             get {
                 if (this.MetodoDePagoCode != null && this.MetodoDePagoDescription != null)
                     return this.MetodoDePagoCode + "-" + this.MetodoDePagoDescription;
@@ -698,7 +710,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
                     return this.MetodoDePagoDescription;
                 else
                     return this.MetodoDePago;
-            } 
+            }
         }
         public string NumCuenta { get; set; }
         //public string NoOrden { get; set; }
@@ -722,6 +734,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public ComprobanteReceptorDetailsViewModel Receptor { get; set; }
 
         public List<ConceptoViewModel> Conceptos { get; set; }
+        public List<ComprobanteImpuestoTrasladoTotalPorTipoViewModel> Traslados { get; set; }
     }
     #endregion
 
@@ -751,7 +764,15 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
     {
         [Required, DataType(DataType.Upload), Display(Name = "Archivo")]
         public HttpPostedFileBase CancelacionArchivo { get; set; }
-        
+
+    }
+    #endregion
+
+    #region ComprobanteTrasladosPorTasaViewModel
+    public class ComprobanteImpuestoTrasladoTotalPorTipoViewModel
+    {
+        public string Importe { get; set; }
+        public string Tasa { get; set; }
     }
     #endregion
 

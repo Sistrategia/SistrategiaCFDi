@@ -319,11 +319,13 @@
                                         <td width="73%" class="center_item">$@Model.SubTotal.ToString("#,##0.00")</td>
                                       </tr>
 
-                                      <tr>
-                                        <td class="center_item">16% IVA</td>
-                                        <td class="center_item">$@Model.IVA.ToString("#,##0.00")</td>
-                                      </tr>
 
+                                        @foreach (var traslado in Model.Traslados) {
+                                            <tr>
+                                                <td class="center_item">@traslado.Tasa</td>
+                                                <td class="center_item">@traslado.Importe</td>
+                                            </tr>
+                                        }
 
                                       <tr>
                                         <td class="center_item">Total</td>

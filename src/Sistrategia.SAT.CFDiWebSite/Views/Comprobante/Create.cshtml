@@ -210,10 +210,10 @@
                 <input type="text" class="form-control" data-bind="textInput: TrasladosTasa" placeholder="Tasa">
             </div>
             <div class="col-md-3">
-                <input type="number" class="form-control" data-bind="textInput: TrasladosImporte" placeholder="Importe">
+                <input type="number" class="form-control" data-bind="textInput: TrasladosImporte, enable: (TrasladosTasa() > 0)" placeholder="Importe">
             </div>
             <div class="col-md-2">
-                <button type="button" class="btn btn-default form-control" data-bind="enable: (TrasladosImpuesto().length > 0 && TrasladosImporte().length > 0 && TrasladosTasa().length > 0), click: addTraslado">Agregar</button>
+                <button type="button" class="btn btn-default form-control" data-bind="enable: ((TrasladosImpuesto().length > 0 && TrasladosImporte().length > 0 && TrasladosTasa().length > 0) || (TrasladosImpuesto() && TrasladosTasa() == 0)), click: addTraslado">Agregar</button>
             </div>
             <div class="col-md-12"><br /></div>
             <div class="col-md-12" data-bind="visible: TrasladosHasItems()">
@@ -515,9 +515,6 @@
         conceptos_model.Cantidad(1);
         impuestos_model.TrasladosImpuesto("IVA");
         impuestos_model.TrasladosTasa("16.00");
-
-
-
 
         initial_model.MetodoDePagoId.subscribe(function (newValue) {
             if (newValue == '11' || newValue == '12' || newValue == '13' || newValue == '17' || newValue == '') //[tipo_metodo_de_pago_id]
