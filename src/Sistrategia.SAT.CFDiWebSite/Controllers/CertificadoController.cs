@@ -218,15 +218,25 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 return HttpNotFound();
 
 
-            System.Security.Cryptography.SHA1CryptoServiceProvider sha1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
-            //System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(certificado.PFXArchivo,
-            //     certificado.PFXContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);
-            //// System.Security.Cryptography.RSACryptoServiceProvider rsaCryptoIPT = (System.Security.Cryptography.RSACryptoServiceProvider)cert.PrivateKey;
-            System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(certificado.PFXArchivo,
-                 certificado.PFXContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);
-            System.Security.Cryptography.RSACryptoServiceProvider rsaCryptoIPT = (System.Security.Cryptography.RSACryptoServiceProvider)cert.PrivateKey;
+            //System.Security.Cryptography.SHA1CryptoServiceProvider sha1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
+            //////System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(certificado.PFXArchivo,
+            //////     certificado.PFXContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);
+            //////// System.Security.Cryptography.RSACryptoServiceProvider rsaCryptoIPT = (System.Security.Cryptography.RSACryptoServiceProvider)cert.PrivateKey;
+            ////System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(certificado.PFXArchivo,
+            ////     certificado.PFXContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);
+            ////System.Security.Cryptography.RSACryptoServiceProvider rsaCryptoIPT = (System.Security.Cryptography.RSACryptoServiceProvider)cert.PrivateKey;
 
-             
+
+            //System.Security.SecureString passwordSeguro = new System.Security.SecureString();
+            //passwordSeguro.Clear();
+            //foreach (char c in certificado.PrivateKeyContrasena.ToCharArray())
+            //    passwordSeguro.AppendChar(c);
+            //var rsaCryptoIPT = JavaScience.opensslkey.DecodeEncryptedPrivateKeyInfo(certificado.PrivateKeyDER, passwordSeguro);
+            //System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
+            //System.Security.Cryptography.X509Certificates.X509Certificate2 cert = 
+            //    new System.Security.Cryptography.X509Certificates.X509Certificate2(certificado.CertificadoDER,
+            //     certificado.PrivateKeyContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);
+
 
             //System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
             //byte[] binData = encoder.GetBytes(cadenaOriginal);
@@ -237,17 +247,11 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
             var model = new CertificadoDetailsViewModel(certificado);
             //model.Issuer = cert.Issuer;
-            model.Issuer = cert.IssuerName.Name;
-            model.Subject = cert.GetNameInfo(System.Security.Cryptography.X509Certificates.X509NameType.SimpleName, false);
-
-           
-
-            model.Issuer = cert.GetEffectiveDateString();
-            model.Issuer = cert.GetExpirationDateString();
-            model.Issuer = cert.Subject;
-            model.Issuer = certificado.GetNumeroSerie(); //  cert.SerialNumber; // cert.GetSerialNumberString();
-            model.Issuer = cert.GetNameInfo(System.Security.Cryptography.X509Certificates.X509NameType.SimpleName, true);
-            //model.Issuer = cert.GetNameInfo(System.Security.Cryptography.X509Certificates.X509NameType.SimpleName, false);
+            model.Issuer = certificado.GetIssuerSimpleName();
+            model.Subject = certificado.GetSubjectSimpleName(); // cert.GetNameInfo(System.Security.Cryptography.X509Certificates.X509NameType.SimpleName, false);
+            model.Inicia = DateTime.Parse( certificado.GetEffectiveDateString() );
+            model.Finaliza = DateTime.Parse( certificado.GetExpirationDateString() );
+            model.NumSerie = certificado.GetNumeroSerie(); //  cert.SerialNumber; // cert.GetSerialNumberString();            
             return View(model);
         }            
     }
