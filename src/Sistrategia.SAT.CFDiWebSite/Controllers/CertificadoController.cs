@@ -208,7 +208,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         }
 
         public ActionResult Details(string id) {
-            Guid publicKey;
+            Guid publicKey;            
             if (!Guid.TryParse(id, out publicKey))
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
 
@@ -216,34 +216,6 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
             if (certificado == null)
                 return HttpNotFound();
-
-
-            //System.Security.Cryptography.SHA1CryptoServiceProvider sha1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
-            //////System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(certificado.PFXArchivo,
-            //////     certificado.PFXContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);
-            //////// System.Security.Cryptography.RSACryptoServiceProvider rsaCryptoIPT = (System.Security.Cryptography.RSACryptoServiceProvider)cert.PrivateKey;
-            ////System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(certificado.PFXArchivo,
-            ////     certificado.PFXContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);
-            ////System.Security.Cryptography.RSACryptoServiceProvider rsaCryptoIPT = (System.Security.Cryptography.RSACryptoServiceProvider)cert.PrivateKey;
-
-
-            //System.Security.SecureString passwordSeguro = new System.Security.SecureString();
-            //passwordSeguro.Clear();
-            //foreach (char c in certificado.PrivateKeyContrasena.ToCharArray())
-            //    passwordSeguro.AppendChar(c);
-            //var rsaCryptoIPT = JavaScience.opensslkey.DecodeEncryptedPrivateKeyInfo(certificado.PrivateKeyDER, passwordSeguro);
-            //System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
-            //System.Security.Cryptography.X509Certificates.X509Certificate2 cert = 
-            //    new System.Security.Cryptography.X509Certificates.X509Certificate2(certificado.CertificadoDER,
-            //     certificado.PrivateKeyContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);
-
-
-            //System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
-            //byte[] binData = encoder.GetBytes(cadenaOriginal);
-            //byte[] binSignature = rsaCryptoIPT.SignData(binData, sha1);
-            //string sello = Convert.ToBase64String(binSignature);
-            //return sello;
-
 
             var model = new CertificadoDetailsViewModel(certificado);
             //model.Issuer = cert.Issuer;
