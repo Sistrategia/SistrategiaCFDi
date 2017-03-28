@@ -338,7 +338,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     throw new ApplicationException("¡Ingrese la forma de pago!");
                 else if (model.MetodoDePagoId <= 0)
                     throw new ApplicationException("¡Ingrese el método de pago!");
-                else if ((model.MetodoDePagoId == 11 || model.MetodoDePagoId == 12 || model.MetodoDePagoId == 13 || model.MetodoDePagoId == 17) && (model.NumCtaPago == null || (model.NumCtaPago.Count() > 6 || model.NumCtaPago.Count() < 4)))
+                //else if ((model.MetodoDePagoId == 11 || model.MetodoDePagoId == 12 || model.MetodoDePagoId == 13 || model.MetodoDePagoId == 17) && (model.NumCtaPago == null || (model.NumCtaPago.Count() > 6 || model.NumCtaPago.Count() < 4)))
+                else if ((model.NumCtaPago != null && (model.NumCtaPago.Count() > 6 || model.NumCtaPago.Count() < 4)))
                     throw new ApplicationException("¡El valor de NumCtaPago debe contener entre 4 hasta 6 caracteres!");
                 //else if ((model.MetodoDePagoId == 11 || model.MetodoDePagoId == 12 || model.MetodoDePagoId == 13 || model.MetodoDePagoId == 17) && (string.IsNullOrEmpty(model.Banco)))
                 //    throw new ApplicationException("¡Ingrese el banco!");
@@ -346,7 +347,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     && model.Conceptos.All(x => x.Cantidad < 0m || x.Unidad == null || x.Descripcion == null || x.ValorUnitario < 0m))
                     throw new ApplicationException("¡Ingrese al menos un concepto!");
                 else if (model.SubTotal < 0m)
-                    throw new ApplicationException("¡SubTotal no válido!");
+                    throw new ApplicationException("¡Subtotal no válido!");
                 else if (model.TotalImpuestosTrasladados < 0m)
                     throw new ApplicationException("¡Total Impuestos Trasladados no válido!");
                 else if (model.TotalImpuestosRetenidos < 0m)
