@@ -218,18 +218,18 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public Guid PublicKey { get; set; }
 
         /// <summary>
-        /// Atributo requerido con valor prefijado a 3.2 que indica la versión del estándar bajo el que se encuentra expresado el comprobante.
+        /// Atributo requerido con valor prefijado a 3.3 que indica la versión del estándar bajo el que se encuentra expresado el comprobante.
         /// </summary>
         /// <remarks>
-        /// Requerido con valor prefijado a 3.2
+        /// Requerido con valor prefijado a 3.3
         /// No debe contener espacios en blanco
         /// </remarks>
         [XmlAttribute("version")]
         public string Version {
             get { return version; }
             set {
-                //if (value != "3.2") {
-                //    throw new ArgumentException("Atributo requerido con valor prefijado a 3.2");
+                //if (value != "3.3") {
+                //    throw new ArgumentException("Atributo requerido con valor prefijado a 3.3");
                 //}
                 this.version = value; // validar las posibles versiones
             }

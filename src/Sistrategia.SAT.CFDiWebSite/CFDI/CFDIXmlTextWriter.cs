@@ -67,6 +67,12 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
                     writer.WriteAttributeString("xsi", "schemaLocation", "http://www.w3.org/2001/XMLSchema-instance", "http://www.sat.gob.mx/cfd/3 cfdv3.xsd");
                     break;
+                case "3.3":
+                    writer.WriteStartElement("cfdi", "Comprobante", "http://www.sat.gob.mx/cfd/3");
+                    writer.WriteAttributeString("xmlns", "cfdi", null, "http://www.sat.gob.mx/cfd/3");
+                    writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
+                    writer.WriteAttributeString("xsi", "schemaLocation", "http://www.w3.org/2001/XMLSchema-instance", "http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd");
+                    break;
                 case "3.2":
                 default:
                     writer.WriteStartElement("cfdi", "Comprobante", "http://www.sat.gob.mx/cfd/3");
@@ -77,8 +83,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             }
 
 
-            // Atributo requerido (con valor prefijado a 3.2 en la ultima versión) que indica la versión del estándar bajo el que se encuentra expresado el comprobante.            
-            // Requerido con valor prefijado a 3.2 en la ultima versión.
+            // Atributo requerido (con valor prefijado a 3.3 en la ultima versión) que indica la versión del estándar bajo el que se encuentra expresado el comprobante.            
+            // Atributo requerido con valor prefijado a 3.3 que indica la versión del estándar bajo el que se encuentra expresado el comprobante.
             // No debe contener espacios en blanco            
             writer.WriteAttributeString("version", comprobante.Version);
 
@@ -101,6 +107,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                 case "3.0":
                 // Atributo requerido para la expresión de la fecha y hora de expedición  del comprobante fiscal. Se expresa en la forma aaaa-mm-ddThh:mm:ss, de acuerdo con la especificación ISO 8601.
                 case "3.2":
+                // Atributo requerido para la expresión de la fecha y hora de expedición  del comprobante fiscal. Se expresa en la forma aaaa-mm-ddThh:mm:ss, de acuerdo con la especificación ISO 8601.
+                case "3.3":
                 // Atributo requerido para la expresión de la fecha y hora de expedición  del comprobante fiscal. Se expresa en la forma aaaa-mm-ddThh:mm:ss, de acuerdo con la especificación ISO 8601.
                 default:
                     writer.WriteAttributeString("fecha", comprobante.Fecha.ToString("yyyy-MM-ddTHH:mm:ss"));
@@ -143,6 +151,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());
                     break;
                 case "3.2":
+                case "3.3":
                 default:                    
                     writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());                    
                     break;
