@@ -316,6 +316,15 @@
     <Content Include="Content\fonts\Verdana\verdanab.ttf" />
     <Content Include="Content\fonts\Verdana\verdanai.ttf" />
     <Content Include="Content\fonts\Verdana\verdanaz.ttf" />
+    <EmbeddedResource Include="CFDI\XSD\cfdv32.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CFDI\XSD\cfdv33.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CFDI\XSD\tdCFDI.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="Scripts\amplify.js" />
@@ -478,6 +487,9 @@
     <Compile Include="CFDI\Traslado.cs" />
     <Compile Include="CFDI\Ubicacion.cs" />
     <Compile Include="CFDI\UbicacionFiscal.cs" />
+    <Compile Include="CFDI\v32\Concepto.cs" />
+    <Compile Include="CFDI\v32\IComprobante.cs" />
+    <Compile Include="CFDI\v33\IComprobante.cs" />
     <Compile Include="CloudStorage\CloudStorageItem.cs" />
     <Compile Include="CloudStorage\CloudStorageMananger.cs" />
     <Compile Include="Controllers\AccountController.cs" />
