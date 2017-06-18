@@ -1,5 +1,5 @@
 ﻿/*************************************************************************************************************
-* IComprobante.cs is part of the Sistrategia.SAT Framework developed by Sistrategia
+* IConcepto.cs is part of the Sistrategia.SAT Framework developed by Sistrategia
 * Copyright (C) 2017 Sistrategia.
 * 
 * Contributor(s):	J. Ernesto Ocampo Cicero, ernesto@sistrategia.com
@@ -17,7 +17,7 @@ using System.Xml.Serialization;
 
 namespace Sistrategia.SAT.CFDiWebSite.CFDI.v32
 {
-    public interface Concepto
+    public interface IConcepto
     {
         ///// <summary>
         ///// ComplementoConcepto: Nodo opcional donde se incluirán los nodos complementarios de extensión al concepto, definidos por el SAT, de acuerdo a disposiciones particulares a un sector o actividad especifica.

@@ -487,9 +487,14 @@
     <Compile Include="CFDI\Traslado.cs" />
     <Compile Include="CFDI\Ubicacion.cs" />
     <Compile Include="CFDI\UbicacionFiscal.cs" />
-    <Compile Include="CFDI\v32\Concepto.cs" />
+    <Compile Include="CFDI\v32\IConcepto.cs" />
     <Compile Include="CFDI\v32\IComprobante.cs" />
+    <Compile Include="CFDI\v32\IEmisor.cs" />
+    <Compile Include="CFDI\v32\IReceptor.cs" />
     <Compile Include="CFDI\v33\IComprobante.cs" />
+    <Compile Include="CFDI\v33\IConcepto.cs" />
+    <Compile Include="CFDI\v33\IEmisor.cs" />
+    <Compile Include="CFDI\v33\IReceptor.cs" />
     <Compile Include="CloudStorage\CloudStorageItem.cs" />
     <Compile Include="CloudStorage\CloudStorageMananger.cs" />
     <Compile Include="Controllers\AccountController.cs" />
