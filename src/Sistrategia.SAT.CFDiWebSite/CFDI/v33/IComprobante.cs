@@ -23,8 +23,17 @@ using System.Xml.Serialization;
 
 namespace Sistrategia.SAT.CFDiWebSite.CFDI.v33
 {
+    /// <summary>
+    /// Estándar de Comprobante Fiscal Digital por Internet.
+    /// </summary>
     public interface IComprobante
     {
+        /// <summary>
+        /// Nodo opcional para precisar la información de los comprobantes relacionados.
+        /// </summary>
+        [XmlArrayItem("CfdiRelacionado", IsNullable = false)]
+        IEnumerable<ICfdiRelacionado> CfdiRelacionados { get; set; }
+
         /// <summary>
         /// Atributo requerido con valor prefijado a 3.3 que indica la versión del estándar bajo el que se 
         /// encuentra expresado el comprobante.
@@ -546,6 +555,5 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI.v33
         //     </xs:restriction>
         //   </xs:simpleType>
         // </xs:attribute>
-        
     }
 }

@@ -491,6 +491,8 @@
     <Compile Include="CFDI\v32\IComprobante.cs" />
     <Compile Include="CFDI\v32\IEmisor.cs" />
     <Compile Include="CFDI\v32\IReceptor.cs" />
+    <Compile Include="CFDI\v33\ICfdiRelacionado.cs" />
+    <Compile Include="CFDI\v33\ICfdiRelacionados.cs" />
     <Compile Include="CFDI\v33\IComprobante.cs" />
     <Compile Include="CFDI\v33\IConcepto.cs" />
     <Compile Include="CFDI\v33\IEmisor.cs" />

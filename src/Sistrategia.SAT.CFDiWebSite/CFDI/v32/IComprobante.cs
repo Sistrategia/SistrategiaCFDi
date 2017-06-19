@@ -588,5 +588,181 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI.v32
         //     </xs:documentation>
         //   </xs:annotation>
         // </xs:attribute>
+
+
+        /// <summary>
+        /// Nodo requerido para capturar los impuestos aplicables.
+        /// </summary>
+        IImpuestos Impuestos { get; set; }
+        //public ComprobanteImpuestos Impuestos { get; set; }
+    }
+
+    /// <summary>
+    /// Nodo requerido para capturar los impuestos aplicables.
+    /// </summary>
+    public interface IImpuestos
+    {
+        /// <summary>
+        /// Nodo opcional para capturar los impuestos retenidos aplicables
+        /// </summary>
+        [XmlArrayItem("Retencion", IsNullable = false)]
+        IRetencion[] Retenciones { get; set; }
+
+        /// <summary>
+        /// Nodo opcional para asentar o referir los impuestos trasladados aplicables
+        /// </summary>
+        [XmlArrayItem("Traslado", IsNullable = false)]
+        ITraslado[] Traslados { get; set; }
+
+        /// <summary>
+        /// Atributo opcional para expresar el total de los impuestos retenidos que se desprenden 
+        /// de los conceptos expresados en el comprobante fiscal digital a través de Internet.
+        /// </summary>
+        [XmlAttribute("totalImpuestosRetenidos")]
+        //public decimal TotalImpuestosRetenidos {
+        decimal? TotalImpuestosRetenidos { get; set; }
+        //<xs:attribute name="totalImpuestosRetenidos" type="cfdi:t_Importe" use="optional">
+        //    <xs:annotation>
+        //    <xs:documentation>Atributo opcional para expresar el total de los impuestos retenidos que se desprenden de los conceptos expresados en el comprobante fiscal digital a través de Internet.</xs:documentation>
+        //    </xs:annotation>
+        //</xs:attribute>
+
+
+        //[XmlIgnore]
+        //public bool TotalImpuestosRetenidosSpecified {
+        //    get { return this.totalImpuestosRetenidosSpecified; }
+        //    set { this.totalImpuestosRetenidosSpecified = value; }
+        //}
+
+        /// <summary>
+        /// Atributo opcional para expresar el total de los impuestos trasladados que se desprenden 
+        /// de los conceptos expresados en el comprobante fiscal digital a través de Internet.
+        /// </summary>
+        [XmlAttribute("totalImpuestosTrasladados")]
+        //public decimal TotalImpuestosTrasladados {
+        decimal? TotalImpuestosTrasladados { get; set; }
+        //<xs:attribute name="totalImpuestosTrasladados" type="cfdi:t_Importe" use="optional">
+        //    <xs:annotation>
+        //    <xs:documentation>Atributo opcional para expresar el total de los impuestos trasladados que se desprenden de los conceptos expresados en el comprobante fiscal digital a través de Internet.</xs:documentation>
+        //    </xs:annotation>
+        //</xs:attribute>
+
+        //[XmlIgnore]
+        //public bool TotalImpuestosTrasladadosSpecified {
+        //    get { return this.totalImpuestosTrasladadosSpecified; }
+        //    set { this.totalImpuestosTrasladadosSpecified = value; }
+        //}
+    }
+
+    /// <summary>
+    /// Nodo para la información detallada de una retención de impuesto específico.
+    /// </summary>    
+    [XmlType(AnonymousType = true, Namespace = "http://www.sat.gob.mx/cfd/3")]
+    public interface IRetencion
+    {
+        /// <summary>
+        /// Atributo requerido para señalar el tipo de impuesto retenido
+        /// </summary>
+        [XmlAttribute("impuesto")]
+        //public ComprobanteImpuestosRetencionImpuesto Impuesto {
+        string Impuesto { get; set; }
+        //<xs:attribute name="impuesto" use="required">
+        //    <xs:annotation>
+        //        <xs:documentation>Atributo requerido para señalar el tipo de impuesto retenido</xs:documentation>
+        //    </xs:annotation>
+        //    <xs:simpleType>
+        //        <xs:restriction base="xs:string">
+        //            <xs:whiteSpace value="collapse"/>
+        //            <xs:enumeration value="ISR">
+        //                <xs:annotation>
+        //                    <xs:documentation>Impuesto sobre la renta</xs:documentation>
+        //                </xs:annotation>
+        //            </xs:enumeration>
+        //            <xs:enumeration value="IVA">
+        //                <xs:annotation>
+        //                    <xs:documentation>Impuesto al Valor Agregado</xs:documentation>
+        //                </xs:annotation>
+        //            </xs:enumeration>
+        //        </xs:restriction>
+        //    </xs:simpleType>
+        //</xs:attribute>
+
+        /// <summary>
+        /// Atributo requerido para señalar el importe o monto del impuesto retenido
+        /// </summary>
+        [XmlAttribute("importe")]
+        decimal Importe { get; set; }
+        // <xs:attribute name="importe" type="cfdi:t_Importe" use="required">
+        //   <xs:annotation>
+        //     <xs:documentation>
+        //       Atributo requerido para señalar el importe o monto del impuesto retenido
+        //     </xs:documentation>
+        //   </xs:annotation>
+        // </xs:attribute>
+    }
+
+    /// <summary>
+    /// Nodo para la información detallada de un traslado de impuesto específico
+    /// </summary>    
+    [XmlType(AnonymousType = true, Namespace = "http://www.sat.gob.mx/cfd/3")]
+    public interface ITraslado
+    {
+        /// <summary>
+        /// Atributo requerido para señalar el tipo de impuesto trasladado
+        /// </summary>
+        [XmlAttribute("impuesto")]
+        //public ComprobanteImpuestosTrasladoImpuesto Impuesto {
+        string Impuesto { get; set; }
+        // <xs:attribute name="impuesto" use="required">
+        //   <xs:annotation>
+        //     <xs:documentation>
+        //       Atributo requerido para señalar el tipo de impuesto trasladado
+        //     </xs:documentation>
+        //   </xs:annotation>
+        //   <xs:simpleType>
+        //     <xs:restriction base="xs:string">
+        //       <xs:whiteSpace value="collapse"/>
+        //       <xs:enumeration value="IVA">
+        //         <xs:annotation>
+        //           <xs:documentation>Impuesto al Valor Agregado</xs:documentation>
+        //         </xs:annotation>
+        //       </xs:enumeration>
+        //       <xs:enumeration value="IEPS">
+        //         <xs:annotation>
+        //           <xs:documentation>Impuesto especial sobre productos y servicios</xs:documentation>
+        //         </xs:annotation>
+        //       </xs:enumeration>
+        //     </xs:restriction>
+        //   </xs:simpleType>
+        // </xs:attribute>
+
+        /// <summary>
+        /// Atributo requerido para señalar la tasa del impuesto que se traslada por cada concepto 
+        /// amparado en el comprobante
+        /// </summary>
+        [XmlAttribute("tasa")]
+        decimal Tasa { get; set; }
+        // <xs:attribute name="tasa" type="cfdi:t_Importe" use="required">
+        //   <xs:annotation>
+        //     <xs:documentation>
+        //       Atributo requerido para señalar la tasa del impuesto que se traslada por cada concepto 
+        //       amparado en el comprobante
+        //     </xs:documentation>
+        //   </xs:annotation>
+        // </xs:attribute>
+
+        /// <summary>
+        /// Atributo requerido para señalar el importe del impuesto trasladado
+        /// </summary>
+        [XmlAttribute("importe")]
+        decimal Importe { get; set; }
+        // <xs:attribute name="importe" type="cfdi:t_Importe" use="required">
+        //   <xs:annotation>
+        //     <xs:documentation>
+        //       Atributo requerido para señalar el importe del impuesto trasladado
+        //     </xs:documentation>
+        //   </xs:annotation>
+        // </xs:attribute>
+ 
     }
 }
