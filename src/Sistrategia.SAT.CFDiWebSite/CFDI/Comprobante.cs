@@ -125,7 +125,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
             try {
                 if ("3.2".Equals(doc.ChildNodes[1].Attributes["version"].Value)) {
-                    xslt.Load("http://www.sat.gob.mx/sitio_internet/cfd/3/cadenaoriginal_3_2/cadenaoriginal_3_2.xslts");
+                    xslt.Load("http://www.sat.gob.mx/sitio_internet/cfd/3/cadenaoriginal_3_2/cadenaoriginal_3_2.xslt");
                 }
                 else {
                     xslt.Load("http://www.sat.gob.mx/sitio_internet/cfd/3/cadenaoriginal_3_0/cadenaoriginal_3_0.xslt");
