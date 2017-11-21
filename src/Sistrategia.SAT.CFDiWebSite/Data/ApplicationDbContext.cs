@@ -506,8 +506,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .IsOptional();
             comprobante.Property(p => p.FormaDePago)
                 .HasColumnName("forma_de_pago")
-                .IsRequired() // DEFAULT 'PAGO EN UNA SOLA EXHIBICION'
+                .IsOptional() // Se cambia porque se deprecia en 3.3 .IsRequired() // DEFAULT 'PAGO EN UNA SOLA EXHIBICION'
                 .HasMaxLength(256);
+            comprobante.Property(p => p.FormaPago)
+                .HasColumnName("forma_pago")
+                .IsOptional() // .IsRequired() // DEFAULT 'PAGO EN UNA SOLA EXHIBICION'
+                .HasMaxLength(2);
             //comprobante.Property(p => p.NoCertificado)
             //    .HasColumnName("no_certificado")
             //    .IsOptional()
@@ -565,6 +569,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("metodo_de_pago")
                 .IsOptional() // .IsRequired() // Requerido
                 .HasMaxLength(256);
+            comprobante.Property(p => p.MetodoPago)
+                .HasColumnName("metodo_pago")
+                .IsOptional() // .IsRequired() // Requerido
+                .HasMaxLength(3);
             comprobante.Property(p => p.TipoMetodoDePagoId)
                 .HasColumnName("tipo_metodo_de_pago_id")
                 .IsOptional();
@@ -572,6 +580,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("lugar_expedicion")
                 .IsOptional() // .IsRequired() // Requerido
                 .HasMaxLength(2048);
+            comprobante.Property(p => p.Confirmacion)
+                .HasColumnName("confirmacion")
+                .IsOptional() // .IsRequired() // Requerido
+                .HasMaxLength(5);
             comprobante.Property(p => p.NumCtaPago)
                 .HasColumnName("num_cta_pago")
                 .IsOptional()

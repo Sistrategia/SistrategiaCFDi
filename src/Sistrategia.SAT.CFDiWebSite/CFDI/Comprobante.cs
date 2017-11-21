@@ -9,7 +9,10 @@ using System.Text;
 
 namespace Sistrategia.SAT.CFDiWebSite.CFDI
 {
-    public class Comprobante
+    /// <summary>
+    /// Estándar para la expresión de comprobantes fiscales digitales.
+    /// </summary>
+    public class Comprobante // : Sistrategia.SAT.CFDiWebSite.CFDI.v32.IComprobante, Sistrategia.SAT.CFDiWebSite.CFDI.v33.IComprobante
     {
         #region Private Fields
         private string version;
@@ -17,38 +20,32 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         private string folio;   // opcional en CFDi
         private DateTime fecha;
         private string sello;
-
-        private string noAprobacion;
-        private string anoAprobacion;
-
+        private string noAprobacion; // Este atributo no está presente en la versión 3.0 y 3.2 (Exclusivo de CFD)
+        private string anoAprobacion;  // Este atributo no está presente en la versión 3.0 y 3.2 (Exclusivo de CFD)
         private string formaDePago;
+        private string formaPago;
         private string noCertificado;
         private bool hasNoCertificado;
         private string certificado;
         private bool hasCertificado;
         private string condicionesDePago;
         private decimal subTotal;
-        //private decimal descuento;
-        //private bool descuentoSpecified;
         private decimal? descuento;
         private string motivoDescuento;
-
         private string tipoCambio;
         private string moneda;
-
         private decimal total;
         //private ComprobanteTipoDeComprobante tipoDeComprobante;
         private string tipoDeComprobante;
         private string metodoDePago;
+        private string metodoPago;
         private string lugarExpedicion;
+        private string confirmacion;
         private string numCtaPago;
         private string folioFiscalOrig;
-        //private bool fechaFolioFiscalOrigFieldSpecified = false;
         private string serieFolioFiscalOrig;
         private DateTime? fechaFolioFiscalOrig;
         private decimal? montoFolioFiscalOrig;
-        //private bool montoFolioFiscalOrigFieldSpecified = false;
-
        
         private string decimalFormat;
         private int? decimalPlaces = null;
@@ -365,6 +362,56 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             get { return this.formaDePago; }
             set { this.formaDePago = value; }
         }
+
+        /// <summary>
+        /// Atributo condicional para expresar la clave de la forma de pago de los bienes o servicios 
+        /// amparados por el comprobante. Si no se conoce la forma de pago este atributo se debe omitir.
+        /// </summary>
+        /// <remarks>
+        /// Requerido
+        /// No debe contener espacios en blanco
+        /// <para>
+        /// Se debe registrar la clave de la forma de pago de la adquisición de los bienes o de la 
+        /// prestación de los servicios contenidos en el comprobante.
+        /// </para>
+        /// <para>
+        /// En el caso, de que se haya recibido el pago de la contraprestación al momento de la emisión
+        /// del comprobante fiscal, los contribuyentes deberán consignar en éste, la clave correspondiente
+        /// a la forma de pago de conformidad con el catálogo c_FormaPago publicado en el portal del SAT;
+        /// no debiendo incorporar el "Complemento para recepción de pagos".
+        /// </para>
+        /// <para>
+        /// En el caso de aplicar más de una forma de pago en una transacción, los contribuyentes deben
+        /// incluir en este campo, la clave de forma de pago con la que se liquida la mayor cantidad del 
+        /// pago con el mismo importe, el contribuyente debe registrar a su consideración, una de las 
+        /// formas de pago con lsa que se recibió el pago de la contraprestación.
+        /// </para>
+        /// <para>
+        /// En el caso de que no se reciba el pago de la contraprestación al momento de la emisión del 
+        /// comprobante fiscal (pago en parcialidades o diferido), los constribuyentes deberán seleccionar
+        /// la clave "99" (Por definir) del catálogo c_FormaPago publicdo en el Portal del SAT.
+        /// </para>
+        /// <para>
+        /// Cuando el tipo de comprobante sea "E" (Egreso), se deberá registrar como forma de pago, la misma
+        /// que se registró en el CFDI "I" (Ingreso" que dió origen a este comprobante, derivado ya sea de
+        /// una devolución, descuento o bonificación, conforme al catálogo de formas de pago del Anexo 20,
+        /// opcionalmente se podrá registrar la forma de pago conl a que se está efectuando el descuento,
+        /// devolución o bonificación en su caso.
+        /// </para>
+        /// </remarks>
+        [XmlAttribute("FormaPago")]
+        public string FormaPago {
+            get { return this.formaPago; }
+            set { this.formaPago = value; }
+        }
+        // <xs:attribute name="FormaPago" use="optional" type="catCFDI:c_FormaPago">
+        //   <xs:annotation>
+        //     <xs:documentation>
+        //       Atributo condicional para expresar la clave de la forma de pago de los bienes o servicios 
+        //       amparados por el comprobante. Si no se conoce la forma de pago este atributo se debe omitir.
+        //     </xs:documentation>
+        //   </xs:annotation>
+        // </xs:attribute>
 
         /// <summary>
         /// Atributo requerido para expresar el número de serie del certificado de sello digital que ampara al comprobante, de acuerdo al acuse correspondiente a 20 posiciones otorgado por el sistema del SAT.
@@ -706,6 +753,40 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public virtual TipoMetodoDePago TipoMetodoDePago { get; set; }
 
 
+        /// <summary>		
+        /// Atributo condicional para precisar la clave del método de pago que aplica para este comprobante 
+        /// fiscal digital por Internet, conforme al Artículo 29-A fracción VII incisos a y b del CFF.
+        /// </summary>
+        /// <remarks>
+        /// PUE	Pago en una sola exhibición
+        /// PIP	Pago inicial y parcialidades
+        /// PPD	Pago en parcialidades o diferido        
+        /// </remarks>
+        [XmlAttribute("MetodoPago")] // Versión 3.2: [XmlAttribute("metodoDePago")]
+        public string MetodoPago {
+            get { return this.metodoPago; }
+            set { this.metodoPago = value; }
+        }
+        // <xs:attribute name="MetodoPago" use="optional" type="catCFDI:c_MetodoPago">
+        //   <xs:annotation>
+        //     <xs:documentation>
+        //       Atributo condicional para precisar la clave del método de pago que aplica para este 
+        //       comprobante fiscal digital por Internet, conforme al Artículo 29-A fracción VII 
+        //       incisos a y b del CFF.
+        //     </xs:documentation>
+        //   </xs:annotation>        
+        // </xs:attribute>
+        // ...
+        // <xs:simpleType name="c_MetodoPago">
+        //   <xs:restriction base="xs:string">
+        //     <xs:whiteSpace value="collapse"/>
+        //     <xs:enumeration value="PUE"/>
+        //     <xs:enumeration value="PIP"/>
+        //     <xs:enumeration value="PPD"/>
+        //   </xs:restriction>
+        // </xs:simpleType>
+
+
         /// <summary>
         /// Atributo requerido para incorporar el lugar de expedición del comprobante.
         /// </summary>
@@ -731,6 +812,42 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             get { return this.lugarExpedicion; }
             set { this.lugarExpedicion = value; }
         }
+
+        /// <summary>
+        /// Atributo condicional para registrar la clave de confirmación que entregue el PAC para expedir 
+        /// el comprobante con importes grandes, con un tipo de cambio fuera del rango establecido o 
+        /// con ambos casos. Es requerido cuando se registra un tipo de cambio o un total fuera del 
+        /// rango establecido.
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        [XmlAttribute("Confirmacion")]
+        public string Confirmacion {
+            get { return this.confirmacion; }
+            set {
+                if ((!string.IsNullOrEmpty(value) && value.Trim().Length != 5)) {
+                    throw new ArgumentException("El largo del atributo Confirmacion debe ser de 5 caracteres");
+                }
+                this.confirmacion = value.Trim();
+            }
+        }
+        // <xs:attribute name="Confirmacion" use="optional">
+        //   <xs:annotation>
+        //     <xs:documentation>
+        //       Atributo condicional para registrar la clave de confirmación que entregue el PAC para 
+        //       expedir el comprobante con importes grandes, con un tipo de cambio fuera del rango 
+        //       establecido o con ambos casos. Es requerido cuando se registra un tipo de cambio o 
+        //       un total fuera del rango establecido.
+        //     </xs:documentation>
+        //   </xs:annotation>
+        //   <xs:simpleType>
+        //     <xs:restriction base="xs:string">
+        //       <xs:whiteSpace value="collapse"/>
+        //       <xs:length value="5"/>
+        //       <xs:pattern value="[0-9a-zA-Z]{5}"/>
+        //     </xs:restriction>
+        //   </xs:simpleType>
+        // </xs:attribute>
 
         /// <summary>
         /// Atributo Opcional para incorporar al menos los cuatro últimos digitos del número de cuenta con la que se realizó el pago.

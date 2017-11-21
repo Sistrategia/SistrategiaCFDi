@@ -325,6 +325,9 @@
     <EmbeddedResource Include="CFDI\XSD\tdCFDI.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711211832268_v33.resx">
+      <DependentUpon>201711211832268_v33.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="Scripts\amplify.js" />
@@ -528,6 +531,10 @@
     <Compile Include="Migrations\201608152234450_Banco2016.cs" />
     <Compile Include="Migrations\201608152234450_Banco2016.Designer.cs">
       <DependentUpon>201608152234450_Banco2016.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711211832268_v33.cs" />
+    <Compile Include="Migrations\201711211832268_v33.Designer.cs">
+      <DependentUpon>201711211832268_v33.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
