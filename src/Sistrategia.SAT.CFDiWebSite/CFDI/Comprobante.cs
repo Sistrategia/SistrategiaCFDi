@@ -93,8 +93,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
         private void InitializeDefaults() {
             if (string.IsNullOrEmpty(this.version))
-                this.version = "3.2";
-            this.PublicKey = Guid.NewGuid();            
+                this.version = "3.3";
+            this.PublicKey = Guid.NewGuid();
             this.status = "P"; // A
             //this.Fecha = DateTime.Now; // Cambiar esta implementación, ya que en producción asignaría la hora del servidor (EU)
             if (this.version == "3.3")
