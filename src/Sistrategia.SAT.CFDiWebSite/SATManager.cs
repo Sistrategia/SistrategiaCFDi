@@ -36,6 +36,14 @@ namespace Sistrategia.SAT.CFDiWebSite
             return "PAGO EN UNA SOLA EXHIBICION";
         }
 
+        internal static string GetMetodoPagoDefault() {
+            return "PUE";
+        }
+
+        internal static string GetMetodoDePagoDefault() {
+            return "99";
+        }
+
         internal static int GetDecimalPlacesDefault() {
             //return 6;
             return 2;
