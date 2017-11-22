@@ -105,7 +105,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                 if (CteNumero == null)
                 {
-                    CteNumero = this.DBContext.Database.SqlQuery<int>("SELECT MAX([extended_int_value_2])+1 FROM [sat_comprobante] WHERE [serie] = 'A'").FirstOrDefault();
+                    CteNumero = this.DBContext.Database.SqlQuery<int>("IF EXISTS (SELECT TOP 1 1 FROM [sat_comprobante] WHERE [serie] = 'A') SELECT MAX([extended_int_value_2])+1 FROM [sat_comprobante] WHERE [serie] = 'A' ELSE SELECT 1").FirstOrDefault();
                 }
 
                 var result = new { resp = true, CteNumero = CteNumero };
@@ -311,8 +311,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             model.ExpedidoEn.UbicacionId = null; // default null (same as domicilioFiscal)
             model.CertificadoId = emisor.Certificados.FirstOrDefault(x => x.Estado == "A").CertificadoId;
 
-            model.Folio = this.DBContext.Database.SqlQuery<string>("SELECT CONVERT(NVARCHAR,MAX(CONVERT(INT,[folio]))+1) FROM [sat_comprobante] WHERE [serie] = 'A'").FirstOrDefault();
-            model.OrdenNumero = this.DBContext.Database.SqlQuery<int>("SELECT MAX([extended_int_value_1])+1 FROM [sat_comprobante] WHERE [serie] = 'A'").FirstOrDefault();
+            model.Folio = this.DBContext.Database.SqlQuery<string>("IF EXISTS (SELECT TOP 1 1 FROM [sat_comprobante] WHERE [serie] = 'A') SELECT CONVERT(NVARCHAR,MAX(CONVERT(INT,[folio]))+1) FROM [sat_comprobante] WHERE [serie] = 'A' ELSE SELECT '1'").FirstOrDefault();
+            model.OrdenNumero = this.DBContext.Database.SqlQuery<int>("IF EXISTS (SELECT TOP 1 1 FROM [sat_comprobante] WHERE [serie] = 'A') SELECT MAX([extended_int_value_1])+1 FROM [sat_comprobante] WHERE [serie] = 'A' ELSE SELECT 1").FirstOrDefault();
 
 
             var SampleConceptsList = this.DBContext.Database.SqlQuery<SelectListItem>("SELECT [no_identificacion] as Value, [no_identificacion] + ' - ' + [descripcion] as Text FROM [sat_concepto] GROUP BY [no_identificacion], [descripcion] order by [no_identificacion] DESC");
