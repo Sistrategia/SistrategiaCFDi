@@ -520,9 +520,11 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     writer.WriteAttributeString("Rfc", comprobante.Emisor.RFC);
                     //if (!string.IsNullOrEmpty(comprobante.Emisor.Nombre))
                     writer.WriteAttributeString("Nombre", comprobante.Emisor.Nombre);
-                    ////////////////////////////////////////////////////////////////////////ESTE SI SE TIENE QUE HABILITAR:
+                    
                     //if (!string.IsNullOrEmpty(comprobante.Emisor.RegimenFiscal))
-                    //    writer.WriteAttributeString("RegimenFiscal", comprobante.Emisor.RegimenFiscal);
+                    if (comprobante.Emisor.RegimenFiscal != null && comprobante.Emisor.RegimenFiscal.Count > 0 
+                        && !string.IsNullOrEmpty(comprobante.Emisor.RegimenFiscal[0].Regimen) )
+                        writer.WriteAttributeString("RegimenFiscal", comprobante.Emisor.RegimenFiscal[0].Regimen);
                     break;
             }
 
@@ -709,16 +711,18 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                         break;
                     case "3.0":
                     case "3.2":
-                    default:
+                    //default: // 3.3 ya no aplica
                         writer.WriteStartElement("cfdi", "RegimenFiscal", "http://www.sat.gob.mx/cfd/3");
                         break;
                 }
 
-                if (!string.IsNullOrEmpty(comprobante.Emisor.RegimenFiscal[0].Regimen))
-                    writer.WriteAttributeString("Regimen", comprobante.Emisor.RegimenFiscal[0].Regimen);
+                if (!"3.3".Equals(comprobante.Version)) {
+                    if (!string.IsNullOrEmpty(comprobante.Emisor.RegimenFiscal[0].Regimen))
+                        writer.WriteAttributeString("Regimen", comprobante.Emisor.RegimenFiscal[0].Regimen);
 
-                //End RegimenFiscal
-                writer.WriteEndElement();
+                    //End RegimenFiscal
+                    writer.WriteEndElement();
+                }
             }
 
 
@@ -752,13 +756,28 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                         writer.WriteAttributeString("nombre", comprobante.Receptor.Nombre);
                     break;
                 case "3.0":
-                case "3.2":
-                default:
+                case "3.2":                
                     writer.WriteStartElement("cfdi", "Receptor", "http://www.sat.gob.mx/cfd/3");
                     //if (!string.IsNullOrEmpty(comprobante.Receptor.RFC))
                     writer.WriteAttributeString("rfc", comprobante.Receptor.RFC);
                     if (!string.IsNullOrEmpty(comprobante.Receptor.Nombre))
                         writer.WriteAttributeString("nombre", comprobante.Receptor.Nombre);
+                    break;
+                case "3.3":
+                default:
+                    writer.WriteStartElement("cfdi", "Receptor", "http://www.sat.gob.mx/cfd/3");
+                    //if (!string.IsNullOrEmpty(comprobante.Receptor.RFC))
+                    writer.WriteAttributeString("Rfc", comprobante.Receptor.RFC);
+                    if (!string.IsNullOrEmpty(comprobante.Receptor.Nombre))
+                        writer.WriteAttributeString("Nombre", comprobante.Receptor.Nombre);
+
+                    if (!string.IsNullOrEmpty(comprobante.Receptor.ResidenciaFiscal))
+                        writer.WriteAttributeString("ResidenciaFiscal", comprobante.Receptor.ResidenciaFiscal);
+                    if (!string.IsNullOrEmpty(comprobante.Receptor.NumRegIdTrib))
+                        writer.WriteAttributeString("NumRegIdTrib", comprobante.Receptor.NumRegIdTrib);
+                    if (!string.IsNullOrEmpty(comprobante.Receptor.UsoCFDI))
+                        writer.WriteAttributeString("UsoCFDI", comprobante.Receptor.UsoCFDI);
+
                     break;
             }
 
