@@ -67,32 +67,70 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
                     writer.WriteAttributeString("xsi", "schemaLocation", "http://www.w3.org/2001/XMLSchema-instance", "http://www.sat.gob.mx/cfd/3 cfdv3.xsd");
                     break;
-                case "3.3":
-                    writer.WriteStartElement("cfdi", "Comprobante", "http://www.sat.gob.mx/cfd/3");
-                    writer.WriteAttributeString("xmlns", "cfdi", null, "http://www.sat.gob.mx/cfd/3");
-                    writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
-                    writer.WriteAttributeString("xsi", "schemaLocation", "http://www.w3.org/2001/XMLSchema-instance", "http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd");
-                    break;
-                case "3.2":
-                default:
+                case "3.2":                
                     writer.WriteStartElement("cfdi", "Comprobante", "http://www.sat.gob.mx/cfd/3");
                     writer.WriteAttributeString("xmlns", "cfdi", null, "http://www.sat.gob.mx/cfd/3");
                     writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
                     writer.WriteAttributeString("xsi", "schemaLocation", "http://www.w3.org/2001/XMLSchema-instance", "http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd");
                     break;
+                case "3.3":
+                default:
+                    writer.WriteStartElement("cfdi", "Comprobante", "http://www.sat.gob.mx/cfd/3");
+                    writer.WriteAttributeString("xmlns", "cfdi", null, "http://www.sat.gob.mx/cfd/3");
+                    writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
+                    writer.WriteAttributeString("xsi", "schemaLocation", "http://www.w3.org/2001/XMLSchema-instance", "http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd");
+                    break;
             }
 
 
-            // Atributo requerido (con valor prefijado a 3.3 en la ultima versión) que indica la versión del estándar bajo el que se encuentra expresado el comprobante.            
-            // Atributo requerido con valor prefijado a 3.3 que indica la versión del estándar bajo el que se encuentra expresado el comprobante.
-            // No debe contener espacios en blanco            
-            writer.WriteAttributeString("version", comprobante.Version);
+            // Atributo requerido (con valor prefijado a 3.2 en la ultima versión) que indica la versión del estándar bajo el que se encuentra expresado el comprobante.            
+            // Requerido con valor prefijado a 3.2 en la ultima versión.
+            // No debe contener espacios en blanco                        
+            switch (comprobante.Version) {
+                case "1.0":
+                case "2.0":
+                case "2.2":
+                case "3.0":
+                case "3.2":
+                    writer.WriteAttributeString("version", comprobante.Version);
+                    break;
+                case "3.3":
+                default:
+                    writer.WriteAttributeString("Version", comprobante.Version);
+                    break;
+            }
 
+            switch (comprobante.Version) {
+                case "1.0":
+                case "2.0":
+                case "2.2":
+                case "3.0":
+                case "3.2":
+                    if (!string.IsNullOrEmpty(comprobante.Serie))
+                        writer.WriteAttributeString("serie", comprobante.Serie);
+                    break;
+                case "3.3":
+                default:
+                    if (!string.IsNullOrEmpty(comprobante.Serie))
+                        writer.WriteAttributeString("Serie", comprobante.Serie);
+                    break;
+            }
 
-            if (!string.IsNullOrEmpty(comprobante.Serie))
-                writer.WriteAttributeString("serie", comprobante.Serie);
-            if (!string.IsNullOrEmpty(comprobante.Folio))
-                writer.WriteAttributeString("folio", comprobante.Folio);
+            switch (comprobante.Version) {
+                case "1.0":
+                case "2.0":
+                case "2.2":
+                case "3.0":
+                case "3.2":
+                    if (!string.IsNullOrEmpty(comprobante.Folio))
+                        writer.WriteAttributeString("folio", comprobante.Folio);
+                    break;
+                case "3.3":
+                default:
+                    if (!string.IsNullOrEmpty(comprobante.Folio))
+                        writer.WriteAttributeString("Folio", comprobante.Folio);
+                    break;
+            }
 
             switch (comprobante.Version) {
                 case "1.0":
@@ -103,21 +141,35 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                 // Atributo requerido para la expresión de la fecha y hora de expedición  del comprobante fiscal. Se expresa en la forma aaaa-mm-ddThh:mm:ss, de acuerdo con la especificación ISO 8601.
                 // http://en.wikipedia.org/wiki/ISO_8601
                 case "2.2":
-                // Atributo requerido para la expresión de la fecha y hora de expedición  del comprobante fiscal. Se expresa en la forma aaaa-mm-ddThh:mm:ss, de acuerdo con la especificación ISO 8601.                                        
+                // Atributo requerido para la expresión de la fecha y hora de expedición  del comprobante fiscal. Se expresa en la forma aaaa-mm-ddThh:mm:ss, de acuerdo con la especificación ISO 8601.
                 case "3.0":
                 // Atributo requerido para la expresión de la fecha y hora de expedición  del comprobante fiscal. Se expresa en la forma aaaa-mm-ddThh:mm:ss, de acuerdo con la especificación ISO 8601.
                 case "3.2":
-                // Atributo requerido para la expresión de la fecha y hora de expedición  del comprobante fiscal. Se expresa en la forma aaaa-mm-ddThh:mm:ss, de acuerdo con la especificación ISO 8601.
+                    // Atributo requerido para la expresión de la fecha y hora de expedición  del comprobante fiscal. Se expresa en la forma aaaa-mm-ddThh:mm:ss, de acuerdo con la especificación ISO 8601.
+                    writer.WriteAttributeString("fecha", comprobante.Fecha.ToString("yyyy-MM-ddTHH:mm:ss"));
+                    break;
                 case "3.3":
                 // Atributo requerido para la expresión de la fecha y hora de expedición  del comprobante fiscal. Se expresa en la forma aaaa-mm-ddThh:mm:ss, de acuerdo con la especificación ISO 8601.
                 default:
-                    writer.WriteAttributeString("fecha", comprobante.Fecha.ToString("yyyy-MM-ddTHH:mm:ss"));
+                    writer.WriteAttributeString("Fecha", comprobante.Fecha.ToString("yyyy-MM-ddTHH:mm:ss")); // El estándar dice incorrectamente: AAAA-MM-DDThh:mm:ss (traducción al español?)
                     break;
             }
 
-
-            if (!string.IsNullOrEmpty(comprobante.Sello))
-                writer.WriteAttributeString("sello", comprobante.Sello);
+            switch (comprobante.Version) {
+                case "1.0":
+                case "2.0":
+                case "2.2":
+                case "3.0":
+                case "3.2":
+                    if (!string.IsNullOrEmpty(comprobante.Sello))
+                        writer.WriteAttributeString("sello", comprobante.Sello);
+                    break;
+                case "3.3":
+                default:
+                    if (!string.IsNullOrEmpty(comprobante.Sello))
+                        writer.WriteAttributeString("Sello", comprobante.Sello);
+                    break;
+            }
 
 
             switch (comprobante.Version) {
@@ -134,6 +186,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     break;
                 case "3.0":
                 case "3.2":
+                case "3.3":
                 default:
                     break;
             }
@@ -141,19 +194,21 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             switch (comprobante.Version) {
                 case "1.0":
                     break;
-                case "2.0":                    
+                case "2.0":
                     writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());
                     break;
-                case "2.2": 
-                    writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());                    
+                case "2.2":
+                    writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());
                     break;
-                case "3.0":                    
+                case "3.0":
                     writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());
                     break;
                 case "3.2":
+                    writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());
+                    break;
                 case "3.3":
-                default:                    
-                    writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());                    
+                default:
+                    writer.WriteAttributeString("TipoDeComprobante", comprobante.TipoDeComprobante.ToString());
                     break;
             }
 
@@ -166,35 +221,51 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                 case "2.2":
                 case "3.0":
                 case "3.2":
-                default:
                     // ES OBLIGATORIO
                     // if (!string.IsNullOrEmpty(comprobante.FormaDePago))
                     writer.WriteAttributeString("formaDePago", comprobante.FormaDePago);
                     break;
+                case "3.3":
+                default:
+                    // ES OBLIGATORIO
+                    // if (!string.IsNullOrEmpty(comprobante.FormaDePago))
+                    writer.WriteAttributeString("FormaPago", comprobante.FormaPago);
+                    break;
             }
-            
+
             // ESTE VA AQUI Temporalmente lo pongo más abajo por Figueroa
-            //switch (comprobante.Version) {
-            //    case "1.0":
-            //        if (!string.IsNullOrEmpty(comprobante.NoCertificado))
-            //            writer.WriteAttributeString("noCertificado", comprobante.NoCertificado);
-            //        if (!string.IsNullOrEmpty(comprobante.CertificadoBase64))
-            //            writer.WriteAttributeString("certificado", comprobante.CertificadoBase64);
-            //        break;
-            //    case "2.0":
-            //    case "2.2":
-            //        writer.WriteAttributeString("noCertificado", comprobante.NoCertificado); // requerido en el esquema
-            //        if (!string.IsNullOrEmpty(comprobante.CertificadoBase64))
-            //            writer.WriteAttributeString("certificado", comprobante.CertificadoBase64);
-            //        break;
-            //    case "3.0":
-            //    case "3.2":
-            //    default:
-            //        // REQUERIDOS
-            //        writer.WriteAttributeString("noCertificado", comprobante.NoCertificado); // requerido en el esquema
-            //        writer.WriteAttributeString("certificado", comprobante.CertificadoBase64); // requerido en el esquema
-            //        break;
-            //}
+            switch (comprobante.Version) {
+                //case "1.0":
+                //    if (!string.IsNullOrEmpty(comprobante.NoCertificado))
+                //        writer.WriteAttributeString("noCertificado", comprobante.NoCertificado);
+                //    //if (!string.IsNullOrEmpty(comprobante.CertificadoBase64))
+                //    //    writer.WriteAttributeString("certificado", comprobante.CertificadoBase64);
+                //    if (!string.IsNullOrEmpty(comprobante.Certificado))
+                //        writer.WriteAttributeString("certificado", comprobante.Certificado);
+                //    break;
+                //case "2.0":
+                //case "2.2":
+                //    writer.WriteAttributeString("noCertificado", comprobante.NoCertificado); // requerido en el esquema
+                //    //if (!string.IsNullOrEmpty(comprobante.CertificadoBase64))
+                //    //    writer.WriteAttributeString("certificado", comprobante.CertificadoBase64);
+                //    if (!string.IsNullOrEmpty(comprobante.Certificado))
+                //        writer.WriteAttributeString("certificado", comprobante.Certificado);
+                //    break;
+                //case "3.0":
+                //case "3.2":                
+                //    // REQUERIDOS
+                //    writer.WriteAttributeString("noCertificado", comprobante.NoCertificado); // requerido en el esquema
+                //    //writer.WriteAttributeString("certificado", comprobante.CertificadoBase64); // requerido en el esquema
+                //    writer.WriteAttributeString("certificado", comprobante.Certificado); // requerido en el esquema
+                //    break;
+                case "3.3":
+                    //default:
+                    // REQUERIDOS
+                    writer.WriteAttributeString("NoCertificado", comprobante.NoCertificado); // requerido en el esquema
+                    //writer.WriteAttributeString("certificado", comprobante.CertificadoBase64); // requerido en el esquema
+                    writer.WriteAttributeString("Certificado", comprobante.CertificadoBase64); // requerido en el esquema
+                    break;
+            }
 
             switch (comprobante.Version) {
                 case "1.0":
@@ -203,10 +274,14 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                 case "2.2":
                 case "3.0":
                 case "3.2":
-                default:
                     if (!string.IsNullOrEmpty(comprobante.CondicionesDePago))
                         writer.WriteAttributeString("condicionesDePago", comprobante.CondicionesDePago);
                     break;
+                case "3.3":
+                default:
+                    if (!string.IsNullOrEmpty(comprobante.CondicionesDePago))
+                        writer.WriteAttributeString("CondicionesDePago", comprobante.CondicionesDePago);
+                    break;
             }
 
 
@@ -218,17 +293,26 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                 case "2.2":
                 case "3.0":
                 case "3.2":
-                default:
-                    // if (!string.IsNullOrEmpty(comprobante.CondicionesDePago))
+                    // if (!string.IsNullOrEmpty(comprobante.SubTotal))
                     writer.WriteAttributeString("subTotal", comprobante.SubTotal.ToString(comprobante.DecimalFormat));
-                    //if (comprobante.DescuentoSpecified) {
-                    //if (comprobante.Descuento != null) {
+                    //if (comprobante.DescuentoSpecified) {                    
+                    //    writer.WriteAttributeString("descuento", comprobante.Descuento.ToString(comprobante.DecimalFormat));
                     if (comprobante.Descuento.HasValue) {
                         writer.WriteAttributeString("descuento", comprobante.Descuento.Value.ToString(comprobante.DecimalFormat));
                     }
                     if (!string.IsNullOrEmpty(comprobante.MotivoDescuento))
                         writer.WriteAttributeString("motivoDescuento", comprobante.MotivoDescuento);
                     break;
+                case "3.3":
+                default:
+                    // if (!string.IsNullOrEmpty(comprobante.SubTotal))
+                    writer.WriteAttributeString("SubTotal", comprobante.SubTotal.ToString(comprobante.DecimalFormat));
+                    //if (comprobante.DescuentoSpecified) {                    
+                    //    writer.WriteAttributeString("descuento", comprobante.Descuento.ToString(comprobante.DecimalFormat));
+                    if (comprobante.Descuento.HasValue) {
+                        writer.WriteAttributeString("Descuento", comprobante.Descuento.Value.ToString(comprobante.DecimalFormat));
+                    }
+                    break;
             }
 
 
@@ -254,12 +338,19 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     writer.WriteAttributeString("total", comprobante.Total.ToString(comprobante.DecimalFormat));
                     break;
                 case "3.2":
-                default:
                     if (!string.IsNullOrEmpty(comprobante.TipoCambio))
                         writer.WriteAttributeString("TipoCambio", comprobante.TipoCambio);
                     if (!string.IsNullOrEmpty(comprobante.Moneda))
                         writer.WriteAttributeString("Moneda", comprobante.Moneda);
                     writer.WriteAttributeString("total", comprobante.Total.ToString(comprobante.DecimalFormat));
+                    break;
+                case "3.3":
+                default:
+                    if (!string.IsNullOrEmpty(comprobante.Moneda))
+                        writer.WriteAttributeString("Moneda", comprobante.Moneda);
+                    if (!string.IsNullOrEmpty(comprobante.TipoCambio))
+                        writer.WriteAttributeString("TipoCambio", comprobante.TipoCambio);
+                    writer.WriteAttributeString("Total", comprobante.Total.ToString(comprobante.DecimalFormat));
                     break;
             }
 
@@ -302,7 +393,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     break;
                 case "2.0":
                     if (!string.IsNullOrEmpty(comprobante.MetodoDePago))
-                        writer.WriteAttributeString("metodoDePago", comprobante.MetodoDePago);                    
+                        writer.WriteAttributeString("metodoDePago", comprobante.MetodoDePago);
                     break;
                 case "2.2": // SE INVIERTEN ORDEN                   
                     if (!string.IsNullOrEmpty(comprobante.MetodoDePago))
@@ -310,11 +401,14 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     break;
                 case "3.0":
                     if (!string.IsNullOrEmpty(comprobante.MetodoDePago))
-                        writer.WriteAttributeString("metodoDePago", comprobante.MetodoDePago);                   
+                        writer.WriteAttributeString("metodoDePago", comprobante.MetodoDePago);
                     break;
                 case "3.2":
-                default:                   
                     writer.WriteAttributeString("metodoDePago", comprobante.MetodoDePago);
+                    break;
+                case "3.3":
+                default:
+                    writer.WriteAttributeString("MetodoPago", comprobante.MetodoPago);
                     break;
             }
 
@@ -323,7 +417,6 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                 case "2.0":
                     break;
                 case "2.2":
-
                     if (!string.IsNullOrEmpty(comprobante.LugarExpedicion))
                         writer.WriteAttributeString("LugarExpedicion", comprobante.LugarExpedicion);
                     if (!string.IsNullOrEmpty(comprobante.NumCtaPago))
@@ -332,20 +425,16 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                         writer.WriteAttributeString("FolioFiscalOrig", comprobante.FolioFiscalOrig);
                     if (!string.IsNullOrEmpty(comprobante.SerieFolioFiscalOrig))
                         writer.WriteAttributeString("SerieFolioFiscalOrig", comprobante.SerieFolioFiscalOrig);
-
                     //if (comprobante.FechaFolioFiscalOrigSpecified && comprobante.FechaFolioFiscalOrig.HasValue) //if (!string.IsNullOrEmpty(comprobante.FechaFolioFiscalOrig))
                     if (comprobante.FechaFolioFiscalOrig.HasValue)
                         writer.WriteAttributeString("FechaFolioFiscalOrig", comprobante.FechaFolioFiscalOrig.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
-
                     //if (comprobante.MontoFolioFiscalOrigSpecified && comprobante.MontoFolioFiscalOrig.HasValue) // if (!string.IsNullOrEmpty(comprobante.MontoFolioFiscalOrig))
                     if (comprobante.MontoFolioFiscalOrig.HasValue)
                         writer.WriteAttributeString("MontoFolioFiscalOrig", comprobante.MontoFolioFiscalOrig.Value.ToString(comprobante.DecimalFormat));
-
                     break;
                 case "3.0":
                     break;
-                case "3.2":
-                default:
+                case "3.2":                
                     if (!string.IsNullOrEmpty(comprobante.LugarExpedicion))
                         writer.WriteAttributeString("LugarExpedicion", comprobante.LugarExpedicion);
                     if (!string.IsNullOrEmpty(comprobante.NumCtaPago))
@@ -362,6 +451,13 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     //if (comprobante.MontoFolioFiscalOrigSpecified && comprobante.MontoFolioFiscalOrig.HasValue) // if (!string.IsNullOrEmpty(comprobante.MontoFolioFiscalOrig))
                     if (comprobante.MontoFolioFiscalOrig.HasValue) 
                         writer.WriteAttributeString("MontoFolioFiscalOrig", comprobante.MontoFolioFiscalOrig.Value.ToString(comprobante.DecimalFormat));
+                    break;
+                case "3.3":
+                default:
+                    if (!string.IsNullOrEmpty(comprobante.LugarExpedicion))
+                        writer.WriteAttributeString("LugarExpedicion", comprobante.LugarExpedicion);
+                    if (!string.IsNullOrEmpty(comprobante.Confirmacion))
+                        writer.WriteAttributeString("Confirmacion", comprobante.LugarExpedicion);
                     break;
             }
 
@@ -380,7 +476,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     break;
                 case "3.0":
                 case "3.2":
-                default:
+                //default:
                     // REQUERIDOS
                     writer.WriteAttributeString("noCertificado", comprobante.NoCertificado); // requerido en el esquema
                     writer.WriteAttributeString("certificado", comprobante.CertificadoBase64); // requerido en el esquema
@@ -399,19 +495,39 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     break;
                 case "3.0":
                 case "3.2":
+                case "3.3":
                 default:
                     writer.WriteStartElement("cfdi", "Emisor", "http://www.sat.gob.mx/cfd/3");
                     break;
             }
 
-            // Requeridos
-            //if (!string.IsNullOrEmpty(comprobante.Emisor.RFC))
-            writer.WriteAttributeString("rfc", comprobante.Emisor.RFC);
-            //if (!string.IsNullOrEmpty(comprobante.Emisor.Nombre))
-            writer.WriteAttributeString("nombre", comprobante.Emisor.Nombre);
+            switch (comprobante.Version) {
+                case "1.0":
+                case "2.0":
+                case "2.2":
+                case "3.0":
+                case "3.2":
+                    // Requeridos
+                    //if (!string.IsNullOrEmpty(comprobante.Emisor.RFC))
+                    writer.WriteAttributeString("rfc", comprobante.Emisor.RFC);
+                    //if (!string.IsNullOrEmpty(comprobante.Emisor.Nombre))
+                    writer.WriteAttributeString("nombre", comprobante.Emisor.Nombre);
+                    break;
+                case "3.3":
+                default:
+                    // Requeridos
+                    //if (!string.IsNullOrEmpty(comprobante.Emisor.RFC))
+                    writer.WriteAttributeString("Rfc", comprobante.Emisor.RFC);
+                    //if (!string.IsNullOrEmpty(comprobante.Emisor.Nombre))
+                    writer.WriteAttributeString("Nombre", comprobante.Emisor.Nombre);
+                    ////////////////////////////////////////////////////////////////////////ESTE SI SE TIENE QUE HABILITAR:
+                    //if (!string.IsNullOrEmpty(comprobante.Emisor.RegimenFiscal))
+                    //    writer.WriteAttributeString("RegimenFiscal", comprobante.Emisor.RegimenFiscal);
+                    break;
+            }
 
             // Ubicación Fiscal 1.0 2.0 y 3.0 era requerido
-            if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.Pais)) {
+            if (comprobante.Emisor != null && comprobante.Emisor.DomicilioFiscal != null && !string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.Pais)) {
                 switch (comprobante.Version) {
                     case "1.0":
                         writer.WriteStartElement("DomicilioFiscal");
@@ -422,42 +538,47 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                         break;
                     case "3.0":
                     case "3.2":
-                    default:
                         writer.WriteStartElement("cfdi", "DomicilioFiscal", "http://www.sat.gob.mx/cfd/3");
+                        break;
+                    case "3.3": // Ya no lleva
+                    default:
                         break;
                 }
 
-                if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.Calle))
-                    writer.WriteAttributeString("calle", comprobante.Emisor.DomicilioFiscal.Calle);
+                if (!"3.3".Equals(comprobante.Version)) {
 
-                if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.NoExterior))
-                    writer.WriteAttributeString("noExterior", comprobante.Emisor.DomicilioFiscal.NoExterior);
+                    if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.Calle))
+                        writer.WriteAttributeString("calle", comprobante.Emisor.DomicilioFiscal.Calle);
 
-                if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.NoInterior))
-                    writer.WriteAttributeString("noInterior", comprobante.Emisor.DomicilioFiscal.NoInterior);
+                    if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.NoExterior))
+                        writer.WriteAttributeString("noExterior", comprobante.Emisor.DomicilioFiscal.NoExterior);
 
-                if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.Colonia))
-                    writer.WriteAttributeString("colonia", comprobante.Emisor.DomicilioFiscal.Colonia);
+                    if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.NoInterior))
+                        writer.WriteAttributeString("noInterior", comprobante.Emisor.DomicilioFiscal.NoInterior);
 
-                if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.Localidad))
-                    writer.WriteAttributeString("localidad", comprobante.Emisor.DomicilioFiscal.Localidad);
+                    if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.Colonia))
+                        writer.WriteAttributeString("colonia", comprobante.Emisor.DomicilioFiscal.Colonia);
 
-                if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.Referencia))
-                    writer.WriteAttributeString("referencia", comprobante.Emisor.DomicilioFiscal.Referencia);
+                    if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.Localidad))
+                        writer.WriteAttributeString("localidad", comprobante.Emisor.DomicilioFiscal.Localidad);
 
-                if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.Municipio))
-                    writer.WriteAttributeString("municipio", comprobante.Emisor.DomicilioFiscal.Municipio);
+                    if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.Referencia))
+                        writer.WriteAttributeString("referencia", comprobante.Emisor.DomicilioFiscal.Referencia);
 
-                if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.Estado))
-                    writer.WriteAttributeString("estado", comprobante.Emisor.DomicilioFiscal.Estado);
+                    if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.Municipio))
+                        writer.WriteAttributeString("municipio", comprobante.Emisor.DomicilioFiscal.Municipio);
 
-                if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.Pais))
-                    writer.WriteAttributeString("pais", comprobante.Emisor.DomicilioFiscal.Pais);
+                    if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.Estado))
+                        writer.WriteAttributeString("estado", comprobante.Emisor.DomicilioFiscal.Estado);
 
-                if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.CodigoPostal))
-                    writer.WriteAttributeString("codigoPostal", comprobante.Emisor.DomicilioFiscal.CodigoPostal);
+                    if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.Pais))
+                        writer.WriteAttributeString("pais", comprobante.Emisor.DomicilioFiscal.Pais);
 
-                writer.WriteEndElement();
+                    if (!string.IsNullOrEmpty(comprobante.Emisor.DomicilioFiscal.CodigoPostal))
+                        writer.WriteAttributeString("codigoPostal", comprobante.Emisor.DomicilioFiscal.CodigoPostal);
+
+                    writer.WriteEndElement();
+                }
             }
             else {
                 // Como es requerido en 1.0, 2.0 y en 3.0 si no está poner el esquema con valores vacios:
