@@ -422,6 +422,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             receptor.Property(p => p.Nombre)
                 .HasColumnName("nombre");
 
+            receptor.Property(p => p.ResidenciaFiscal)
+                .HasColumnName("residencia_fiscal");
+            receptor.Property(p => p.NumRegIdTrib)
+                .HasColumnName("num_reg_id_trib");
+            receptor.Property(p => p.UsoCFDI)
+                .HasColumnName("uso_cfdi");
+
             receptor.Property(p => p.DomicilioId)
                 .HasColumnName("domicilio_id");
 
