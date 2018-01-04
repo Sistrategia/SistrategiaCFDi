@@ -11,12 +11,16 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
     public class Concepto
     {
         #region Private Fields
-        private decimal cantidad;
-        private string unidad;
+        private string claveProdServ;
         private string noIdentificacion;
+        private decimal cantidad;
+        private string claveUnidad;
+        private string unidad;        
         private string descripcion;
         private decimal valorUnitario;
         private decimal importe;
+        private decimal? descuento;
+        private string motivoDescuento { get; set; }
         private int ordinal;
         #endregion
 
@@ -252,5 +256,27 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             get { return this.ordinal; }
             set { this.ordinal = value; }
         }
+
+        [ForeignKey("Impuestos")]
+        public int? ImpuestosId { get; set; }
+
+        /// <summary>
+        /// Nodo condicional para expresar el resumen de los impuestos aplicables.
+        /// </summary>
+        public virtual ConceptoImpuestos Impuestos { get; set; }
+        //public Impuestos Impuestos {
+        //    get { return this.impuestos; }
+        //    set { this.impuestos = value; }
+        //}
+
+        ///// <summary>
+        ///// Nodo condicional para expresar el resumen de los impuestos aplicables.
+        ///// </summary>
+        //[XmlArrayItemAttribute("Impuesto", IsNullable = false)]
+        //public virtual List<ConceptoImpuestos> Impuestos { get; set; }
+        ////public IList<ComprobanteConcepto> Conceptos {
+        ////    get { return this.conceptos; }
+        ////    //set { this.conceptos = value; }
+        ////}
     }
 }

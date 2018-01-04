@@ -58,10 +58,17 @@ namespace Sistrategia.SAT.CFDiWebSite
         }
 
         public static string GetQrCode(string info) {
-            //info = "?re=JOE110617QB7&rr=RSC940221A48&tt=34800.00&id=3EF99271-8206-414E-BA07-2DCAE3C722FE";
             string cbb = QrCodeModel.GenerateQrCode(info);
             return cbb;
         }
+
+        public static string GetQrCode(string info, int version) {
+            //info = "?re=JOE110617QB7&rr=RSC940221A48&tt=34800.00&id=3EF99271-8206-414E-BA07-2DCAE3C722FE";
+            string cbb = QrCodeModel.GenerateQrCode(info, version);
+            return cbb;
+        }
+
+        
 
         #region Utilities
         internal static string NormalizeWhiteSpace(string S) {
@@ -335,11 +342,15 @@ namespace Sistrategia.SAT.CFDiWebSite
         //URL: http://platform.twit88.com/
 
         public static string GenerateQrCode(string info) {
+            return GenerateQrCode(info, 0);
+        }
+
+        public static string GenerateQrCode(string info, int version) {
             try {
                 QRCodeEncoder encoder = new QRCodeEncoder();
                 encoder.QRCodeErrorCorrect = QRCodeEncoder.ERROR_CORRECTION.Q;
-                encoder.QRCodeScale = 2;
-                encoder.QRCodeVersion = 8;
+                encoder.QRCodeScale = 3;  // encoder.QRCodeScale = 2;
+                encoder.QRCodeVersion = version;  // encoder.QRCodeVersion = 8;
                 encoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;
 
                 Bitmap img = encoder.Encode(info);

@@ -393,6 +393,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .ToTable("sat_regimen_fiscal");
             regimenFiscal.Property(p => p.RegimenFiscalId)
                 .HasColumnName("regimen_fiscal_id");
+            regimenFiscal.Property(p => p.RegimenFiscalClave)
+                .HasColumnName("regimen_fiscal_clave");
             regimenFiscal.Property(p => p.Regimen)
                 .HasColumnName("regimen");
             regimenFiscal.Property(p => p.Ordinal)
@@ -413,28 +415,36 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             var receptor = modelBuilder.Entity<Receptor>()
                 .ToTable("sat_receptor");
             receptor.Property(p => p.ReceptorId)
-                .HasColumnName("receptor_id");
+                .HasColumnName("receptor_id")
+                .HasColumnOrder(1);
             receptor.Property(p => p.PublicKey)
                 .HasColumnName("public_key")
-                .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()));
+                .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()))
+                .HasColumnOrder(2);
             receptor.Property(p => p.RFC)
-                .HasColumnName("rfc");
+                .HasColumnName("rfc")
+                .HasColumnOrder(3);
             receptor.Property(p => p.Nombre)
-                .HasColumnName("nombre");
+                .HasColumnName("nombre")
+                .HasColumnOrder(4);
+            receptor.Property(p => p.DomicilioId)
+                .HasColumnName("domicilio_id")
+                .HasColumnOrder(5);
 
             receptor.Property(p => p.ResidenciaFiscal)
-                .HasColumnName("residencia_fiscal");
+                .HasColumnName("residencia_fiscal")
+                .HasColumnOrder(6);
             receptor.Property(p => p.NumRegIdTrib)
-                .HasColumnName("num_reg_id_trib");
+                .HasColumnName("num_reg_id_trib")
+                .HasColumnOrder(7);
             receptor.Property(p => p.UsoCFDI)
-                .HasColumnName("uso_cfdi");
-
-            receptor.Property(p => p.DomicilioId)
-                .HasColumnName("domicilio_id");
+                .HasColumnName("uso_cfdi")
+                .HasColumnOrder(8);            
 
             receptor.Property(p => p.Status)
                .HasColumnName("status")
-               .HasMaxLength(50);
+               .HasMaxLength(50)
+               .HasColumnOrder(9);
 
             var comprobanteEmisor = modelBuilder.Entity<ComprobanteEmisor>()
                 .ToTable("sat_comprobante_emisor");
@@ -697,6 +707,59 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             //    .WithOptional()
             //    .Map(pe => pe.MapKey("comprobante_id"));
 
+            // IMPUESTOS CONCEPTOS
+            var conceptoImpuestos = modelBuilder.Entity<ConceptoImpuestos>()
+                .ToTable("sat_concepto_impuestos");
+            conceptoImpuestos.Property(p => p.ImpuestosId)
+                .HasColumnName("impuestos_id");
+            concepto.Property(p => p.ImpuestosId)
+                .HasColumnName("impuestos_id");
+            concepto.HasOptional(c => c.Impuestos);
+
+            var conceptoImpuestoRetencion = modelBuilder.Entity<ConceptoImpuestosRetencion>()
+                .ToTable("sat_concepto_impuesto_retencion");
+            conceptoImpuestoRetencion.Property(p => p.ConceptoImpuestosRetencionId)
+                .HasColumnName("retencion_id");
+            conceptoImpuestoRetencion.Property(p => p.Base)
+                .HasColumnName("base");
+            conceptoImpuestoRetencion.Property(p => p.Impuesto)
+                .HasColumnName("impuesto");
+            conceptoImpuestoRetencion.Property(p => p.TipoFactor)
+                .HasColumnName("tipo_factor");
+            conceptoImpuestoRetencion.Property(p => p.TasaOCuota)
+                .HasColumnName("tasa_o_cuota");
+            conceptoImpuestoRetencion.Property(p => p.Importe)
+                .HasColumnName("importe");
+            conceptoImpuestoRetencion.Property(p => p.Ordinal)
+                .HasColumnName("ordinal");
+            conceptoImpuestos.HasMany<ConceptoImpuestosRetencion>(p => p.Retenciones)
+                .WithOptional()
+                .Map(pe => pe.MapKey("impuesto_id"));
+
+            var conceptoImpuestoTraslado = modelBuilder.Entity<ConceptoImpuestosTraslado>()
+                .ToTable("sat_concepto_impuesto_traslado");
+            conceptoImpuestoTraslado.Property(p => p.ConceptoImpuestosTrasladoId)
+                .HasColumnName("traslado_id");
+            conceptoImpuestoTraslado.Property(p => p.Base)
+                .HasColumnName("base");
+            conceptoImpuestoTraslado.Property(p => p.Importe)
+                .HasColumnName("importe");
+            conceptoImpuestoTraslado.Property(p => p.TipoFactor)
+                .HasColumnName("tipo_factor");
+            conceptoImpuestoTraslado.Property(p => p.TasaOCuota)
+                .HasColumnName("tasa_o_cuota");
+            conceptoImpuestoTraslado.Property(p => p.Impuesto)
+                .HasColumnName("impuesto");
+            //conceptoImpuestoTraslado.Property(p => p.Tasa)
+            //    .HasColumnName("tasa");
+            conceptoImpuestoTraslado.Property(p => p.Ordinal)
+                .HasColumnName("ordinal");
+            conceptoImpuestos.HasMany<ConceptoImpuestosTraslado>(p => p.Traslados)
+                .WithOptional()
+                .Map(pe => pe.MapKey("impuesto_id"));
+
+
+
             //var impuestos = modelBuilder.Entity<Impuestos>()
             //    .HasRequired(i => i.Comprobante)
             //    .WithOptional(c => c.Impuestos)
@@ -715,20 +778,17 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             //.WithRequired()
             //.Map(pe => pe.MapKey("impuestos_id"));
 
+
             var retencion = modelBuilder.Entity<Retencion>()
                 .ToTable("sat_retencion");
-
             retencion.Property(p => p.RetencionId)
-                .HasColumnName("retencion_id")
-                ;
+                .HasColumnName("retencion_id");
             retencion.Property(p => p.Impuesto)
                 .HasColumnName("impuesto");
             retencion.Property(p => p.Importe)
                 .HasColumnName("importe");
-
             retencion.Property(p => p.Ordinal)
                 .HasColumnName("ordinal");
-
             impuestos.HasMany<Retencion>(p => p.Retenciones)
                 .WithOptional()
                 .Map(pe => pe.MapKey("impuesto_id"));
@@ -736,18 +796,19 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             var traslado = modelBuilder.Entity<Traslado>()
                 .ToTable("sat_traslado");
             traslado.Property(p => p.TrasladoId)
-                .HasColumnName("traslado_id")
-                ;
-            traslado.Property(p => p.Importe)
-                .HasColumnName("importe");
+                .HasColumnName("traslado_id");
             traslado.Property(p => p.Impuesto)
-                .HasColumnName("impuesto");
+                .HasColumnName("impuesto");            
+            traslado.Property(p => p.TipoFactor)
+                .HasColumnName("tipo_factor");
             traslado.Property(p => p.Tasa)
                 .HasColumnName("tasa");
-
+            traslado.Property(p => p.TasaOCuota)
+                .HasColumnName("tasa_o_cuota");
+            traslado.Property(p => p.Importe)
+                .HasColumnName("importe");
             traslado.Property(p => p.Ordinal)
                 .HasColumnName("ordinal");
-
             impuestos.HasMany<Traslado>(p => p.Traslados)
                 .WithOptional()
                 .Map(pe => pe.MapKey("impuesto_id"));

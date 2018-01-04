@@ -1074,8 +1074,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                             default:
                                 if (!string.IsNullOrEmpty(traslado.Impuesto))
                                     writer.WriteAttributeString("impuesto", traslado.Impuesto);
-
-                                writer.WriteAttributeString("tasa", traslado.Tasa.ToString(comprobante.DecimalFormat));
+                                if (traslado.Tasa.HasValue)
+                                    writer.WriteAttributeString("tasa", traslado.Tasa.Value.ToString(comprobante.DecimalFormat));
                                 writer.WriteAttributeString("importe", traslado.Importe.ToString(comprobante.DecimalFormat));
                                 break;
                         }

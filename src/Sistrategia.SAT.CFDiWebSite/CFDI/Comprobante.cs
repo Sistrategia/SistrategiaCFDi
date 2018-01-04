@@ -152,6 +152,27 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             return xml;
         }
 
+        public byte[] GetXmlAsByteArray() {
+            System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            CFDIXmlTextWriter writer =
+                //new CFDIXmlTextWriter(this, ms, System.Text.Encoding.UTF8); // new System.Text.UTF8Encoding(true));            
+                new CFDIXmlTextWriter(this, ms, new System.Text.UTF8Encoding(false)); // new System.Text.UTF8Encoding(true));            
+            writer.WriteXml();
+            ms.Position = 0;
+            //byte[] file = ms.ToArray();
+            string xmlString = System.Text.Encoding.UTF8.GetString(ms.ToArray());
+            writer.Close();
+            var encoding = new System.Text.UTF8Encoding(false);
+            byte[] file = encoding.GetBytes(xmlString); // System.Text.Encoding.UTF8.GetBytes(xmlString);
+            if (file[0] == 239 && file[1] == 187 && file[2] == 191) { // Skip the UTF-8 BOM
+                byte[] file2 = new byte[file.Length - 3];
+                Array.Copy(file, 3, file2, 0, file.Length - 3);
+                file = file2;
+            }
+            //byte[] file2 = System.Text.Encoding.UTF8.GetBytes(xmlString);
+            return file;
+        }
+
         public string GetCadenaOriginal() {
             string xml = this.GetXml();
 
@@ -167,7 +188,10 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
 
             try {
-                if ("3.2".Equals(doc.ChildNodes[1].Attributes["version"].Value)) {
+                if (doc.ChildNodes[1].Attributes["Version"] != null && "3.3".Equals(doc.ChildNodes[1].Attributes["Version"].Value)) {
+                    xslt.Load("http://www.sat.gob.mx/sitio_internet/cfd/3/cadenaoriginal_3_3/cadenaoriginal_3_3.xslt");
+                }
+                else if ("3.2".Equals(doc.ChildNodes[1].Attributes["version"].Value)) {
                     xslt.Load("http://www.sat.gob.mx/sitio_internet/cfd/3/cadenaoriginal_3_2/cadenaoriginal_3_2.xslt");
                 }
                 else {
@@ -239,15 +263,23 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         }
 
         public string GetQrCode() {
-
             if ((this.Complementos != null) && (this.Complementos.Count > 0)) {
                 foreach (Complemento complemento in this.Complementos) {
                     if (complemento is TimbreFiscalDigital) {
                         TimbreFiscalDigital timbre = complemento as TimbreFiscalDigital;
-                        string info = string.Format("?re={0}&rr={1}&tt={2}&id={3}",
-                        this.Emisor.RFC, this.Receptor.RFC, this.Total.ToString(this.DecimalFormat), timbre.UUID);
-                        string cbb = SATManager.GetQrCode(info);
-                        return cbb;
+                        if ("3.3".Equals(this.Version)) {
+                            string info = @"https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=" + timbre.UUID
+                                + "&re=" + this.Emisor.RFC + "&rr=" + this.Receptor.RFC + "&tt=" + this.Total.ToString(this.DecimalFormat)
+                                + "&fe=" + this.Sello.Substring(this.Sello.Length - 8, 8);
+                            string cbb = SATManager.GetQrCode(info);//System.Convert.ToBase64String(toEncodeAsBytes);
+                            return cbb;
+                        }
+                        else {
+                            string info = string.Format("?re={0}&rr={1}&tt={2}&id={3}",
+                            this.Emisor.RFC, this.Receptor.RFC, this.Total.ToString(this.DecimalFormat), timbre.UUID);
+                            string cbb = SATManager.GetQrCode(info, 8);
+                            return cbb;
+                        }
                     }
                 }
             }

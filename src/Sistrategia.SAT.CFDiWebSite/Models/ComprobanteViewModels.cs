@@ -273,7 +273,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public TrasladoViewModel(Traslado traslado) {
             this.Importe = traslado.Importe;
             this.Impuesto = traslado.Impuesto;
-            this.Tasa = traslado.Tasa;
+            if (traslado.Tasa.HasValue)
+                this.Tasa = traslado.Tasa.Value;
         }
 
         public decimal Importe { get; set; }

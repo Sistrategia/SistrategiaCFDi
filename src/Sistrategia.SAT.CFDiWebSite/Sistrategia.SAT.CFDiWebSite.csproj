@@ -475,6 +475,9 @@
     <Compile Include="CFDI\Comprobante.cs" />
     <Compile Include="CFDI\ComprobanteExtendedClasses.cs" />
     <Compile Include="CFDI\Concepto.cs" />
+    <Compile Include="CFDI\ConceptoImpuestos.cs" />
+    <Compile Include="CFDI\ConceptoImpuestosRetencion.cs" />
+    <Compile Include="CFDI\ConceptoImpuestosTraslado.cs" />
     <Compile Include="CFDI\EDICOM\CFDiService.cs">
       <SubType>Component</SubType>
     </Compile>

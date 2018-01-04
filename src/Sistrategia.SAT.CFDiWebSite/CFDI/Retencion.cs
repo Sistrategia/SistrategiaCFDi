@@ -26,58 +26,48 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //public Guid PublicKey { get; set; }
 
         /// <summary>
-        /// Atributo requerido para señalar el tipo de impuesto retenido
+        /// Atributo requerido para señalar la clave del tipo de impuesto retenido
         /// </summary>
-        /// <remarks>
-        /// <code>
-        /// <xs:attribute name="impuesto" use="required">
-        ///     <xs:annotation>
-        ///         <xs:documentation>Atributo requerido para señalar el tipo de impuesto retenido</xs:documentation>
-        ///     </xs:annotation>
-        ///     <xs:simpleType>
-        ///         <xs:restriction base="xs:string">
-        ///             <xs:whiteSpace value="collapse"/>
-        ///             <xs:enumeration value="ISR">
-        ///                 <xs:annotation>
-        ///                     <xs:documentation>Impuesto sobre la renta</xs:documentation>
-        ///                 </xs:annotation>
-        ///             </xs:enumeration>
-        ///             <xs:enumeration value="IVA">
-        ///                 <xs:annotation>
-        ///                     <xs:documentation>Impuesto al Valor Agregado</xs:documentation>
-        ///                 </xs:annotation>
-        ///             </xs:enumeration>
-        ///         </xs:restriction>
-        ///     </xs:simpleType>
-        /// </xs:attribute>
-        /// </code>
-        /// </remarks>
-        [XmlAttribute("impuesto")]
+        [XmlAttribute("Impuesto")] // Version 3.2: [XmlAttribute("impuesto")]
+        //public ComprobanteImpuestosRetencionImpuesto Impuesto {
         public string Impuesto {
-            //public RetencionImpuesto Impuesto {
             get { return this.impuesto; }
             set { this.impuesto = value; }
         }
+        // <xs:attribute name="Impuesto" use="required" type="catCFDI:c_Impuesto">
+        //   <xs:annotation>
+        //     <xs:documentation>
+        //       Atributo requerido para señalar la clave del tipo de impuesto retenido
+        //     </xs:documentation>
+        //   </xs:annotation>        
+        // </xs:attribute>
+        // ...
+        // <xs:simpleType name="c_Impuesto">
+        //   <xs:restriction base="xs:string">
+        //     <xs:whiteSpace value="collapse"/>
+        //     <xs:enumeration value="001"/> // ISR
+        //     <xs:enumeration value="002"/> // IVA
+        //     <xs:enumeration value="003"/> // IEPS
+        //   </xs:restriction>
+        // </xs:simpleType>
 
         /// <summary>
-        /// Atributo requerido para señalar el importe o monto del impuesto retenido.
+        /// Atributo requerido para señalar el monto del impuesto retenido. 
+        /// No se permiten valores negativos.
         /// </summary>
-        /// <remarks>
-        /// <code>
-        /// <xs:attribute name="importe" type="cfdi:t_Importe" use="required">
-        ///   <xs:annotation>
-        ///     <xs:documentation>
-        ///       Atributo requerido para señalar el importe o monto del impuesto retenido.
-        ///     </xs:documentation>
-        ///   </xs:annotation>
-        /// </xs:attribute>
-        /// </code>
-        /// </remarks>
-        [XmlAttribute("importe")]
+        [XmlAttribute("Importe")] // Version 3.2: [XmlAttribute("importe")]
         public decimal Importe {
             get { return this.importe; }
             set { this.importe = value; }
         }
+        // <xs:attribute name="Importe" type="tdCFDI:t_Importe" use="required">
+        //   <xs:annotation>
+        //     <xs:documentation>
+        //       Atributo requerido para señalar el monto del impuesto retenido. 
+        //       No se permiten valores negativos.
+        //     </xs:documentation>
+        //   </xs:annotation>
+        // </xs:attribute>
 
         ///// <summary>
         ///// Atributo requerido para señalar el tipo de impuesto retenido.
