@@ -672,18 +672,27 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("public_key")
                 .IsRequired()
                 .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()));
+            concepto.Property(p => p.ClaveProdServ)
+                .HasColumnName("clave_prod_serv")
+                .HasMaxLength(10)
+                .IsOptional();
+            concepto.Property(p => p.NoIdentificacion)
+                .HasColumnName("no_identificacion")
+                .HasMaxLength(100) // 256
+                .IsOptional();
             concepto.Property(p => p.Cantidad)
                 .HasColumnName("cantidad")
                 .HasPrecision(18, 6)
                 .IsRequired();
             concepto.Property(p => p.Unidad)
                 .HasColumnName("unidad")
-                .HasMaxLength(50)
+                .HasMaxLength(20) // 50
                 .IsOptional();
-            concepto.Property(p => p.NoIdentificacion)
-                .HasColumnName("no_identificacion")
-                .HasMaxLength(256)
+            concepto.Property(p => p.ClaveUnidad)
+                .HasColumnName("clave_unidad")
+                .HasMaxLength(20)
                 .IsOptional();
+            
             concepto.Property(p => p.Descripcion)
                 .HasColumnName("descripcion")
                 //.HasMaxLength(2048)
@@ -696,6 +705,17 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("importe")
                 .HasPrecision(18, 6)
                 .IsRequired();
+
+            concepto.Property(p => p.Descuento)
+                .HasColumnName("descuento")
+                .HasPrecision(18, 6)
+                .IsOptional();
+            //comprobante.Ignore(p => p.DescuentoSpecified);
+            concepto.Property(p => p.MotivoDescuento)
+                .HasColumnName("motivo_descuento")
+                .IsOptional()
+                .HasMaxLength(2048);
+
             concepto.Property(p => p.Ordinal)
                 .HasColumnName("ordinal");
 
@@ -836,6 +856,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
                 .HasColumnName("uuid");
             timbre.Property(p => p.FechaTimbrado)
                 .HasColumnName("fecha_timbrado");
+            timbre.Property(p => p.RfcProvCertif)
+                .HasColumnName("rfc_prov_certif");
+            timbre.Property(p => p.Leyenda)
+                .HasColumnName("leyenda");
             timbre.Property(p => p.SelloCFD)
                 .HasColumnName("sello_cfd");
             timbre.Property(p => p.NoCertificadoSAT)
