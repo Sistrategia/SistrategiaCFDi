@@ -188,12 +188,27 @@ namespace Sistrategia.SAT.CFDiWebSite
 
                                 TimbreFiscalDigital complemento = new TimbreFiscalDigital();
 
-                                complemento.Version = timbre.Attributes.GetNamedItem("version").Value.ToString();
-                                complemento.UUID = timbre.Attributes.GetNamedItem("UUID").Value.ToString();
-                                complemento.FechaTimbrado = DateTime.Parse(timbre.Attributes.GetNamedItem("FechaTimbrado").Value);
-                                complemento.SelloCFD = timbre.Attributes.GetNamedItem("selloCFD").Value.ToString();
-                                complemento.NoCertificadoSAT = timbre.Attributes.GetNamedItem("noCertificadoSAT").Value.ToString();
-                                complemento.SelloSAT = timbre.Attributes.GetNamedItem("selloSAT").Value.ToString();
+                                if (complemento.Version == "1.0")
+                                {
+                                    complemento.Version = timbre.Attributes.GetNamedItem("version").Value.ToString();
+                                    complemento.UUID = timbre.Attributes.GetNamedItem("UUID").Value.ToString();
+                                    complemento.FechaTimbrado = DateTime.Parse(timbre.Attributes.GetNamedItem("FechaTimbrado").Value);
+                                    complemento.SelloCFD = timbre.Attributes.GetNamedItem("selloCFD").Value.ToString();
+                                    complemento.NoCertificadoSAT = timbre.Attributes.GetNamedItem("noCertificadoSAT").Value.ToString();
+                                    complemento.SelloSAT = timbre.Attributes.GetNamedItem("selloSAT").Value.ToString();
+                                }
+                                
+                                if(complemento.Version == "1.1")
+                                {
+                                    complemento.Version = timbre.Attributes.GetNamedItem("Version").Value.ToString();
+                                    complemento.UUID = timbre.Attributes.GetNamedItem("UUID").Value.ToString();
+                                    complemento.FechaTimbrado = DateTime.Parse(timbre.Attributes.GetNamedItem("FechaTimbrado").Value);
+                                    complemento.SelloCFD = timbre.Attributes.GetNamedItem("SelloCFD").Value.ToString();
+                                    complemento.NoCertificadoSAT = timbre.Attributes.GetNamedItem("NoCertificadoSAT").Value.ToString();
+                                    complemento.SelloSAT = timbre.Attributes.GetNamedItem("SelloSAT").Value.ToString();
+                                    complemento.RfcProvCertif = timbre.Attributes.GetNamedItem("RfcProvCertif").Value.ToString();
+                                    complemento.Leyenda = timbre.Attributes.GetNamedItem("Leyenda").Value != null ? timbre.Attributes.GetNamedItem("Leyenda").Value.ToString() : null;
+                                }
 
                                 if (comprobante.Complementos == null)
                                     comprobante.Complementos = new List<Complemento>();

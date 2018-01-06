@@ -94,7 +94,6 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             comprobante.Moneda = "MXN";
             comprobante.TipoDeComprobante = "I";
             comprobante.CondicionesDePago = "CONDICIONES";
-            comprobante.Descuento = 0.0M;
             comprobante.TipoCambio = "1";
             comprobante.LugarExpedicion = "45079";
             comprobante.SubTotal = 100m;
@@ -141,7 +140,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 };
 
             }
-
+            comprobanteEmisor.Emisor.RegimenFiscal[0].RegimenFiscalClave = "601";
             comprobante.Emisor = comprobanteEmisor;
 
 
@@ -205,6 +204,33 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             writer.Close();
 
             return File(ms, "text/xml");
+        }
+
+        public string Timbre33()
+        {
+            var comprobante = DBContext.Comprobantes.Find(1412);
+
+            var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
+
+            string user = ConfigurationManager.AppSettings["CfdiServiceUser"];
+            string password = ConfigurationManager.AppSettings["CfdiServicePassword"];
+
+            var model = new ComprobanteDetailViewModel(comprobante);
+
+            string invoiceFileName = DateTime.Now.ToString("yyyyMMddHHmmss_" + comprobante.PublicKey.ToString("N"));
+
+            try { 
+                SATManager manager = new SATManager();
+                bool response = manager.GetCFDI(user, password, comprobante);
+                if (response)
+                    DBContext.SaveChanges();
+
+                return "Ok";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message.ToString();
+            }
         }
     }
 }
