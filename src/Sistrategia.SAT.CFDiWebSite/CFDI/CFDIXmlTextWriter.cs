@@ -532,12 +532,12 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     writer.WriteAttributeString("Rfc", comprobante.Emisor.RFC);
                     //if (!string.IsNullOrEmpty(comprobante.Emisor.Nombre))
                     writer.WriteAttributeString("Nombre", comprobante.Emisor.Nombre);
-                    //if (!string.IsNullOrEmpty(comprobante.Emisor.RegimenFiscalClave))
-                    //    writer.WriteAttributeString("RegimenFiscal", comprobante.Emisor.RegimenFiscalClave);
+                    if (!string.IsNullOrEmpty(comprobante.Emisor.RegimenFiscalClave))
+                        writer.WriteAttributeString("RegimenFiscal", comprobante.Emisor.RegimenFiscalClave);
                     //if (!string.IsNullOrEmpty(comprobante.Emisor.RegimenFiscal))
-                    if (comprobante.Emisor.RegimenFiscal != null && comprobante.Emisor.RegimenFiscal.Count > 0 
-                        && !string.IsNullOrEmpty(comprobante.Emisor.RegimenFiscal[0].Regimen) )
-                        writer.WriteAttributeString("RegimenFiscal", comprobante.Emisor.RegimenFiscal[0].Regimen);
+                    //if (comprobante.Emisor.RegimenFiscal != null && comprobante.Emisor.RegimenFiscal.Count > 0 
+                    //    && !string.IsNullOrEmpty(comprobante.Emisor.RegimenFiscal[0].RegimenFiscalClave) )
+                    //    writer.WriteAttributeString("RegimenFiscal", comprobante.Emisor.RegimenFiscal[0].RegimenFiscalClave);
                     break;
             }
 

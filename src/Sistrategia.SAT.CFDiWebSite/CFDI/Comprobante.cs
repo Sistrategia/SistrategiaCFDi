@@ -1661,8 +1661,15 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //[XmlElement("ExpedidoEn")]
         public virtual Ubicacion ExpedidoEn { get; set; }
 
-        //[NotMapped]
-        //public virtual List<RegimenFiscal> RegimenFiscal { get { return this.Emisor.RegimenFiscal; } }
+        [NotMapped]
+        public virtual string RegimenFiscalClave { 
+            get {
+                if (this.Emisor.RegimenFiscal != null && this.Emisor.RegimenFiscal.Count > 0) {
+                    return this.Emisor.RegimenFiscal[0].RegimenFiscalClave;
+                }
+                return null;
+            } 
+        }
 
         public virtual List<ComprobanteEmisorRegimenFiscal> RegimenFiscal { get; set; }
 
@@ -1701,6 +1708,9 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
         [NotMapped]
         public string Regimen { get { return this.RegimenFiscal.Regimen; } }
+
+        [NotMapped]
+        public string RegimenFiscalClave { get { return this.RegimenFiscal.RegimenFiscalClave; } }
 
         [ForeignKey("RegimenFiscal")]
         public int RegimenFiscalId { get; set; }
