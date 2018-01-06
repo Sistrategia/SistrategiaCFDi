@@ -48,6 +48,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
         public virtual DbSet<TipoImpuestoRetencion> TiposImpuestoRetencion { get; set; }
         public virtual DbSet<TipoFormaDePago> TiposFormaDePago { get; set; }
         public virtual DbSet<TipoMoneda> TiposMoneda { get; set; }
+
+        public virtual DbSet<TipoImpuesto> TiposImpuestos { get; set; }
+        public virtual DbSet<TipoFormaPago> TiposFormaPago { get; set; }
+        public virtual DbSet<TipoMetodoPago> TiposMetodoPago { get; set; }
         
 
         public virtual DbSet<Banco> Bancos { get; set; }
@@ -205,6 +209,58 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
             banco.Property(p => p.Status)
                 .HasColumnName("status")
                 .HasMaxLength(50);
+
+            var tipoImpuesto = modelBuilder.Entity<TipoImpuesto>()
+                .ToTable("sat_tipo_impuesto");
+            tipoImpuesto.Property(p => p.TipoImpuestoId)
+                .HasColumnName("tipo_impuesto_id");
+            tipoImpuesto.Property(p => p.Impuesto)
+                .HasColumnName("impuesto")
+                .HasMaxLength(3);
+            tipoImpuesto.Property(p => p.Descripcion)
+                .HasColumnName("descripcion")
+                .HasMaxLength(128);
+            tipoImpuesto.Property(p => p.Retencion)
+                .HasColumnName("retencion")
+                .IsRequired()
+                .HasColumnAnnotation("Default", false);
+            tipoImpuesto.Property(p => p.Traslado)
+                .HasColumnName("traslado")
+                .IsRequired()
+                .HasColumnAnnotation("Default", false);
+             
+        
+            var tipoFormaPago = modelBuilder.Entity<TipoFormaPago>()
+                .ToTable("sat_tipo_forma_pago");
+            tipoFormaPago.Property(p => p.TipoFormaPagoId)
+                .HasColumnName("tipo_forma_pago_id");
+            tipoFormaPago.Property(p => p.FormaPago)
+                .HasColumnName("forma_pago")
+                .HasMaxLength(2);
+            tipoFormaPago.Property(p => p.Descripcion)
+                .HasColumnName("descripcion")
+                .HasMaxLength(128);
+            tipoFormaPago.Property(p => p.Bancarizado)
+                .HasColumnName("bancarizado")
+                .IsRequired()
+                .HasColumnAnnotation("Default", false);
+
+            var tipoMetodoPago = modelBuilder.Entity<TipoMetodoPago>()
+                .ToTable("sat_tipo_metodo_pago");
+            tipoMetodoPago.Property(p => p.TipoMetodoPagoId)
+                .HasColumnName("tipo_metodo_pago_id");
+            tipoMetodoPago.Property(p => p.MetodoPago)
+                .HasColumnName("metodo_pago")
+                .HasMaxLength(3);
+            tipoMetodoPago.Property(p => p.Descripcion)
+                .HasColumnName("descripcion")
+                .HasMaxLength(128);
+            tipoMetodoPago.Property(p => p.FechaInicioVigencia)
+                .HasColumnName("fecha_inicio_vigencia")
+                .IsRequired();
+            tipoMetodoPago.Property(p => p.FechaInicioVigencia)
+                .HasColumnName("fecha_fin_vigencia")
+                .IsOptional();
 
 
             var emisor = modelBuilder.Entity<Emisor>()

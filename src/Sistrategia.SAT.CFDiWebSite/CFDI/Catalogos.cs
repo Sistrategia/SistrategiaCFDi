@@ -69,6 +69,35 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         [Required]
         public string Status { get; set; }
     }
+
+    public class TipoImpuesto
+    {
+        [Key]
+        public int? TipoImpuestoId { get; set; }
+        public string Impuesto { get; set; }
+        public string Descripcion { get; set; }
+        public bool Retencion { get; set; }
+        public bool Traslado { get; set; }
+    }
+
+    public class TipoFormaPago
+    {
+        [Key]
+        public int? TipoFormaPagoId { get; set; }
+        public string FormaPago { get; set; }
+        public string Descripcion { get; set; }
+        public bool Bancarizado { get; set; }
+    }
+
+    public class TipoMetodoPago
+    {
+        [Key]
+        public int? TipoMetodoPagoId { get; set; }
+        public string MetodoPago { get; set; }
+        public string Descripcion { get; set; }
+        public DateTime FechaInicioVigencia { get; set; }
+        public DateTime? FechaFinVigencia { get; set; }
+    }
 }
 
 

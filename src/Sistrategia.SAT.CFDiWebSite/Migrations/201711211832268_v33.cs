@@ -1,6 +1,8 @@
 namespace Sistrategia.SAT.CFDiWebSite.Migrations
 {
     using System;
+    using System.Collections.Generic;
+    using System.Data.Entity.Infrastructure.Annotations;
     using System.Data.Entity.Migrations;
     
     public partial class v33 : DbMigration
@@ -48,6 +50,62 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 .PrimaryKey(t => t.traslado_id)
                 .ForeignKey("dbo.sat_concepto_impuestos", t => t.impuesto_id)
                 .Index(t => t.impuesto_id);
+            
+            CreateTable(
+                "dbo.sat_tipo_forma_pago",
+                c => new
+                    {
+                        tipo_forma_pago_id = c.Int(nullable: false, identity: true),
+                        forma_pago = c.String(maxLength: 2),
+                        descripcion = c.String(maxLength: 128),
+                        bancarizado = c.Boolean(nullable: false,
+                            annotations: new Dictionary<string, AnnotationValues>
+                            {
+                                { 
+                                    "Default",
+                                    new AnnotationValues(oldValue: null, newValue: "False")
+                                },
+                            }),
+                    })
+                .PrimaryKey(t => t.tipo_forma_pago_id);
+            
+            CreateTable(
+                "dbo.sat_tipo_impuesto",
+                c => new
+                    {
+                        tipo_impuesto_id = c.Int(nullable: false, identity: true),
+                        impuesto = c.String(maxLength: 3),
+                        descripcion = c.String(maxLength: 128),
+                        retencion = c.Boolean(nullable: false,
+                            annotations: new Dictionary<string, AnnotationValues>
+                            {
+                                { 
+                                    "Default",
+                                    new AnnotationValues(oldValue: null, newValue: "False")
+                                },
+                            }),
+                        traslado = c.Boolean(nullable: false,
+                            annotations: new Dictionary<string, AnnotationValues>
+                            {
+                                { 
+                                    "Default",
+                                    new AnnotationValues(oldValue: null, newValue: "False")
+                                },
+                            }),
+                    })
+                .PrimaryKey(t => t.tipo_impuesto_id);
+            
+            CreateTable(
+                "dbo.sat_tipo_metodo_pago",
+                c => new
+                    {
+                        tipo_metodo_pago_id = c.Int(nullable: false, identity: true),
+                        metodo_pago = c.String(maxLength: 3),
+                        descripcion = c.String(maxLength: 128),
+                        fecha_fin_vigencia = c.DateTime(),
+                        FechaFinVigencia = c.DateTime(),
+                    })
+                .PrimaryKey(t => t.tipo_metodo_pago_id);
             
             AddColumn("dbo.sat_comprobante", "forma_pago", c => c.String(maxLength: 2));
             AddColumn("dbo.sat_comprobante", "metodo_pago", c => c.String(maxLength: 3));
@@ -101,6 +159,36 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             DropColumn("dbo.sat_comprobante", "confirmacion");
             DropColumn("dbo.sat_comprobante", "metodo_pago");
             DropColumn("dbo.sat_comprobante", "forma_pago");
+            DropTable("dbo.sat_tipo_metodo_pago");
+            DropTable("dbo.sat_tipo_impuesto",
+                removedColumnAnnotations: new Dictionary<string, IDictionary<string, object>>
+                {
+                    {
+                        "retencion",
+                        new Dictionary<string, object>
+                        {
+                            { "Default", "False" },
+                        }
+                    },
+                    {
+                        "traslado",
+                        new Dictionary<string, object>
+                        {
+                            { "Default", "False" },
+                        }
+                    },
+                });
+            DropTable("dbo.sat_tipo_forma_pago",
+                removedColumnAnnotations: new Dictionary<string, IDictionary<string, object>>
+                {
+                    {
+                        "bancarizado",
+                        new Dictionary<string, object>
+                        {
+                            { "Default", "False" },
+                        }
+                    },
+                });
             DropTable("dbo.sat_concepto_impuesto_traslado");
             DropTable("dbo.sat_concepto_impuesto_retencion");
             DropTable("dbo.sat_concepto_impuestos");
