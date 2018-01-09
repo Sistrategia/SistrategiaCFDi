@@ -76,7 +76,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             comprobante.TipoDeComprobante = "I";
 
             comprobante.Serie = "A";
-            comprobante.Folio = "167ABC";
+            comprobante.Folio = "167";
             comprobante.Fecha = DateTime.Parse("2018-01-03T16:57:04");
 
             CFDI.Certificado certificado = DBContext.Certificados.Find(3);
@@ -208,7 +208,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
         public string Timbre33()
         {
-            var comprobante = DBContext.Comprobantes.Find(1412);
+            var comprobante = DBContext.Comprobantes.Find(2408);
 
             var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
 

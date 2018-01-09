@@ -17,6 +17,7 @@
 
 var InitialModel = function (modelId) {
     var self = this;
+    self.UsoCFDI = ko.observable("");
     self.EmisorId = ko.observable("");
     self.ReceptorId = ko.observable("");
     self.Serie = ko.observable("");
@@ -49,6 +50,14 @@ var Concepto = function () {
     this.ConceptoValorUnitario = null;
     this.ConceptoImporte = null;
     this.ConceptoOrdinal = null;
+
+    this.ImpuestoTipo = null;
+    this.ImpuestoBase = null;
+    this.ImpuestoImpuesto = null;
+    this.ImpuestoTipoFactor = null;
+    this.ImpuestoTasaOCuota = null;
+    this.ImpuestoImporte = null;
+    this.ImpuestoOrdinal = null;
 }
 
 var ConceptosModel = function (modelId) {

@@ -87,7 +87,7 @@
                 <div class="form-group">
                     @Html.LabelFor(m => m.LugarExpedicion, new { @class = "col-md-2 control-label" })
                     <div class="col-md-4">
-                        <input class="form-control" type="text" data-bind="value: LugarExpedicion" />
+                        <input class="form-control" type="number" data-bind="value: LugarExpedicion" />
                     </div>
                     @Html.LabelFor(m => m.FormaDePago, new { @class = "col-md-1  control-label" })
                     <div class="col-md-5">
@@ -97,10 +97,13 @@
             </div>
             <div class="form-horizontal">
                 <div class="form-group">
-
                     @Html.LabelFor(m => m.MetodoDePagoId, new { @class = "col-md-2  control-label" })
                     <div class="col-md-4">
                         @Html.DropDownListFor(m => m.MetodoDePagoId, Model.TipoMetodoDePago, "Seleccione", new { @class = "form-control", data_bind = "value: MetodoDePagoId" })
+                    </div>
+                    <label class="col-md-2  control-label">UsoCFDI</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" data-bind="value: UsoCFDI" />
                     </div>
                 </div>
             </div>
@@ -456,13 +459,14 @@
         var conceptos_model = new ConceptosModel('ConceptosModel');
         var impuestos_model = new ImpuestosModel('ImpuestosModel');
 
-        initial_model.FormaDePago("PAGO EN UNA SOLA EXHIBICION");
-        initial_model.LugarExpedicion("MATRIZ");
-        //initial_model.Moneda("MXN");
+        initial_model.UsoCFDI("P01");
+        initial_model.FormaDePago(03);
+        initial_model.LugarExpedicion(62130);
+        initial_model.Moneda("MXN");
         //initial_model.TipoCambio(1);
-        initial_model.TipoDeComprobante("ingreso");
+        initial_model.TipoDeComprobante("I");
         initial_model.TemplateId(2);
-        initial_model.MetodoDePagoId("19"); //[tipo_metodo_de_pago_id] "OTROS"
+        initial_model.MetodoDePagoId("PUE"); //[tipo_metodo_de_pago_id] "OTROS"
 
         initial_model.Folio("@Html.Raw(Model.Folio)");     
         initial_model.OrdenNumero("@Html.Raw(Model.OrdenNumero)");
@@ -516,8 +520,8 @@
         impuestos_model.TrasladosImpuesto("IVA");
         impuestos_model.TrasladosTasa("16.00");
 
-        initial_model.MetodoDePagoId.subscribe(function (newValue) {
-            if (newValue == '11' || newValue == '12' || newValue == '13' || newValue == '17' || newValue == '') //[tipo_metodo_de_pago_id]
+        initial_model.FormaDePago.subscribe(function (newValue) {
+            if (newValue == 02 || newValue == 03 || newValue == 04 || newValue == 05 || newValue == 06 || newValue == 28 || newValue == '') //[tipo_metodo_de_pago_id]
                 initial_model.IsRequiredNumCtaPago(true);
             else
                 initial_model.IsRequiredNumCtaPago(false);
@@ -612,6 +616,7 @@
             }
 
             var myobject = {
+                UsoCFDI: initial_model.UsoCFDI(),
                 EmisorId: initial_model.EmisorId(),
                 ReceptorId: initial_model.ReceptorId(),
                 Serie: initial_model.Serie(),

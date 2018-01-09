@@ -36,6 +36,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             this.Traslados = new List<TrasladoViewModel>();
         }
 
+        public string UsoCFDI { get; set; }
         public string Serie { get; set; }
         public string Folio { get; set; }
 
@@ -152,6 +153,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             this.LugarExpedicion = comprobante.LugarExpedicion;
             this.FormaDePago = comprobante.FormaDePago;
 
+            this.UsoCFDI = comprobante.Receptor.UsoCFDI;
             this.Serie = comprobante.Serie;
             this.Folio = comprobante.Folio;
             this.Fecha = comprobante.Fecha.ToString("yyyy-MM-ddTHH:mm:ss");
@@ -177,6 +179,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         }
 
         public int? ComprobanteId { get; set; }
+        public string UsoCFDI { get; set; }
         public string Serie { get; set; }
         public string Folio { get; set; }
         //public DateTime Fecha { get; set; }
@@ -244,21 +247,57 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         public ConceptoViewModel(Concepto concepto) {
             this.Cantidad = concepto.Cantidad;
+            this.ClaveProdServ = concepto.ClaveProdServ;
             this.Unidad = concepto.Unidad;
+            this.ClaveUnidad = concepto.ClaveUnidad;
             this.NoIdentificacion = concepto.NoIdentificacion;
             this.Descripcion = concepto.Descripcion;
             this.ValorUnitario = concepto.ValorUnitario;
             this.Importe = concepto.Importe;
+            this.Descuento = concepto.Descuento;
             this.Ordinal = concepto.Ordinal;
+
+            if (concepto.Impuestos.Traslados.Count > 0)
+            {
+                this.ImpuestoTipo = "traslado";
+                this.ImpuestoBase = concepto.Impuestos.Traslados[concepto.Ordinal].Base;
+                this.ImpuestoImpuesto = concepto.Impuestos.Traslados[concepto.Ordinal].Impuesto;
+                this.ImpuestoTipoFactor = concepto.Impuestos.Traslados[concepto.Ordinal].TipoFactor;
+                this.ImpuestoTasaOCuota = concepto.Impuestos.Traslados[concepto.Ordinal].TasaOCuota;
+                this.ImpuestoImporte = concepto.Impuestos.Traslados[concepto.Ordinal].Importe;
+                this.ImpuestoOrdinal = concepto.Impuestos.Traslados[concepto.Ordinal].Ordinal;
+            }
+
+            if (concepto.Impuestos.Retenciones.Count > 0)
+            {
+                this.ImpuestoTipo = "retencion";
+                this.ImpuestoBase = concepto.Impuestos.Traslados[concepto.Ordinal].Base;
+                this.ImpuestoImpuesto = concepto.Impuestos.Traslados[concepto.Ordinal].Impuesto;
+                this.ImpuestoTipoFactor = concepto.Impuestos.Traslados[concepto.Ordinal].TipoFactor;
+                this.ImpuestoTasaOCuota = concepto.Impuestos.Traslados[concepto.Ordinal].TasaOCuota;
+                this.ImpuestoImporte = concepto.Impuestos.Traslados[concepto.Ordinal].Importe;
+                this.ImpuestoOrdinal = concepto.Impuestos.Traslados[concepto.Ordinal].Ordinal;
+            }
         }
 
         public decimal Cantidad { get; set; }
+        public string ClaveProdServ { get; set; }
         public string Unidad { get; set; }
+        public string ClaveUnidad { get; set; }
         public string NoIdentificacion { get; set; }
         public string Descripcion { get; set; }
         public decimal ValorUnitario { get; set; }
         public decimal Importe { get; set; }
+        public decimal? Descuento { get; set; }
         public int Ordinal { get; set; }
+
+        public string ImpuestoTipo { get; set; }
+        public decimal ImpuestoBase { get; set; }
+        public string ImpuestoImpuesto { get; set; }
+        public string ImpuestoTipoFactor { get; set; }
+        public decimal? ImpuestoTasaOCuota { get; set; }
+        public decimal? ImpuestoImporte { get; set; }
+        public int? ImpuestoOrdinal { get; set; }
 
     }
     #endregion

@@ -214,13 +214,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         public ActionResult Create() {
             var model = new ComprobanteCreateViewModel();
 
-            var tipoMetodoDePagoList = DBContext.TiposMetodoDePago.Where(m => m.Status == "A").ToList();
+            var tipoMetodoDePagoList = DBContext.TiposMetodoPago.ToList();
             var tipoMetodoDePagoSelectList = new List<SelectListItem>();
 
             foreach (var tipoMetodoDePago in tipoMetodoDePagoList) {
                 tipoMetodoDePagoSelectList.Add(new SelectListItem {
-                    Value = tipoMetodoDePago.TipoMetodoDePagoId.ToString(), //TipoMetodoDePagoValue,
-                    Text = tipoMetodoDePago.TipoMetodoDePagoCode + " - " + tipoMetodoDePago.TipoMetodoDePagoDescription
+                    Value = tipoMetodoDePago.MetodoPago, //TipoMetodoDePagoValue,
+                    Text = tipoMetodoDePago.MetodoPago + " - " + tipoMetodoDePago.Descripcion
                 });                
             }
             model.TipoMetodoDePago = tipoMetodoDePagoSelectList;
@@ -245,12 +245,12 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             }
             model.TiposImpuestoTraslado = tiposImpuestoTrasladoSelectList;
 
-            var tiposFormaDePagoList = DBContext.TiposFormaDePago.ToList();
+            var tiposFormaDePagoList = DBContext.TiposFormaPago.ToList();
             var tiposFormaDePagoSelectList = new List<SelectListItem>();
             foreach (var tiposFormaDePago in tiposFormaDePagoList) {
                 tiposFormaDePagoSelectList.Add(new SelectListItem {
-                    Value = tiposFormaDePago.TipoFormaDePagoValue,
-                    Text = tiposFormaDePago.TipoFormaDePagoValue
+                    Value = tiposFormaDePago.FormaPago,
+                    Text = tiposFormaDePago.Descripcion
                 });
             }
             model.TiposFormaDePago = tiposFormaDePagoSelectList;
@@ -276,7 +276,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             model.TiposMoneda = monedasListSelectList;
 
 
-            var tiposDeComprobanteList = DBContext.TiposTipoDeComprobante.ToList();
+            var tiposDeComprobanteList = DBContext.TiposTipoDeComprobante.Where(x => x.TipoTipoDeComprobanteId > 3).ToList();
             var tiposDeComprobanteListSelectList = new List<SelectListItem>();
             foreach (var tipoDeComprobante in tiposDeComprobanteList)
             {
@@ -311,7 +311,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             model.ExpedidoEn.UbicacionId = null; // default null (same as domicilioFiscal)
             model.CertificadoId = emisor.Certificados.FirstOrDefault(x => x.Estado == "A").CertificadoId;
 
-            model.Folio = this.DBContext.Database.SqlQuery<string>("IF EXISTS (SELECT TOP 1 1 FROM [sat_comprobante] WHERE [serie] = 'A') SELECT CONVERT(NVARCHAR,MAX(CONVERT(INT,[folio]))+1) FROM [sat_comprobante] WHERE [serie] = 'A' ELSE SELECT '1'").FirstOrDefault();
+            model.Folio = "1"; //this.DBContext.Database.SqlQuery<string>("IF EXISTS (SELECT TOP 1 1 FROM [sat_comprobante] WHERE [serie] = 'A') SELECT CONVERT(NVARCHAR,MAX(CONVERT(INT,[folio]))+1) FROM [sat_comprobante] WHERE [serie] = 'A' ELSE SELECT '1'").FirstOrDefault();
             model.OrdenNumero = this.DBContext.Database.SqlQuery<int>("IF EXISTS (SELECT TOP 1 1 FROM [sat_comprobante] WHERE [serie] = 'A') SELECT MAX([extended_int_value_1])+1 FROM [sat_comprobante] WHERE [serie] = 'A' ELSE SELECT 1").FirstOrDefault();
 
 
@@ -445,7 +445,6 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     comprobante.Moneda = model.Moneda;
                     comprobante.NumCtaPago = model.NumCtaPago;
                     comprobante.ExtendedStringValue1 = model.Banco;
-                    comprobante.Moneda = model.Moneda;
 
                     comprobante.Conceptos = new List<Concepto>();
 
