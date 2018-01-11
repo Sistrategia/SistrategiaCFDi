@@ -103,7 +103,7 @@
                     </div>
                     <label class="col-md-2  control-label">UsoCFDI</label>
                     <div class="col-md-4">
-                        <input class="form-control" type="text" data-bind="value: UsoCFDI" />
+                        @Html.DropDownListFor(m => m.UsoCFDI, Model.UsoCFDIList, "Seleccione", new { @class = "form-control", data_bind="value: UsoCFDI" })
                     </div>
                 </div>
             </div>
@@ -148,20 +148,45 @@
         <div class="col-md-1">
             <input type="number" class="form-control" data-bind="textInput: Cantidad" placeholder="Cantidad">
         </div>
-        <div class="col-md-1">
-            <input type="text" class="form-control" data-bind="textInput: Unidad" placeholder="Unidad">
+        <div class="col-md-2">
+            <input type="text" class="form-control" data-bind="textInput: ClaveUnidad" placeholder="ClaveUnidad">
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
             <input type="text" class="form-control" data-bind="textInput: NoIdentificacion" placeholder="Identificación">
+        </div>
+        <div class="col-md-2">
+            <input type="text" class="form-control" data-bind="textInput: ClaveProdServ" placeholder="ClaveProdServ">
         </div>
         <div class="col-md-5">
             <input type="text" class="form-control" data-bind="textInput: Descripcion" placeholder="Descripción">
         </div>
+
+        <div class="col-md-12">
+            <br />
+        </div>
+
         <div class="col-md-2">
             <input type="number" class="form-control" data-bind="textInput: ValorUnitario" placeholder="Precio">
         </div>
+
         <div class="col-md-2">
-            <button type="button" class="btn btn-default form-control" data-bind="enable: (Cantidad() > 0 && Unidad().length > 0 && NoIdentificacion().length > 0 && Descripcion().length > 0 && ValorUnitario().length > 0), click: addItem">Agregar</button>
+            <select class="form-control" data-bind="value: ImpuestoTasaOCuota" id="ImpuestoTasaOCuota" placeholder="Tasa">
+                <option value="">Seleccione</option>
+                <option value="0.160000">IVA 16%</option>
+                <option value="0.000000">IVA 0%</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <input type="number" class="form-control" data-bind="textInput: ImpuestoImporte" placeholder="Impuesto">
+        </div>
+
+        <div class="col-md-2">
+            <input type="number" class="form-control" data-bind="textInput: Importe" placeholder="Importe">
+        </div>
+
+        <div class="col-md-2">
+            <button type="button" class="btn btn-default form-control" data-bind="enable: (Cantidad() > 0 && ImpuestoTasaOCuota() != '' && ClaveUnidad().length > 0 && NoIdentificacion().length > 0 && Descripcion().length > 0 && ValorUnitario().length > 0), click: addItem">Agregar</button>
         </div>
         <div class="col-md-12"><br /></div>
         <div class="col-md-12" data-bind="visible: HasItems()">
@@ -170,10 +195,13 @@
                     <tr>
                         <th class="text-center">N°</th>
                         <th class="text-center">Cantidad</th>
-                        <th class="text-center">Unidad</th>
+                        <th class="text-center">ClaveUnidad</th>
                         <th class="text-center">Identificación</th>
+                        <th class="text-center">ClaveProdServ</th>
                         <th class="text-center">Descripción</th>
                         <th class="text-center">Precio</th>
+                        <th class="text-center">Tasa</th>
+                        <th class="text-center">Impuesto</th>
                         <th class="text-center">Importe</th>
                         <th class="text-center">Acciones</th>
                     </tr>
@@ -182,10 +210,13 @@
                     <tr>
                         <td data-bind='text: ConceptoOrdinal' class="text-center"></td>
                         <td data-bind='text: ConceptoCantidad' class="text-center"></td>
-                        <td data-bind='text: ConceptoUnidad' class="text-center"></td>
+                        <td data-bind='text: ConceptoClaveUnidad' class="text-center"></td>
                         <td data-bind='text: ConceptoNoIdentificacion' class="text-center"></td>
+                        <td data-bind='text: ConceptoClaveProdServ' class="text-center"></td>
                         <td data-bind='text: ConceptoDescripcion' class="text-center"></td>
                         <td data-bind='text: ConceptoValorUnitario' class="text-center"></td>
+                        <td data-bind='text: ConceptoImpuestoTasaOCuota' class="text-center"></td>
+                        <td data-bind='text: ConceptoImpuestoImporte' class="text-center"></td>
                         <td data-bind='text: ConceptoImporte' class="text-center"></td>
                         <td class="text-center">
                             <a href="#" class="btn btn-danger btn-sm" data-bind="click: $root.removeSelected">
@@ -201,7 +232,7 @@
         <hr />
     </div>
     <div id="impuestos_model_id">
-        <div class="col-md-8">
+        @*<div class="col-md-8">
             <div class="col-md-12">
                 <h3 class="text-center" style="margin-top: 0;">Impuestos trasladados</h3>
                 <br />
@@ -282,13 +313,14 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+        </div>*@
+        <div class="col-md-8"></div>
         <div class="col-md-4">
             <div class="col-md-7" style="font-weight:600">
                 Subtotal:
             </div>
             <div class="col-md-5">
-                <input class="form-control" data-bind="textInput: SubTotal" type="number" />
+                <input class="form-control" data-bind="textInput: SubTotal" type="text"  />
                 <br />
             </div>
 
@@ -296,22 +328,22 @@
                 Total de impuestos trasladados:
             </div>
             <div class="col-md-5">
-                <input class="form-control" data-bind="textInput: TotalTraslados" type="number" />
+                <input class="form-control" data-bind="textInput: TotalTraslados" type="text" />
                 <br />
             </div>
 
-            <div class="col-md-7" style="font-weight:600">
+            @*<div class="col-md-7" style="font-weight:600">
                 Total de impuestos retenidos:
             </div>
             <div class="col-md-5" style="font-weight:600">
                 <input class="form-control" data-bind="textInput: TotalRetenciones" type="number" />
                 <br />
-            </div>
+            </div>*@
             <div class="col-md-7" style="font-weight:600">
                 Total:
             </div>
             <div class="col-md-5">
-                <input class="form-control" data-bind="textInput: Total" type="number" />
+                <input class="form-control" data-bind="textInput: Total" type="text" />
                 <br />
             </div>
         </div>
@@ -515,10 +547,13 @@
         });
 
 
-        conceptos_model.Unidad("pza");
         conceptos_model.Cantidad(1);
-        impuestos_model.TrasladosImpuesto("IVA");
-        impuestos_model.TrasladosTasa("16.00");
+        conceptos_model.ImpuestoTasaOCuota(0.160000);
+        conceptos_model.ClaveUnidad("ACT");
+        conceptos_model.ImpuestoTipoFactor("Tasa");
+        conceptos_model.ImpuestoImpuesto("002");
+        //impuestos_model.TrasladosImpuesto("IVA");
+        //impuestos_model.TrasladosTasa("16.00");
 
         initial_model.FormaDePago.subscribe(function (newValue) {
             if (newValue == 02 || newValue == 03 || newValue == 04 || newValue == 05 || newValue == 06 || newValue == 28 || newValue == '') //[tipo_metodo_de_pago_id]
@@ -530,46 +565,83 @@
         conceptos_model.Items.subscribe(function (newValue) {
             if (newValue.length > 0) {
                 var importeTotalConceptos = 0;
+                var importeTotalTrasladosImpuestos = 0;
+
+                var trasladosImporte16 = 0;
+                var trasladosImporte0 = 0;
+
                 for (var i = 0; i < newValue.length; i++) {
-                    importeTotalConceptos += Math.round(parseFloat(newValue[i].ConceptoImporte()) * 100) / 100;
+                    importeTotalConceptos += parseFloat(newValue[i].ConceptoImporte());
+
+                    if (newValue[i].ConceptoImpuestoTasaOCuota() == 0.160000){
+                        trasladosImporte16 += parseFloat(newValue[i].ConceptoImpuestoImporte());
+                    }
+                    if (newValue[i].ConceptoImpuestoTasaOCuota() == 0.000000) {
+                        trasladosImporte0 += parseFloat(newValue[i].ConceptoImpuestoImporte());
+                    }
                 }
-                impuestos_model.SubTotal(Math.round(parseFloat(importeTotalConceptos) * 100) / 100);
+                impuestos_model.SubTotal((parseFloat(importeTotalConceptos).toFixed(2) * 100)/100);
+
+                if (newValue.find(x => x.ConceptoImpuestoTasaOCuota() == 0.160000)) {
+                    var trasladado = new Trasladado();
+                    trasladado.TrasladadoImpuesto = ko.observable("002");
+                    trasladado.TrasladadoTipoFactor = ko.observable("Tasa");
+                    trasladado.TrasladadoTasa = ko.observable(0.160000);
+                    trasladado.TrasladadoImporte = ko.observable(trasladosImporte16.toFixed(2));
+                    trasladado.TrasladadoOrdinal = ko.observable(1);
+                    impuestos_model.TrasladosItems.push(trasladado);
+                    impuestos_model.TotalTraslados((parseFloat(trasladosImporte16).toFixed(2)*100)/100);
+                }
+
+                if (newValue.find(x => x.ConceptoImpuestoTasaOCuota() == 0.000000)) {
+                    var trasladado = new Trasladado();
+                    trasladado.TrasladadoImpuesto = ko.observable("002");
+                    trasladado.TrasladadoTipoFactor = ko.observable("Tasa");
+                    trasladado.TrasladadoTasa = ko.observable(0.000000);
+                    trasladado.TrasladadoImporte = ko.observable((trasladosImporte0.toFixed(2)*100)/100);
+                    trasladado.TrasladadoOrdinal = ko.observable(2);
+                    impuestos_model.TrasladosItems.push(trasladado);
+                    impuestos_model.TotalTraslados((parseFloat(trasladosImporte0).toFixed(2) * 100) /100);
+                }
+
             } else {
                 impuestos_model.SubTotal(0);
-            }
-            var totalidad = Math.round(parseFloat(((impuestos_model.SubTotal() + impuestos_model.TotalTraslados()) - impuestos_model.TotalRetenciones()) * 100)) / 100;
-            impuestos_model.Total(totalidad);
-        });
-
-        impuestos_model.TrasladosItems.subscribe(function (newValue) {
-            if (newValue.length > 0) {
-              var importeTotalTrasladados = null;
-              for (var i = 0; i < newValue.length; i++) {
-                  importeTotalTrasladados += Math.round(parseFloat(newValue[i].TrasladadoImporte()) * 100) / 100;
-              }
-              impuestos_model.TotalTraslados(Math.round(parseFloat(importeTotalTrasladados) * 100) / 100);
-            }
-            else {
                 impuestos_model.TotalTraslados(0);
             }
-            var totalidad = Math.round(parseFloat(((impuestos_model.SubTotal() + impuestos_model.TotalTraslados()) - impuestos_model.TotalRetenciones()) * 100)) / 100;
+
+            var totalidad = ((parseFloat(impuestos_model.SubTotal() + impuestos_model.TotalTraslados()).toFixed(2) * 100) / 100);
             impuestos_model.Total(totalidad);
         });
 
-        impuestos_model.RetencionesItems.subscribe(function (newValue) {
-            if (newValue.length > 0) {
-                var importeTotalRetenciones = 0;
-                for (var i = 0; i < newValue.length; i++) {
-                    importeTotalRetenciones += Math.round(parseFloat(newValue[i].RetencionImporte()) * 100) / 100;
-                }
-                impuestos_model.TotalRetenciones(Math.round(parseFloat(importeTotalRetenciones) * 100) / 100);
-            }
-            else {
-                impuestos_model.TotalRetenciones(0);
-            }
-            var totalidad = Math.round(parseFloat(((impuestos_model.SubTotal() + impuestos_model.TotalTraslados()) - impuestos_model.TotalRetenciones()) * 100)) / 100;
-            impuestos_model.Total(totalidad);
-        });
+        //impuestos_model.TrasladosItems.subscribe(function (newValue) {
+        //    if (newValue.length > 0) {
+        //      var importeTotalTrasladados = null;
+        //      for (var i = 0; i < newValue.length; i++) {
+        //          importeTotalTrasladados += Math.round(parseFloat(newValue[i].TrasladadoImporte()) * 100) / 100;
+        //      }
+        //      impuestos_model.TotalTraslados(Math.round(parseFloat(importeTotalTrasladados) * 100) / 100);
+        //    }
+        //    else {
+        //        impuestos_model.TotalTraslados(0);
+        //    }
+        //    var totalidad = Math.round(parseFloat(((impuestos_model.SubTotal() + impuestos_model.TotalTraslados()) - impuestos_model.TotalRetenciones()) * 100)) / 100;
+        //    impuestos_model.Total(totalidad);
+        //});
+
+        //impuestos_model.RetencionesItems.subscribe(function (newValue) {
+        //    if (newValue.length > 0) {
+        //        var importeTotalRetenciones = 0;
+        //        for (var i = 0; i < newValue.length; i++) {
+        //            importeTotalRetenciones += Math.round(parseFloat(newValue[i].RetencionImporte()) * 100) / 100;
+        //        }
+        //        impuestos_model.TotalRetenciones(Math.round(parseFloat(importeTotalRetenciones) * 100) / 100);
+        //    }
+        //    else {
+        //        impuestos_model.TotalRetenciones(0);
+        //    }
+        //    var totalidad = Math.round(parseFloat(((impuestos_model.SubTotal() + impuestos_model.TotalTraslados()) - impuestos_model.TotalRetenciones()) * 100)) / 100;
+        //    impuestos_model.Total(totalidad);
+        //});
 
         ko.applyBindings(initial_model, document.getElementById("initial_model_id"));
         ko.applyBindings(conceptos_model, document.getElementById("conceptos_model_id"));
@@ -586,12 +658,21 @@
                 for (var i = 0; i < conceptos_model.Items().length; i++) {
                     conceptos.push({
                         Cantidad: conceptos_model.Items()[i].ConceptoCantidad(),
-                        Unidad: conceptos_model.Items()[i].ConceptoUnidad(),
+                        ClaveProdServ: conceptos_model.Items()[i].ConceptoClaveProdServ(),
+                        ClaveUnidad: conceptos_model.Items()[i].ConceptoClaveUnidad(),
                         NoIdentificacion: conceptos_model.Items()[i].ConceptoNoIdentificacion(),
                         Descripcion: conceptos_model.Items()[i].ConceptoDescripcion(),
                         ValorUnitario: conceptos_model.Items()[i].ConceptoValorUnitario(),
                         Importe: conceptos_model.Items()[i].ConceptoImporte(),
-                        Ordinal: conceptos_model.Items()[i].ConceptoOrdinal()
+                        Ordinal: conceptos_model.Items()[i].ConceptoOrdinal(),
+
+                        ImpuestoTipo: "traslado",
+                        ImpuestoBase: conceptos_model.Items()[i].ConceptoImpuestoBase(),
+                        ImpuestoImpuesto: conceptos_model.Items()[i].ConceptoImpuestoImpuesto(),
+                        ImpuestoTipoFactor: conceptos_model.Items()[i].ConceptoImpuestoTipoFactor(),
+                        ImpuestoTasaOCuota: conceptos_model.Items()[i].ConceptoImpuestoTasaOCuota(),
+                        ImpuestoImporte: conceptos_model.Items()[i].ConceptoImpuestoImporte(),
+                        ImpuestoOrdinal: conceptos_model.Items()[i].ConceptoImpuestoOrdinal(),
                     });
                 }
             }
@@ -599,6 +680,7 @@
             if (impuestos_model.TrasladosItems().length > 0) {
                 for (var i = 0; i < impuestos_model.TrasladosItems().length; i++) {
                     traslados.push({
+                        TipoFactor: impuestos_model.TrasladosItems()[i].TrasladadoTipoFactor(),
                         Impuesto: impuestos_model.TrasladosItems()[i].TrasladadoImpuesto(),
                         Tasa: impuestos_model.TrasladosItems()[i].TrasladadoTasa(),
                         Importe: impuestos_model.TrasladosItems()[i].TrasladadoImporte(),
@@ -606,14 +688,14 @@
                 }
             }
 
-            if (impuestos_model.RetencionesItems().length > 0) {
-                for (var i = 0; i < impuestos_model.RetencionesItems().length; i++) {
-                    retenciones.push({
-                        Impuesto: impuestos_model.RetencionesItems()[i].RetencionImpuesto(),
-                        Importe: impuestos_model.RetencionesItems()[i].RetencionImporte(),
-                    });
-                }
-            }
+            //if (impuestos_model.RetencionesItems().length > 0) {
+            //    for (var i = 0; i < impuestos_model.RetencionesItems().length; i++) {
+            //        retenciones.push({
+            //            Impuesto: impuestos_model.RetencionesItems()[i].RetencionImpuesto(),
+            //            Importe: impuestos_model.RetencionesItems()[i].RetencionImporte(),
+            //        });
+            //    }
+            //}
 
             var myobject = {
                 UsoCFDI: initial_model.UsoCFDI(),
@@ -623,19 +705,19 @@
                 Folio: initial_model.Folio(),
                 Moneda: initial_model.Moneda(),
                 TipoCambio: initial_model.TipoCambio(),
-                FormaDePago: initial_model.FormaDePago(),
-                MetodoDePagoId: initial_model.MetodoDePagoId(),
+                FormaPago: initial_model.FormaDePago(),
+                MetodoPago: initial_model.MetodoDePagoId(),
                 LugarExpedicion: initial_model.LugarExpedicion(),
                 NumCtaPago: initial_model.NumCtaPago(),
                 Banco: initial_model.Banco(),
                 CertificadoId: initial_model.CertificadoId(),
                 SubTotal: impuestos_model.SubTotal(),
                 TotalImpuestosTrasladados: impuestos_model.TotalTraslados(),
-                TotalImpuestosRetenidos: impuestos_model.TotalRetenciones(),
+                //TotalImpuestosRetenidos: impuestos_model.TotalRetenciones(),
                 Total: impuestos_model.Total(),
                 Conceptos: conceptos,
                 Traslados: traslados,
-                Retenciones: retenciones,
+                //Retenciones: retenciones,
                 TipoDeComprobante: initial_model.TipoDeComprobante(),
                 CteNumero: initial_model.CteNumero(),
                 OrdenNumero: initial_model.OrdenNumero(),
@@ -657,7 +739,8 @@
             },
             success: function (data) {
                 if (data.error == false) {
-                    window.location.href = "@Url.Action("Details", "Comprobante")/" + data.comprobanteId + "";
+                    //window.location.href = "@Url.Action("Details", "Comprobante")/" + data.comprobanteId + "";
+                    alert("inserted");
                 }
                 else {
                     $("#danger").addClass("alert alert-danger").show().append(data.errorMsg);

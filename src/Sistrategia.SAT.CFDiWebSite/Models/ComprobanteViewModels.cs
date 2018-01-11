@@ -52,6 +52,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         public decimal Total { get; set; }
 
         public string FormaDePago { get; set; }
+        public string FormaPago { get; set; }
+        public string MetodoPago { get; set; }
         //public string MetodoDePago { get; set; }
         public string NumCtaPago { get; set; }
         public string LugarExpedicion { get; set; }
@@ -65,6 +67,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
 
         //public List<Receptor> Receptores { get; set; }
+        public IEnumerable<SelectListItem> UsoCFDIList { get; set; }
         public IEnumerable<SelectListItem> Emisores { get; set; }
         public IEnumerable<SelectListItem> Receptores { get; set; }
         public IEnumerable<SelectListItem> Certificados { get; set; }
@@ -257,26 +260,26 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             this.Descuento = concepto.Descuento;
             this.Ordinal = concepto.Ordinal;
 
-            if (concepto.Impuestos.Traslados.Count > 0)
+            if (concepto.Impuestos != null && concepto.Impuestos.Traslados.Count > 0)
             {
                 this.ImpuestoTipo = "traslado";
-                this.ImpuestoBase = concepto.Impuestos.Traslados[concepto.Ordinal].Base;
-                this.ImpuestoImpuesto = concepto.Impuestos.Traslados[concepto.Ordinal].Impuesto;
-                this.ImpuestoTipoFactor = concepto.Impuestos.Traslados[concepto.Ordinal].TipoFactor;
-                this.ImpuestoTasaOCuota = concepto.Impuestos.Traslados[concepto.Ordinal].TasaOCuota;
-                this.ImpuestoImporte = concepto.Impuestos.Traslados[concepto.Ordinal].Importe;
-                this.ImpuestoOrdinal = concepto.Impuestos.Traslados[concepto.Ordinal].Ordinal;
+                this.ImpuestoBase = concepto.Impuestos.Traslados[concepto.Ordinal-1].Base;
+                this.ImpuestoImpuesto = concepto.Impuestos.Traslados[concepto.Ordinal - 1].Impuesto;
+                this.ImpuestoTipoFactor = concepto.Impuestos.Traslados[concepto.Ordinal - 1].TipoFactor;
+                this.ImpuestoTasaOCuota = concepto.Impuestos.Traslados[concepto.Ordinal - 1].TasaOCuota;
+                this.ImpuestoImporte = concepto.Impuestos.Traslados[concepto.Ordinal - 1].Importe;
+                this.ImpuestoOrdinal = concepto.Impuestos.Traslados[concepto.Ordinal - 1].Ordinal;
             }
 
-            if (concepto.Impuestos.Retenciones.Count > 0)
+            if (concepto.Impuestos != null && concepto.Impuestos.Retenciones.Count > 0)
             {
                 this.ImpuestoTipo = "retencion";
-                this.ImpuestoBase = concepto.Impuestos.Traslados[concepto.Ordinal].Base;
-                this.ImpuestoImpuesto = concepto.Impuestos.Traslados[concepto.Ordinal].Impuesto;
-                this.ImpuestoTipoFactor = concepto.Impuestos.Traslados[concepto.Ordinal].TipoFactor;
-                this.ImpuestoTasaOCuota = concepto.Impuestos.Traslados[concepto.Ordinal].TasaOCuota;
-                this.ImpuestoImporte = concepto.Impuestos.Traslados[concepto.Ordinal].Importe;
-                this.ImpuestoOrdinal = concepto.Impuestos.Traslados[concepto.Ordinal].Ordinal;
+                this.ImpuestoBase = concepto.Impuestos.Traslados[concepto.Ordinal - 1].Base;
+                this.ImpuestoImpuesto = concepto.Impuestos.Traslados[concepto.Ordinal - 1].Impuesto;
+                this.ImpuestoTipoFactor = concepto.Impuestos.Traslados[concepto.Ordinal - 1].TipoFactor;
+                this.ImpuestoTasaOCuota = concepto.Impuestos.Traslados[concepto.Ordinal - 1].TasaOCuota;
+                this.ImpuestoImporte = concepto.Impuestos.Traslados[concepto.Ordinal - 1].Importe;
+                this.ImpuestoOrdinal = concepto.Impuestos.Traslados[concepto.Ordinal - 1].Ordinal;
             }
         }
 
@@ -311,11 +314,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         public TrasladoViewModel(Traslado traslado) {
             this.Importe = traslado.Importe;
+            this.TipoFactor = traslado.TipoFactor;
             this.Impuesto = traslado.Impuesto;
             if (traslado.Tasa.HasValue)
                 this.Tasa = traslado.Tasa.Value;
         }
 
+        public string TipoFactor { get; set; }
         public decimal Importe { get; set; }
         public string Impuesto { get; set; }
         public decimal Tasa { get; set; }

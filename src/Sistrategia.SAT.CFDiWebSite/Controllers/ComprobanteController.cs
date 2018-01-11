@@ -211,8 +211,61 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
         #region Create
 
+        public class CFDIUse
+        {
+            public CFDIUse(string clave, string descripcion)
+            {
+                this.SATClave = clave;
+                this.Descripcion = descripcion;
+            }
+            public string SATClave { get; set; }
+            public string Descripcion { get; set; }
+        }
+
+        public List<CFDIUse> GetCFDIUse()
+        {
+            List<CFDIUse> cfdiUse = new List<CFDIUse>();
+            cfdiUse.Add(new CFDIUse("G01", "Adquisición de Mercancias"));
+            cfdiUse.Add(new CFDIUse("G02", "Devoluciones, descuentos o bonificaciones"));
+            cfdiUse.Add(new CFDIUse("G03", "Gastos en general"));
+            cfdiUse.Add(new CFDIUse("I01", "Construcciones"));
+            cfdiUse.Add(new CFDIUse("I02", "Mobiliario y equipo de òficina por inversiones"));
+            cfdiUse.Add(new CFDIUse("I03", "Equipo de transporte"));
+            cfdiUse.Add(new CFDIUse("I04", "Equipo de computo y accesorios"));
+            cfdiUse.Add(new CFDIUse("I05", "Dados, troqueles, moldes, matrices y heramental"));
+            cfdiUse.Add(new CFDIUse("I06", "Comunicaciones telefónicas"));
+            cfdiUse.Add(new CFDIUse("I07", "Comunicaciones satelitales"));
+            cfdiUse.Add(new CFDIUse("I08", "Otra maquinaria y equipo"));
+            cfdiUse.Add(new CFDIUse("D01", "Honorarios médicos, dentales y gastos hospitalarios"));
+            cfdiUse.Add(new CFDIUse("D02", "Gastos médicos por incapacidad o discpacidad"));
+            cfdiUse.Add(new CFDIUse("D03", "Gastos funerales"));
+            cfdiUse.Add(new CFDIUse("D04", "Donativos"));
+            cfdiUse.Add(new CFDIUse("D05", "Intereses reales efectivamente pagados por créditos hipotecarios (casa habitación)"));
+            cfdiUse.Add(new CFDIUse("D06", "Aportaciones voluntarias al SAR"));
+            cfdiUse.Add(new CFDIUse("D07", "Primas por seguros de gastos médicos"));
+            cfdiUse.Add(new CFDIUse("D08", "Gastos de transportación escolar obligatoria"));
+            cfdiUse.Add(new CFDIUse("D09", "Depósitos en cuentas para el ahorro, primas que tengan como base planes de pensiones"));
+            cfdiUse.Add(new CFDIUse("D10", "Pagos por servicios educativos(colegiaturas)"));
+            cfdiUse.Add(new CFDIUse("P01", "Por definir"));
+
+            return cfdiUse;
+        }
+
         public ActionResult Create() {
             var model = new ComprobanteCreateViewModel();
+
+            var usoCFDIList = new List<SelectListItem>();
+
+            foreach (var CFDIUse in GetCFDIUse())
+            {
+                usoCFDIList.Add(new SelectListItem
+                {
+                    Value = CFDIUse.SATClave, 
+                    Text = CFDIUse.Descripcion
+                });
+            }
+
+            model.UsoCFDIList = usoCFDIList;
 
             var tipoMetodoDePagoList = DBContext.TiposMetodoPago.ToList();
             var tipoMetodoDePagoSelectList = new List<SelectListItem>();
@@ -334,9 +387,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     throw new ApplicationException("¡Ingrese el receptor!");
                 else if (model.CertificadoId <= 0)
                     throw new ApplicationException("¡Ingrese el certificado!");
-                else if (String.IsNullOrEmpty(model.FormaDePago))
+                else if (String.IsNullOrEmpty(model.FormaPago))
                     throw new ApplicationException("¡Ingrese la forma de pago!");
-                else if (model.MetodoDePagoId <= 0)
+                else if (String.IsNullOrEmpty(model.MetodoPago))
                     throw new ApplicationException("¡Ingrese el método de pago!");
                 //else if ((model.MetodoDePagoId == 11 || model.MetodoDePagoId == 12 || model.MetodoDePagoId == 13 || model.MetodoDePagoId == 17) && (model.NumCtaPago == null || (model.NumCtaPago.Count() > 6 || model.NumCtaPago.Count() < 4)))
                 else if ((model.NumCtaPago != null && (model.NumCtaPago.Count() > 6 || model.NumCtaPago.Count() < 4)))
@@ -344,19 +397,23 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 //else if ((model.MetodoDePagoId == 11 || model.MetodoDePagoId == 12 || model.MetodoDePagoId == 13 || model.MetodoDePagoId == 17) && (string.IsNullOrEmpty(model.Banco)))
                 //    throw new ApplicationException("¡Ingrese el banco!");
                 else if ((model.Conceptos != null || model.Conceptos.Count > 0)
-                    && model.Conceptos.All(x => x.Cantidad < 0m || x.Unidad == null || x.Descripcion == null || x.ValorUnitario < 0m))
+                    && model.Conceptos.All(x => x.Cantidad < 0m 
+                                        || x.ClaveUnidad == null
+                                        || x.ClaveProdServ == null
+                                        || x.Descripcion == null
+                                        || x.ValorUnitario < 0m))
                     throw new ApplicationException("¡Ingrese al menos un concepto!");
                 else if (model.SubTotal < 0m)
                     throw new ApplicationException("¡Subtotal no válido!");
                 else if (model.TotalImpuestosTrasladados < 0m)
                     throw new ApplicationException("¡Total Impuestos Trasladados no válido!");
-                else if (model.TotalImpuestosRetenidos < 0m)
-                    throw new ApplicationException("¡Total Impuestos Retenidos no válido!");
+                //else if (model.TotalImpuestosRetenidos < 0m)
+                //    throw new ApplicationException("¡Total Impuestos Retenidos no válido!");
                 else if (model.Total < 0m)
                     throw new ApplicationException("¡Total no válido!");
                 else {
 
-                    var comprobante = new Comprobante();
+                    var comprobante = new Comprobante("3.3");
 
                     Emisor emisor = DBContext.Emisores.Find(model.EmisorId);
 
@@ -373,12 +430,23 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         comprobanteEmisor = DBContext.ComprobantesEmisores.Where(e => e.EmisorId == emisor.EmisorId && e.DomicilioFiscalId == emisor.DomicilioFiscalId && e.ExpedidoEnId == model.ExpedidoEn.UbicacionId).SingleOrDefault();
                     }
 
+                    List<CFDI.ComprobanteEmisorRegimenFiscal> regimenes = new List<CFDI.ComprobanteEmisorRegimenFiscal>();
+
+                    regimenes.Add(new CFDI.ComprobanteEmisorRegimenFiscal()
+                    {
+                        RegimenFiscal = new CFDI.RegimenFiscal()
+                        {
+                            RegimenFiscalClave = "601",
+                        }
+                    });
+
                     // Crear uno nuevo
                     if (comprobanteEmisor == null) {
                         comprobanteEmisor = new ComprobanteEmisor {
                             Emisor = emisor,
                             //EmisorId = emisor.EmisorId,
-                            DomicilioFiscal = emisor.DomicilioFiscal
+                            DomicilioFiscal = emisor.DomicilioFiscal,
+                            RegimenFiscal = regimenes
                             //,DomicilioId = receptor.DomicilioId
                             // TODO:
                             //RegimenFiscal = emisor.RegimenFiscal
@@ -386,6 +454,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                     }
 
+                    comprobanteEmisor.Emisor.RegimenFiscal[0].RegimenFiscalClave = "601";
+                    comprobanteEmisor.Emisor.RegimenFiscal[1].RegimenFiscalClave = "601";
                     comprobante.Emisor = comprobanteEmisor;
 
                     //comprobante.EmisorId = model.EmisorId;
@@ -398,6 +468,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     //}
 
                     Receptor receptor = DBContext.Receptores.Find(model.ReceptorId);
+                    receptor.UsoCFDI = model.UsoCFDI;
 
                     ComprobanteReceptor comprobanteReceptor = DBContext.ComprobantesReceptores.Where(r => r.ReceptorId == receptor.ReceptorId && r.DomicilioId == receptor.DomicilioId).SingleOrDefault();
 
@@ -418,7 +489,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     comprobante.Serie = model.Serie;
                     comprobante.Folio = model.Folio;
                     comprobante.Fecha = DateTime.Now + SATManager.GetCFDIServiceTimeSpan();
-                    comprobante.FormaDePago = model.FormaDePago;
+                    comprobante.FormaPago = model.FormaPago;
                     comprobante.SubTotal = model.SubTotal;
                     comprobante.Total = model.Total;
 
@@ -433,13 +504,13 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                     comprobante.ViewTemplateId = model.TemplateId;
 
-                    comprobante.FormaDePago = model.FormaDePago;
 
-                    TipoMetodoDePago tipoMetodoDePago = DBContext.TiposMetodoDePago.Find(model.MetodoDePagoId);
-                    comprobante.MetodoDePago = tipoMetodoDePago.TipoMetodoDePagoValue;
-                    comprobante.TipoMetodoDePagoId = tipoMetodoDePago.TipoMetodoDePagoId;
-                    comprobante.TipoMetodoDePago = tipoMetodoDePago;
-                    
+                    //TipoMetodoDePago tipoMetodoDePago = DBContext.TiposMetodoDePago.Find(model.MetodoDePagoId);
+                    //comprobante.MetodoPago = tipoMetodoDePago.TipoMetodoDePagoValue;
+                    //comprobante.TipoMetodoDePagoId = tipoMetodoDePago.TipoMetodoDePagoId;
+                    //comprobante.TipoMetodoDePago = tipoMetodoDePago;
+                    comprobante.MetodoPago = model.MetodoPago;
+
                     comprobante.LugarExpedicion = model.LugarExpedicion;
                     comprobante.TipoCambio = model.TipoCambio;
                     comprobante.Moneda = model.Moneda;
@@ -450,18 +521,40 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                     foreach (var modelConcepto in model.Conceptos) {
                         if (!string.IsNullOrEmpty(modelConcepto.Descripcion)) {
-                            comprobante.Conceptos.Add(new Concepto {
+
+                            CFDI.Concepto concepto = new Concepto
+                            {
                                 Cantidad = modelConcepto.Cantidad,
-                                Unidad = modelConcepto.Unidad,
+                                //Unidad = modelConcepto.Unidad,
                                 NoIdentificacion = modelConcepto.NoIdentificacion,
                                 Descripcion = modelConcepto.Descripcion,
                                 ValorUnitario = modelConcepto.ValorUnitario,
                                 Importe = modelConcepto.Importe,
                                 PublicKey = Guid.NewGuid(),
-                                Ordinal = modelConcepto.Ordinal
+                                Ordinal = modelConcepto.Ordinal,
+                                ClaveProdServ = modelConcepto.ClaveProdServ,
+                                ClaveUnidad = modelConcepto.ClaveUnidad
+                            };
+
+                            concepto.Impuestos = new CFDI.ConceptoImpuestos();
+                            concepto.Impuestos.Traslados = new List<CFDI.ConceptoImpuestosTraslado>();
+
+                            concepto.Impuestos.Traslados.Add(new CFDI.ConceptoImpuestosTraslado
+                            {
+                                Base = modelConcepto.ImpuestoBase,
+                                TipoFactor = modelConcepto.ImpuestoTipoFactor,
+                                TasaOCuota = modelConcepto.ImpuestoTasaOCuota,
+                                Importe = modelConcepto.ImpuestoImporte,
+                                Ordinal = modelConcepto.ImpuestoOrdinal,
+                                Impuesto = modelConcepto.ImpuestoImpuesto
                             });
+
+                            comprobante.Conceptos.Add(concepto);
+
+
                         }
                     }
+
 
                     comprobante.Impuestos = new Impuestos();
                     comprobante.Impuestos.Traslados = new List<Traslado>();
@@ -469,9 +562,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     foreach (var modelTraslado in model.Traslados) {
                         if ((modelTraslado.Tasa == 0 && modelTraslado.Importe == 0) || (modelTraslado.Tasa > 0 && modelTraslado.Importe >= 0)) {
                             comprobante.Impuestos.Traslados.Add(new Traslado {
+                                TipoFactor = modelTraslado.TipoFactor,
                                 Importe = modelTraslado.Importe,
                                 Impuesto = modelTraslado.Impuesto,
-                                Tasa = modelTraslado.Tasa,
+                                TasaOCuota = modelTraslado.Tasa,
                             });
                         }
                         else {
@@ -479,18 +573,18 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         }
                     }
 
-                    comprobante.Impuestos.Retenciones = new List<Retencion>();
-                    foreach (var modelRetencion in model.Retenciones) {
-                        if (modelRetencion.Importe > 0) {
-                            comprobante.Impuestos.Retenciones.Add(new Retencion {
-                                Importe = modelRetencion.Importe,
-                                Impuesto = modelRetencion.Impuesto,
-                            });
-                        }
-                    }
+                    //comprobante.Impuestos.Retenciones = new List<Retencion>();
+                    //foreach (var modelRetencion in model.Retenciones) {
+                    //    if (modelRetencion.Importe > 0) {
+                    //        comprobante.Impuestos.Retenciones.Add(new Retencion {
+                    //            Importe = modelRetencion.Importe,
+                    //            Impuesto = modelRetencion.Impuesto,
+                    //        });
+                    //    }
+                    //}
 
-                    if (model.TotalImpuestosRetenidos > 0)
-                        comprobante.Impuestos.TotalImpuestosRetenidos = model.TotalImpuestosRetenidos;
+                    //if (model.TotalImpuestosRetenidos > 0)
+                    //    comprobante.Impuestos.TotalImpuestosRetenidos = model.TotalImpuestosRetenidos;
 
                     if (model.TotalImpuestosTrasladados >= 0)
                         comprobante.Impuestos.TotalImpuestosTrasladados = model.TotalImpuestosTrasladados;
