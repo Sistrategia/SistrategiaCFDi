@@ -364,7 +364,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             model.ExpedidoEn.UbicacionId = null; // default null (same as domicilioFiscal)
             model.CertificadoId = emisor.Certificados.FirstOrDefault(x => x.Estado == "A").CertificadoId;
 
-            model.Folio = "1"; //this.DBContext.Database.SqlQuery<string>("IF EXISTS (SELECT TOP 1 1 FROM [sat_comprobante] WHERE [serie] = 'A') SELECT CONVERT(NVARCHAR,MAX(CONVERT(INT,[folio]))+1) FROM [sat_comprobante] WHERE [serie] = 'A' ELSE SELECT '1'").FirstOrDefault();
+            model.Folio = this.DBContext.Database.SqlQuery<string>("IF EXISTS (SELECT TOP 1 1 FROM [sat_comprobante] WHERE [serie] = 'A') SELECT CONVERT(NVARCHAR,MAX(CONVERT(INT,[folio]))+1) FROM [sat_comprobante] WHERE [serie] = 'A' ELSE SELECT '1'").FirstOrDefault();
             model.OrdenNumero = this.DBContext.Database.SqlQuery<int>("IF EXISTS (SELECT TOP 1 1 FROM [sat_comprobante] WHERE [serie] = 'A') SELECT MAX([extended_int_value_1])+1 FROM [sat_comprobante] WHERE [serie] = 'A' ELSE SELECT 1").FirstOrDefault();
 
 
@@ -1263,10 +1263,10 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                         comprobante.GeneratedCadenaOriginal = comprobante.GetCadenaOriginal();
 
                         if (model.ComprobantePDFArchivo != null && model.ComprobantePDFArchivo.ContentLength > 0) {
-                            comprobante.GeneratedXmlUrl = string.Format(@"https://sistrategiacfdi1.blob.core.windows.net/{0}/{1}.xml",
+                            comprobante.GeneratedXmlUrl = string.Format(@"https://"+ ConfigurationManager.AppSettings["AzureAccountName"] + ".blob.core.windows.net/{0}/{1}.xml",
                                 comprobante.Emisor.PublicKey.ToString("N"),
                                 comprobante.PublicKey.ToString("N"));
-                            comprobante.GeneratedPDFUrl = string.Format(@"https://sistrategiacfdi1.blob.core.windows.net/{0}/{1}.pdf",
+                            comprobante.GeneratedPDFUrl = string.Format(@"https://"+ ConfigurationManager.AppSettings["AzureAccountName"] + ".blob.core.windows.net/{0}/{1}.pdf",
                                 comprobante.Emisor.PublicKey.ToString("N"),
                                 comprobante.PublicKey.ToString("N"));
                             //comprobante.GeneratedPDFUrl
@@ -1629,16 +1629,37 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             
             if (comprobante == null)
                 return HttpNotFound();
-            
-            var model = new ComprobanteHtmlViewModel(comprobante);
-            TipoMetodoDePago tipoMetodoDePago = new TipoMetodoDePago();
 
-            if (comprobante.Fecha > DateTime.Parse("2016-07-15 00:00:00.000"))
-                tipoMetodoDePago = DBContext.TiposMetodoDePago.Where(m => m.TipoMetodoDePagoCode == comprobante.MetodoDePago).SingleOrDefault();
+            dynamic model = null;
 
-            if (tipoMetodoDePago != null) {
-                model.MetodoDePagoCode = tipoMetodoDePago.TipoMetodoDePagoCode;
-                model.MetodoDePagoDescription = tipoMetodoDePago.TipoMetodoDePagoDescription;
+            if (comprobante.Version == "3.3")
+            {
+                model = new ComprobanteHtmlViewModel33(comprobante);
+
+                var metodoDePago = DBContext.TiposMetodoPago.Where(m => m.MetodoPago == comprobante.MetodoPago).SingleOrDefault();
+                model.MetodoPago = metodoDePago.Descripcion.ToUpperInvariant();
+
+                var formaPago = DBContext.TiposFormaPago.Where(m => m.FormaPago == comprobante.FormaPago).SingleOrDefault();
+                model.FormaPago = formaPago.Descripcion.ToUpperInvariant();
+
+                model.TipoDeComprobante = comprobante.TipoDeComprobante.Equals("I") ? "INGRESO" : comprobante.TipoDeComprobante.Equals("E") ? "EGRESO" : comprobante.TipoDeComprobante.Equals("T") ? "TRASLADO" : "PAGO";
+
+                model.Receptor.UsoCFDI = GetCFDIUse().Where(x => x.SATClave == comprobante.Receptor.UsoCFDI).First().Descripcion.ToUpperInvariant();
+            }
+            else
+            {
+                model = new ComprobanteHtmlViewModel(comprobante);
+
+                TipoMetodoDePago tipoMetodoDePago = new TipoMetodoDePago();
+
+                if (comprobante.Fecha > DateTime.Parse("2016-07-15 00:00:00.000"))
+                    tipoMetodoDePago = DBContext.TiposMetodoDePago.Where(m => m.TipoMetodoDePagoCode == comprobante.MetodoDePago).SingleOrDefault();
+
+                if (tipoMetodoDePago != null)
+                {
+                    model.MetodoDePagoCode = tipoMetodoDePago.TipoMetodoDePagoCode;
+                    model.MetodoDePagoDescription = tipoMetodoDePago.TipoMetodoDePagoDescription;
+                }
             }
 
             if (comprobante.ViewTemplate != null) {

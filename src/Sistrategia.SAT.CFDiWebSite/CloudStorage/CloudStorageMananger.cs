@@ -96,7 +96,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CloudStorage
                   );
             Microsoft.WindowsAzure.Storage.Blob.CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             Microsoft.WindowsAzure.Storage.Blob.CloudBlobContainer container = blobClient.GetContainerReference(containerName);
-
+            container.CreateIfNotExists();
             string ext = System.IO.Path.GetExtension(sourceFileName);
             //string fileName = String.Format(
 

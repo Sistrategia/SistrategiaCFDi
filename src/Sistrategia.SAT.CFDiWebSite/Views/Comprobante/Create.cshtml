@@ -497,10 +497,10 @@
         initial_model.Moneda("MXN");
         //initial_model.TipoCambio(1);
         initial_model.TipoDeComprobante("I");
-        initial_model.TemplateId(2);
+        initial_model.TemplateId(4);
         initial_model.MetodoDePagoId("PUE"); //[tipo_metodo_de_pago_id] "OTROS"
 
-        initial_model.Folio("@Html.Raw(Model.Folio)");     
+        initial_model.Folio("@Html.Raw(Model.Folio)");
         initial_model.OrdenNumero("@Html.Raw(Model.OrdenNumero)");
         initial_model.Serie("A");
 
@@ -550,8 +550,6 @@
         conceptos_model.Cantidad(1);
         conceptos_model.ImpuestoTasaOCuota(0.160000);
         conceptos_model.ClaveUnidad("ACT");
-        conceptos_model.ImpuestoTipoFactor("Tasa");
-        conceptos_model.ImpuestoImpuesto("002");
         //impuestos_model.TrasladosImpuesto("IVA");
         //impuestos_model.TrasladosTasa("16.00");
 
@@ -579,34 +577,18 @@
                     if (newValue[i].ConceptoImpuestoTasaOCuota() == 0.000000) {
                         trasladosImporte0 += parseFloat(newValue[i].ConceptoImpuestoImporte());
                     }
+
+                    newValue[i].ConceptoImpuestoTipoFactor("Tasa");
+                    newValue[i].ConceptoImpuestoImpuesto("002");
                 }
+
                 impuestos_model.SubTotal((parseFloat(importeTotalConceptos).toFixed(2) * 100)/100);
-
-                if (newValue.find(x => x.ConceptoImpuestoTasaOCuota() == 0.160000)) {
-                    var trasladado = new Trasladado();
-                    trasladado.TrasladadoImpuesto = ko.observable("002");
-                    trasladado.TrasladadoTipoFactor = ko.observable("Tasa");
-                    trasladado.TrasladadoTasa = ko.observable(0.160000);
-                    trasladado.TrasladadoImporte = ko.observable(trasladosImporte16.toFixed(2));
-                    trasladado.TrasladadoOrdinal = ko.observable(1);
-                    impuestos_model.TrasladosItems.push(trasladado);
-                    impuestos_model.TotalTraslados((parseFloat(trasladosImporte16).toFixed(2)*100)/100);
-                }
-
-                if (newValue.find(x => x.ConceptoImpuestoTasaOCuota() == 0.000000)) {
-                    var trasladado = new Trasladado();
-                    trasladado.TrasladadoImpuesto = ko.observable("002");
-                    trasladado.TrasladadoTipoFactor = ko.observable("Tasa");
-                    trasladado.TrasladadoTasa = ko.observable(0.000000);
-                    trasladado.TrasladadoImporte = ko.observable((trasladosImporte0.toFixed(2)*100)/100);
-                    trasladado.TrasladadoOrdinal = ko.observable(2);
-                    impuestos_model.TrasladosItems.push(trasladado);
-                    impuestos_model.TotalTraslados((parseFloat(trasladosImporte0).toFixed(2) * 100) /100);
-                }
+                impuestos_model.TotalTraslados((parseFloat(trasladosImporte16 + trasladosImporte0).toFixed(2) * 100) / 100);
 
             } else {
                 impuestos_model.SubTotal(0);
                 impuestos_model.TotalTraslados(0);
+                impuestos_model.TrasladosItems([]);
             }
 
             var totalidad = ((parseFloat(impuestos_model.SubTotal() + impuestos_model.TotalTraslados()).toFixed(2) * 100) / 100);
@@ -654,6 +636,9 @@
             var traslados = new Array();
             var retenciones = new Array();
 
+            var trasladosImporte16 = 0;
+            var trasladosImporte0 = 0;
+
             if (conceptos_model.Items().length > 0) {
                 for (var i = 0; i < conceptos_model.Items().length; i++) {
                     conceptos.push({
@@ -674,7 +659,36 @@
                         ImpuestoImporte: conceptos_model.Items()[i].ConceptoImpuestoImporte(),
                         ImpuestoOrdinal: conceptos_model.Items()[i].ConceptoImpuestoOrdinal(),
                     });
+
+                    if (conceptos_model.Items()[i].ConceptoImpuestoTasaOCuota() == 0.160000) {
+                        trasladosImporte16 += parseFloat(conceptos_model.Items()[i].ConceptoImpuestoImporte());
+                    }
+                    if (conceptos_model.Items()[i].ConceptoImpuestoTasaOCuota() == 0.000000) {
+                        trasladosImporte0 += parseFloat(conceptos_model.Items()[i].ConceptoImpuestoImporte());
+                    }
                 }
+            }
+
+            impuestos_model.TrasladosItems([]);
+
+            if (conceptos_model.Items().find(x => x.ConceptoImpuestoTasaOCuota() == 0.160000)) {
+                var trasladado = new Trasladado();
+                trasladado.TrasladadoImpuesto = ko.observable("002");
+                trasladado.TrasladadoTipoFactor = ko.observable("Tasa");
+                trasladado.TrasladadoTasa = ko.observable(0.160000);
+                trasladado.TrasladadoImporte = ko.observable(trasladosImporte16.toFixed(2));
+                trasladado.TrasladadoOrdinal = ko.observable(1);
+                impuestos_model.TrasladosItems.push(trasladado);
+            }
+
+            if (conceptos_model.Items().find(x => x.ConceptoImpuestoTasaOCuota() == 0.000000)) {
+                var trasladado = new Trasladado();
+                trasladado.TrasladadoImpuesto = ko.observable("002");
+                trasladado.TrasladadoTipoFactor = ko.observable("Tasa");
+                trasladado.TrasladadoTasa = ko.observable(0.000000);
+                trasladado.TrasladadoImporte = ko.observable(trasladosImporte0.toFixed(2));
+                trasladado.TrasladadoOrdinal = ko.observable(2);
+                impuestos_model.TrasladosItems.push(trasladado);
             }
 
             if (impuestos_model.TrasladosItems().length > 0) {
@@ -725,6 +739,8 @@
                 TemplateId: initial_model.TemplateId()
             }
 
+           
+
             $.ajax({
                 url: "@Url.Action("Create", "Comprobante")",
             type: "POST",
@@ -739,8 +755,7 @@
             },
             success: function (data) {
                 if (data.error == false) {
-                    //window.location.href = "@Url.Action("Details", "Comprobante")/" + data.comprobanteId + "";
-                    alert("inserted");
+                    window.location.href = "@Url.Action("Details", "Comprobante")/" + data.comprobanteId + "";
                 }
                 else {
                     $("#danger").addClass("alert alert-danger").show().append(data.errorMsg);

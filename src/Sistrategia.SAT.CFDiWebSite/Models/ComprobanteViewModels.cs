@@ -263,23 +263,23 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
             if (concepto.Impuestos != null && concepto.Impuestos.Traslados.Count > 0)
             {
                 this.ImpuestoTipo = "traslado";
-                this.ImpuestoBase = concepto.Impuestos.Traslados[concepto.Ordinal-1].Base;
-                this.ImpuestoImpuesto = concepto.Impuestos.Traslados[concepto.Ordinal - 1].Impuesto;
-                this.ImpuestoTipoFactor = concepto.Impuestos.Traslados[concepto.Ordinal - 1].TipoFactor;
-                this.ImpuestoTasaOCuota = concepto.Impuestos.Traslados[concepto.Ordinal - 1].TasaOCuota;
-                this.ImpuestoImporte = concepto.Impuestos.Traslados[concepto.Ordinal - 1].Importe;
-                this.ImpuestoOrdinal = concepto.Impuestos.Traslados[concepto.Ordinal - 1].Ordinal;
+                this.ImpuestoBase = concepto.Impuestos.Traslados[0].Base;
+                this.ImpuestoImpuesto = concepto.Impuestos.Traslados[0].Impuesto;
+                this.ImpuestoTipoFactor = concepto.Impuestos.Traslados[0].TipoFactor;
+                this.ImpuestoTasaOCuota = concepto.Impuestos.Traslados[0].TasaOCuota;
+                this.ImpuestoImporte = concepto.Impuestos.Traslados[0].Importe;
+                this.ImpuestoOrdinal = concepto.Impuestos.Traslados[0].Ordinal;
             }
 
             if (concepto.Impuestos != null && concepto.Impuestos.Retenciones.Count > 0)
             {
                 this.ImpuestoTipo = "retencion";
-                this.ImpuestoBase = concepto.Impuestos.Traslados[concepto.Ordinal - 1].Base;
-                this.ImpuestoImpuesto = concepto.Impuestos.Traslados[concepto.Ordinal - 1].Impuesto;
-                this.ImpuestoTipoFactor = concepto.Impuestos.Traslados[concepto.Ordinal - 1].TipoFactor;
-                this.ImpuestoTasaOCuota = concepto.Impuestos.Traslados[concepto.Ordinal - 1].TasaOCuota;
-                this.ImpuestoImporte = concepto.Impuestos.Traslados[concepto.Ordinal - 1].Importe;
-                this.ImpuestoOrdinal = concepto.Impuestos.Traslados[concepto.Ordinal - 1].Ordinal;
+                this.ImpuestoBase = concepto.Impuestos.Traslados[0].Base;
+                this.ImpuestoImpuesto = concepto.Impuestos.Traslados[0].Impuesto;
+                this.ImpuestoTipoFactor = concepto.Impuestos.Traslados[0].TipoFactor;
+                this.ImpuestoTasaOCuota = concepto.Impuestos.Traslados[0].TasaOCuota;
+                this.ImpuestoImporte = concepto.Impuestos.Traslados[0].Importe;
+                this.ImpuestoOrdinal = concepto.Impuestos.Traslados[0].Ordinal;
             }
         }
 
@@ -581,6 +581,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
             this.RFC = receptor.RFC;
             this.Nombre = receptor.Nombre;
+            this.UsoCFDI = receptor.UsoCFDI;
             //if (receptor.RegimenFiscal != null && receptor.RegimenFiscal.Count > 0)
             //    this.RegimenFiscal = receptor.RegimenFiscal[0].Regimen;
 
@@ -597,6 +598,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
         [Display(ResourceType = typeof(LocalizedStrings), Name = "FiscalNameField", ShortName = "Name")]
         public string Nombre { get; set; }
 
+
+        public string UsoCFDI { get; set; }
         //[Display(ResourceType = typeof(LocalizedStrings), Name = "FiscalRegimeField")]
         //public string RegimenFiscal { get; set; }
 
@@ -774,6 +777,170 @@ namespace Sistrategia.SAT.CFDiWebSite.Models
 
         public string SelloCFD { get; set; }
         public string SelloSAT { get; set; }
+
+        public ComprobanteEmisorDetailViewModel Emisor { get; set; }
+        public ComprobanteReceptorDetailsViewModel Receptor { get; set; }
+
+        public List<ConceptoViewModel> Conceptos { get; set; }
+        public List<ComprobanteImpuestoTrasladoTotalPorTipoViewModel> Traslados { get; set; }
+    }
+    #endregion
+
+    #region ComprobanteHtmlViewModel33
+    public class ComprobanteHtmlViewModel33
+    {
+        public ComprobanteHtmlViewModel33(Comprobante comprobante)
+        {
+
+            //this.Traslados = new List<ComprobanteImpuestoTrasladoTotalPorTipoViewModel>();
+
+            if (comprobante == null)
+                throw new ArgumentNullException("comprobante");
+
+            if (comprobante.Emisor != null)
+            {
+                this.Emisor = new ComprobanteEmisorDetailViewModel(comprobante.Emisor);
+            }
+
+            if (comprobante.Receptor != null)
+            {
+                this.Receptor = new ComprobanteReceptorDetailsViewModel(comprobante.Receptor);
+            }
+
+            if (comprobante.Conceptos != null && comprobante.Conceptos.Count > 0)
+            {
+                this.Conceptos = new List<ConceptoViewModel>();
+                foreach (Concepto concepto in comprobante.Conceptos)
+                {
+                    this.Conceptos.Add(new ConceptoViewModel(concepto));
+                }
+            }
+
+
+            if (comprobante.Impuestos.Traslados != null && comprobante.Impuestos.Traslados.Count > 0)
+            {
+                this.Traslados = comprobante.Impuestos.Traslados
+                    .GroupBy(traslado => new { traslado.Impuesto, traslado.TasaOCuota })
+                    .OrderByDescending(traslado => traslado.First().Impuesto)
+                    .ThenBy(traslado => traslado.First().TasaOCuota)
+                    .Select(trasladoGrouped =>
+                        new ComprobanteImpuestoTrasladoTotalPorTipoViewModel()
+                        {
+                            Tasa = String.Format("{0}% IVA", (trasladoGrouped.First().TasaOCuota * 100).Value.ToString("0")),
+                            Importe = String.Format("{0:C2}", trasladoGrouped.Sum(t => t.Importe))
+                        }
+                    ).ToList();
+            }
+
+            this.MainCss = ConfigurationManager.AppSettings["InvoiceMainCss"];
+            this.PrintCss = ConfigurationManager.AppSettings["InvoicePrintCss"];
+
+            this.EmisorLogoUrl = comprobante.Emisor.LogoUrl;
+            this.EmisorTelefono = comprobante.Emisor.Telefono;
+            this.EmisorCorreo = comprobante.Emisor.Correo;
+            this.EmisorCifUrl = comprobante.Emisor.CifUrl;
+
+            this.PublicKey = comprobante.PublicKey;
+            this.Status = "A";
+            this.TipoDeComprobante = comprobante.TipoDeComprobante;
+            this.Fecha = comprobante.Fecha.ToString("dd/MM/yyyy HH:mm:ss");
+            this.Serie = comprobante.Serie;
+            this.Folio = comprobante.Folio;
+
+            this.MetodoPago = comprobante.MetodoPago;
+            this.FormaPago = comprobante.FormaPago;
+            this.NumCuenta = comprobante.NumCtaPago;
+
+            this.LugarExpedicion = comprobante.LugarExpedicion;
+            this.Moneda = comprobante.Moneda;
+
+            this.SubTotal = comprobante.SubTotal;
+            if (comprobante.Impuestos != null && comprobante.Impuestos.TotalImpuestosTrasladados.HasValue)
+                this.IVA = comprobante.Impuestos.TotalImpuestosTrasladados.Value;
+            this.Total = comprobante.Total;
+
+            CantidadEnLetraConverter letraConverter = new CantidadEnLetraConverter();
+            letraConverter.Numero = comprobante.Total;
+            this.TotalLetra = letraConverter.letra();
+
+            this.SelloCFD = comprobante.Sello;
+            //this.SelloSAT = comprobante.Complementos.
+            foreach (Complemento complemento in comprobante.Complementos)
+            {
+                if (complemento is TimbreFiscalDigital)
+                {
+                    TimbreFiscalDigital timbre = complemento as TimbreFiscalDigital;
+                    this.SelloSAT = timbre.SelloSAT;
+                    this.FechaTimbre = timbre.FechaTimbrado.ToString("dd/MM/yyyy HH:mm:ss");
+                    this.FolioFiscal = timbre.UUID;
+                    this.NumSerieSAT = timbre.NoCertificadoSAT;
+                    this.RfcProvCertif = timbre.RfcProvCertif;
+                    this.CadenaSAT = comprobante.GetCadenaSAT();
+                    this.CBB = comprobante.GetQrCode();
+                }
+            }
+
+        }
+
+        public string DocumentName {
+            get {
+                if ("I".Equals(this.TipoDeComprobante, StringComparison.InvariantCultureIgnoreCase))
+                    return "Factura";
+                if ("E".Equals(this.TipoDeComprobante, StringComparison.InvariantCultureIgnoreCase)) // verificar en que caso sería nómina (complemento)
+                    return "Nota de Crédito";
+
+                return "Factura";
+            }
+        }
+
+        public string EmisorTelefono { get; set; }
+        public string EmisorCorreo { get; set; }
+
+        public string MainCss { get; set; }
+
+        public string PrintCss { get; set; }
+
+        public string EmisorLogoUrl { get; set; }
+
+        public string EmisorCifUrl { get; set; }
+
+        public Guid PublicKey { get; set; }
+        public string Status { get; set; }
+
+        public string TipoDeComprobante { get; set; }
+
+
+        public string Serie { get; set; }
+        public string Folio { get; set; }
+
+        public string Fecha { get; set; }
+        public string FolioFiscal { get; set; }
+
+        public string MetodoPago { get; set; }
+        public string FormaPago { get; set; }
+
+        public string NumCuenta { get; set; }
+        public string LugarExpedicion { get; set; }
+
+        public string Moneda { get; set; }
+
+        public decimal SubTotal { get; set; }
+        public decimal IVA { get; set; }
+        public decimal Total { get; set; }
+
+        public string TotalLetra { get; set; }
+
+        public string FechaTimbre { get; set; }
+        public string CadenaSAT { get; set; }
+
+        public string CBB { get; set; }
+        public string NumSerieSAT { get; set; }
+
+        public string RfcProvCertif { get; set; }
+
+        public string SelloCFD { get; set; }
+        public string SelloSAT { get; set; }
+
 
         public ComprobanteEmisorDetailViewModel Emisor { get; set; }
         public ComprobanteReceptorDetailsViewModel Receptor { get; set; }

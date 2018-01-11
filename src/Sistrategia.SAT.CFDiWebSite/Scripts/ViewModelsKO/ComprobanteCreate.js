@@ -114,7 +114,13 @@ var ConceptosModel = function (modelId) {
             concepto.ConceptoClaveUnidad = ko.observable(self.ClaveUnidad());
             concepto.ConceptoNoIdentificacion = ko.observable(self.NoIdentificacion());
             concepto.ConceptoDescripcion = ko.observable(self.Descripcion());
-            concepto.ConceptoValorUnitario = ko.observable(((parseFloat(self.ValorUnitario()).toFixed(2) / 1.160000).toFixed(2) * 100) / 100);
+
+            if (self.ImpuestoTasaOCuota() == 0.160000) {
+                concepto.ConceptoValorUnitario = ko.observable(((parseFloat(self.ValorUnitario()).toFixed(2) / 1.160000).toFixed(2) * 100) / 100);
+            }
+            else {
+                concepto.ConceptoValorUnitario = ko.observable((parseFloat(self.ValorUnitario()).toFixed(2) * 100) / 100);
+            }
             concepto.ConceptoImporte = ko.observable(self.Importe());
             concepto.ConceptoOrdinal = ko.observable(self.Ordinal());
 
@@ -142,7 +148,6 @@ var ConceptosModel = function (modelId) {
             
             //self.Cantidad("");
             self.ClaveProdServ("");
-            self.ClaveUnidad("");
             self.NoIdentificacion("");
             self.Descripcion("");
             self.ValorUnitario("");

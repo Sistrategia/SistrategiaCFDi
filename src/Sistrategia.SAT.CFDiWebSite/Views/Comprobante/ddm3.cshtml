@@ -1,4 +1,4 @@
-﻿@model Sistrategia.SAT.CFDiWebSite.Models.ComprobanteHtmlViewModel
+﻿@model Sistrategia.SAT.CFDiWebSite.Models.ComprobanteHtmlViewModel33
 @{ Layout = null; }
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0110)http://jeocsifact.sistrategia.com/index.php?interface=10023&factura_id=118&format=html&interface_mode=raw_view -->
@@ -84,6 +84,7 @@
                                             <tr>
                                                 <td colspan="2" class="header">@Model.DocumentName:  @Model.Serie@Model.Folio </td>
                                             </tr>
+                                           
                                             <tr>
                                                 <td width="40%" class="center_item">Emisión</td>
                                                 <td width="60%" class="center_item">@Model.Fecha</td>
@@ -93,33 +94,15 @@
                                                 <td class="center_item">@Model.FolioFiscal</td>
                                             </tr>
                                             <tr>
-                                                <td class="center_item">No. de Orden</td>
-                                                <td class="center_item">@Model.NoOrden</td>
+                                                <td class="center_item">Método de Pago</td>
+                                                <td class="center_item">@Model.MetodoPago</td>
                                             </tr>
 
                                             <tr>
-                                                <td class="center_item">Cliente</td>
-                                                <td class="center_item">@Model.NoCliente</td>
+                                                <td class="center_item">Forma de Pago</td>
+                                                <td class="center_item">@Model.FormaPago</td>
                                             </tr>
 
-                                            <tr>
-                                                <td class="center_item">Transporte</td>
-                                                <td class="center_item">CLIENTE</td>
-                                            </tr>
-                                            @if (!string.IsNullOrEmpty(Model.MetodoDePago))
-                                            {
-                                                <tr>
-                                                    <td class="center_item">Método de Pago</td>
-                                                    @if (!string.IsNullOrEmpty(Model.MetodoDePagoDisplayName))
-                                                    {
-                                                        <td class="center_item">@Model.MetodoDePagoDisplayName</td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td class="center_item">@Model.MetodoDePago</td>
-                                                    }
-                                                </tr>
-                                            }
                                             @if (!string.IsNullOrEmpty(Model.NumCuenta))
                                             {
                                                 <tr>
@@ -127,6 +110,7 @@
                                                     <td class="center_item">@Model.NumCuenta</td>
                                                 </tr>
                                             }
+                                           
 
                                         </tbody>
                                     </table>
@@ -149,7 +133,7 @@
                                     <table class="box">
                                         <tbody>
                                             <tr>
-                                                <td colspan="2" class="header">Datos de Facturación</td>
+                                                <td colspan="2" class="header">Datos de Receptor</td>
                                             </tr>
                                             <tr>
                                                 <td width="26%" class="center_item">RFC</td>
@@ -161,8 +145,8 @@
                                             </tr>
                                             
                                             <tr>
-                                                <td class="center_item">Código Postal</td>
-                                                <td class="center_item">@Model.Receptor.Domicilio.CodigoPostal</td>
+                                                <td class="center_item">Uso CFDI</td>
+                                                <td class="center_item">@Model.Receptor.UsoCFDI</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -172,40 +156,20 @@
                                     <table class="box">
                                         <tbody>
                                             <tr>
-                                                <td colspan="2" class="header">Destinatario</td>
+                                                <td class="center_item">Lugar de expedición</td>
+                                                <td class="center_item">@Model.LugarExpedicion</td>
                                             </tr>
                                             <tr>
-                                                <td width="26%" class="center_item">Destinatario</td>
-                                                <td width="74%" class="center_item">@Model.Receptor.Nombre</td>
+                                                <td class="center_item">Tipo de comprobante</td>
+                                                <td class="center_item">@Model.TipoDeComprobante</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2" class="subheader">Dirección</td>
+                                                <td class="center_item">Moneda</td>
+                                                <td class="center_item">@Model.Moneda</td>
                                             </tr>
                                             <tr>
-                                                <td class="center_item">Calle</td>
-                                                @*<td class="center_item">@Model.Receptor.Domicilio.Calle # @Model.Receptor.Domicilio.NoExterior</td>*@
-                                                <td class="center_item">@Model.Receptor.Domicilio.Calle # @Model.Receptor.Domicilio.NoExterior @Html.Raw(string.IsNullOrEmpty(Model.Receptor.Domicilio.NoInterior) ? "" : " - " + Model.Receptor.Domicilio.NoInterior)</td>
-
-                                            </tr>
-                                            <tr>
-                                                <td class="center_item">Colonia</td>
-                                                <td class="center_item">@Model.Receptor.Domicilio.Colonia</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="center_item">Municipio</td>
-                                                <td class="center_item">@Model.Receptor.Domicilio.Municipio</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="center_item">Estado</td>
-                                                <td class="center_item">@Model.Receptor.Domicilio.Estado</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="center_item">País</td>
-                                                <td class="center_item">@Model.Receptor.Domicilio.Pais</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="center_item">Código Postal</td>
-                                                <td class="center_item">@Model.Receptor.Domicilio.CodigoPostal</td>
+                                                <td class="center_item"><br /></td>
+                                                <td class="center_item"><br /></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -232,11 +196,13 @@
                                                     <table class="itemstable">
                                                         <tbody>
                                                             <tr>
-                                                                <td width="10%" class="header">Cantidad</td>
-                                                                <td width="13%" class="header">Clave</td>
-                                                                <td width="51%" class="header">Descripción</td>
-                                                                <td width="13%" class="header">P.&nbsp;Unitario</td>
-                                                                <td width="13%" class="header">Importe</td>
+                                                                <td width="8%" class="header">Cantidad</td>
+                                                                <td width="8%" class="header">Clave</td>
+                                                                <td width="8%" class="header">Clave Unidad</td>
+                                                                <td width="32%" class="header">Descripción</td>
+                                                                <td width="12%" class="header">V.&nbsp;Unitario</td>
+                                                                <td width="20%" class="header">Impuestos</td>
+                                                                <td width="12%" class="header">Importe</td>
                                                             </tr>
 
                                                             @foreach (var concepto in Model.Conceptos)
@@ -244,8 +210,10 @@
                                                                 <tr>
                                                                     <td class="center_item">@concepto.Cantidad.ToString("0.00")</td>
                                                                     <td class="center_item">@concepto.NoIdentificacion</td>
-                                                                    <td class="center_item">@concepto.Descripcion</td>
+                                                                    <td class="center_item">@concepto.ClaveUnidad</td>
+                                                                    <td class="center_item">@concepto.ClaveProdServ - @concepto.Descripcion</td>
                                                                     <td class="center_item">$@concepto.ValorUnitario.ToString("#,##0.00")</td>
+                                                                    <td class="center_item">IVA @Html.Raw((concepto.ImpuestoTasaOCuota * 100m).Value.ToString("0"))% $@concepto.ImpuestoImporte.Value.ToString("#,##0.00")</td>
                                                                     <td class="center_item">$@concepto.Importe.ToString("#,##0.00")</td>
                                                                 </tr>
                                                             }
@@ -286,7 +254,7 @@
                                                                     <table class="innertable">
                                                                         <tbody>
                                                                             <tr>
-                                                                                <td class="header" style="font-size:9px">Certificación: @Model.FechaTimbre</td>
+                                                                                <td class="header" style="font-size:9px">Certificación: @Model.FechaTimbre<td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="header">Cadena SAT</td>
@@ -305,6 +273,7 @@
                                                                                 <td width="73%" class="center_item">$@Model.SubTotal.ToString("#,##0.00")</td>
                                                                             </tr>
 
+
                                                                             @foreach (var traslado in Model.Traslados)
                                                                             {
                                                                                 <tr>
@@ -312,7 +281,6 @@
                                                                                     <td class="center_item">@traslado.Importe</td>
                                                                                 </tr>
                                                                             }
-
 
                                                                             <tr>
                                                                                 <td class="center_item">Total</td>
@@ -342,6 +310,9 @@
                                                                         <tbody>
                                                                             <tr>
                                                                                 <td class="header" style="font-size:9px">Certificado SAT: @Model.NumSerieSAT</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="header">RFC del proveedor de certificación: @Model.RfcProvCertif</td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="header">Sellos Digitales</td>

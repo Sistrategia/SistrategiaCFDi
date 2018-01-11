@@ -157,7 +157,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 v => v.CodeName,
                 new ViewTemplate { ViewTemplateId = 1, CodeName = "ddm1", DisplayName = "ddm1", Description = "ddm1" },
                 new ViewTemplate { ViewTemplateId = 2, CodeName = "ddm2", DisplayName = "ddm2", Description = "ddm2" },
-                new ViewTemplate { ViewTemplateId = 3, CodeName = "cemer", DisplayName = "cemer", Description = "cemer" }
+                new ViewTemplate { ViewTemplateId = 3, CodeName = "cemer", DisplayName = "cemer", Description = "cemer" },
+                new ViewTemplate { ViewTemplateId = 4, CodeName = "ddm3", DisplayName = "ddm3", Description = "ddm3" }
             );
             context.SaveChanges();
         }

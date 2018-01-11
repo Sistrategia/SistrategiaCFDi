@@ -188,17 +188,7 @@ namespace Sistrategia.SAT.CFDiWebSite
 
                                 TimbreFiscalDigital complemento = new TimbreFiscalDigital();
 
-                                if (complemento.Version == "1.0")
-                                {
-                                    complemento.Version = timbre.Attributes.GetNamedItem("version").Value.ToString();
-                                    complemento.UUID = timbre.Attributes.GetNamedItem("UUID").Value.ToString();
-                                    complemento.FechaTimbrado = DateTime.Parse(timbre.Attributes.GetNamedItem("FechaTimbrado").Value);
-                                    complemento.SelloCFD = timbre.Attributes.GetNamedItem("selloCFD").Value.ToString();
-                                    complemento.NoCertificadoSAT = timbre.Attributes.GetNamedItem("noCertificadoSAT").Value.ToString();
-                                    complemento.SelloSAT = timbre.Attributes.GetNamedItem("selloSAT").Value.ToString();
-                                }
-                                
-                                if(complemento.Version == "1.1")
+                                if(comprobante.Version == "3.3")
                                 {
                                     complemento.Version = timbre.Attributes.GetNamedItem("Version").Value.ToString();
                                     complemento.UUID = timbre.Attributes.GetNamedItem("UUID").Value.ToString();
@@ -207,7 +197,17 @@ namespace Sistrategia.SAT.CFDiWebSite
                                     complemento.NoCertificadoSAT = timbre.Attributes.GetNamedItem("NoCertificadoSAT").Value.ToString();
                                     complemento.SelloSAT = timbre.Attributes.GetNamedItem("SelloSAT").Value.ToString();
                                     complemento.RfcProvCertif = timbre.Attributes.GetNamedItem("RfcProvCertif").Value.ToString();
-                                    complemento.Leyenda = timbre.Attributes.GetNamedItem("Leyenda").Value != null ? timbre.Attributes.GetNamedItem("Leyenda").Value.ToString() : null;
+                                    complemento.Leyenda = timbre.Attributes.GetNamedItem("Leyenda") != null ? timbre.Attributes.GetNamedItem("Leyenda").Value.ToString() : null;
+                                }
+                                else
+                                {
+
+                                    complemento.Version = timbre.Attributes.GetNamedItem("version").Value.ToString();
+                                    complemento.UUID = timbre.Attributes.GetNamedItem("UUID").Value.ToString();
+                                    complemento.FechaTimbrado = DateTime.Parse(timbre.Attributes.GetNamedItem("FechaTimbrado").Value);
+                                    complemento.SelloCFD = timbre.Attributes.GetNamedItem("selloCFD").Value.ToString();
+                                    complemento.NoCertificadoSAT = timbre.Attributes.GetNamedItem("noCertificadoSAT").Value.ToString();
+                                    complemento.SelloSAT = timbre.Attributes.GetNamedItem("selloSAT").Value.ToString();
                                 }
 
                                 if (comprobante.Complementos == null)
@@ -247,7 +247,7 @@ namespace Sistrategia.SAT.CFDiWebSite
                                 output); // model.ComprobanteArchivo.InputStream);
 
                                 comprobante.GeneratedCadenaOriginal = comprobante.GetCadenaOriginal();
-                                comprobante.GeneratedXmlUrl = string.Format(@"https://sistrategiacfdi1.blob.core.windows.net/{0}/{1}.xml",
+                                comprobante.GeneratedXmlUrl = string.Format(@"https://"+ ConfigurationManager.AppSettings["AzureAccountName"] + ".blob.core.windows.net/{0}/{1}.xml",
                                 comprobante.Emisor.PublicKey.ToString("N"),
                                 comprobante.PublicKey.ToString("N"));
                                 comprobante.Status = "A";
