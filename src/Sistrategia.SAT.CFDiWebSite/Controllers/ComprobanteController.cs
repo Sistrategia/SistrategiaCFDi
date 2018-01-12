@@ -419,16 +419,26 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                     ComprobanteEmisor comprobanteEmisor = null;
 
-                    if (model.ExpedidoEn != null && model.ExpedidoEn.UbicacionId != null) {
-                        comprobanteEmisor = DBContext.ComprobantesEmisores.Where(e => e.EmisorId == emisor.EmisorId && e.DomicilioFiscalId == emisor.DomicilioFiscalId && e.ExpedidoEnId == model.ExpedidoEn.UbicacionId).SingleOrDefault();
-                    }
-                    //else if () {
+                    comprobanteEmisor = DBContext.ComprobantesEmisores.Find(4);
+
+                    //if (model.ExpedidoEn != null && model.ExpedidoEn.UbicacionId != null) {
+                    //    var comprobanteEmisores = DBContext.ComprobantesEmisores.Where(e => e.EmisorId == emisor.EmisorId && e.DomicilioFiscalId == emisor.DomicilioFiscalId && e.ExpedidoEnId == model.ExpedidoEn.UbicacionId);
+                    //    foreach (var cEmisor in comprobanteEmisores) {
+                    //        if (cEmisor.RegimenFiscalClave == "601")
+                    //            comprobanteEmisor = cEmisor;
+                    //    }
                     //}
-                    else {
-                        // crear o seleccionar la ubicación y agregarla
-                        //comprobanteEmisor = DBContext.ComprobantesEmisores.Where(e => e.EmisorId == model.EmisorId && e.DomicilioFiscalId == model.DomicilioFiscalId && e.ExpedidoEnId == model.ExpedidoEnId);
-                        comprobanteEmisor = DBContext.ComprobantesEmisores.Where(e => e.EmisorId == emisor.EmisorId && e.DomicilioFiscalId == emisor.DomicilioFiscalId && e.ExpedidoEnId == model.ExpedidoEn.UbicacionId).SingleOrDefault();
-                    }
+                    ////else if () {
+                    ////}
+                    //else {
+                    //    // crear o seleccionar la ubicación y agregarla
+                    //    //comprobanteEmisor = DBContext.ComprobantesEmisores.Where(e => e.EmisorId == model.EmisorId && e.DomicilioFiscalId == model.DomicilioFiscalId && e.ExpedidoEnId == model.ExpedidoEnId);
+                    //    var comprobanteEmisores = DBContext.ComprobantesEmisores.Where(e => e.EmisorId == emisor.EmisorId && e.DomicilioFiscalId == emisor.DomicilioFiscalId && e.ExpedidoEnId == model.ExpedidoEn.UbicacionId);
+                    //    foreach (var cEmisor in comprobanteEmisores) {
+                    //        if (cEmisor.RegimenFiscalClave == "601")
+                    //            comprobanteEmisor = cEmisor;
+                    //    }
+                    //}
 
                     List<CFDI.ComprobanteEmisorRegimenFiscal> regimenes = new List<CFDI.ComprobanteEmisorRegimenFiscal>();
 
@@ -454,8 +464,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
                     }
 
-                    comprobanteEmisor.Emisor.RegimenFiscal[0].RegimenFiscalClave = "601";
-                    comprobanteEmisor.Emisor.RegimenFiscal[1].RegimenFiscalClave = "601";
+                    //comprobanteEmisor.Emisor.RegimenFiscal[0].RegimenFiscalClave = "601";
+                    //comprobanteEmisor.Emisor.RegimenFiscal[1].RegimenFiscalClave = "601";
                     comprobante.Emisor = comprobanteEmisor;
 
                     //comprobante.EmisorId = model.EmisorId;
