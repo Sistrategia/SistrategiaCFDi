@@ -5,6 +5,15 @@
   Sistrategia.SAT.CFDiWebSite.CloudStorage.CloudStorageMananger cloudStorage = new Sistrategia.SAT.CFDiWebSite.CloudStorage.CloudStorageMananger();
 }
 
+@if (TempData["success"] != null)
+{
+    @Html.Raw("<div class='alert alert-success text-center'>" + TempData["success"] + "</div>")
+}
+else if (TempData["error"] != null)
+{
+    @Html.Raw("<div class='alert alert-danger text-center'><span class='glyphicon glyphicon-warning-sign'></span> " + TempData["error"] + "</div>")
+}
+
 <h1>@ViewBag.Title <br /><small>@Model.Receptor.RFC</small></h1>
 
 <div class="row">
