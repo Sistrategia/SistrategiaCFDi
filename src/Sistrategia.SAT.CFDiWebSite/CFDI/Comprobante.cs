@@ -1665,7 +1665,10 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public virtual string RegimenFiscalClave { 
             get {
                 if (this.Emisor.RegimenFiscal != null && this.Emisor.RegimenFiscal.Count > 0) {
-                    return this.Emisor.RegimenFiscal[0].RegimenFiscalClave;
+                    foreach (var regimen in this.Emisor.RegimenFiscal) {
+                        if (regimen.Status == "A")
+                            return regimen.RegimenFiscalClave;
+                    }                    
                 }
                 return null;
             } 
