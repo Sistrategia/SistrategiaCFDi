@@ -115,13 +115,18 @@ var ConceptosModel = function (modelId) {
             concepto.ConceptoNoIdentificacion = ko.observable(self.NoIdentificacion());
             concepto.ConceptoDescripcion = ko.observable(self.Descripcion());
 
-            if (self.ImpuestoTasaOCuota() == 0.160000) {
-                concepto.ConceptoValorUnitario = ko.observable(((parseFloat(self.ValorUnitario()).toFixed(2) / 1.160000).toFixed(2) * 100) / 100);
+            if (self.ImpuestoImporte() == "") {
+                if (self.ImpuestoTasaOCuota() == 0.160000) {
+                    concepto.ConceptoValorUnitario = ko.observable(((parseFloat(self.ValorUnitario()).toFixed(2) / 1.160000).toFixed(2) * 100) / 100);
+                }
+                else {
+                    concepto.ConceptoValorUnitario = ko.observable((parseFloat(self.ValorUnitario()).toFixed(2) * 100) / 100);
+                }
             }
             else {
                 concepto.ConceptoValorUnitario = ko.observable((parseFloat(self.ValorUnitario()).toFixed(2) * 100) / 100);
             }
-            concepto.ConceptoImporte = ko.observable(self.Importe());
+            concepto.ConceptoImporte = ko.observable((parseFloat(self.Importe()).toFixed(2) * 100) / 100);
             concepto.ConceptoOrdinal = ko.observable(self.Ordinal());
 
             concepto.ConceptoImpuestoTipo = ko.observable("traslado");
@@ -135,7 +140,7 @@ var ConceptosModel = function (modelId) {
                     concepto.ConceptoImpuestoImporte = ko.observable((parseFloat(sumaImporteConIVA - sumaImporteSinIVA).toFixed(2) * 100) / 100);
                 }
                 else {
-                    concepto.ConceptoImpuestoImporte = ko.observable(self.ImpuestoImporte().toFixed(2));
+                    concepto.ConceptoImpuestoImporte = ko.observable((parseFloat(self.ImpuestoImporte()).toFixed(2) * 100) / 100);
                 }
             }
             else {

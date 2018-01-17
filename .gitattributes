@@ -1,0 +1,52 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+*.cs text diff=csharp
+*.xaml text
+*.csproj text merge=union
+*.sln text eol=crlf merge=union 
+*.css text
+*.cshtml text
+*.htm text
+*.html text
+*.js text
+*.tt text
+*.ps1 text
+*.cmd  text
+*.msbuild text
+*.md text
+*.resx text merge=union
+*.ruleset text
+*.Stylecop text
+*.targets text
+*.txt text
+*.vb text
+*.vbhtml text
+*.vbproj text merge=union 
+*.xml text
+*.xunit text
+*.ascx text
+
+*.doc diff=astextplain
+*.DOC diff=astextplain
+*.docx diff=astextplain
+*.DOCX diff=astextplain
+*.dot diff=astextplain
+*.DOT diff=astextplain
+*.pdf diff=astextplain
+*.PDF diff=astextplain
+*.rtf diff=astextplain
+*.RTF diff=astextplain
+*.cmd text
+
+# Images should be treated as binary
+# (binary is a macro for -text -diff)
+*.png binary
+*.jepg binary
+*.jpg binary
+*.bmp binary
+*.gif binary
+*.ico binary
+
+*.sdf binary
+

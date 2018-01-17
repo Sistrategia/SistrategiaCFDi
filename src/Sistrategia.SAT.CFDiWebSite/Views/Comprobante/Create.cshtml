@@ -495,7 +495,7 @@
         initial_model.FormaDePago(03);
         initial_model.LugarExpedicion(62130);
         initial_model.Moneda("MXN");
-        //initial_model.TipoCambio(1);
+        initial_model.TipoCambio(1);
         initial_model.TipoDeComprobante("I");
         initial_model.TemplateId(4);
         initial_model.MetodoDePagoId("PUE"); //[tipo_metodo_de_pago_id] "OTROS"
@@ -652,11 +652,11 @@
                         Ordinal: conceptos_model.Items()[i].ConceptoOrdinal(),
 
                         ImpuestoTipo: "traslado",
-                        ImpuestoBase: conceptos_model.Items()[i].ConceptoImpuestoBase(),
+                        ImpuestoBase: parseFloat(conceptos_model.Items()[i].ConceptoImpuestoBase()),
                         ImpuestoImpuesto: conceptos_model.Items()[i].ConceptoImpuestoImpuesto(),
                         ImpuestoTipoFactor: conceptos_model.Items()[i].ConceptoImpuestoTipoFactor(),
                         ImpuestoTasaOCuota: conceptos_model.Items()[i].ConceptoImpuestoTasaOCuota(),
-                        ImpuestoImporte: conceptos_model.Items()[i].ConceptoImpuestoImporte(),
+                        ImpuestoImporte: parseFloat(conceptos_model.Items()[i].ConceptoImpuestoImporte()),
                         ImpuestoOrdinal: conceptos_model.Items()[i].ConceptoImpuestoOrdinal(),
                     });
 
@@ -697,7 +697,7 @@
                         TipoFactor: impuestos_model.TrasladosItems()[i].TrasladadoTipoFactor(),
                         Impuesto: impuestos_model.TrasladosItems()[i].TrasladadoImpuesto(),
                         Tasa: impuestos_model.TrasladosItems()[i].TrasladadoTasa(),
-                        Importe: impuestos_model.TrasladosItems()[i].TrasladadoImporte(),
+                        Importe: ((parseFloat(impuestos_model.TrasladosItems()[i].TrasladadoImporte()).toFixed(2) * 100) / 100),
                     });
                 }
             }

@@ -17,7 +17,7 @@
             @Html.Raw("<div class='alert alert-danger text-center'><span class='glyphicon glyphicon-warning-sign'></span> " + TempData["msg"] + "</div>")
         }
         <div class="SubArea">
-            <a href="@Url.Action("Index")" class="btn btn-custom">Regresar</a>
+            <a href="@Url.Action("Details/"+Model.PublicKey)" class="btn btn-custom">Regresar</a>
             @if (!Model.Status.Equals("A"))
             {
                 <form method="post" style="margin: 0; display: inline;">
@@ -29,12 +29,19 @@
         </div>
     </div>
 
+    
 
-
-
-
-    <table class="outertable" width="680px">
+    <table class="outertable" width="680px" style="position:relative">
         <tbody>
+            @if (Model.Status == "C") {
+            <tr>
+                <td>
+                    <div style="position: absolute; width: 19cm; min-height: 9cm; top: 4cm; left: 3cm;z-index:-1;">
+                        <img src="@Url.Content("/Content/img/Cancelado.png")" title="cancelled" />
+                    </div>
+                </td>
+            </tr>
+            }
             <tr>
                 <td>
                     <table class="rowtable">

@@ -297,6 +297,7 @@
     <Content Include="Content\bootstrap.debug.css.map">
       <DependentUpon>bootstrap.debug.css</DependentUpon>
     </Content>
+    <Content Include="Content\img\Cancelado.png" />
     <Content Include="Content\site.css" />
     <Content Include="Gruntfile.js" />
     <Content Include="package.json" />
