@@ -14,7 +14,7 @@
 }
 else {
   <ul class="nav navbar-nav navbar-right">
-    <li>@Html.ActionLink(LocalizedStrings.RegisterButton, "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+    @*<li>@Html.ActionLink(LocalizedStrings.RegisterButton, "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>*@
     <li>@Html.ActionLink(LocalizedStrings.SigninButton, "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
   </ul>
 }

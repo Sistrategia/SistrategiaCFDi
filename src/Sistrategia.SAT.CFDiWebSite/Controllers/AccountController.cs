@@ -126,30 +126,30 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model) {
-            if (ModelState.IsValid) {
-                var user = new SecurityUser { UserName = model.Email, Email = model.Email, FullName = model.FullName }; //, Hometown = model.Hometown };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded) {
-                    // await UserManager.AddToRoleAsync(user.Id, "User");
-                    // await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);                    
+        public /*async Task<ActionResult>*/ ActionResult Register(RegisterViewModel model) {
+            //if (ModelState.IsValid) {
+            //    var user = new SecurityUser { UserName = model.Email, Email = model.Email, FullName = model.FullName }; //, Hometown = model.Hometown };
+            //    var result = await UserManager.CreateAsync(user, model.Password);
+            //    if (result.Succeeded) {
+            //        // await UserManager.AddToRoleAsync(user.Id, "User");
+            //        // await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);                    
 
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account",
-                        new { invitation = user.PublicKey.ToString("N"), code = code }
-                        , protocol: Request.Url.Scheme);
+            //        // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+            //        // Send an email with this link
+            //        string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+            //        var callbackUrl = Url.Action("ConfirmEmail", "Account",
+            //            new { invitation = user.PublicKey.ToString("N"), code = code }
+            //            , protocol: Request.Url.Scheme);
 
-                    await UserManager.SendEmailAsync(user.Id,
-                        LocalizedStrings.Account_ConfirmYourAccount + " " + DateTime.Now.ToString("yyyyMMddHHmmssfff"),
-                        string.Format(LocalizedStrings.Account_ConfirmYourAccountBody, callbackUrl));
+            //        await UserManager.SendEmailAsync(user.Id,
+            //            LocalizedStrings.Account_ConfirmYourAccount + " " + DateTime.Now.ToString("yyyyMMddHHmmssfff"),
+            //            string.Format(LocalizedStrings.Account_ConfirmYourAccountBody, callbackUrl));
 
-                    //return RedirectToAction("Index", "Home");
-                    return View("DisplayEmail");
-                }
-                AddErrors(result);
-            }
+            //        //return RedirectToAction("Index", "Home");
+            //        return View("DisplayEmail");
+            //    }
+            //    AddErrors(result);
+            //}
 
             // If we got this far, something failed, redisplay form
             return View(model);
