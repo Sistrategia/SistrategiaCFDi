@@ -1,0 +1,363 @@
+﻿@model Sistrategia.SAT.CFDiWebSite.Models.ComprobanteHtmlViewModel33
+@{ Layout = null; }
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0110)http://jeocsifact.sistrategia.com/index.php?interface=10023&factura_id=118&format=html&interface_mode=raw_view -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <title>Factura</title>
+    <link href="@Model.MainCss" type="text/css" rel="stylesheet" />
+    <link href="@Model.PrintCss" type="text/css" rel="stylesheet" media="print" />
+</head>
+<body>
+    <div id="Area">
+        @if (TempData["msg"] != null)
+        {
+            @Html.Raw("<div class='alert alert-danger text-center'><span class='glyphicon glyphicon-warning-sign'></span> " + TempData["msg"] + "</div>")
+        }
+        <div class="SubArea">
+            <a href="@Url.Action("Details/"+Model.PublicKey)" class="btn btn-custom">Regresar</a>
+            @if (!Model.Status.Equals("A"))
+            {
+                <form method="post" style="margin: 0; display: inline;">
+                    <input type="hidden" id="publicKey" name="publicKey" value="@Model.PublicKey" />
+                    <button type="submit" class="btn btn-custom">Timbrar</button>
+                </form>
+            }
+            <a href="#" onclick="window.print();" class="btn btn-custom">Imprimir</a>
+        </div>
+    </div>
+
+    
+
+    <table class="outertable" width="680px" style="position:relative">
+        <tbody>
+            @if (Model.Status == "C") {
+            <tr>
+                <td>
+                    <div style="position: absolute; width: 19cm; min-height: 9cm; top: 4cm; left: 3cm;z-index:-1;">
+                        <img src="@Url.Content("/Content/img/Cancelado.png")" title="cancelled" />
+                    </div>
+                </td>
+            </tr>
+            }
+            <tr>
+                <td>
+                    <table class="rowtable">
+                        <tbody>
+                            <tr>
+                                <!---->
+
+                                <td><div align="center"><img src="@Model.EmisorLogoUrl" alt="logoemisor" class="logo" style="width:149px;" /></div></td> @*height:64px;*@
+                                <td height="100%">
+                                    <table class="itemstable">
+                                        <tbody>
+                                            <tr>
+                                                <td class="header" style="font-size:9px">@Model.Emisor.Nombre</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="left_item">RFC: @Model.Emisor.RFC</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="left_item">@Model.Emisor.Calle # @Model.Emisor.NoExterior</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="left_item">@Model.Emisor.Colonia, C.P. @Model.Emisor.CodigoPostal</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="left_item">@Model.Emisor.Municipio, @Model.Emisor.Estado. @Model.Emisor.Pais</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="left_item">TEL. @Model.EmisorTelefono</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="left_item">@Model.EmisorCorreo</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="left_item">Régimen Fiscal: @Model.Emisor.RegimenFiscal</td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </td>
+
+                                <td width="250px" height="100%">
+                                    <table class="box">
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="2" class="header">@Model.DocumentName:  @Model.Serie@Model.Folio </td>
+                                            </tr>
+                                           
+                                            <tr>
+                                                <td width="40%" class="center_item">Emisión</td>
+                                                <td width="60%" class="center_item">@Model.Fecha</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="center_item">Folio Fiscal</td>
+                                                <td class="center_item">@Model.FolioFiscal</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="center_item">Método de Pago</td>
+                                                <td class="center_item">@Model.MetodoPago</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="center_item">Forma de Pago</td>
+                                                <td class="center_item">@Model.FormaPago</td>
+                                            </tr>
+
+                                            @if (!string.IsNullOrEmpty(Model.NumCuenta))
+                                            {
+                                                <tr>
+                                                    <td class="center_item">Número de Cuenta</td>
+                                                    <td class="center_item">@Model.NumCuenta</td>
+                                                </tr>
+                                            }
+                                           
+
+                                        </tbody>
+                                    </table>
+                                </td>
+
+                                <!---->
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table class="rowtable">
+                        <tbody>
+                            <tr>
+                                <!---->
+
+                                <td width="50%" height="100%">
+                                    <table class="box">
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="2" class="header">Datos de Receptor</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="26%" class="center_item">RFC</td>
+                                                <td width="74%" class="center_item">@Model.Receptor.RFC</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="center_item">Nombre</td>
+                                                <td class="center_item">@Model.Receptor.Nombre</td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td class="center_item">Uso CFDI</td>
+                                                <td class="center_item">@Model.Receptor.UsoCFDI</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+
+                                <td width="50%" height="100%">
+                                    <table class="box">
+                                        <tbody>
+                                            <tr>
+                                                <td class="center_item">Lugar de expedición</td>
+                                                <td class="center_item">@Model.LugarExpedicion</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="center_item">Tipo de comprobante</td>
+                                                <td class="center_item">@Model.TipoDeComprobante</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="center_item">Moneda</td>
+                                                <td class="center_item">@Model.Moneda</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="center_item"><br /></td>
+                                                <td class="center_item"><br /></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+
+                                <!---->
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table class="rowtable">
+                        <tbody>
+                            <tr>
+                                <!---->
+
+                                <td>
+                                    <table class="itemsbox" height="240px" style="height:240px;">
+                                        <tbody>
+                                            <tr valign="top">
+                                                <td>
+                                                    <table class="itemstable">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td width="8%" class="header">Cantidad</td>
+                                                                <td width="8%" class="header">Clave</td>
+                                                                <td width="8%" class="header">Clave Unidad</td>
+                                                                <td width="32%" class="header">Descripción</td>
+                                                                <td width="12%" class="header">V.&nbsp;Unitario</td>
+                                                                <td width="20%" class="header">Impuestos</td>
+                                                                <td width="12%" class="header">Importe</td>
+                                                            </tr>
+
+                                                            @foreach (var concepto in Model.Conceptos)
+                                                            {
+                                                                <tr>
+                                                                    <td class="center_item">@concepto.Cantidad.ToString("0.00")</td>
+                                                                    <td class="center_item">@concepto.NoIdentificacion</td>
+                                                                    <td class="center_item">@concepto.ClaveUnidad</td>
+                                                                    <td class="center_item">@concepto.ClaveProdServ - @concepto.Descripcion</td>
+                                                                    <td class="center_item">$@concepto.ValorUnitario.ToString("#,##0.00")</td>
+                                                                    <td class="center_item">IVA @Html.Raw((concepto.ImpuestoTasaOCuota * 100m).Value.ToString("0"))% $@concepto.ImpuestoImporte.Value.ToString("#,##0.00")</td>
+                                                                    <td class="center_item">$@concepto.Importe.ToString("#,##0.00")</td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </td>
+
+                                <!---->
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table class="rowtable">
+                        <tbody>
+                            <tr>
+                                <!---->
+
+                                <td colspan="2">
+                                    <table class="box">
+                                        <tbody>
+                                            <tr>
+                                                <td width="100px" rowspan="4" style="vertical-align:middle; padding-right:5px; border-right:solid; border-right-width:1px; border-color:#3E5454;"><div align="center"><img src="@Model.EmisorCifUrl" style="width:107px; height:198px;" class="CIF" /></div></td>
+                                                <td>
+
+                                                    <table class="innertable" style="border-bottom:solid; border-bottom-width:1px; border-color:#3E5454;">
+                                                        <tbody>
+                                                            <tr>
+
+                                                                <td width="47%" height="100%" style="border-right:solid; border-right-width:1px; border-color:#3E5454; vertical-align:top">
+                                                                    <table class="innertable">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td class="header" style="font-size:9px">Certificación: @Model.FechaTimbre<td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="header">Cadena SAT</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="center_item" style="font-size:7px;max-width: 248px;word-wrap: break-word;">@Model.CadenaSAT</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                                <td width="53%" height="100%">
+                                                                    <table width="100%" height="100%">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td width="27%" class="center_item">SubTotal</td>
+                                                                                <td width="73%" class="center_item">$@Model.SubTotal.ToString("#,##0.00")</td>
+                                                                            </tr>
+
+
+                                                                            @foreach (var traslado in Model.Traslados)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td class="center_item">@traslado.Tasa</td>
+                                                                                    <td class="center_item">@traslado.Importe</td>
+                                                                                </tr>
+                                                                            }
+
+                                                                            <tr>
+                                                                                <td class="center_item">Total</td>
+                                                                                <td class="center_item">$@Model.Total.ToString("#,##0.00")</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td colspan="2" class="itemdivider">@Model.TotalLetra M.N</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <table class="innertable">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td width="105px" style="vertical-align:middle; padding-right:5px; border-right:solid; border-right-width:1px; border-color:#3E5454;"><div align="center"> <img src="@Html.Raw("data:image/png;base64,"+Model.CBB)" style="min-width:99px; max-width:100px; min-height:99px; max-height:100px; " /></div></td>
+                                                                <td>
+                                                                    <table class="innertable">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td class="header" style="font-size:9px">Certificado SAT: @Model.NumSerieSAT</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="header">RFC del proveedor de certificación: @Model.RfcProvCertif</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="header">Sellos Digitales</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="center_item" style="font-size:7px;max-width: 417px;word-wrap: break-word;">Sello CFD: @Model.SelloCFD <br />Sello SAT: @Model.SelloSAT</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="itemdivider">Este documento es una representación impresa de un CFDI.</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+
+                                <!---->
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

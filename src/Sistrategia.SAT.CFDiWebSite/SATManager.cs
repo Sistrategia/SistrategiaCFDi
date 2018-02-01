@@ -36,6 +36,14 @@ namespace Sistrategia.SAT.CFDiWebSite
             return "PAGO EN UNA SOLA EXHIBICION";
         }
 
+        internal static string GetMetodoPagoDefault() {
+            return "PUE";
+        }
+
+        internal static string GetMetodoDePagoDefault() {
+            return "99";
+        }
+
         internal static int GetDecimalPlacesDefault() {
             //return 6;
             return 2;
@@ -50,10 +58,17 @@ namespace Sistrategia.SAT.CFDiWebSite
         }
 
         public static string GetQrCode(string info) {
-            //info = "?re=JOE110617QB7&rr=RSC940221A48&tt=34800.00&id=3EF99271-8206-414E-BA07-2DCAE3C722FE";
             string cbb = QrCodeModel.GenerateQrCode(info);
             return cbb;
         }
+
+        public static string GetQrCode(string info, int version) {
+            //info = "?re=JOE110617QB7&rr=RSC940221A48&tt=34800.00&id=3EF99271-8206-414E-BA07-2DCAE3C722FE";
+            string cbb = QrCodeModel.GenerateQrCode(info, version);
+            return cbb;
+        }
+
+        
 
         #region Utilities
         internal static string NormalizeWhiteSpace(string S) {
@@ -173,12 +188,27 @@ namespace Sistrategia.SAT.CFDiWebSite
 
                                 TimbreFiscalDigital complemento = new TimbreFiscalDigital();
 
-                                complemento.Version = timbre.Attributes.GetNamedItem("version").Value.ToString();
-                                complemento.UUID = timbre.Attributes.GetNamedItem("UUID").Value.ToString();
-                                complemento.FechaTimbrado = DateTime.Parse(timbre.Attributes.GetNamedItem("FechaTimbrado").Value);
-                                complemento.SelloCFD = timbre.Attributes.GetNamedItem("selloCFD").Value.ToString();
-                                complemento.NoCertificadoSAT = timbre.Attributes.GetNamedItem("noCertificadoSAT").Value.ToString();
-                                complemento.SelloSAT = timbre.Attributes.GetNamedItem("selloSAT").Value.ToString();
+                                if(comprobante.Version == "3.3")
+                                {
+                                    complemento.Version = timbre.Attributes.GetNamedItem("Version").Value.ToString();
+                                    complemento.UUID = timbre.Attributes.GetNamedItem("UUID").Value.ToString();
+                                    complemento.FechaTimbrado = DateTime.Parse(timbre.Attributes.GetNamedItem("FechaTimbrado").Value);
+                                    complemento.SelloCFD = timbre.Attributes.GetNamedItem("SelloCFD").Value.ToString();
+                                    complemento.NoCertificadoSAT = timbre.Attributes.GetNamedItem("NoCertificadoSAT").Value.ToString();
+                                    complemento.SelloSAT = timbre.Attributes.GetNamedItem("SelloSAT").Value.ToString();
+                                    complemento.RfcProvCertif = timbre.Attributes.GetNamedItem("RfcProvCertif").Value.ToString();
+                                    complemento.Leyenda = timbre.Attributes.GetNamedItem("Leyenda") != null ? timbre.Attributes.GetNamedItem("Leyenda").Value.ToString() : null;
+                                }
+                                else
+                                {
+
+                                    complemento.Version = timbre.Attributes.GetNamedItem("version").Value.ToString();
+                                    complemento.UUID = timbre.Attributes.GetNamedItem("UUID").Value.ToString();
+                                    complemento.FechaTimbrado = DateTime.Parse(timbre.Attributes.GetNamedItem("FechaTimbrado").Value);
+                                    complemento.SelloCFD = timbre.Attributes.GetNamedItem("selloCFD").Value.ToString();
+                                    complemento.NoCertificadoSAT = timbre.Attributes.GetNamedItem("noCertificadoSAT").Value.ToString();
+                                    complemento.SelloSAT = timbre.Attributes.GetNamedItem("selloSAT").Value.ToString();
+                                }
 
                                 if (comprobante.Complementos == null)
                                     comprobante.Complementos = new List<Complemento>();
@@ -217,7 +247,7 @@ namespace Sistrategia.SAT.CFDiWebSite
                                 output); // model.ComprobanteArchivo.InputStream);
 
                                 comprobante.GeneratedCadenaOriginal = comprobante.GetCadenaOriginal();
-                                comprobante.GeneratedXmlUrl = string.Format(@"https://sistrategiacfdi1.blob.core.windows.net/{0}/{1}.xml",
+                                comprobante.GeneratedXmlUrl = string.Format(@"https://"+ ConfigurationManager.AppSettings["AzureAccountName"] + ".blob.core.windows.net/{0}/{1}.xml",
                                 comprobante.Emisor.PublicKey.ToString("N"),
                                 comprobante.PublicKey.ToString("N"));
                                 comprobante.Status = "A";
@@ -327,11 +357,15 @@ namespace Sistrategia.SAT.CFDiWebSite
         //URL: http://platform.twit88.com/
 
         public static string GenerateQrCode(string info) {
+            return GenerateQrCode(info, 0);
+        }
+
+        public static string GenerateQrCode(string info, int version) {
             try {
                 QRCodeEncoder encoder = new QRCodeEncoder();
                 encoder.QRCodeErrorCorrect = QRCodeEncoder.ERROR_CORRECTION.Q;
-                encoder.QRCodeScale = 2;
-                encoder.QRCodeVersion = 8;
+                encoder.QRCodeScale = 3;  // encoder.QRCodeScale = 2;
+                encoder.QRCodeVersion = version;  // encoder.QRCodeVersion = 8;
                 encoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;
 
                 Bitmap img = encoder.Encode(info);

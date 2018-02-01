@@ -16,9 +16,13 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         private string version;
         private string uuid;
         private DateTime fechaTimbrado;
+        private string rfcProvCertif;
+        private string leyenda;
         private string selloCFD;
         private string noCertificadoSAT;
         private string selloSAT;
+        //private string cbb;
+        //private string status;
 
         //public Guid SatTimbreId {
         //    get { return this.satTimbreId; }
@@ -81,6 +85,16 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public DateTime FechaTimbrado {
             get { return this.fechaTimbrado; }
             set { this.fechaTimbrado = value; }
+        }
+
+        public string RfcProvCertif {
+            get { return this.rfcProvCertif; }
+            set { this.rfcProvCertif = value; }
+        }
+
+        public string Leyenda {
+            get { return this.leyenda; }
+            set { this.leyenda = value; }
         }
 
         //<xs:attribute name="selloCFD" use="required">

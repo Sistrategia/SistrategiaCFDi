@@ -32,7 +32,11 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
                 t => t.TipoTipoDeComprobanteValue,
                 new TipoTipoDeComprobante { TipoTipoDeComprobanteId = 1, TipoTipoDeComprobanteValue = "ingreso" },
                 new TipoTipoDeComprobante { TipoTipoDeComprobanteId = 1, TipoTipoDeComprobanteValue = "egreso" },
-                new TipoTipoDeComprobante { TipoTipoDeComprobanteId = 1, TipoTipoDeComprobanteValue = "traslado" }
+                new TipoTipoDeComprobante { TipoTipoDeComprobanteId = 1, TipoTipoDeComprobanteValue = "traslado" },
+                new TipoTipoDeComprobante { TipoTipoDeComprobanteId = 1, TipoTipoDeComprobanteValue = "I" },
+                new TipoTipoDeComprobante { TipoTipoDeComprobanteId = 1, TipoTipoDeComprobanteValue = "E" },
+                new TipoTipoDeComprobante { TipoTipoDeComprobanteId = 1, TipoTipoDeComprobanteValue = "T" },
+                new TipoTipoDeComprobante { TipoTipoDeComprobanteId = 1, TipoTipoDeComprobanteValue = "P" }
             );
             context.SaveChanges();
 
@@ -106,11 +110,55 @@ namespace Sistrategia.SAT.CFDiWebSite.Migrations
             );
             context.SaveChanges();
 
+            context.TiposImpuestos.AddOrUpdate(
+                t => t.Impuesto,
+                new TipoImpuesto { TipoImpuestoId = 1, Impuesto = "001", Descripcion = "ISR", Retencion = true, Traslado = false },
+                new TipoImpuesto { TipoImpuestoId = 2, Impuesto = "002", Descripcion = "IVA", Retencion = true, Traslado = true },
+                new TipoImpuesto { TipoImpuestoId = 3, Impuesto = "003", Descripcion = "IEPS", Retencion = true, Traslado = true }
+            );
+            context.SaveChanges();
+
+            context.TiposFormaPago.AddOrUpdate(
+                t => t.FormaPago,
+                new TipoFormaPago { TipoFormaPagoId = 1, FormaPago = "99", Descripcion = "Por definir", Bancarizado = false },
+                new TipoFormaPago { TipoFormaPagoId = 2, FormaPago = "01", Descripcion = "Efectivo", Bancarizado = false },
+                new TipoFormaPago { TipoFormaPagoId = 3, FormaPago = "02", Descripcion = "Cheque nominativo", Bancarizado = true },
+                new TipoFormaPago { TipoFormaPagoId = 4, FormaPago = "03", Descripcion = "Transferencia electrónica de fondos", Bancarizado = true },
+                new TipoFormaPago { TipoFormaPagoId = 5, FormaPago = "04", Descripcion = "Tarjeta de crédito", Bancarizado = true },
+                new TipoFormaPago { TipoFormaPagoId = 6, FormaPago = "05", Descripcion = "Monedero electrónico", Bancarizado = true },
+                new TipoFormaPago { TipoFormaPagoId = 7, FormaPago = "06", Descripcion = "Dinero electrónico", Bancarizado = true },
+                new TipoFormaPago { TipoFormaPagoId = 8, FormaPago = "08", Descripcion = "Vales de despensa", Bancarizado = false },
+                new TipoFormaPago { TipoFormaPagoId = 9, FormaPago = "12", Descripcion = "Dación en pago", Bancarizado = false },
+                new TipoFormaPago { TipoFormaPagoId = 10, FormaPago = "13", Descripcion = "Pago por subrogación", Bancarizado = false },
+                new TipoFormaPago { TipoFormaPagoId = 11, FormaPago = "14", Descripcion = "Pago por consignación", Bancarizado = false },
+                new TipoFormaPago { TipoFormaPagoId = 12, FormaPago = "15", Descripcion = "Condonación", Bancarizado = false },
+                new TipoFormaPago { TipoFormaPagoId = 13, FormaPago = "17", Descripcion = "Compensación", Bancarizado = false },
+                new TipoFormaPago { TipoFormaPagoId = 14, FormaPago = "23", Descripcion = "Novación", Bancarizado = false },
+                new TipoFormaPago { TipoFormaPagoId = 15, FormaPago = "24", Descripcion = "Confusión", Bancarizado = false },
+                new TipoFormaPago { TipoFormaPagoId = 16, FormaPago = "25", Descripcion = "Remisión de deuda", Bancarizado = false },
+                new TipoFormaPago { TipoFormaPagoId = 17, FormaPago = "26", Descripcion = "Prescripción o caducidad", Bancarizado = false },
+                new TipoFormaPago { TipoFormaPagoId = 18, FormaPago = "27", Descripcion = "A satisfacción del acreedor", Bancarizado = false },
+                new TipoFormaPago { TipoFormaPagoId = 19, FormaPago = "28", Descripcion = "Tarjeta de débito", Bancarizado = true },
+                new TipoFormaPago { TipoFormaPagoId = 20, FormaPago = "29", Descripcion = "Tarjeta de servicios", Bancarizado = true },
+                new TipoFormaPago { TipoFormaPagoId = 21, FormaPago = "30", Descripcion = "Aplicación de anticipos", Bancarizado = false },
+                new TipoFormaPago { TipoFormaPagoId = 22, FormaPago = "31", Descripcion = "Intermediario pagos", Bancarizado = false }
+
+            );
+            context.SaveChanges();
+
+            context.TiposMetodoPago.AddOrUpdate(
+                t => t.MetodoPago,
+                new TipoMetodoPago { TipoMetodoPagoId = 1, MetodoPago = "PUE", Descripcion = "Pago en una sola exhibición", FechaInicioVigencia = new DateTime(2017,1,1) },
+                new TipoMetodoPago { TipoMetodoPagoId = 2, MetodoPago = "PPD", Descripcion = "Pago en parcialidades o diferido", FechaInicioVigencia = new DateTime(2017, 1, 1) }
+            );
+            context.SaveChanges();
+
             context.ViewTemplates.AddOrUpdate(
                 v => v.CodeName,
                 new ViewTemplate { ViewTemplateId = 1, CodeName = "ddm1", DisplayName = "ddm1", Description = "ddm1" },
                 new ViewTemplate { ViewTemplateId = 2, CodeName = "ddm2", DisplayName = "ddm2", Description = "ddm2" },
-                new ViewTemplate { ViewTemplateId = 3, CodeName = "cemer", DisplayName = "cemer", Description = "cemer" }
+                new ViewTemplate { ViewTemplateId = 3, CodeName = "cemer", DisplayName = "cemer", Description = "cemer" },
+                new ViewTemplate { ViewTemplateId = 4, CodeName = "ddm3", DisplayName = "ddm3", Description = "ddm3" }
             );
             context.SaveChanges();
         }

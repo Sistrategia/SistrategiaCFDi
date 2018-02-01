@@ -19,6 +19,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         [Key]
         public int RegimenFiscalId { get; set; }
         public string Regimen { get; set; }
+        public string RegimenFiscalClave { get; set; }
 
         public int Ordinal { get; set; }
 

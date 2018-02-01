@@ -19,6 +19,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -295,6 +297,7 @@
     <Content Include="Content\bootstrap.debug.css.map">
       <DependentUpon>bootstrap.debug.css</DependentUpon>
     </Content>
+    <Content Include="Content\img\Cancelado.png" />
     <Content Include="Content\site.css" />
     <Content Include="Gruntfile.js" />
     <Content Include="package.json" />
@@ -316,6 +319,18 @@
     <Content Include="Content\fonts\Verdana\verdanab.ttf" />
     <Content Include="Content\fonts\Verdana\verdanai.ttf" />
     <Content Include="Content\fonts\Verdana\verdanaz.ttf" />
+    <EmbeddedResource Include="CFDI\XSD\cfdv32.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CFDI\XSD\cfdv33.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CFDI\XSD\tdCFDI.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711211832268_v33.resx">
+      <DependentUpon>201711211832268_v33.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="Scripts\amplify.js" />
@@ -430,6 +445,7 @@
     <Content Include="Views\Comprobante\cemer.cshtml" />
     <Content Include="Views\Dev\GetTimbradoLog.cshtml" />
     <Content Include="Views\Comprobante\EditOLD.cshtml" />
+    <Content Include="Views\Comprobante\ddm3.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -463,12 +479,11 @@
     <Compile Include="CFDI\Comprobante.cs" />
     <Compile Include="CFDI\ComprobanteExtendedClasses.cs" />
     <Compile Include="CFDI\Concepto.cs" />
-    <Compile Include="CFDI\EDICOM\CFDiService.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CFDI\EDICOM\TestCFDI\CFDiService.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="CFDI\ConceptoImpuestos.cs" />
+    <Compile Include="CFDI\ConceptoImpuestosRetencion.cs" />
+    <Compile Include="CFDI\ConceptoImpuestosTraslado.cs" />
+    <Compile Include="CFDI\EDICOM\CFDiService.cs" />
+    <Compile Include="CFDI\EDICOM\TestCFDI\CFDiService.cs" />
     <Compile Include="CFDI\Emisor.cs" />
     <Compile Include="CFDI\Impuestos.cs" />
     <Compile Include="CFDI\Receptor.cs" />
@@ -478,6 +493,16 @@
     <Compile Include="CFDI\Traslado.cs" />
     <Compile Include="CFDI\Ubicacion.cs" />
     <Compile Include="CFDI\UbicacionFiscal.cs" />
+    <Compile Include="CFDI\v32\IConcepto.cs" />
+    <Compile Include="CFDI\v32\IComprobante.cs" />
+    <Compile Include="CFDI\v32\IEmisor.cs" />
+    <Compile Include="CFDI\v32\IReceptor.cs" />
+    <Compile Include="CFDI\v33\ICfdiRelacionado.cs" />
+    <Compile Include="CFDI\v33\ICfdiRelacionados.cs" />
+    <Compile Include="CFDI\v33\IComprobante.cs" />
+    <Compile Include="CFDI\v33\IConcepto.cs" />
+    <Compile Include="CFDI\v33\IEmisor.cs" />
+    <Compile Include="CFDI\v33\IReceptor.cs" />
     <Compile Include="CloudStorage\CloudStorageItem.cs" />
     <Compile Include="CloudStorage\CloudStorageMananger.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -509,6 +534,10 @@
     <Compile Include="Migrations\201608152234450_Banco2016.cs" />
     <Compile Include="Migrations\201608152234450_Banco2016.Designer.cs">
       <DependentUpon>201608152234450_Banco2016.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711211832268_v33.cs" />
+    <Compile Include="Migrations\201711211832268_v33.Designer.cs">
+      <DependentUpon>201711211832268_v33.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />

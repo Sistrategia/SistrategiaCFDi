@@ -5,6 +5,15 @@
   Sistrategia.SAT.CFDiWebSite.CloudStorage.CloudStorageMananger cloudStorage = new Sistrategia.SAT.CFDiWebSite.CloudStorage.CloudStorageMananger();
 }
 
+@if (TempData["success"] != null)
+{
+    @Html.Raw("<div class='alert alert-success text-center'>" + TempData["success"] + "</div>")
+}
+else if (TempData["error"] != null)
+{
+    @Html.Raw("<div class='alert alert-danger text-center'><span class='glyphicon glyphicon-warning-sign'></span> " + TempData["error"] + "</div>")
+}
+
 <h1>@ViewBag.Title <br /><small>@Model.Receptor.RFC</small></h1>
 
 <div class="row">
@@ -37,7 +46,7 @@
 
     @if (Model.TimbreFiscalDigital == null) { //&& !string.IsNullOrEmpty(Model.TimbreFiscalDigital.SelloSAT)) {
       <a target="_blank" href="@Url.Action("Edit", new { id = Model.PublicKey.ToString("N") })" class="btn btn-primary">Editar</a>
-      <a target="_blank" href="@Url.Action("GetTimbre", new { id = Model.PublicKey.ToString("N") })" class="btn btn-primary">Timbrar</a>
+      <a href="@Url.Action("GetTimbre", new { id = Model.PublicKey.ToString("N") })" class="btn btn-primary">Timbrar</a>
     }
     
     @if (Model.TimbreFiscalDigital != null && Model.Status.Equals("A", StringComparison.InvariantCultureIgnoreCase)) { //&& !string.IsNullOrEmpty(Model.TimbreFiscalDigital.SelloSAT)) {    
@@ -79,12 +88,15 @@
     Cantidad
   </div>
   <div class="col-md-1">
-    Unidad
+    Clave de Unidad
   </div>
   <div class="col-md-1">
-    Identificación
+    Clave
   </div>
-  <div class="col-md-6">
+  <div class="col-md-2">
+        Clave del producto o servicio
+  </div>
+  <div class="col-md-5">
     Descripción
   </div>
   <div class="col-md-1">
@@ -115,12 +127,15 @@
       @string.Format("{0:0.00}", concepto.Cantidad)
     </div>
     <div class="col-md-1">
-      @concepto.Unidad
+      @concepto.ClaveUnidad
     </div>
     <div class="col-md-1">
       @concepto.NoIdentificacion
     </div>
-    <div class="col-md-6">
+      <div class="col-md-2">
+          @concepto.ClaveProdServ
+      </div>
+    <div class="col-md-5">
       @concepto.Descripcion
     </div>
     <div class="col-md-1">
@@ -181,7 +196,7 @@
     <h4>Cadena Original:</h4>
     <p><small>@Model.CadenaOriginal</small></p>
     <h4>Sello:</h4>
-    <p><small>@Model.Sello</small></p>
+    <p style="word-wrap: break-word;"><small>@Model.Sello</small></p>
   </div>
 </div>
 

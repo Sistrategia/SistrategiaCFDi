@@ -17,6 +17,7 @@
 
 var InitialModel = function (modelId) {
     var self = this;
+    self.UsoCFDI = ko.observable("");
     self.EmisorId = ko.observable("");
     self.ReceptorId = ko.observable("");
     self.Serie = ko.observable("");
@@ -43,51 +44,127 @@ var InitialModel = function (modelId) {
 
 var Concepto = function () {
     this.ConceptoCantidad = null;
+    this.ConceptoClaveProdServ = null;
     this.ConceptoUnidad = null;
+    this.ConceptoClaveUnidad = null;
     this.ConceptoNoIdentificacion = null;
     this.ConceptoDescripcion = null;
     this.ConceptoValorUnitario = null;
     this.ConceptoImporte = null;
+    this.ConceptoDescuento = null;
     this.ConceptoOrdinal = null;
+
+    this.ConceptoImpuestoTipo = null;
+    this.ConceptoImpuestoBase = null;
+    this.ConceptoImpuestoImpuesto = null;
+    this.ConceptoImpuestoTipoFactor = null;
+    this.ConceptoImpuestoTasaOCuota = null;
+    this.ConceptoImpuestoImporte = null;
+    this.ConceptoImpuestoOrdinal = null;
 }
 
 var ConceptosModel = function (modelId) {
     var self = this;
     self.Cantidad = ko.observable("");
+    self.ClaveProdServ = ko.observable("");
     self.Unidad = ko.observable("");
+    self.ClaveUnidad = ko.observable("");
     self.NoIdentificacion = ko.observable("");
     self.Descripcion = ko.observable("");
     self.ValorUnitario = ko.observable("");
+    self.Descuento = ko.observable(""); 
     self.Importe = ko.observable("");
+
+    self.ImpuestoTipo = ko.observable("");
+    self.ImpuestoBase = ko.observable("");
+    self.ImpuestoImpuesto = ko.observable("");
+    self.ImpuestoTipoFactor = ko.observable("");
+    self.ImpuestoTasaOCuota = ko.observable("");
+    self.ImpuestoImporte = ko.observable("");
+    self.ImpuestoOrdinal = ko.observable("");
 
     self.Ordinal = ko.observable(0);
     self.Items = ko.observableArray([]);
     self.HasItems = ko.observable(false);
 
     self.addItem = function () {
-        if (self.Cantidad() != "" && self.Unidad() != "" && self.NoIdentificacion() != "" && self.Descripcion() != "" && self.ValorUnitario() != "") {
-            self.Ordinal(self.Ordinal() + 1);
-            self.Importe(self.Cantidad() * self.ValorUnitario());
+        if (self.Cantidad() != ""
+            && self.ClaveProdServ() != ""
+            && self.ClaveUnidad() != ""
+            && self.NoIdentificacion() != ""
+            && self.Descripcion() != ""
+            && self.ValorUnitario() != "") {
 
-            var sumaImporte = ((Math.round(parseFloat(self.Cantidad()) * 100) / 100) * (Math.round(parseFloat(self.ValorUnitario()) * 100) / 100));
-            self.Importe((Math.round(parseFloat(sumaImporte) * 100) / 100));
+            self.Ordinal(self.Ordinal() + 1);
+            self.ImpuestoOrdinal(self.Ordinal() + 1);
+            
+            var sumaImporteConIVA = ((Math.round(parseFloat(self.Cantidad()) * 100) / 100) * (Math.round(parseFloat(self.ValorUnitario()) * 100) / 100));
+            var sumaImporteSinIVA = ((parseFloat(sumaImporteConIVA.toFixed(2) / 1.160000).toFixed(2) * 100 ) / 100);
+            if (self.Importe() == "") {
+                if (self.ImpuestoTasaOCuota() == 0.160000)
+                    self.Importe(sumaImporteSinIVA);
+                else
+                    self.Importe(sumaImporteConIVA);
+            }
 
             var concepto = new Concepto();            
             concepto.ConceptoCantidad = ko.observable(self.Cantidad());
+            concepto.ConceptoClaveProdServ = ko.observable(self.ClaveProdServ());
             concepto.ConceptoUnidad = ko.observable(self.Unidad());
+            concepto.ConceptoClaveUnidad = ko.observable(self.ClaveUnidad());
             concepto.ConceptoNoIdentificacion = ko.observable(self.NoIdentificacion());
             concepto.ConceptoDescripcion = ko.observable(self.Descripcion());
-            concepto.ConceptoValorUnitario = ko.observable(self.ValorUnitario());
-            concepto.ConceptoImporte = ko.observable(self.Importe());
+
+            if (self.ImpuestoImporte() == "") {
+                if (self.ImpuestoTasaOCuota() == 0.160000) {
+                    concepto.ConceptoValorUnitario = ko.observable(((parseFloat(self.ValorUnitario()).toFixed(2) / 1.160000).toFixed(2) * 100) / 100);
+                }
+                else {
+                    concepto.ConceptoValorUnitario = ko.observable((parseFloat(self.ValorUnitario()).toFixed(2) * 100) / 100);
+                }
+            }
+            else {
+                concepto.ConceptoValorUnitario = ko.observable((parseFloat(self.ValorUnitario()).toFixed(2) * 100) / 100);
+            }
+            concepto.ConceptoImporte = ko.observable((parseFloat(self.Importe()).toFixed(2) * 100) / 100);
             concepto.ConceptoOrdinal = ko.observable(self.Ordinal());
+
+            concepto.ConceptoImpuestoTipo = ko.observable("traslado");
+            concepto.ConceptoImpuestoBase = ko.observable(self.Importe());
+            concepto.ConceptoImpuestoImpuesto = ko.observable(self.ImpuestoImpuesto());
+            concepto.ConceptoImpuestoTipoFactor = ko.observable(self.ImpuestoTipoFactor());
+            concepto.ConceptoImpuestoTasaOCuota = ko.observable(self.ImpuestoTasaOCuota());
+
+            if (self.ImpuestoTasaOCuota() == 0.160000) {
+                if (self.ImpuestoImporte() == "") {
+                    concepto.ConceptoImpuestoImporte = ko.observable((parseFloat(sumaImporteConIVA - sumaImporteSinIVA).toFixed(2) * 100) / 100);
+                }
+                else {
+                    concepto.ConceptoImpuestoImporte = ko.observable((parseFloat(self.ImpuestoImporte()).toFixed(2) * 100) / 100);
+                }
+            }
+            else {
+                concepto.ConceptoImpuestoImporte = ko.observable(0);
+            }
+            concepto.ConceptoImpuestoOrdinal = ko.observable(self.Ordinal());
+
 
             self.Items.push(concepto);
             
             //self.Cantidad("");
+            self.ClaveProdServ("");
             self.NoIdentificacion("");
             self.Descripcion("");
             self.ValorUnitario("");
             self.Importe("");
+
+            self.ImpuestoBase("");
+            self.ImpuestoTipo("");
+            self.ImpuestoBase("");
+            self.ImpuestoImpuesto("");
+            self.ImpuestoTipoFactor("");
+            self.ImpuestoImporte("");
+
         }
     };
 
@@ -110,6 +187,7 @@ var ConceptosModel = function (modelId) {
 
 var Trasladado = function () {
     this.TrasladadoImpuesto = null;
+    this.TrasladadoTipoFactor = null;
     this.TrasladadoTasa = null;
     this.TrasladadoImporte = null;
     this.TrasladadoOrdinal = null;
@@ -124,6 +202,7 @@ var Retencion = function () {
 var ImpuestosModel = function (modelId) {
     var self = this;
     self.TrasladosImpuesto = ko.observable("");
+    self.TrasladadoTipoFactor = ko.observable("");
     self.TrasladosImporte = ko.observable("");
     self.TrasladosTasa = ko.observable("");
 
@@ -148,6 +227,7 @@ var ImpuestosModel = function (modelId) {
             self.TrasladosOrdinal(self.TrasladosOrdinal() + 1);
             var trasladado = new Trasladado();
             trasladado.TrasladadoImpuesto = ko.observable(self.TrasladosImpuesto());
+            trasladado.TrasladadoTipoFactor = ko.observable(self.TrasladadoTipoFactor());
             trasladado.TrasladadoTasa = ko.observable(self.TrasladosTasa());
             trasladado.TrasladadoImporte = ko.observable(self.TrasladosImporte());
             trasladado.TrasladadoOrdinal = ko.observable(self.TrasladosOrdinal());

@@ -65,30 +65,58 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         }
 
         private string GetSelloFromDerKey(string cadenaOriginal) {
-            System.Security.Cryptography.SHA1CryptoServiceProvider sha1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
-            System.Security.SecureString passwordSeguro = new System.Security.SecureString();
-            passwordSeguro.Clear();
-            foreach (char c in this.PrivateKeyContrasena.ToCharArray())
-                passwordSeguro.AppendChar(c);
-            var rsaCryptoIPT = JavaScience.opensslkey.DecodeEncryptedPrivateKeyInfo(this.PrivateKeyDER, passwordSeguro);
-            System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
-            byte[] binData = encoder.GetBytes(cadenaOriginal);
-            byte[] binSignature = rsaCryptoIPT.SignData(binData, sha1);
-            string sello = Convert.ToBase64String(binSignature);
-            return sello;
+            if ("3.3".Equals(cadenaOriginal.Substring(2, 3))) {
+                System.Security.Cryptography.SHA256CryptoServiceProvider sha256 = new System.Security.Cryptography.SHA256CryptoServiceProvider(); // this.GetSHA256CryptoServiceProvider();
+                System.Security.SecureString passwordSeguro = new System.Security.SecureString();
+                passwordSeguro.Clear();
+                foreach (char c in this.PrivateKeyContrasena.ToCharArray())
+                    passwordSeguro.AppendChar(c);
+                var rsaCryptoIPT = JavaScience.opensslkey.DecodeEncryptedPrivateKeyInfo(this.PrivateKeyDER, passwordSeguro);
+                System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
+                byte[] binData = encoder.GetBytes(cadenaOriginal);
+                byte[] binSignature = rsaCryptoIPT.SignData(binData, sha256);
+                string sello = Convert.ToBase64String(binSignature);
+                return sello;
+            }
+            else {
+                System.Security.Cryptography.SHA1CryptoServiceProvider sha1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
+                System.Security.SecureString passwordSeguro = new System.Security.SecureString();
+                passwordSeguro.Clear();
+                foreach (char c in this.PrivateKeyContrasena.ToCharArray())
+                    passwordSeguro.AppendChar(c);
+                var rsaCryptoIPT = JavaScience.opensslkey.DecodeEncryptedPrivateKeyInfo(this.PrivateKeyDER, passwordSeguro);
+                System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
+                byte[] binData = encoder.GetBytes(cadenaOriginal);
+                byte[] binSignature = rsaCryptoIPT.SignData(binData, sha1);
+                string sello = Convert.ToBase64String(binSignature);
+                return sello;
+            }
         }
 
 
         private string GetSelloFromPFX(string cadenaOriginal) {
-            System.Security.Cryptography.SHA1CryptoServiceProvider sha1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
-            System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(this.PFXArchivo,
-                 this.PFXContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);
-            System.Security.Cryptography.RSACryptoServiceProvider rsaCryptoIPT = (System.Security.Cryptography.RSACryptoServiceProvider)cert.PrivateKey;
-            System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
-            byte[] binData = encoder.GetBytes(cadenaOriginal);
-            byte[] binSignature = rsaCryptoIPT.SignData(binData, sha1);
-            string sello = Convert.ToBase64String(binSignature);
-            return sello;
+            if ("3.3".Equals(cadenaOriginal.Substring(2, 3))) {
+                System.Security.Cryptography.SHA256CryptoServiceProvider sha256 = new System.Security.Cryptography.SHA256CryptoServiceProvider(); // this.GetSHA256CryptoServiceProvider();
+                System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(this.PFXArchivo,
+                     this.PFXContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);
+                System.Security.Cryptography.RSACryptoServiceProvider rsaCryptoIPT = (System.Security.Cryptography.RSACryptoServiceProvider)cert.PrivateKey;
+                System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
+                byte[] binData = encoder.GetBytes(cadenaOriginal);
+                byte[] binSignature = rsaCryptoIPT.SignData(binData, sha256);
+                string sello = Convert.ToBase64String(binSignature);
+                return sello;
+            }
+            else {
+                System.Security.Cryptography.SHA1CryptoServiceProvider sha1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
+                System.Security.Cryptography.X509Certificates.X509Certificate2 cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(this.PFXArchivo,
+                     this.PFXContrasena, System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.MachineKeySet);
+                System.Security.Cryptography.RSACryptoServiceProvider rsaCryptoIPT = (System.Security.Cryptography.RSACryptoServiceProvider)cert.PrivateKey;
+                System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
+                byte[] binData = encoder.GetBytes(cadenaOriginal);
+                byte[] binSignature = rsaCryptoIPT.SignData(binData, sha1);
+                string sello = Convert.ToBase64String(binSignature);
+                return sello;
+            }
         }
 
       
