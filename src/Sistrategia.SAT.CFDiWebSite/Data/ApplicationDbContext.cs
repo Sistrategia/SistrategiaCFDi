@@ -17,7 +17,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Data
     {
         public ApplicationDbContext()
             : base("DefaultDatabase") {
-                Database.SetInitializer<ApplicationDbContext>(null);
+                //Database.SetInitializer<ApplicationDbContext>(null);
         }
 
         public static ApplicationDbContext Create() {
