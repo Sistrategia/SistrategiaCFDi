@@ -498,7 +498,15 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                     comprobante.Receptor = comprobanteReceptor;
                     comprobante.Serie = model.Serie;
                     comprobante.Folio = model.Folio;
-                    comprobante.Fecha = DateTime.Now + SATManager.GetCFDIServiceTimeSpan();
+
+                    System.Globalization.CultureInfo esMX = new System.Globalization.CultureInfo("ex-MX");
+                    System.Threading.Thread.CurrentThread.CurrentCulture = esMX;
+
+                    DateTime utcDateTime = DateTime.UtcNow;
+                    TimeZoneInfo nzTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
+                    DateTime normalizedDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, nzTimeZone);
+
+                    comprobante.Fecha = normalizedDateTime + SATManager.GetCFDIServiceTimeSpan();
                     comprobante.FormaPago = model.FormaPago;
                     comprobante.SubTotal = model.SubTotal;
                     comprobante.Total = model.Total;
