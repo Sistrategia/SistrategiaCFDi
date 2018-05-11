@@ -474,6 +474,8 @@
     <Compile Include="CFDI\Complemento.cs" />
     <Compile Include="CFDI\Comprobante.cs" />
     <Compile Include="CFDI\ComprobanteExtendedClasses.cs" />
+    <Compile Include="CFDI\ComprobantePago.cs" />
+    <Compile Include="CFDI\ComprobantePagoDoctoRelacionado.cs" />
     <Compile Include="CFDI\Concepto.cs" />
     <Compile Include="CFDI\ConceptoImpuestos.cs" />
     <Compile Include="CFDI\ConceptoImpuestosRetencion.cs" />
