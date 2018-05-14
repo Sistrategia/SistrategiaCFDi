@@ -90,7 +90,23 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     writer.WriteStartElement("cfdi", "Comprobante", "http://www.sat.gob.mx/cfd/3");
                     writer.WriteAttributeString("xmlns", "cfdi", null, "http://www.sat.gob.mx/cfd/3");
                     writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
-                    writer.WriteAttributeString("xsi", "schemaLocation", "http://www.w3.org/2001/XMLSchema-instance", "http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd");
+                    
+                    //writer.WriteAttributeString("xsi", "schemaLocation", "http://www.w3.org/2001/XMLSchema-instance", "http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd");
+
+                    foreach (Complemento complemento in comprobante.Complementos.OrderBy(c => c.Ordinal))
+                    {
+                        if (complemento is ComprobantePago)
+                        {
+                            writer.WriteAttributeString("xmlns", "pago10", null, "http://www.sat.gob.mx/Pagos");
+                            writer.WriteAttributeString("xsi", "schemaLocation", "http://www.w3.org/2001/XMLSchema-instance", "http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd http://www.sat.gob.mx/Pagos http://www.sat.gob.mx/sitio_internet/cfd/Pagos/Pagos10.xsd");
+
+                        }
+                        else 
+                        {
+                            writer.WriteAttributeString("xsi", "schemaLocation", "http://www.w3.org/2001/XMLSchema-instance", "http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd");
+                        }
+                    }
+
                     break;
             }
 
@@ -241,7 +257,20 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                 default:
                     // ES OBLIGATORIO
                     // if (!string.IsNullOrEmpty(comprobante.FormaDePago))
-                    writer.WriteAttributeString("FormaPago", comprobante.FormaPago);
+                    //writer.WriteAttributeString("FormaPago", comprobante.FormaPago);
+
+                    foreach (Complemento complemento in comprobante.Complementos.OrderBy(c => c.Ordinal))
+                    {
+                        if (complemento is ComprobantePago)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            writer.WriteAttributeString("FormaPago", comprobante.FormaPago);
+                        }
+                    }
+
                     break;
             }
 
@@ -291,8 +320,25 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     break;
                 case "3.3":
                 default:
+                    //if (!string.IsNullOrEmpty(comprobante.CondicionesDePago))
+                    //    writer.WriteAttributeString("CondicionesDePago", comprobante.CondicionesDePago);
+
                     if (!string.IsNullOrEmpty(comprobante.CondicionesDePago))
-                        writer.WriteAttributeString("CondicionesDePago", comprobante.CondicionesDePago);
+                    {
+
+                        foreach (Complemento complemento in comprobante.Complementos.OrderBy(c => c.Ordinal))
+                        {
+                            if (complemento is ComprobantePago)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                writer.WriteAttributeString("CondicionesDePago", comprobante.CondicionesDePago);
+                            }
+                        }
+                    }
+
                     break;
             }
 
@@ -307,6 +353,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                 case "3.2":
                     // if (!string.IsNullOrEmpty(comprobante.SubTotal))
                     writer.WriteAttributeString("subTotal", comprobante.SubTotal.ToString(comprobante.DecimalFormat));
+
                     //if (comprobante.DescuentoSpecified) {                    
                     //    writer.WriteAttributeString("descuento", comprobante.Descuento.ToString(comprobante.DecimalFormat));
                     if (comprobante.Descuento.HasValue) {
@@ -318,7 +365,20 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                 case "3.3":
                 default:
                     // if (!string.IsNullOrEmpty(comprobante.SubTotal))
-                    writer.WriteAttributeString("SubTotal", comprobante.SubTotal.ToString(comprobante.DecimalFormat));
+                    // writer.WriteAttributeString("SubTotal", comprobante.SubTotal.ToString(comprobante.DecimalFormat));
+
+                    foreach (Complemento complemento in comprobante.Complementos.OrderBy(c => c.Ordinal))
+                    {
+                        if (complemento is ComprobantePago)
+                        {
+                            writer.WriteAttributeString("SubTotal", "0");
+                        }
+                        else
+                        {
+                            writer.WriteAttributeString("SubTotal", comprobante.SubTotal.ToString(comprobante.DecimalFormat));
+                        }
+                    }
+
                     //if (comprobante.DescuentoSpecified) {                    
                     //    writer.WriteAttributeString("descuento", comprobante.Descuento.ToString(comprobante.DecimalFormat));
                     if (comprobante.Descuento.HasValue) {
@@ -361,8 +421,29 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     if (!string.IsNullOrEmpty(comprobante.Moneda))
                         writer.WriteAttributeString("Moneda", comprobante.Moneda);
                     if (!string.IsNullOrEmpty(comprobante.TipoCambio))
-                        writer.WriteAttributeString("TipoCambio", comprobante.TipoCambio);
-                    writer.WriteAttributeString("Total", comprobante.Total.ToString(comprobante.DecimalFormat));
+                    {
+                        foreach (Complemento complemento in comprobante.Complementos.OrderBy(c => c.Ordinal))
+                        {
+                            if (complemento is ComprobantePago){}
+                            else
+                            {
+                                writer.WriteAttributeString("TipoCambio", comprobante.TipoCambio);
+                            }
+                        }
+                    }
+
+                    foreach (Complemento complemento in comprobante.Complementos.OrderBy(c => c.Ordinal))
+                    {
+                        if (complemento is ComprobantePago) {
+                            writer.WriteAttributeString("Total", "0");
+                        }
+                        else
+                        {
+                            writer.WriteAttributeString("Total", comprobante.Total.ToString(comprobante.DecimalFormat));
+                        }
+                    }
+
+                    
                     break;
             }
 
@@ -420,7 +501,20 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     break;
                 case "3.3":
                 default:
-                    writer.WriteAttributeString("MetodoPago", comprobante.MetodoPago);
+                    //writer.WriteAttributeString("MetodoPago", comprobante.MetodoPago);
+
+                    foreach (Complemento complemento in comprobante.Complementos.OrderBy(c => c.Ordinal))
+                    {
+                        if (complemento is ComprobantePago)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            writer.WriteAttributeString("MetodoPago", comprobante.MetodoPago);
+                        }
+                    }
+
                     break;
             }
 
@@ -934,16 +1028,61 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                                 writer.WriteAttributeString("ClaveProdServ", concepto.ClaveProdServ);
                             if (!string.IsNullOrEmpty(concepto.NoIdentificacion))
                                 writer.WriteAttributeString("NoIdentificacion", concepto.NoIdentificacion);
-                            writer.WriteAttributeString("Cantidad", concepto.Cantidad.ToString(comprobante.DecimalFormat));
+                            
+
+                            foreach (Complemento complemento in comprobante.Complementos.OrderBy(c => c.Ordinal))
+                            {
+                                if (complemento is ComprobantePago)
+                                {
+                                    writer.WriteAttributeString("Cantidad", "0");
+                                }
+                                else
+                                {
+                                    writer.WriteAttributeString("Cantidad", concepto.Cantidad.ToString(comprobante.DecimalFormat));
+                                }
+                            }
+
+
                             writer.WriteAttributeString("ClaveUnidad", concepto.ClaveUnidad);
                             if (!string.IsNullOrEmpty(concepto.Unidad))
                                 writer.WriteAttributeString("Unidad", concepto.Unidad);
                             if (!string.IsNullOrEmpty(concepto.Descripcion))
                                 writer.WriteAttributeString("Descripcion", concepto.Descripcion);
-                            writer.WriteAttributeString("ValorUnitario", concepto.ValorUnitario.ToString(comprobante.DecimalFormat));
-                            writer.WriteAttributeString("Importe", concepto.Importe.ToString(comprobante.DecimalFormat));
+
+                            //writer.WriteAttributeString("ValorUnitario", concepto.ValorUnitario.ToString(comprobante.DecimalFormat));
+                            //writer.WriteAttributeString("Importe", concepto.Importe.ToString(comprobante.DecimalFormat));
+
+                            foreach (Complemento complemento in comprobante.Complementos.OrderBy(c => c.Ordinal))
+                            {
+                                if (complemento is ComprobantePago)
+                                {
+                                    writer.WriteAttributeString("ValorUnitario", "0");
+                                    writer.WriteAttributeString("Importe", "0");
+                                }
+                                else
+                                {
+                                    writer.WriteAttributeString("ValorUnitario", concepto.ValorUnitario.ToString(comprobante.DecimalFormat));
+                                    writer.WriteAttributeString("Importe", concepto.Importe.ToString(comprobante.DecimalFormat));
+                                }
+                            }
+
+
                             if (concepto.Descuento != null && concepto.Descuento.HasValue)
-                                writer.WriteAttributeString("Descuento", concepto.Descuento.Value.ToString(comprobante.DecimalFormat));
+                            {
+                                
+                                foreach (Complemento complemento in comprobante.Complementos.OrderBy(c => c.Ordinal))
+                                {
+                                    if (complemento is ComprobantePago)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        writer.WriteAttributeString("Descuento", concepto.Descuento.Value.ToString(comprobante.DecimalFormat));
+                                    }
+                                }
+
+                            }
                             break;
                     }
 
@@ -1038,25 +1177,240 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
             //if (comprobante.Impuestos != null && comprobante.Conceptos.Count > 0) {
 
-            switch (comprobante.Version) {
-                case "1.0":
-                    writer.WriteStartElement("Impuestos");
-                    break;
-                case "2.0":
-                case "2.2":
-                    writer.WriteStartElement("Impuestos", "http://www.sat.gob.mx/cfd/2");
-                    break;
-                case "3.0":
-                case "3.2":                
-                    writer.WriteStartElement("cfdi", "Impuestos", "http://www.sat.gob.mx/cfd/3");
-                    break;
-                case "3.3":
-                default:
-                    if (comprobante.Impuestos != null && ((comprobante.Impuestos.Traslados != null && comprobante.Impuestos.Traslados.Count > 0) || (comprobante.Impuestos.Retenciones != null && comprobante.Impuestos.Retenciones.Count > 0))) {
-                        writer.WriteStartElement("cfdi", "Impuestos", "http://www.sat.gob.mx/cfd/3");
+            foreach (Complemento complemento in comprobante.Complementos.OrderBy(c => c.Ordinal))
+            {
+                if (complemento is ComprobantePago)
+                {
+                   
+                }
+                else
+                {
+                    switch (comprobante.Version)
+                    {
+                        case "1.0":
+                            writer.WriteStartElement("Impuestos");
+                            break;
+                        case "2.0":
+                        case "2.2":
+                            writer.WriteStartElement("Impuestos", "http://www.sat.gob.mx/cfd/2");
+                            break;
+                        case "3.0":
+                        case "3.2":
+                            writer.WriteStartElement("cfdi", "Impuestos", "http://www.sat.gob.mx/cfd/3");
+                            break;
+                        case "3.3":
+                        default:
+                            if (comprobante.Impuestos != null && ((comprobante.Impuestos.Traslados != null && comprobante.Impuestos.Traslados.Count > 0) || (comprobante.Impuestos.Retenciones != null && comprobante.Impuestos.Retenciones.Count > 0)))
+                            {
+                                writer.WriteStartElement("cfdi", "Impuestos", "http://www.sat.gob.mx/cfd/3");
+                            }
+                            break;
                     }
-                    break;
+
+                    if (comprobante.Impuestos != null)
+                    {
+                        //if (!string.IsNullOrEmpty(comprobante.Impuestos.TotalImpuestosRetenidosSpecified))
+                        //if (comprobante.Impuestos.TotalImpuestosRetenidosSpecified && comprobante.Impuestos.Retenciones.Count > 0)
+                        if (comprobante.Impuestos.TotalImpuestosRetenidos.HasValue && comprobante.Impuestos.Retenciones.Count > 0)
+                        {
+                            //writer.WriteAttributeString("totalImpuestosRetenidos", comprobante.Impuestos.TotalImpuestosRetenidos.Value.ToString(comprobante.DecimalFormat));
+                            switch (comprobante.Version)
+                            {
+                                case "1.0":
+                                case "2.0":
+                                case "2.2":
+                                case "3.0":
+                                case "3.2":
+                                    writer.WriteAttributeString("totalImpuestosRetenidos", comprobante.Impuestos.TotalImpuestosRetenidos.Value.ToString(comprobante.DecimalFormat));
+                                    break;
+                                case "3.3":
+                                default:
+                                    writer.WriteAttributeString("TotalImpuestosRetenidos", comprobante.Impuestos.TotalImpuestosRetenidos.Value.ToString(comprobante.DecimalFormat));
+                                    break;
+                            }
+                        }
+
+                        //if (comprobante.Impuestos.TotalImpuestosTrasladadosSpecified && comprobante.Impuestos.Traslados.Count > 0)
+                        if (comprobante.Impuestos.TotalImpuestosTrasladados.HasValue && comprobante.Impuestos.Traslados.Count > 0)
+                        {
+                            //writer.WriteAttributeString("totalImpuestosTrasladados", comprobante.Impuestos.TotalImpuestosTrasladados.Value.ToString(comprobante.DecimalFormat));
+                            switch (comprobante.Version)
+                            {
+                                case "1.0":
+                                case "2.0":
+                                case "2.2":
+                                case "3.0":
+                                case "3.2":
+                                    writer.WriteAttributeString("totalImpuestosTrasladados", comprobante.Impuestos.TotalImpuestosTrasladados.Value.ToString(comprobante.DecimalFormat));
+                                    break;
+                                case "3.3":
+                                default:
+                                    writer.WriteAttributeString("TotalImpuestosTrasladados", comprobante.Impuestos.TotalImpuestosTrasladados.Value.ToString(comprobante.DecimalFormat));
+                                    break;
+                            }
+                        }
+
+
+                        //if (comprobante.Impuestos.Retenciones.Count > 0 || (comprobante.Impuestos.Retenciones.Count > 0 && comprobante.Impuestos.TotalImpuestosRetenidosSpecified)) {
+                        if (comprobante.Impuestos.Retenciones != null && (comprobante.Impuestos.Retenciones.Count > 0 || (comprobante.Impuestos.Retenciones.Count > 0 && comprobante.Impuestos.TotalImpuestosRetenidos.HasValue)))
+                        {
+
+                            // retenciones
+                            switch (comprobante.Version)
+                            {
+                                case "1.0":
+                                    writer.WriteStartElement("Retenciones");
+                                    break;
+                                case "2.0":
+                                case "2.2":
+                                    writer.WriteStartElement("Retenciones", "http://www.sat.gob.mx/cfd/2");
+                                    break;
+                                case "3.0":
+                                case "3.2":
+                                case "3.3":
+                                default:
+                                    writer.WriteStartElement("cfdi", "Retenciones", "http://www.sat.gob.mx/cfd/3");
+                                    break;
+                            }
+                            //foreach (ComprobanteImpuestosRetencion retencion in comprobante.Impuestos.Retenciones) {
+                            foreach (Retencion retencion in comprobante.Impuestos.Retenciones.OrderBy(r => r.Ordinal))
+                            {
+
+                                switch (comprobante.Version)
+                                {
+                                    case "1.0":
+                                        writer.WriteStartElement("Retencion");
+                                        break;
+                                    case "2.0":
+                                    case "2.2":
+                                        writer.WriteStartElement("Retencion", "http://www.sat.gob.mx/cfd/2");
+                                        break;
+                                    case "3.0":
+                                    case "3.2":
+                                    case "3.3":
+                                    default:
+                                        writer.WriteStartElement("cfdi", "Retencion", "http://www.sat.gob.mx/cfd/3");
+                                        break;
+                                }
+
+                                switch (comprobante.Version)
+                                {
+                                    case "1.0":
+                                    case "2.0":
+                                    case "2.2":
+                                    case "3.0":
+                                    case "3.2":
+                                        if (!string.IsNullOrEmpty(retencion.Impuesto))
+                                            writer.WriteAttributeString("impuesto", retencion.Impuesto);
+                                        writer.WriteAttributeString("importe", retencion.Importe.ToString(comprobante.DecimalFormat));
+                                        break;
+                                    case "3.3":
+                                    default:
+                                        if (!string.IsNullOrEmpty(retencion.Impuesto))
+                                            writer.WriteAttributeString("Impuesto", retencion.Impuesto);
+                                        writer.WriteAttributeString("Importe", retencion.Importe.ToString(comprobante.DecimalFormat));
+                                        break;
+                                }
+
+                                writer.WriteEndElement();
+                            }
+
+                            writer.WriteEndElement();
+                        }
+
+
+
+
+                        // traslados                  
+                        //if (comprobante.Impuestos.Traslados.Count > 0 || (comprobante.Impuestos.Traslados.Count > 0 && comprobante.Impuestos.TotalImpuestosTrasladadosSpecified)) {
+                        if (comprobante.Impuestos.Traslados.Count > 0 || (comprobante.Impuestos.Traslados.Count > 0 && comprobante.Impuestos.TotalImpuestosTrasladados.HasValue))
+                        {
+                            //if (comprobante.Impuestos.TotalImpuestosTrasladadosSpecified || comprobante.Impuestos.Traslados.Count > 0) {
+                            switch (comprobante.Version)
+                            {
+                                case "1.0":
+                                    writer.WriteStartElement("Traslados");
+                                    break;
+                                case "2.0":
+                                case "2.2":
+                                    writer.WriteStartElement("Traslados", "http://www.sat.gob.mx/cfd/2");
+                                    break;
+                                case "3.0":
+                                case "3.2":
+                                case "3.3":
+                                default:
+                                    writer.WriteStartElement("cfdi", "Traslados", "http://www.sat.gob.mx/cfd/3");
+                                    break;
+                            }
+                            //foreach (ComprobanteImpuestosTraslado traslado in comprobante.Impuestos.Traslados) {
+                            foreach (Traslado traslado in comprobante.Impuestos.Traslados.OrderBy(t => t.Ordinal))
+                            {
+
+                                switch (comprobante.Version)
+                                {
+                                    case "1.0":
+                                        writer.WriteStartElement("Traslado");
+                                        break;
+                                    case "2.0":
+                                    case "2.2":
+                                        writer.WriteStartElement("Traslado", "http://www.sat.gob.mx/cfd/2");
+                                        break;
+                                    case "3.0":
+                                    case "3.2":
+                                    case "3.3":
+                                    default:
+                                        writer.WriteStartElement("cfdi", "Traslado", "http://www.sat.gob.mx/cfd/3");
+                                        break;
+                                }
+
+
+                                switch (comprobante.Version)
+                                {
+                                    case "1.0":
+                                        //if (!string.IsNullOrEmpty(traslado.Impuesto))
+                                        writer.WriteAttributeString("impuesto", traslado.Impuesto);
+                                        // no lleva tasa la versión 1.0
+                                        writer.WriteAttributeString("importe", traslado.Importe.ToString(comprobante.DecimalFormat));
+                                        break;
+                                    case "2.0":
+                                    case "2.2":
+                                    case "3.0":
+                                    case "3.2":
+                                        if (!string.IsNullOrEmpty(traslado.Impuesto))
+                                            writer.WriteAttributeString("impuesto", traslado.Impuesto);
+                                        if (traslado.Tasa.HasValue)
+                                            writer.WriteAttributeString("tasa", traslado.Tasa.Value.ToString(comprobante.DecimalFormat));
+                                        writer.WriteAttributeString("importe", traslado.Importe.ToString(comprobante.DecimalFormat));
+                                        break;
+                                    case "3.3":
+                                    default:
+                                        if (!string.IsNullOrEmpty(traslado.Impuesto))
+                                        {
+                                            writer.WriteAttributeString("Impuesto", traslado.Impuesto);
+                                        }
+                                        if (!string.IsNullOrEmpty(traslado.TipoFactor))
+                                        {
+                                            writer.WriteAttributeString("TipoFactor", traslado.TipoFactor);
+                                        }
+                                        writer.WriteAttributeString("TasaOCuota", (traslado.TasaOCuota.Value).ToString("0.000000")); //comprobante.DecimalFormat));
+                                        writer.WriteAttributeString("Importe", traslado.Importe.ToString(comprobante.DecimalFormat));
+                                        break;
+                                }
+
+                                writer.WriteEndElement();
+                            }
+
+                            writer.WriteEndElement();
+                        }
+
+                    }
+
+                    // EndImpuestos
+                    writer.WriteEndElement();
+                }
             }
+
+          
 
             //foreach (ComprobanteConcepto concepto in comprobante.Conceptos) {
 
@@ -1080,187 +1434,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             //}
 
 
-            if (comprobante.Impuestos != null) {
-                //if (!string.IsNullOrEmpty(comprobante.Impuestos.TotalImpuestosRetenidosSpecified))
-                //if (comprobante.Impuestos.TotalImpuestosRetenidosSpecified && comprobante.Impuestos.Retenciones.Count > 0)
-                if (comprobante.Impuestos.TotalImpuestosRetenidos.HasValue && comprobante.Impuestos.Retenciones.Count > 0) {
-                    //writer.WriteAttributeString("totalImpuestosRetenidos", comprobante.Impuestos.TotalImpuestosRetenidos.Value.ToString(comprobante.DecimalFormat));
-                    switch (comprobante.Version) {
-                        case "1.0":
-                        case "2.0":
-                        case "2.2":
-                        case "3.0":
-                        case "3.2":
-                            writer.WriteAttributeString("totalImpuestosRetenidos", comprobante.Impuestos.TotalImpuestosRetenidos.Value.ToString(comprobante.DecimalFormat));
-                            break;
-                        case "3.3":
-                        default:
-                            writer.WriteAttributeString("TotalImpuestosRetenidos", comprobante.Impuestos.TotalImpuestosRetenidos.Value.ToString(comprobante.DecimalFormat));
-                            break;
-                    }
-                }
-
-                //if (comprobante.Impuestos.TotalImpuestosTrasladadosSpecified && comprobante.Impuestos.Traslados.Count > 0)
-                if (comprobante.Impuestos.TotalImpuestosTrasladados.HasValue && comprobante.Impuestos.Traslados.Count > 0) {
-                    //writer.WriteAttributeString("totalImpuestosTrasladados", comprobante.Impuestos.TotalImpuestosTrasladados.Value.ToString(comprobante.DecimalFormat));
-                    switch (comprobante.Version) {
-                        case "1.0":
-                        case "2.0":
-                        case "2.2":
-                        case "3.0":
-                        case "3.2":
-                            writer.WriteAttributeString("totalImpuestosTrasladados", comprobante.Impuestos.TotalImpuestosTrasladados.Value.ToString(comprobante.DecimalFormat));
-                            break;
-                        case "3.3":
-                        default:
-                            writer.WriteAttributeString("TotalImpuestosTrasladados", comprobante.Impuestos.TotalImpuestosTrasladados.Value.ToString(comprobante.DecimalFormat));
-                            break;
-                    }
-                }
-
-
-                //if (comprobante.Impuestos.Retenciones.Count > 0 || (comprobante.Impuestos.Retenciones.Count > 0 && comprobante.Impuestos.TotalImpuestosRetenidosSpecified)) {
-                if (comprobante.Impuestos.Retenciones!=null && ( comprobante.Impuestos.Retenciones.Count > 0 || (comprobante.Impuestos.Retenciones.Count > 0 && comprobante.Impuestos.TotalImpuestosRetenidos.HasValue))) {
-
-                    // retenciones
-                    switch (comprobante.Version) {
-                        case "1.0":
-                            writer.WriteStartElement("Retenciones");
-                            break;
-                        case "2.0":
-                        case "2.2":
-                            writer.WriteStartElement("Retenciones", "http://www.sat.gob.mx/cfd/2");
-                            break;
-                        case "3.0":
-                        case "3.2":
-                        case "3.3":
-                        default:
-                            writer.WriteStartElement("cfdi", "Retenciones", "http://www.sat.gob.mx/cfd/3");
-                            break;
-                    }
-                    //foreach (ComprobanteImpuestosRetencion retencion in comprobante.Impuestos.Retenciones) {
-                    foreach (Retencion retencion in comprobante.Impuestos.Retenciones.OrderBy(r => r.Ordinal)) {
-
-                        switch (comprobante.Version) {
-                            case "1.0":
-                                writer.WriteStartElement("Retencion");
-                                break;
-                            case "2.0":
-                            case "2.2":
-                                writer.WriteStartElement("Retencion", "http://www.sat.gob.mx/cfd/2");
-                                break;
-                            case "3.0":
-                            case "3.2":
-                            case "3.3":
-                            default:
-                                writer.WriteStartElement("cfdi", "Retencion", "http://www.sat.gob.mx/cfd/3");
-                                break;
-                        }
-
-                        switch (comprobante.Version) {
-                            case "1.0":
-                            case "2.0":
-                            case "2.2":
-                            case "3.0":
-                            case "3.2":
-                                if (!string.IsNullOrEmpty(retencion.Impuesto))
-                                    writer.WriteAttributeString("impuesto", retencion.Impuesto);
-                                writer.WriteAttributeString("importe", retencion.Importe.ToString(comprobante.DecimalFormat));
-                                break;
-                            case "3.3":
-                            default:
-                                if (!string.IsNullOrEmpty(retencion.Impuesto))
-                                    writer.WriteAttributeString("Impuesto", retencion.Impuesto);
-                                writer.WriteAttributeString("Importe", retencion.Importe.ToString(comprobante.DecimalFormat));
-                                break;
-                        }
-
-                        writer.WriteEndElement();
-                    }
-
-                    writer.WriteEndElement();
-                }
-
-
-
-
-                // traslados                  
-                //if (comprobante.Impuestos.Traslados.Count > 0 || (comprobante.Impuestos.Traslados.Count > 0 && comprobante.Impuestos.TotalImpuestosTrasladadosSpecified)) {
-                if (comprobante.Impuestos.Traslados.Count > 0 || (comprobante.Impuestos.Traslados.Count > 0 && comprobante.Impuestos.TotalImpuestosTrasladados.HasValue)) {
-                    //if (comprobante.Impuestos.TotalImpuestosTrasladadosSpecified || comprobante.Impuestos.Traslados.Count > 0) {
-                    switch (comprobante.Version) {
-                        case "1.0":
-                            writer.WriteStartElement("Traslados");
-                            break;
-                        case "2.0":
-                        case "2.2":
-                            writer.WriteStartElement("Traslados", "http://www.sat.gob.mx/cfd/2");
-                            break;
-                        case "3.0":
-                        case "3.2":
-                        case "3.3":
-                        default:
-                            writer.WriteStartElement("cfdi", "Traslados", "http://www.sat.gob.mx/cfd/3");
-                            break;
-                    }
-                    //foreach (ComprobanteImpuestosTraslado traslado in comprobante.Impuestos.Traslados) {
-                    foreach (Traslado traslado in comprobante.Impuestos.Traslados.OrderBy(t => t.Ordinal)) {
-
-                        switch (comprobante.Version) {
-                            case "1.0":
-                                writer.WriteStartElement("Traslado");
-                                break;
-                            case "2.0":
-                            case "2.2":
-                                writer.WriteStartElement("Traslado", "http://www.sat.gob.mx/cfd/2");
-                                break;
-                            case "3.0":
-                            case "3.2":
-                            case "3.3":
-                            default:
-                                writer.WriteStartElement("cfdi", "Traslado", "http://www.sat.gob.mx/cfd/3");
-                                break;
-                        }
-
-
-                        switch (comprobante.Version) {
-                            case "1.0":
-                                //if (!string.IsNullOrEmpty(traslado.Impuesto))
-                                writer.WriteAttributeString("impuesto", traslado.Impuesto);
-                                // no lleva tasa la versión 1.0
-                                writer.WriteAttributeString("importe", traslado.Importe.ToString(comprobante.DecimalFormat));
-                                break;
-                            case "2.0":
-                            case "2.2":
-                            case "3.0":
-                            case "3.2":                            
-                                if (!string.IsNullOrEmpty(traslado.Impuesto))
-                                    writer.WriteAttributeString("impuesto", traslado.Impuesto);
-                                if (traslado.Tasa.HasValue)
-                                    writer.WriteAttributeString("tasa", traslado.Tasa.Value.ToString(comprobante.DecimalFormat));
-                                writer.WriteAttributeString("importe", traslado.Importe.ToString(comprobante.DecimalFormat));
-                                break;
-                            case "3.3":
-                            default:
-                                if (!string.IsNullOrEmpty(traslado.Impuesto)) {
-                                    writer.WriteAttributeString("Impuesto", traslado.Impuesto);
-                                }
-                                if (!string.IsNullOrEmpty(traslado.TipoFactor)) {
-                                    writer.WriteAttributeString("TipoFactor", traslado.TipoFactor);
-                                }
-                                writer.WriteAttributeString("TasaOCuota", (traslado.TasaOCuota.Value).ToString("0.000000")); //comprobante.DecimalFormat));
-                                writer.WriteAttributeString("Importe", traslado.Importe.ToString(comprobante.DecimalFormat));
-                                break;
-                        }
-
-                        writer.WriteEndElement();
-                    }
-
-                    writer.WriteEndElement();
-                }
-
-            }// EndImpuestos
-            writer.WriteEndElement();
+            
 
 
             if (comprobante.Complementos != null && comprobante.Complementos.Count > 0) {
@@ -1320,6 +1494,98 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
                          writer.WriteEndElement();
                      }
+                     else if (complemento is ComprobantePago) {
+                        ComprobantePago pago = (ComprobantePago)complemento;
+
+
+                        writer.WriteStartElement("pago10", "Pagos", "http://www.sat.gob.mx/Pagos");
+
+                        writer.WriteAttributeString("Version", pago.Version);
+
+                        //foreach (ComprobantePago pago in comprobante.Complemento.RecepcionPagos)
+                        //{
+                            writer.WriteStartElement("pago10", "Pago", "http://www.sat.gob.mx/Pagos");
+
+                            writer.WriteAttributeString("FechaPago", pago.FechaPago.ToString("yyyy-MM-ddTHH:mm:ss"));
+
+                            writer.WriteAttributeString("FormaDePagoP", pago.FormaDePagoP);
+
+                            writer.WriteAttributeString("MonedaP", pago.MonedaP);
+
+                            writer.WriteAttributeString("Monto", pago.Monto.ToString("0.00"));
+
+                            if (!string.IsNullOrEmpty(pago.NumOperacion))
+                                writer.WriteAttributeString("NumOperacion", pago.NumOperacion);
+
+                            if (!string.IsNullOrEmpty(pago.RfcEmisorCtaOrd))
+                                writer.WriteAttributeString("RfcEmisorCtaOrd", pago.RfcEmisorCtaOrd);
+
+                            if (!string.IsNullOrEmpty(pago.NombBancoOrdExt))
+                                writer.WriteAttributeString("NomBancoOrdExt", pago.NombBancoOrdExt);
+
+                            if (!string.IsNullOrEmpty(pago.CtaOrdenante))
+                                writer.WriteAttributeString("CtaOrdenante", pago.CtaOrdenante);
+
+                            if (!string.IsNullOrEmpty(pago.RfcEmisorCtaBen))
+                                writer.WriteAttributeString("RfcEmisorCtaBen", pago.RfcEmisorCtaBen);
+
+                            if (!string.IsNullOrEmpty(pago.CtaBeneficiario))
+                                writer.WriteAttributeString("CtaBeneficiario", pago.CtaBeneficiario);
+
+                            if (!string.IsNullOrEmpty(pago.TipoCadPago))
+                                writer.WriteAttributeString("TipoCadPago", pago.TipoCadPago);
+
+                            if (!string.IsNullOrEmpty(pago.CertPago))
+                                writer.WriteAttributeString("CertPago", pago.CertPago);
+
+                            if (!string.IsNullOrEmpty(pago.CadPago))
+                                writer.WriteAttributeString("CadPago", pago.CadPago);
+
+                            if (!string.IsNullOrEmpty(pago.SelloPago))
+                                writer.WriteAttributeString("SelloPago", pago.SelloPago);
+
+                            foreach (ComprobantePagoDoctoRelacionado docto in pago.DoctosRelacionados)
+                            {
+                                writer.WriteStartElement("pago10", "DoctoRelacionado", "http://www.sat.gob.mx/Pagos");
+
+                                writer.WriteAttributeString("IdDocumento", docto.IdDocumento);
+
+                                if (!string.IsNullOrEmpty(docto.Serie))
+                                    writer.WriteAttributeString("Serie", docto.Serie);
+
+                                if (!string.IsNullOrEmpty(docto.Folio))
+                                    writer.WriteAttributeString("Folio", docto.Folio);
+
+                                writer.WriteAttributeString("MonedaDR", docto.MonedaDR);
+
+                                if (!docto.MonedaDR.Equals("MXN"))
+                                    writer.WriteAttributeString("TipoCambioDR", docto.TipoCambioDR.ToString("0.00"));
+
+                                writer.WriteAttributeString("MetodoDePagoDR", docto.MetodoDePagoDR);
+
+                                if (docto.NumParcialidades > 0)
+                                    writer.WriteAttributeString("NumParcialidad", docto.NumParcialidades.ToString());
+
+                                if (docto.ImpSaldAnt > 0M)
+                                    writer.WriteAttributeString("ImpSaldoAnt", docto.ImpSaldAnt.ToString("0.00"));
+
+                                if (docto.ImpPagado > 0M)
+                                    writer.WriteAttributeString("ImpPagado", docto.ImpPagado.ToString("0.00"));
+
+                                if (docto.ImpPagado > 0M && docto.ImpSaldAnt > 0M)
+                                    if (docto.ImpSaldoInsoluto == 0M)
+                                        writer.WriteAttributeString("ImpSaldoInsoluto", docto.ImpSaldoInsoluto.ToString("0"));
+                                    else
+                                        writer.WriteAttributeString("ImpSaldoInsoluto", docto.ImpSaldoInsoluto.ToString("0.00"));
+
+                                writer.WriteEndElement();// Cierre de docto Relacionado
+                            }
+                            writer.WriteEndElement();// Cierre de pago
+                        //}
+
+                        writer.WriteEndElement(); //Cierre de complemento de Pagos
+
+                     }
 
                      //if (comprobante.Complemento.Nomina != null && comprobante.Complemento.NominaSpecified) {
                      //    writer.WriteStartElement("nomina", "Nomina", "http://www.sat.gob.mx/cfd/3");
@@ -1330,13 +1596,9 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
                  }
 
-
                 writer.WriteEndElement();
                 // end Complemento
             }
-
-
-
 
 
             writer.WriteEndElement();

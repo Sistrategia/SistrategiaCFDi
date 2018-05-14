@@ -5,10 +5,10 @@ using System.Web;
 
 namespace Sistrategia.SAT.CFDiWebSite.CFDI
 {
-    public class ComprobantePago
+    public class ComprobantePago : Complemento
     {
-        private Guid comprobantePagoId { get; set; }
-        private Guid comprobanteId { get; set; }
+        //private Guid comprobantePagoId { get; set; }
+        //private Guid comprobanteId { get; set; }
         private string version { get; set; }
         private DateTime fechaPago { get; set; }
         private string formaDePagoP { get; set; }
@@ -25,7 +25,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         private string certPago { get; set; }
         private string cadPago { get; set; }
         private string selloPago { get; set; }
-        private int ordinal { get; set; }
+        //private int ordinal { get; set; }
 
         private List<ComprobantePagoDoctoRelacionado> doctosRelacionados { get; set; }
 
@@ -34,15 +34,15 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             this.doctosRelacionados = new List<ComprobantePagoDoctoRelacionado>();
         }
 
-        public Guid ComprobantePagoId {
-            get { return this.comprobantePagoId; }
-            set { this.comprobantePagoId = value; }
-        }
+        //public Guid ComprobantePagoId {
+        //    get { return this.comprobantePagoId; }
+        //    set { this.comprobantePagoId = value; }
+        //}
 
-        public Guid ComprobanteId {
-            get { return this.comprobanteId; }
-            set { this.comprobanteId = value; }
-        }
+        //public Guid ComprobanteId {
+        //    get { return this.comprobanteId; }
+        //    set { this.comprobanteId = value; }
+        //}
 
         public string Version {
             get { return this.version; }
@@ -124,10 +124,10 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             set { this.selloPago = value; }
         }
 
-        public int Ordinal {
-            get { return this.ordinal; }
-            set { this.ordinal = value; }
-        }
+        //public int Ordinal {
+        //    get { return this.ordinal; }
+        //    set { this.ordinal = value; }
+        //}
 
         public List<ComprobantePagoDoctoRelacionado> DoctosRelacionados {
             get { return this.doctosRelacionados; }

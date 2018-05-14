@@ -7,9 +7,10 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 {
     public class ComprobantePagoDoctoRelacionado
     {
+
         private Guid comprobantePagoDoctoRelacionadoId { get; set; }
-        private Guid comprobantePagoId { get; set; }
-        private Guid doctoRelacionadoId { get; set; }
+        //private Guid comprobantePagoId { get; set; }
+        //private Guid doctoRelacionadoId { get; set; }
         private string idDocumento { get; set; }
         private string serie { get; set; }
         private string folio { get; set; }
@@ -27,15 +28,15 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             set { this.comprobantePagoDoctoRelacionadoId = value; }
         }
 
-        public Guid ComprobantePagoId {
-            get { return this.comprobantePagoId; }
-            set { this.comprobantePagoId = value; }
-        }
+        //public Guid ComprobantePagoId {
+        //    get { return this.comprobantePagoId; }
+        //    set { this.comprobantePagoId = value; }
+        //}
 
-        public Guid DoctoRelacionadoId {
-            get { return this.doctoRelacionadoId; }
-            set { this.doctoRelacionadoId = value; }
-        }
+        //public Guid DoctoRelacionadoId {
+        //    get { return this.doctoRelacionadoId; }
+        //    set { this.doctoRelacionadoId = value; }
+        //}
 
         public string IdDocumento {
             get { return this.idDocumento; }
