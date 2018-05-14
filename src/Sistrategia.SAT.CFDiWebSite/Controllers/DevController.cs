@@ -215,9 +215,9 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             comprobante.DecimalFormat = "0.00";
             comprobante.TipoDeComprobante = "P";
 
-            comprobante.Serie = "P";
+            comprobante.Serie = "CP";
             comprobante.Folio = "1";
-            comprobante.Fecha = DateTime.Parse("2018-05-14T11:20:04");
+            comprobante.Fecha = DateTime.Now + SATManager.GetCFDIServiceTimeSpan();
 
             CFDI.Certificado certificado = DBContext.Certificados.Find(3);
 
@@ -229,19 +229,16 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 comprobante.HasCertificado = true;
             }
 
-            //comprobante.FormaPago = "01";
-            //comprobante.MetodoPago = "PUE";
+
             comprobante.Moneda = "XXX";
-            comprobante.CondicionesDePago = "CONDICIONES";
-            comprobante.TipoCambio = "1";
-            comprobante.LugarExpedicion = "45079";
+            comprobante.LugarExpedicion = "62130";
             comprobante.SubTotal = 0m;
             comprobante.Total = 0m;
 
-            CFDI.Receptor receptor = DBContext.Receptores.Find(54);
+            CFDI.Receptor receptor = DBContext.Receptores.Find(23);
             receptor.UsoCFDI = "P01";
 
-            CFDI.ComprobanteReceptor comprobanteReceptor = DBContext.ComprobantesReceptores.Find(51);
+            CFDI.ComprobanteReceptor comprobanteReceptor = DBContext.ComprobantesReceptores.Find(23);
 
             // Crear uno nuevo
             if (comprobanteReceptor == null)
@@ -316,8 +313,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
             ComprobantePago comprobantePago = new ComprobantePago();
             comprobantePago.Version = "1.0";
-            comprobantePago.FechaPago = DateTime.Parse("2018-05-14T21:57:04");
-            comprobantePago.FormaDePagoP = "01";
+            comprobantePago.FechaPago = DateTime.Parse("2018-05-14T12:00:00");
+            comprobantePago.FormaDePagoP = "03";
             comprobantePago.MonedaP = "MXN";
             comprobantePago.Monto = 100m;
             comprobantePago.Ordinal = 1;
@@ -345,11 +342,11 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
             ComprobantePagoDoctoRelacionado docto = new ComprobantePagoDoctoRelacionado();
             docto.ComprobantePagoDoctoRelacionadoId = Guid.NewGuid();
-            docto.IdDocumento = "63964343-0faa-414d-b9b9-efe1cc9622a1";
+            docto.IdDocumento = Guid.NewGuid().ToString();
             docto.Serie = "A";
             docto.Folio = "1";
             docto.MonedaDR = "MXN";
-            docto.MetodoDePagoDR = "PUE";
+            docto.MetodoDePagoDR = "PPD";
             docto.NumParcialidades = 1;
             docto.ImpSaldAnt = 100m;
             docto.ImpPagado = 100m;
@@ -379,8 +376,6 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             string cadenaOriginal = comprobante.GetCadenaOriginal();
             comprobante.Sello = certificado.GetSello(cadenaOriginal);
 
-            //DBContext.Comprobantes.Add(comprobante);
-            //DBContext.SaveChanges();
 
             System.IO.MemoryStream ms = new System.IO.MemoryStream();
             CFDI.CFDIXmlTextWriter writer =
