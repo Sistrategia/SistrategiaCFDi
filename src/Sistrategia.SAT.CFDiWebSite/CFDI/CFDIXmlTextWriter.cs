@@ -1026,23 +1026,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                         default:
                             if (!string.IsNullOrEmpty(concepto.ClaveProdServ))
                                 writer.WriteAttributeString("ClaveProdServ", concepto.ClaveProdServ);
-                            if (!string.IsNullOrEmpty(concepto.NoIdentificacion))
-                                writer.WriteAttributeString("NoIdentificacion", concepto.NoIdentificacion);
                             
-
-                            foreach (Complemento complemento in comprobante.Complementos.OrderBy(c => c.Ordinal))
-                            {
-                                if (complemento is ComprobantePago)
-                                {
-                                    writer.WriteAttributeString("Cantidad", "0");
-                                }
-                                else
-                                {
-                                    writer.WriteAttributeString("Cantidad", concepto.Cantidad.ToString(comprobante.DecimalFormat));
-                                }
-                            }
-
-
+                            
                             writer.WriteAttributeString("ClaveUnidad", concepto.ClaveUnidad);
                             if (!string.IsNullOrEmpty(concepto.Unidad))
                                 writer.WriteAttributeString("Unidad", concepto.Unidad);
@@ -1056,11 +1041,16 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                             {
                                 if (complemento is ComprobantePago)
                                 {
+                                    writer.WriteAttributeString("Cantidad", "1");
                                     writer.WriteAttributeString("ValorUnitario", "0");
                                     writer.WriteAttributeString("Importe", "0");
                                 }
                                 else
                                 {
+                                    if (!string.IsNullOrEmpty(concepto.NoIdentificacion))
+                                        writer.WriteAttributeString("NoIdentificacion", concepto.NoIdentificacion);
+
+                                    writer.WriteAttributeString("Cantidad", concepto.Cantidad.ToString(comprobante.DecimalFormat));
                                     writer.WriteAttributeString("ValorUnitario", concepto.ValorUnitario.ToString(comprobante.DecimalFormat));
                                     writer.WriteAttributeString("Importe", concepto.Importe.ToString(comprobante.DecimalFormat));
                                 }

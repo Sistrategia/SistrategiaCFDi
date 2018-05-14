@@ -217,7 +217,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
             comprobante.Serie = "P";
             comprobante.Folio = "1";
-            comprobante.Fecha = DateTime.Parse("2018-05-14T10:57:04");
+            comprobante.Fecha = DateTime.Parse("2018-05-14T11:20:04");
 
             CFDI.Certificado certificado = DBContext.Certificados.Find(3);
 
@@ -288,8 +288,8 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             CFDI.Concepto concepto = new CFDI.Concepto
             {
                 Cantidad = 1m,
-                Unidad = "NA",
-                NoIdentificacion = "NA",
+                //Unidad = "NA",
+                //NoIdentificacion = "NA",
                 Descripcion = "Pago",
                 ValorUnitario = 0m,
                 Importe = 0m,
@@ -345,7 +345,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
             ComprobantePagoDoctoRelacionado docto = new ComprobantePagoDoctoRelacionado();
             docto.ComprobantePagoDoctoRelacionadoId = Guid.NewGuid();
-            docto.IdDocumento = Guid.NewGuid().ToString();
+            docto.IdDocumento = "63964343-0faa-414d-b9b9-efe1cc9622a1";
             docto.Serie = "A";
             docto.Folio = "1";
             docto.MonedaDR = "MXN";
@@ -390,6 +390,28 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
             writer.Close();
 
             return File(ms, "text/xml");
+
+            //string user = ConfigurationManager.AppSettings["CfdiServiceUser"];
+            //string password = ConfigurationManager.AppSettings["CfdiServicePassword"];
+
+            //var model = new ComprobanteDetailViewModel(comprobante);
+
+            //string invoiceFileName = DateTime.Now.ToString("yyyyMMddHHmmss_" + comprobante.PublicKey.ToString("N"));
+
+            //try
+            //{
+            //    SATManager manager = new SATManager();
+            //    bool response = manager.GetCFDI(user, password, comprobante);
+            //    //if (response)
+            //    //    DBContext.SaveChanges();
+
+            //    return "Ok";
+            //}
+            //catch (Exception ex)
+            //{
+            //    return ex.Message.ToString();
+            //}
+
         }
 
         public string Timbre33()
