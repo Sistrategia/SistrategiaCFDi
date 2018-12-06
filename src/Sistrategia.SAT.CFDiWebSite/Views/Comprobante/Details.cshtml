@@ -68,7 +68,7 @@ else if (TempData["error"] != null)
 <div class="row">
   <div class="col-md-9">
     <p>
-      @Html.Raw(Model.Receptor.Domicilio.ToHtml())
+      @Html.Raw(Model.Receptor.Domicilio != null ? Model.Receptor.Domicilio.ToHtml() : "")
     </p>
   </div>
   <div class="col-md-3" >
