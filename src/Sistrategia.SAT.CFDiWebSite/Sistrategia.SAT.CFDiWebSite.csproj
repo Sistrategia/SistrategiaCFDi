@@ -482,8 +482,12 @@
     <Compile Include="CFDI\ConceptoImpuestos.cs" />
     <Compile Include="CFDI\ConceptoImpuestosRetencion.cs" />
     <Compile Include="CFDI\ConceptoImpuestosTraslado.cs" />
-    <Compile Include="CFDI\EDICOM\CFDiService.cs" />
-    <Compile Include="CFDI\EDICOM\TestCFDI\CFDiService.cs" />
+    <Compile Include="CFDI\EDICOM\CFDiService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CFDI\EDICOM\TestCFDI\CFDiService.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CFDI\Emisor.cs" />
     <Compile Include="CFDI\Impuestos.cs" />
     <Compile Include="CFDI\Receptor.cs" />

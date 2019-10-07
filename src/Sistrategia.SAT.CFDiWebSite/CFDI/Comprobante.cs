@@ -201,7 +201,13 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             catch {
 
                 try {
-                    xslt.Load("https://sistrategial1.blob.core.windows.net/wwwimages/satcadenaoriginal/cadenaoriginal_3_2.xslt");
+                    if (doc.ChildNodes[1].Attributes["Version"] != null && "3.3".Equals(doc.ChildNodes[1].Attributes["Version"].Value)) {
+                        xslt.Load("https://sistrategial1.blob.core.windows.net/sat/cadena_original/cadenaoriginal_3_3.xslt");
+                        //xslt.Load("https://sistrategial1.blob.core.windows.net/wwwimages/satcadenaoriginal/cadenaoriginal_3_3.xslt");
+                    } 
+                    else {
+                        xslt.Load("https://sistrategial1.blob.core.windows.net/wwwimages/satcadenaoriginal/cadenaoriginal_3_2.xslt");                        
+                    }                    
                 }
                 catch (Exception innerException) {
                     throw; // new Sistrategia.Server.SAT.SATException("No se completó la creación del comprobante. No se puede establecer comunicación con el SAT intente mas tarde.", innerException);
