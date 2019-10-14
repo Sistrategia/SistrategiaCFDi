@@ -204,7 +204,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
                     if (doc.ChildNodes[1].Attributes["Version"] != null && "3.3".Equals(doc.ChildNodes[1].Attributes["Version"].Value))
                     {
-                        xslt.Load("https://sistrategial1.blob.core.windows.net/wwwimages/satcadenaoriginal33/cadenaoriginal_3_3.xslt");
+                        xslt.Load("https://sistrategial1.blob.core.windows.net/sat/cadena_original/cadenaoriginal_3_3.xslt");
+                        //xslt.Load("https://sistrategial1.blob.core.windows.net/wwwimages/satcadenaoriginal33/cadenaoriginal_3_3.xslt");
                     }
                     else if ("3.2".Equals(doc.ChildNodes[1].Attributes["version"].Value))
                     {
