@@ -13,6 +13,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using Sistrategia.SAT.CFDiWebSite.CloudStorage;
 using Newtonsoft.Json;
 using System.Data.SqlClient;
+using System.Net;
 
 namespace Sistrategia.SAT.CFDiWebSite.Controllers
 {
@@ -1536,6 +1537,7 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
 
         [HttpPost]
         public ActionResult GetTimbre(string id, FormCollection formCollection) {
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             //public ActionResult GetTimbre(string id, ComprobanteDetailViewModel model) {
             //public ActionResult GetTimbre(ComprobanteDetailViewModel model) {
             Guid publicKey;
