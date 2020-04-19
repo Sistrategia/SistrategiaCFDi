@@ -17,7 +17,13 @@ namespace Sistrategia.SAT.CFDiWebSite
     {
         public void Configuration(IAppBuilder app) {
 
-            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            //System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            // Remove insecure protocols (SSL3, TLS 1.0, TLS 1.1)
+            System.Net.ServicePointManager.SecurityProtocol &= ~System.Net.SecurityProtocolType.Ssl3;
+            System.Net.ServicePointManager.SecurityProtocol &= ~System.Net.SecurityProtocolType.Tls;
+            System.Net.ServicePointManager.SecurityProtocol &= ~System.Net.SecurityProtocolType.Tls11;
+            // Add TLS 1.2
+            System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
 
             //AreaRegistration.RegisterAllAreas();
             //GlobalConfiguration.Configure(WebApiConfig.Register);
