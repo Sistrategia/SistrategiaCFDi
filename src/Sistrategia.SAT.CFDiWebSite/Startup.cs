@@ -16,6 +16,9 @@ namespace Sistrategia.SAT.CFDiWebSite
     public partial class Startup
     {
         public void Configuration(IAppBuilder app) {
+
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             //AreaRegistration.RegisterAllAreas();
             //GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
