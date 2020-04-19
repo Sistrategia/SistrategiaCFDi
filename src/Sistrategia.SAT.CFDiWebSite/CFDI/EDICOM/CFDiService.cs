@@ -91,6 +91,10 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI.EDICOM
             return responseBase;
         }
 
+        public byte[] GetCFDIFromUUID(string user, string password, string rfc, string[] uuid) {
+            return this.getCfdiFromUUID(user, password, rfc, uuid);
+        }
+
         #endregion
 
         #region Web Service Calls

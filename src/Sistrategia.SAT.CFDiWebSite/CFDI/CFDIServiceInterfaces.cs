@@ -7,6 +7,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         byte[] GetCFDI(string user, string password, byte[] file);
         byte[] GetTimbreCFDI(string user, string password, byte[] file);
         ICancelaResponse CancelaCFDI(string user, string password, string rfc, string[] uuid, byte[] pfx, string pfxPassword);
+        byte[] GetCFDIFromUUID(string user, string password, string rfc, string[] uuid);
     }
 
     public interface ICancelaResponse

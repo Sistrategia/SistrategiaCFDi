@@ -88,6 +88,10 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI.EDICOM.TestCFDI
             return this.getTimbreCfdiTest(user, password, file);
         }
 
+        public byte[] GetCFDIFromUUID(string user, string password, string rfc, string[] uuid) {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         ICancelaResponse ICFDIService.CancelaCFDI(string user, string password, string rfc, string[] uuid, byte[] pfx, string pfxPassword) {

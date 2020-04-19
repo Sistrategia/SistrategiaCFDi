@@ -311,7 +311,13 @@ namespace Sistrategia.SAT.CFDiWebSite
                 throw;
             }
         }
-        
+
+        public byte[] GetCFDIFromUUID(string user, string password, string rfc, string uuid) {
+            ICFDIService webService = CFDiServiceFactory.Create();
+            byte[] cfdi = webService.GetCFDIFromUUID(user, password, rfc, new string[] { uuid });
+            return cfdi;
+        }
+
     }
 
     public class CFDiServiceFactory
