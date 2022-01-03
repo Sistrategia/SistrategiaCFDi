@@ -197,3 +197,5 @@ FakesAssemblies/
 
 #Private Web.config App Settings
 PrivateSettings.config
+PrivateConnections.config
+.DS_Store
