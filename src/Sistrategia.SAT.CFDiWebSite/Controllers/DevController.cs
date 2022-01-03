@@ -232,5 +232,93 @@ namespace Sistrategia.SAT.CFDiWebSite.Controllers
                 return ex.Message.ToString();
             }
         }
+
+        //public ActionResult GetCFDiStatus
+        public ActionResult GetCFDIFromUUID(string id) {
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            if (comprobante == null)
+                return HttpNotFound();
+
+            var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
+
+            string user = ConfigurationManager.AppSettings["CfdiServiceUser"];
+            string password = ConfigurationManager.AppSettings["CfdiServicePassword"];
+
+            //comprobante.Emisor.RFC;
+            //comprobante.Complementos[]
+            string uuid = string.Empty;
+
+            foreach (var complemento in comprobante.Complementos) {
+                if (complemento is CFDI.TimbreFiscalDigital) {
+                    var timbre = complemento as CFDI.TimbreFiscalDigital;
+                    //this.SelloSAT = timbre.SelloSAT;
+                    //this.FechaTimbre = timbre.FechaTimbrado.ToString("dd/MM/yyyy HH:mm:ss");
+                    uuid = timbre.UUID;
+                    //this.NumSerieSAT = timbre.NoCertificadoSAT;
+                    //this.RfcProvCertif = timbre.RfcProvCertif;
+                    //this.CadenaSAT = comprobante.GetCadenaSAT();
+                    //this.CBB = comprobante.GetQrCode();
+                }
+            }
+
+            SATManager manager = new SATManager();
+
+            try {
+                var response = manager.GetCFDIFromUUID(user, password, comprobante.Receptor.RFC, uuid);
+            } catch (Exception ex) {
+                ex.ToString();
+            }
+
+            return Content(uuid);
+        }
+
+        public ActionResult GetCFDiStatus(string id) {
+            Guid publicKey;
+            if (!Guid.TryParse(id, out publicKey))
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var comprobante = DBContext.Comprobantes.Where(e => e.PublicKey == publicKey).SingleOrDefault();
+
+            if (comprobante == null)
+                return HttpNotFound();
+
+            var certificado = DBContext.Certificados.Where(e => e.NumSerie == comprobante.NoCertificado).SingleOrDefault();
+
+            string user = ConfigurationManager.AppSettings["CfdiServiceUser"];
+            string password = ConfigurationManager.AppSettings["CfdiServicePassword"];
+
+            //comprobante.Emisor.RFC;
+            //comprobante.Complementos[]
+            string uuid = string.Empty;
+
+            foreach (var complemento in comprobante.Complementos) {
+                if (complemento is CFDI.TimbreFiscalDigital) {
+                    var timbre = complemento as CFDI.TimbreFiscalDigital;
+                    //this.SelloSAT = timbre.SelloSAT;
+                    //this.FechaTimbre = timbre.FechaTimbrado.ToString("dd/MM/yyyy HH:mm:ss");
+                    uuid = timbre.UUID;
+                    //this.NumSerieSAT = timbre.NoCertificadoSAT;
+                    //this.RfcProvCertif = timbre.RfcProvCertif;
+                    //this.CadenaSAT = comprobante.GetCadenaSAT();
+                    //this.CBB = comprobante.GetQrCode();
+                }
+            }
+
+            SATManager manager = new SATManager();
+
+            try {
+                var response = manager.GetCFDiStatus(user, password, comprobante.Emisor.RFC, comprobante.Receptor.RFC, uuid, double.Parse(comprobante.Total.ToString()));
+            } catch (Exception ex) {
+                ex.ToString();
+            }
+
+            return Content(uuid);
+
+        }
     }
 }

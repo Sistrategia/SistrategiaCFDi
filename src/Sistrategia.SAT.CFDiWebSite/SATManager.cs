@@ -318,6 +318,10 @@ namespace Sistrategia.SAT.CFDiWebSite
             return cfdi;
         }
 
+        public CancelQueryData GetCFDiStatus(string user, string password, string rfcE, string rfcR, string uuid, double total) {
+            ICFDIService webService = CFDiServiceFactory.Create();
+            return webService.getCFDiStatus(user, password, rfcE, rfcR, uuid, total);
+        }
     }
 
     public class CFDiServiceFactory

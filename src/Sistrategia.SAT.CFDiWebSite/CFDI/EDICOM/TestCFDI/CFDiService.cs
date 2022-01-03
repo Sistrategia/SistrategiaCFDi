@@ -78,6 +78,24 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI.EDICOM.TestCFDI
             return ((byte[])(results[0]));
         }
 
+        // CancelQueryData getCFDiStatus(string user, string password, string rfcE, string rfcR, string uuid, double total);
+        [SoapDocumentMethod("", RequestNamespace = "http://cfdi.service.ediwinws.edicom.com",
+                                ResponseNamespace = "http://cfdi.service.ediwinws.edicom.com",
+                                Use = SoapBindingUse.Literal,
+                                ParameterStyle = SoapParameterStyle.Wrapped)]
+        [return: XmlElement("getCFDiStatusResponse")]
+        public CancelQueryData getCFDiStatus(string user, string password, string rfcE, string rfcR, string uuid, double total, bool test) {
+            object[] results = this.Invoke("getCFDiStatus", new object[] {
+                user,
+                password,
+                rfcE,
+                rfcR,
+                uuid,
+                total,
+                test});
+            return ((CancelQueryData)(results[0]));
+        }
+
         #region ICFDIService Implementation
 
         byte[] ICFDIService.GetCFDI(string user, string password, byte[] file) {
@@ -90,6 +108,10 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI.EDICOM.TestCFDI
 
         public byte[] GetCFDIFromUUID(string user, string password, string rfc, string[] uuid) {
             throw new NotImplementedException();
+        }
+
+        CancelQueryData ICFDIService.getCFDiStatus(string user, string password, string rfcE, string rfcR, string uuid, double total) {
+            return this.getCFDiStatus(user, password, rfcE, rfcR, uuid, total, false);
         }
 
         #endregion

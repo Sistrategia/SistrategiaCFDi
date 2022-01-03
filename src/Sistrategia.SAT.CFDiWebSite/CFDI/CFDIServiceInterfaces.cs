@@ -8,6 +8,9 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         byte[] GetTimbreCFDI(string user, string password, byte[] file);
         ICancelaResponse CancelaCFDI(string user, string password, string rfc, string[] uuid, byte[] pfx, string pfxPassword);
         byte[] GetCFDIFromUUID(string user, string password, string rfc, string[] uuid);
+        //byte[] getCFDiStatus(string user, string password, string rfcE, string rfcR, string uuid, double total, bool test);
+        //byte[] getCFDiStatus(string user, string password, string rfcE, string rfcR, string uuid, double total);
+        CancelQueryData getCFDiStatus(string user, string password, string rfcE, string rfcR, string uuid, double total);
     }
 
     public interface ICancelaResponse
@@ -59,4 +62,11 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         }
     }
 
+    public class CancelQueryData
+    {
+        public string cancelStatus { get; set; }
+        public string isCancelable { get; set; }
+        public string status { get; set; }
+        public string statusCode { get; set; }
+    }
 }

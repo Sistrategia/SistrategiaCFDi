@@ -95,6 +95,10 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI.EDICOM
             return this.getCfdiFromUUID(user, password, rfc, uuid);
         }
 
+        CancelQueryData ICFDIService.getCFDiStatus(string user, string password, string rfcE, string rfcR, string uuid, double total) {
+            return this.getCFDiStatus(user, password, rfcE, rfcR, uuid, total, false);
+        }
+
         #endregion
 
         #region Web Service Calls
@@ -167,6 +171,25 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI.EDICOM
                         uuid});
             return ((byte[])(results[0]));
         }
+
+        // CancelQueryData getCFDiStatus(string user, string password, string rfcE, string rfcR, string uuid, double total);
+        [SoapDocumentMethod("", RequestNamespace = "http://cfdi.service.ediwinws.edicom.com",
+                                ResponseNamespace = "http://cfdi.service.ediwinws.edicom.com",
+                                Use = SoapBindingUse.Literal,
+                                ParameterStyle = SoapParameterStyle.Wrapped)]
+        [return: XmlElement("getCFDiStatusResponse")]
+        public CancelQueryData getCFDiStatus(string user, string password, string rfcE, string rfcR, string uuid, double total, bool test) {
+            object[] results = this.Invoke("getCFDiStatus", new object[] {
+                user,
+                password,
+                rfcE,
+                rfcR,
+                uuid,
+                total,
+                test});
+            return ((CancelQueryData)(results[0]));
+        }
+
 
         #endregion
 
