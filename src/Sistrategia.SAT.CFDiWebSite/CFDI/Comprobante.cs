@@ -65,10 +65,10 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         private decimal? montoFolioFiscalOrig;
         //extended fields:
         private string status;
-       
+
         private string decimalFormat;
         private int? decimalPlaces = null;
-                
+
         //private Emisor emisor;
         //private Receptor receptor;
 
@@ -83,7 +83,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
         #region Constructors
         public Comprobante() {
-            this.InitializeDefaults();            
+            this.InitializeDefaults();
         }
 
         public Comprobante(string version) {
@@ -93,19 +93,19 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
         private void InitializeDefaults() {
             if (string.IsNullOrEmpty(this.version))
-                this.version = "3.3";
+                this.version = "4.0";
             this.PublicKey = Guid.NewGuid();
             this.status = "P"; // A
             //this.Fecha = DateTime.Now; // Cambiar esta implementación, ya que en producción asignaría la hora del servidor (EU)
-            if (this.version == "3.3")
+            if (this.version == "3.3" || this.version == "4.0")
                 this.TipoDeComprobante = "I";
             else
                 this.TipoDeComprobante = "ingreso";
-            if (this.version == "3.3")
+            if (this.version == "3.3" || this.version == "4.0")
                 this.FormaPago = "99";
             else
                 this.FormaDePago = SATManager.GetFormaDePagoDefault(); // "PAGO EN UNA SOLA EXHIBICION";
-            if (this.version == "3.3")
+            if (this.version == "3.3" || this.version == "4.0")
                 this.MetodoPago = SATManager.GetMetodoPagoDefault(); // PUE - Pago en una sola exhibición
             else
                 this.MetodoDePago = SATManager.GetMetodoDePagoDefault(); // "99" - Otros
@@ -133,7 +133,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                 if (this.decimalPlaces.HasValue)
                     return this.decimalPlaces.Value;
                 else
-                    return SATManager.GetDecimalPlacesDefault();                
+                    return SATManager.GetDecimalPlacesDefault();
             }
         }
 
@@ -188,32 +188,29 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
 
             try {
-                if (doc.ChildNodes[1].Attributes["Version"] != null && "3.3".Equals(doc.ChildNodes[1].Attributes["Version"].Value)) {
+                if (doc.ChildNodes[1].Attributes["Version"] != null && "4.0".Equals(doc.ChildNodes[1].Attributes["Version"].Value)) {
+                    xslt.Load("http://www.sat.gob.mx/sitio_internet/cfd/4/cadenaoriginal_4_0/cadenaoriginal_4_0.xslt");
+                } else if (doc.ChildNodes[1].Attributes["Version"] != null && "3.3".Equals(doc.ChildNodes[1].Attributes["Version"].Value)) {
                     xslt.Load("http://www.sat.gob.mx/sitio_internet/cfd/3/cadenaoriginal_3_3/cadenaoriginal_3_3.xslt");
-                }
-                else if ("3.2".Equals(doc.ChildNodes[1].Attributes["version"].Value)) {
+                } else if ("3.2".Equals(doc.ChildNodes[1].Attributes["version"].Value)) {
                     xslt.Load("http://www.sat.gob.mx/sitio_internet/cfd/3/cadenaoriginal_3_2/cadenaoriginal_3_2.xslt");
-                }
-                else {
+                } else if ("3.0".Equals(doc.ChildNodes[1].Attributes["version"].Value)) {
                     xslt.Load("http://www.sat.gob.mx/sitio_internet/cfd/3/cadenaoriginal_3_0/cadenaoriginal_3_0.xslt");
+                } else {
+                    xslt.Load("http://www.sat.gob.mx/sitio_internet/cfd/4/cadenaoriginal_4_0/cadenaoriginal_4_0.xslt");
                 }
-            }
-            catch {
-
+            } catch {
                 try {
-
-                    if (doc.ChildNodes[1].Attributes["Version"] != null && "3.3".Equals(doc.ChildNodes[1].Attributes["Version"].Value))
-                    {
+                    if (doc.ChildNodes[1].Attributes["Version"] != null && "4.0".Equals(doc.ChildNodes[1].Attributes["Version"].Value)) {
+                        xslt.Load("https://sistrategial1.blob.core.windows.net/sat/cadena_original/cadenaoriginal_4_0.xslt");
+                        //xslt.Load("https://sistrategial1.blob.core.windows.net/wwwimages/satcadenaoriginal33/cadenaoriginal_3_3.xslt");
+                    } else if (doc.ChildNodes[1].Attributes["Version"] != null && "3.3".Equals(doc.ChildNodes[1].Attributes["Version"].Value)) {
                         xslt.Load("https://sistrategial1.blob.core.windows.net/sat/cadena_original/cadenaoriginal_3_3.xslt");
                         //xslt.Load("https://sistrategial1.blob.core.windows.net/wwwimages/satcadenaoriginal33/cadenaoriginal_3_3.xslt");
-                    }
-                    else if ("3.2".Equals(doc.ChildNodes[1].Attributes["version"].Value))
-                    {
+                    } else if ("3.2".Equals(doc.ChildNodes[1].Attributes["version"].Value)) {
                         xslt.Load("https://sistrategial1.blob.core.windows.net/wwwimages/satcadenaoriginal/cadenaoriginal_3_2.xslt");
                     }
-                    
-                }
-                catch (Exception innerException) {
+                } catch (Exception innerException) {
                     throw; // new Sistrategia.Server.SAT.SATException("No se completó la creación del comprobante. No se puede establecer comunicación con el SAT intente mas tarde.", innerException);
                 }
             }
@@ -247,7 +244,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
             var comprobante = this;
 
-            if ((comprobante != null) && (comprobante.Complementos != null) && (comprobante.Complementos.Count > 0 )) {
+            if ((comprobante != null) && (comprobante.Complementos != null) && (comprobante.Complementos.Count > 0)) {
                 foreach (Complemento complemento in comprobante.Complementos) {
                     if (complemento is TimbreFiscalDigital) {
                         TimbreFiscalDigital timbre = complemento as TimbreFiscalDigital;
@@ -266,9 +263,9 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
                     }
                 }
-                
+
             }
-           
+
             return GetCadenaOriginal();
         }
 
@@ -283,8 +280,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                                 + "&fe=" + this.Sello.Substring(this.Sello.Length - 8, 8);
                             string cbb = SATManager.GetQrCode(info);//System.Convert.ToBase64String(toEncodeAsBytes);
                             return cbb;
-                        }
-                        else {
+                        } else {
                             string info = string.Format("?re={0}&rr={1}&tt={2}&id={3}",
                             this.Emisor.RFC, this.Receptor.RFC, this.Total.ToString(this.DecimalFormat), timbre.UUID);
                             string cbb = SATManager.GetQrCode(info, 8);
@@ -311,22 +307,23 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         #region Public Properties
 
         /// <summary>
-        /// Atributo requerido con valor prefijado a 3.3 que indica la versión del estándar bajo el que se 
+        /// Atributo requerido con valor prefijado a 4.0 que indica la versión del estándar bajo el que se 
         /// encuentra expresado el comprobante.
         /// </summary>
         /// <remarks>
-        /// Requerido con valor prefijado a 3.3
+        /// Requerido con valor prefijado a 4.0
         /// No debe contener espacios en blanco        
         /// </remarks>
         [XmlAttribute("Version")] // 3.2 y anterior: [XmlAttribute("version")]
         public string Version {
             get { return this.version; }
             set {
-                //if (value != "3.3") {
-                //    throw new ArgumentException("Atributo requerido con valor prefijado a 3.3");
+                //if (value != "4.0") {
+                //    throw new ArgumentException("Atributo requerido con valor prefijado a 4.0");
                 //}
                 if (
-                    value == "3.3" // Atributo requerido con valor prefijado a 3.3
+                    value == "4.0" // Atributo requerido con valor prefijado a 4.0
+                    || value == "3.3" // Atributo requerido con valor prefijado a 3.3
                     || value == "3.2" // Atributo requerido con valor prefijado a 3.2
                     || value == "3.0" // Atributo requerido con valor prefijado a 3.0
                     || value == "2.2" // Atributo requerido con valor prefijado a 2.2
@@ -335,16 +332,16 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     )
                     this.version = value; // validar las posibles versiones
                 else {
-                    this.version = "3.3";
-                    throw new ArgumentException("Atributo requerido con valor prefijado a 3.3, los únicos valores "
-                        + "válidos son: 1.0, 2.0, 2.2. 3.0, 3.2 y 3.3");
+                    this.version = "4.0";
+                    throw new ArgumentException("Atributo requerido con valor prefijado a 4.0, los únicos valores "
+                        + "válidos son: 1.0, 2.0, 2.2. 3.0, 3.2, 3.2 y 4.0");
                 }
             }
         }
-        // <xs:attribute name="Version" use="required" fixed="3.3">
+        // <xs:attribute name="Version" use="required" fixed="4.0">
         //   <xs:annotation>
         //     <xs:documentation>
-        //       Atributo requerido con valor prefijado a 3.3 que indica la versión del estándar bajo el que 
+        //       Atributo requerido con valor prefijado a 4.0 que indica la versión del estándar bajo el que 
         //       se encuentra expresado el comprobante.
         //     </xs:documentation>
         //   </xs:annotation>
@@ -408,10 +405,9 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public string Folio {
             get { return this.folio; }
             set {
-                if (this.version == "3.3" && (!string.IsNullOrEmpty(value) && value.Length > 40)) {
+                if ((this.version == "3.3" || this.version == "4.0") && (!string.IsNullOrEmpty(value) && value.Length > 40)) {
                     throw new ArgumentException("El largo del atributo Folio debe estar entre 1 y 40 caracteres");
-                }
-                else if (!string.IsNullOrEmpty(value) && value.Length > 20) { // 3.2 y anteriores
+                } else if (!string.IsNullOrEmpty(value) && value.Length > 20) { // 3.2 y anteriores
                     throw new ArgumentException("El largo del atributo folio debe estar entre 1 y 20 caracteres");
                 }
                 this.folio = value;
@@ -438,6 +434,13 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// local donde se expide el comprobante.        
         /// </summary>
         /// <remarks>
+        /// Es la fecha y hora de expedición del comprobante fiscal. Se expresa en la forma AAAA-MM-DDThh:mm:ss 
+        /// y debe corresponder con la hora local donde se expide el comprobante.
+        /// 
+        /// Este dato lo integra el sistema que utiliza el contribuyente para la emisión del comprobante fiscal.
+        ///
+        /// **Ejemplo:** Fecha= **2022-01-27T11:49:48**
+        /// 
         /// Requerido
         /// Fecha y hora de expedición del comprobante fiscal
         /// No debe contener espacios en blanco
@@ -572,32 +575,63 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// Requerido
         /// No debe contener espacios en blanco
         /// <para>
-        /// Se debe registrar la clave de la forma de pago de la adquisición de los bienes o de la 
-        /// prestación de los servicios contenidos en el comprobante.
+        /// Se debe registrar la clave de la forma de pago de la adquisición de los bienes, la 
+        /// prestación de los servicios, el otorgamiento del uso o goce, o la forma en que se 
+        /// recibe el donativo, contenidos en el comprobante.
         /// </para>
         /// <para>
         /// En el caso, de que se haya recibido el pago de la contraprestación al momento de la emisión
-        /// del comprobante fiscal, los contribuyentes deberán consignar en éste, la clave correspondiente
-        /// a la forma de pago de conformidad con el catálogo c_FormaPago publicado en el portal del SAT;
-        /// no debiendo incorporar el "Complemento para recepción de pagos".
+        /// del comprobante fiscal, los contribuyentes deberán consignar en éste, la clave vigente
+        /// correspondiente a la forma en que se recibió el pago de conformidad con el catálogo 
+        /// c_FormaPago publicado en el portal del SAT.
+        /// </para>
+        /// <para>
+        /// En este supuesto no se debe emitor adicionalmente un CFDI al que se le incorpore el 
+        /// "Complemento para recepción de pagos", porque el comprobante ya está pagado.
         /// </para>
         /// <para>
         /// En el caso de aplicar más de una forma de pago en una transacción, los contribuyentes deben
-        /// incluir en este campo, la clave de forma de pago con la que se liquida la mayor cantidad del 
-        /// pago con el mismo importe, el contribuyente debe registrar a su consideración, una de las 
+        /// incluir en este campo, la clave vigente del catálogo c_FormaPago de la forma de pago 
+        /// con la que se liquida la mayor cantidad del pago. En caso de que se reciban distintas formas
+        /// de pago con el mismo importe, el contribuyente debe registrar a su consideración, una de las 
         /// formas de pago con las que se recibió el pago de la contraprestación.
         /// </para>
         /// <para>
         /// En el caso de que no se reciba el pago de la contraprestación al momento de la emisión del 
         /// comprobante fiscal (pago en parcialidades o diferido), los constribuyentes deberán seleccionar
-        /// la clave "99" (Por definir) del catálogo c_FormaPago publicdo en el Portal del SAT.
+        /// la clave "99" (Por definir) del catálogo c_FormaPago publicado en el Portal del SAT.
+        /// </para>
+        /// <para>
+        /// En este supuesto la clave del método de pago debe ser "PPD" (Pago en parcialidades o diferido)
+        /// y cuando se reciba el pago total o parcial se debe emitir adicionalmente un CFDI al que se le 
+        /// incorpore el "Complemento para recepción de pagos" por cada pago que se reciba.
+        /// </para>
+        /// <para>
+        /// En el caso de donativos entregados en especie, este campo se debe registrar la calve "12" 
+        /// (Dación en pago).
+        /// </para>
+        /// <para>
+        /// Las diferentes claves de forma de pago se encuentran incluídas en el catálogo c_FormaPago. 
+        /// Elemplo:
         /// </para>
         /// <para>
         /// Cuando el tipo de comprobante sea "E" (Egreso), se deberá registrar como forma de pago, la misma
-        /// que se registró en el CFDI "I" (Ingreso" que dió origen a este comprobante, derivado ya sea de
-        /// una devolución, descuento o bonificación, conforme al catálogo de formas de pago del Anexo 20,
-        /// opcionalmente se podrá registrar la forma de pago conl a que se está efectuando el descuento,
-        /// devolución o bonificación en su caso.
+        /// clave vigente que se registró en el CFDI "I" (Ingreso" que dió origen a este comprobante, 
+        /// derivado ya sea de una devolución, descuento o bonificación, conforme al catálogo de formas de 
+        /// pago del Anexo 20, opcionalmente se podrá registrar la clave vigente de forma de pago con la que 
+        /// se está efectuando el descuento, devolución o bonificación en su caso.
+        /// </para>
+        /// <para>
+        /// Ejemplo: Un contribuyente realiza la compra de un producto
+        /// por un valor de $1000.00, y se le emite un CFDI de tipo "I"
+        /// (Ingreso). La compra se pagó con forma de pago "01" (Efectivo),
+        /// posteriormente, éste realiza la devolución de dicho producto,
+        /// por lo que el contribuyente emisor del comprobante debe
+        /// emitir un CFDI de tipo "E" (Egreso) por dicha devolución,
+        /// registrando la forma de pago "01" (Efectivo), puesto que ésta es
+        /// la forma de pago registrada en el CFDI tipo "I" (Ingreso) que se
+        /// generó en la operación de origen.
+        /// FormaPago= 01
         /// </para>
         /// </remarks>
         [XmlAttribute("FormaPago")]
@@ -613,6 +647,17 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //     </xs:documentation>
         //   </xs:annotation>
         // </xs:attribute>
+        // ...
+        // <xs:simpleType name="c_FormaPago">
+        //   <xs:restriction base="xs:string">
+        //     <xs:whiteSpace value="collapse"/>
+        //     <xs:enumeration value="01"/>
+        //     <xs:enumeration value="02"/>
+        //     ...
+        //     <xs:enumeration value="31"/>
+        //     <xs:enumeration value="99"/>
+        //   </xs:restriction>
+        // </xs:simpleType>
 
         /// <summary>
         /// Atributo requerido para expresar el número de serie del certificado de sello digital que 
@@ -1048,13 +1093,11 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                         //T	Traslado
                         //N	Nómina
                         //P	Pago
-                    }
-                    else
+                    } else
                         throw new ArgumentException("Los valores válidos para el atributo TipoDeComprobante son: I, E, T, N o P.");
-                }
-                else if ("ingreso".Equals(value, StringComparison.InvariantCulture)
-                    || "egreso".Equals(value, StringComparison.InvariantCulture)
-                    || "traslado".Equals(value, StringComparison.InvariantCulture))
+                } else if ("ingreso".Equals(value, StringComparison.InvariantCulture)
+                      || "egreso".Equals(value, StringComparison.InvariantCulture)
+                      || "traslado".Equals(value, StringComparison.InvariantCulture))
                     this.tipoDeComprobante = value;
                 else
                     throw new ArgumentException("Los valores válidos para el atributo TipoDeComprobante son: ingreso, egreso o traslado.");
@@ -1174,8 +1217,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                         throw new ArgumentException("El largo del atributo LugarExpedicion debe ser de 5 caracteres");
                     }
                     this.lugarExpedicion = value != null ? value.Trim() : null;
-                }
-                else
+                } else
                     this.lugarExpedicion = value;
             }
         }
@@ -1371,7 +1413,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </remarks>
         [XmlAttribute("MontoFolioFiscalOrig")]
         [Obsolete("Attributo depreciado en la versión 3.3", false)]
-        public decimal? MontoFolioFiscalOrig {        
+        public decimal? MontoFolioFiscalOrig {
             get { return this.montoFolioFiscalOrig; }
             set { this.montoFolioFiscalOrig = value; }
         }
@@ -1383,7 +1425,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //     </xs:documentation>
         //   </xs:annotation>
         // </xs:attribute>
-        
+
         //[ForeignKey("Emisor")]
         //public int? EmisorId { get; set; }
 
@@ -1413,7 +1455,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //    get { return this.emisor; }
         //    set { this.emisor = value; }
         //}
-        
+
 
         //[ForeignKey("Receptor")]
         //public int? ReceptorId { get; set; }
@@ -1520,7 +1562,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public string ExtendedStringValue3 { get; set; }
 
         [XmlIgnore]
-        public string Status { 
+        public string Status {
             get { return this.status; }
             set { this.status = value; }
         }
@@ -1548,7 +1590,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
 
         [Required]
         [NotMapped]
-        public Guid PublicKey { get { return this.Emisor.PublicKey; } }        
+        public Guid PublicKey { get { return this.Emisor.PublicKey; } }
 
         /// <summary>
         /// Atributo requerido para la Clave del Registro Federal de Contribuyentes correspondiente al contribuyente emisor del comprobante sin guiones o espacios.
@@ -1577,8 +1619,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </remarks>
         [Required]
         [MaxLength(13)]
-        public string RFC
-        {
+        public string RFC {
             get { return this.rfc; }
             set { this.rfc = SATManager.NormalizeWhiteSpace(value); }
         }
@@ -1618,14 +1659,13 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// Nodo requerido para expresar la información del contribuyente emisor del comprobante.
         /// </summary>
         [XmlElement("Emisor", typeof(Emisor))]
-        public virtual Emisor Emisor { 
+        public virtual Emisor Emisor {
             get { return this.emisor; }
-            set
-            {
+            set {
                 this.emisor = value;
                 this.rfc = value.RFC;
                 this.nombre = value.Nombre; // Validate?
-            } 
+            }
         }
         //public virtual Emisor Emisor {
         //    get { return this.emisor; }
@@ -1672,16 +1712,16 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public virtual Ubicacion ExpedidoEn { get; set; }
 
         [NotMapped]
-        public virtual string RegimenFiscalClave { 
+        public virtual string RegimenFiscalClave {
             get {
                 if (this.Emisor.RegimenFiscal != null && this.Emisor.RegimenFiscal.Count > 0) {
                     foreach (var regimen in this.Emisor.RegimenFiscal) {
                         if (regimen.Status == "A")
                             return regimen.RegimenFiscalClave;
-                    }                    
+                    }
                 }
                 return null;
-            } 
+            }
         }
 
         public virtual List<ComprobanteEmisorRegimenFiscal> RegimenFiscal { get; set; }
@@ -1792,7 +1832,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </remarks>
         [MaxLength(40)]
         //[XmlAttribute("NumRegIdTrib")]
-        [NotMapped]        
+        [NotMapped]
         public string NumRegIdTrib { get { return this.Receptor.NumRegIdTrib; } }
         //    get { return this.numRegIdTrib; }
         //    set { this.numRegIdTrib = value; }
@@ -1836,7 +1876,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //     </xs:restriction>
         //   </xs:simpleType>
         // </xs:attribute>
-        
+
 
         /// <summary>
         /// Nodo requerido para precisar la información del contribuyente receptor del comprobante.
@@ -1874,5 +1914,5 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //}
     }
 
-    
+
 }

@@ -1,0 +1,32 @@
+###############################
+# Core EditorConfig Options   #
+###############################
+root = true
+# All files
+[*]
+indent_style = space
+
+[*.{cshtml,html,js,razor,css,ts}]
+indent_size = 2
+
+[*.{cs,vb}]
+
+# Namespaces
+csharp_style_namespace_declarations = file_scoped:warning
+###############################
+# C# Formatting Rules         #
+###############################
+# New line preferences
+csharp_new_line_before_open_brace = types
+csharp_new_line_before_else = false
+csharp_new_line_before_catch = false
+csharp_new_line_before_finally = false
+csharp_new_line_before_members_in_object_initializers = false
+csharp_new_line_before_members_in_anonymous_types = false
+csharp_new_line_between_query_expression_clauses = true
+
+# Wrapping preferences
+csharp_preserve_single_line_statements = true
+csharp_preserve_single_line_blocks = true
+
+
