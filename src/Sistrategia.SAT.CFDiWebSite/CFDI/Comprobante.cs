@@ -772,7 +772,8 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public string CondicionesDePago {
             get { return this.condicionesDePago; }
             set {
-                if (this.version == "3.3" && (!string.IsNullOrEmpty(value) && value.Trim().Length > 1000)) {
+                if ((this.version == "3.3" || this.version == "4.0")
+                    && (!string.IsNullOrEmpty(value) && value.Trim().Length > 1000)) {
                     throw new ArgumentException("El largo del atributo CondicionesDePago debe estar entre 1 y 1000 caracteres");
                 }
                 this.condicionesDePago = value != null ? value.Trim() : null;
@@ -802,6 +803,9 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         /// </summary>
         /// <remarks>
         /// Tipo t_Importe a 6 decimales
+        /// <para>
+        /// Validaciones addicionales a realizar por el proveedor:
+        /// </para>
         /// <para>
         /// Este campo debe tener hasta la cantidad de decimales que soporte la moneda, ver ejemplo
         /// del campo Moneda.
@@ -833,8 +837,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         // <xs:simpleType name="t_Importe">
         //   <xs:annotation>
         //     <xs:documentation>
-        //       Tipo definido para expresar importes numéricos con fracción hasta seis decimales. 
-        //       El valor se redondea de acuerdo con el número de decimales que soporta la moneda. 
+        //       Tipo definido para expresar importes numéricos con fracción hasta seis decimales.
         //       No se permiten valores negativos.
         //     </xs:documentation>
         //   </xs:annotation>

@@ -219,4 +219,93 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI.v40
     //     </xs:restriction>
     //   </xs:simpleType>
     // </xs:attribute>
+
+    /// <summary>
+    /// Atributo requerido que sirve para incorporar el certificado de sello digital que ampara 
+    /// al comprobante, como texto en formato base 64.
+    /// </summary>
+    /// <remarks>
+    /// Requerido
+    /// No debe contener espacios en blanco
+    /// </remarks>
+    [XmlAttribute("Certificado")] // 3.3: certificado
+    string Certificado { get; set; }
+    // <xs:attribute name="certificado" use="required">
+    //   <xs:annotation>
+    //     <xs:documentation>
+    //       Atributo requerido que sirve para incorporar el certificado de sello digital 
+    //       que ampara al comprobante, como texto en formato base 64.
+    //     </xs:documentation>
+    //   </xs:annotation>
+    //   <xs:simpleType>
+    //     <xs:restriction base="xs:string">
+    //       <xs:whiteSpace value="collapse"/>
+    //     </xs:restriction>
+    //   </xs:simpleType>
+    // </xs:attribute>
+
+    /// <summary>
+    /// Atributo condicional para expresar las condiciones comerciales aplicables para el pago 
+    /// del comprobante fiscal digital por Internet. Este atributo puede ser condicionado mediante 
+    /// atributos o complementos.
+    /// </summary>
+    /// <remarks>
+    /// Requerido
+    /// No debe contener espacios en blanco
+    /// Longitud Mínima: 1
+    /// Longitud Máxima: 1000
+    /// Patrón: <code>[^|]{1,1000}</code>
+    /// </remarks>
+    [XmlAttribute("CondicionesDePago")]
+    string CondicionesDePago { get; set; }
+    // <xs:attribute name="CondicionesDePago" use="optional">
+    //   <xs:annotation>
+    //     <xs:documentation>
+    //       Atributo condicional para expresar las condiciones comerciales aplicables para el pago 
+    //       del comprobante fiscal digital por Internet. Este atributo puede ser condicionado mediante 
+    //       atributos o complementos.
+    //     </xs:documentation>
+    //   </xs:annotation>
+    //   <xs:simpleType>
+    //     <xs:restriction base="xs:string">
+    //       <xs:whiteSpace value="collapse"/>
+    //       <xs:minLength value="1"/>
+    //       <xs:maxLength value="1000"/>
+    //       <xs:pattern value="[^|]{1,1000}"/>
+    //     </xs:restriction>
+    //   </xs:simpleType>
+    // </xs:attribute>
+
+    /// <summary>
+    /// Atributo requerido para representar la suma de los importes de los conceptos antes de 
+    /// descuentos e impuesto. No se permiten valores negativos.
+    /// </summary>
+    /// <remarks>
+    /// Tipo t_Importe a 6 decimales
+    /// </remarks>
+    [XmlAttribute("SubTotal")]
+    decimal SubTotal { get; set; }
+    // <xs:attribute name="SubTotal" type="tdCFDI:t_Importe" use="required">
+    //   <xs:annotation>
+    //     <xs:documentation>
+    //       Atributo requerido para representar la suma de los importes de los conceptos antes de 
+    //       descuentos e impuesto. No se permiten valores negativos.
+    //     </xs:documentation>
+    //   </xs:annotation>
+    // </xs:attribute>
+    // ...
+    // <xs:simpleType name="t_Importe">
+    //   <xs:annotation>
+    //     <xs:documentation>
+    //       Tipo definido para expresar importes numéricos con fracción hasta seis decimales.
+    //       No se permiten valores negativos.
+    //     </xs:documentation>
+    //   </xs:annotation>
+    //   <xs:restriction base="xs:decimal">
+    //     <xs:fractionDigits value="6"/>
+    //     <xs:minInclusive value="0.000000"/>
+    //     <xs:pattern value="[0-9]{1,18}(.[0-9]{1,6})?"/>
+    //     <xs:whiteSpace value="collapse"/>
+    //   </xs:restriction>
+    // </xs:simpleType>
 }
