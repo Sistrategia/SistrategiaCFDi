@@ -170,6 +170,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     break;
                 case "3.3":
                 // Atributo requerido para la expresión de la fecha y hora de expedición  del comprobante fiscal. Se expresa en la forma aaaa-mm-ddThh:mm:ss, de acuerdo con la especificación ISO 8601.
+                case "4.0":
                 default:
                     writer.WriteAttributeString("Fecha", comprobante.Fecha.ToString("yyyy-MM-ddTHH:mm:ss")); // El estándar dice incorrectamente: AAAA-MM-DDThh:mm:ss (traducción al español?)
                     break;
@@ -185,6 +186,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                         writer.WriteAttributeString("sello", comprobante.Sello);
                     break;
                 case "3.3":
+                case "4.0":
                 default:
                     if (!string.IsNullOrEmpty(comprobante.Sello))
                         writer.WriteAttributeString("Sello", comprobante.Sello);
@@ -207,6 +209,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                 case "3.0":
                 case "3.2":
                 case "3.3":
+                case "4.0":
                 default:
                     break;
             }
@@ -227,6 +230,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     writer.WriteAttributeString("tipoDeComprobante", comprobante.TipoDeComprobante.ToString());
                     break;
                 case "3.3":
+                case "4.0":
                 default:
                     writer.WriteAttributeString("TipoDeComprobante", comprobante.TipoDeComprobante.ToString());
                     break;
@@ -246,6 +250,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     writer.WriteAttributeString("formaDePago", comprobante.FormaDePago);
                     break;
                 case "3.3":
+                case "4.0":
                 default:
                     // ES OBLIGATORIO
                     // if (!string.IsNullOrEmpty(comprobante.FormaDePago))
@@ -279,6 +284,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                 //    writer.WriteAttributeString("certificado", comprobante.Certificado); // requerido en el esquema
                 //    break;
                 case "3.3":
+                case "4.0":
                     //default:
                     // REQUERIDOS
                     writer.WriteAttributeString("NoCertificado", comprobante.NoCertificado); // requerido en el esquema
@@ -298,6 +304,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                         writer.WriteAttributeString("condicionesDePago", comprobante.CondicionesDePago);
                     break;
                 case "3.3":
+                case "4.0":
                 default:
                     if (!string.IsNullOrEmpty(comprobante.CondicionesDePago))
                         writer.WriteAttributeString("CondicionesDePago", comprobante.CondicionesDePago);
@@ -324,6 +331,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                         writer.WriteAttributeString("motivoDescuento", comprobante.MotivoDescuento);
                     break;
                 case "3.3":
+                case "4.0":
                 default:
                     // if (!string.IsNullOrEmpty(comprobante.SubTotal))
                     writer.WriteAttributeString("SubTotal", comprobante.SubTotal.ToString(comprobante.DecimalFormat));
@@ -365,6 +373,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     writer.WriteAttributeString("total", comprobante.Total.ToString(comprobante.DecimalFormat));
                     break;
                 case "3.3":
+                case "4.0":
                 default:
                     if (!string.IsNullOrEmpty(comprobante.Moneda))
                         writer.WriteAttributeString("Moneda", comprobante.Moneda);
@@ -427,6 +436,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     writer.WriteAttributeString("metodoDePago", comprobante.MetodoDePago);
                     break;
                 case "3.3":
+                case "4.0":
                 default:
                     writer.WriteAttributeString("MetodoPago", comprobante.MetodoPago);
                     break;
@@ -473,6 +483,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                         writer.WriteAttributeString("MontoFolioFiscalOrig", comprobante.MontoFolioFiscalOrig.Value.ToString(comprobante.DecimalFormat));
                     break;
                 case "3.3":
+                case "4.0":
                 default:
                     if (!string.IsNullOrEmpty(comprobante.LugarExpedicion))
                         writer.WriteAttributeString("LugarExpedicion", comprobante.LugarExpedicion);

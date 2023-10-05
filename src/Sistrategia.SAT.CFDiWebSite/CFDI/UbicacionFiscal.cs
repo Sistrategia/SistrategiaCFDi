@@ -58,153 +58,11 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public override string Calle {
             get { return this.calle; }
             set { this.calle = SATManager.NormalizeWhiteSpace(value); }
-        }
-
-        ///// <summary>
-        ///// Este atributo opcional sirve para expresar el número particular en donde se da la ubicación sobre una calle dada.
-        ///// </summary>        
-        ///// <remarks>
-        ///// <code>
-        ///// <xs:attribute name="noExterior" use="optional">
-        /////     <xs:annotation>
-        /////         <xs:documentation>Este atributo opcional sirve para expresar el número particular en donde se da la ubicación sobre una calle dada.</xs:documentation>
-        /////     </xs:annotation>
-        /////     <xs:simpleType>
-        /////         <xs:restriction base="xs:string">
-        /////             <xs:minLength value="1"/>
-        /////             <xs:whiteSpace value="collapse"/>
-        /////         </xs:restriction>
-        /////     </xs:simpleType>
-        ///// </xs:attribute>
-        ///// </code>
-        ///// </remarks>
-        //[MaxLength(50)]
-        //[XmlAttribute("noExterior")]
-        //public string NoExterior {
-        //    get { return this.noExterior; }
-        //    set { this.noExterior = SATManager.NormalizeWhiteSpace(value); }
-        //}
-
-        ///// <summary>
-        ///// Este atributo opcional sirve para expresar información adicional para especificar 
-        ///// la ubicación cuando calle y número exterior (noExterior) no resulten suficientes 
-        ///// para determinar la ubicación de forma precisa.
-        ///// </summary>
-        ///// <remarks>
-        ///// <code>
-        ///// <xs:attribute name="noInterior" use="optional">
-        /////     <xs:annotation>
-        /////         <xs:documentation>Este atributo opcional sirve para expresar información adicional para especificar la ubicación cuando calle y número exterior (noExterior) no resulten suficientes para determinar la ubicación de forma precisa.</xs:documentation>
-        /////     </xs:annotation>
-        /////     <xs:simpleType>
-        /////         <xs:restriction base="xs:string">
-        /////             <xs:minLength value="1"/>
-        /////             <xs:whiteSpace value="collapse"/>
-        /////         </xs:restriction>
-        /////     </xs:simpleType>
-        ///// </xs:attribute>
-        ///// </code>
-        ///// </remarks>
-        //[MaxLength(50)]
-        //[XmlAttribute("noInterior")]
-        //public string NoInterior {
-        //    get { return this.noInterior; }
-        //    set { this.noInterior = SATManager.NormalizeWhiteSpace(value); }
-        //}
-
-        ///// <summary>
-        ///// Este atributo opcional sirve para precisar la colonia en donde se da la ubicación cuando se desea ser más específico en casos de ubicaciones urbanas.
-        ///// </summary>
-        ///// <remarks>
-        ///// <code>
-        ///// <xs:attribute name="colonia" use="optional">
-        /////     <xs:annotation>
-        /////         <xs:documentation>Este atributo opcional sirve para precisar la colonia en donde se da la ubicación cuando se desea ser más específico en casos de ubicaciones urbanas.</xs:documentation>
-        /////     </xs:annotation>
-        /////     <xs:simpleType>
-        /////         <xs:restriction base="xs:string">
-        /////             <xs:minLength value="1"/>
-        /////             <xs:whiteSpace value="collapse"/>
-        /////         </xs:restriction>
-        /////     </xs:simpleType>
-        ///// </xs:attribute>
-        ///// </code>
-        ///// </remarks>
-        //[MaxLength(50)]
-        //[XmlAttribute("colonia")]
-        //public string Colonia {
-        //    get { return this.colonia; }
-        //    set { this.colonia = SATManager.NormalizeWhiteSpace(value); }
-        //}
-
-        ///// <summary>
-        ///// Atributo opcional que sirve para precisar la ciudad o población donde se da la ubicación.
-        ///// </summary>
-        ///// <remarks>
-        ///// <code>
-        ///// <xs:attribute name="localidad" use="optional">
-        /////     <xs:annotation>
-        /////         <xs:documentation>Atributo opcional que sirve para precisar la ciudad o población donde se da la ubicación.</xs:documentation>
-        /////     </xs:annotation>
-        /////     <xs:simpleType>
-        /////         <xs:restriction base="xs:string">
-        /////             <xs:minLength value="1"/>
-        /////             <xs:whiteSpace value="collapse"/>
-        /////         </xs:restriction>
-        /////     </xs:simpleType>
-        ///// </xs:attribute>
-        ///// </code>
-        ///// </remarks>
-        //[MaxLength(50)]
-        //[XmlAttribute("localidad")]
-        //public string Localidad {
-        //    get { return this.localidad; }
-        //    set { this.localidad = SATManager.NormalizeWhiteSpace(value); }
-        //}
-
-        ///// <summary>
-        ///// Atributo opcional para expresar una referencia de ubicación adicional.
-        ///// </summary>
-        ///// <remarks>
-        ///// <code>
-        ///// <xs:attribute name="referencia" use="optional">
-        /////     <xs:annotation>
-        /////         <xs:documentation>Atributo opcional para expresar una referencia de ubicación adicional.</xs:documentation>
-        /////     </xs:annotation>
-        /////     <xs:simpleType>
-        /////         <xs:restriction base="xs:string">
-        /////             <xs:whiteSpace value="collapse"/>
-        /////             <xs:minLength value="1"/>
-        /////         </xs:restriction>
-        /////     </xs:simpleType>
-        ///// </xs:attribute>
-        ///// </code>
-        ///// </remarks>
-        //[MaxLength(256)]
-        //[XmlAttribute("referencia")]
-        //public string Referencia {
-        //    get { return this.referencia; }
-        //    set { this.referencia = SATManager.NormalizeWhiteSpace(value); }
-        //}
+        }        
 
         /// <summary>
         /// Atributo requerido que sirve para precisar el municipio o delegación (en el caso del Distrito Federal) en donde se da la ubicación.
         /// </summary>
-        /// <remarks>
-        /// <code>
-        /// <xs:attribute name="municipio" use="required">
-        ///     <xs:annotation>
-        ///         <xs:documentation>Atributo requerido que sirve para precisar el municipio o delegación (en el caso del Distrito Federal) en donde se da la ubicación.</xs:documentation>
-        ///     </xs:annotation>
-        ///     <xs:simpleType>
-        ///         <xs:restriction base="xs:string">
-        ///             <xs:minLength value="1"/>
-        ///             <xs:whiteSpace value="collapse"/>
-        ///         </xs:restriction>
-        ///     </xs:simpleType>
-        /// </xs:attribute>
-        /// </code>
-        /// </remarks>
         [Required]
         [MaxLength(50)]
         [XmlAttribute("municipio")]
@@ -212,25 +70,21 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             get { return this.municipio; }
             set { this.municipio = SATManager.NormalizeWhiteSpace(value); }
         }
+        // <xs:attribute name="municipio" use="optional">
+        //   <xs:annotation>
+        //     <xs:documentation>Atributo requerido que sirve para precisar el municipio o delegación (en el caso del Distrito Federal) en donde se da la ubicación.</xs:documentation>
+        //   </xs:annotation>
+        //   <xs:simpleType>
+        //     <xs:restriction base="xs:string">
+        //       <xs:minLength value="1"/>
+        //       <xs:whiteSpace value="collapse"/>
+        //     </xs:restriction>
+        //   </xs:simpleType>
+        // </xs:attribute>
 
         /// <summary>
         /// Atributo requerido que sirve para precisar el estado o entidad federativa donde se da la ubicación.
         /// </summary>
-        /// <remarks>
-        /// <code>
-        /// <xs:attribute name="estado" use="required">
-        ///     <xs:annotation>
-        ///         <xs:documentation>Atributo requerido que sirve para precisar el estado o entidad federativa donde se da la ubicación.</xs:documentation>
-        ///     </xs:annotation>
-        ///     <xs:simpleType>
-        ///         <xs:restriction base="xs:string">
-        ///             <xs:minLength value="1"/>
-        ///             <xs:whiteSpace value="collapse"/>
-        ///         </xs:restriction>
-        ///     </xs:simpleType>
-        /// </xs:attribute>
-        /// </code>
-        /// </remarks>
         [Required]
         [MaxLength(50)]
         [XmlAttribute("estado")]
@@ -238,51 +92,43 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             get { return this.estado; }
             set { this.estado = SATManager.NormalizeWhiteSpace(value); }
         }
+        // <xs:attribute name="estado" use="optional">
+        //   <xs:annotation>
+        //     <xs:documentation>Atributo requerido que sirve para precisar el estado o entidad federativa donde se da la ubicación.</xs:documentation>
+        //   </xs:annotation>
+        //   <xs:simpleType>
+        //     <xs:restriction base="xs:string">
+        //       <xs:minLength value="1"/>
+        //       <xs:whiteSpace value="collapse"/>
+        //     </xs:restriction>
+        //   </xs:simpleType>
+        // </xs:attribute>
 
         /// <summary>
         /// Atributo requerido que sirve para precisar el país donde se da la ubicación.
         /// </summary>
-        /// <remarks>
-        /// <code>
-        /// <xs:attribute name="pais" use="required">
-        ///     <xs:annotation>
-        ///         <xs:documentation>Atributo requerido que sirve para precisar el país donde se da la ubicación.</xs:documentation>
-        ///     </xs:annotation>
-        ///     <xs:simpleType>
-        ///         <xs:restriction base="xs:string">
-        ///             <xs:minLength value="1"/>
-        ///             <xs:whiteSpace value="collapse"/>
-        ///         </xs:restriction>
-        ///     </xs:simpleType>
-        /// </xs:attribute>
-        /// </code>
-        /// </remarks>   
         [Required]
         [MaxLength(50)]
         [XmlAttribute("pais")]
-        public virtual string Pais {
+        public override string Pais {
             get { return this.pais; }
             set { this.pais = SATManager.NormalizeWhiteSpace(value); }
         }
+        // <xs:attribute name="pais" use="required">
+        //   <xs:annotation>
+        //     <xs:documentation>Atributo requerido que sirve para precisar el país donde se da la ubicación.</xs:documentation>
+        //   </xs:annotation>
+        //   <xs:simpleType>
+        //     <xs:restriction base="xs:string">
+        //       <xs:minLength value="1"/>
+        //       <xs:whiteSpace value="collapse"/>
+        //     </xs:restriction>
+        //   </xs:simpleType>
+        // </xs:attribute>
 
         /// <summary>
         /// Atributo requerido que sirve para asentar el código postal en donde se da la ubicación.
         /// </summary>
-        /// <remarks>
-        /// <code>
-        /// <xs:attribute name="codigoPostal" use="required">
-        ///     <xs:annotation>
-        ///         <xs:documentation>Atributo requerido que sirve para asentar el código postal en donde se da la ubicación.</xs:documentation>
-        ///     </xs:annotation>
-        ///     <xs:simpleType>
-        ///         <xs:restriction base="xs:string">
-        ///             <xs:whiteSpace value="collapse"/>
-        ///             <xs:length value="5"/>
-        ///         </xs:restriction>
-        ///     </xs:simpleType>
-        /// </xs:attribute>
-        /// </code>
-        /// </remarks>
         [Required]
         [MaxLength(5)]
         [XmlAttribute("codigoPostal")]
@@ -290,5 +136,15 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
             get { return this.codigoPostal; }
             set { this.codigoPostal = SATManager.NormalizeWhiteSpace(value); }
         }
+        // <xs:attribute name="codigoPostal" use="required">
+        //   <xs:annotation>
+        //     <xs:documentation>Atributo requerido que sirve para asentar el código postal en donde se da la ubicación.</xs:documentation>
+        //   </xs:annotation>
+        //   <xs:simpleType>
+        //     <xs:restriction base="xs:string">
+        //       <xs:whiteSpace value="collapse"/>
+        //     </xs:restriction>
+        //   </xs:simpleType>
+        // </xs:attribute>
     }
 }

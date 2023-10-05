@@ -56,6 +56,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         private string tipoDeComprobante;
         private string metodoDePago;
         private string metodoPago;
+        private string exportacion;
         private string lugarExpedicion;
         private string confirmacion;
         private string numCtaPago;
@@ -678,7 +679,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
                     return null;
             }
             set {
-                if (this.version == "3.3" && (!string.IsNullOrEmpty(value) && value.Length > 20)) {
+                if ((Version == "3.3" || Version == "4.0") && (!string.IsNullOrEmpty(value) && value.Length > 20)) {
                     throw new ArgumentException("El largo del atributo NoCertificado debe estar entre 1 y 20 caracteres");
                 }
                 this.noCertificado = value;
@@ -978,7 +979,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         // </xs:simpleType>
 
         /// <summary>
-        /// Atributo condicional para representar el tipo de cambio conforme con la moneda usada. 
+        /// Atributo condicional para representar el tipo de cambio FIX conforme con la moneda usada. 
         /// Es requerido cuando la clave de moneda es distinta de MXN y de XXX. El valor debe reflejar 
         /// el número de pesos mexicanos que equivalen a una unidad de la divisa señalada en el 
         /// atributo moneda. Si el valor está fuera del porcentaje aplicable a la moneda tomado del 
@@ -997,7 +998,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         // <xs:attribute name="TipoCambio" use="optional">
         //   <xs:annotation>
         //     <xs:documentation>
-        //       Atributo condicional para representar el tipo de cambio conforme con la moneda usada. 
+        //       Atributo condicional para representar el tipo de cambio FIX conforme con la moneda usada. 
         //       Es requerido cuando la clave de moneda es distinta de MXN y de XXX. El valor debe reflejar 
         //       el número de pesos mexicanos que equivalen a una unidad de la divisa señalada en el 
         //       atributo moneda. Si el valor está fuera del porcentaje aplicable a la moneda tomado del 
@@ -1083,7 +1084,7 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public string TipoDeComprobante {
             get { return this.tipoDeComprobante; }
             set {
-                if (this.version == "3.3") {
+                if ((this.version == "4.0") || (this.version == "3.3")) {
                     if ("I".Equals(value, StringComparison.InvariantCulture)
                     || "E".Equals(value, StringComparison.InvariantCulture)
                     || "T".Equals(value, StringComparison.InvariantCulture)
@@ -1131,6 +1132,37 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         //     <xs:enumeration value="N"/>
         //     <xs:enumeration value="P"/>
         //   </xs:restriction>
+        // </xs:simpleType>
+
+        /// <summary>
+        /// Atributo requerido para expresar si el comprobante ampara una operación de exportación.    
+        /// </summary>
+        /// <remarks>
+        /// Se debe registrar la clave con la que se identifica si el comprobante ampara una 
+        /// operación de exportación, las distintas claves vigentes se encuentran incluidas 
+        /// en el catálogo c_Exportacion.
+        /// 
+        /// Cuando se registre el valor “02”, se debe incluir el “Complemento para Comercio Exterior”.
+        ///
+        /// 01 = No aplica
+        /// 
+        /// Versión 3.3: Campo no existente en la versión 3.3 y anterioes        
+        /// </remarks>
+        [XmlAttribute("Exportacion")]
+        public string Exportacion {
+            get { return this.exportacion; }
+            set {
+
+            }
+        }
+        // <xs:simpleType name="c_Exportacion">
+        // 	<xs:restriction base="xs:string">
+        // 		<xs:whiteSpace value="collapse"/>
+        // 		<xs:enumeration value="01"/>
+        // 		<xs:enumeration value="02"/>
+        // 		<xs:enumeration value="03"/>
+        // 		<xs:enumeration value="04"/>
+        // 	</xs:restriction>
         // </xs:simpleType>
 
         /// <summary>		
@@ -1215,11 +1247,11 @@ namespace Sistrategia.SAT.CFDiWebSite.CFDI
         public string LugarExpedicion {
             get { return this.lugarExpedicion; }
             set {
-                if (this.version == "3.3") {
+                if ((this.version == "4.0") || (this.version == "3.3")) {
                     if ((!string.IsNullOrEmpty(value) && value.Trim().Length != 5)) {
                         throw new ArgumentException("El largo del atributo LugarExpedicion debe ser de 5 caracteres");
                     }
-                    this.lugarExpedicion = value != null ? value.Trim() : null;
+                    this.lugarExpedicion = value != null ? value.Trim() : "00000";
                 } else
                     this.lugarExpedicion = value;
             }
